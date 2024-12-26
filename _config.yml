@@ -4,7 +4,7 @@ longtitle:        网鱼网咖
 author:           Ferris
 email:            ferris.evans@outlook.com
 description: >
-  Build Jekyll site with the GitBook style.
+  poeting via code
 
 version:          1.0
 gitbook_version:  3.2.3
@@ -54,7 +54,7 @@ collections:
     output: true
     permalink: /:collection/:path/
   others:
-    output: false
+    output: true
     permalink: /:collection/:path/
 
 ordered_collections:
