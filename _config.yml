@@ -51,10 +51,10 @@ exclude:
 
 collections:
   pages:
-    output: true
+    output: false
     permalink: /:collection/:path/
   others:
-    output: true
+    output: false
     permalink: /:collection/:path/
 
 ordered_collections:
