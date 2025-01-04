@@ -1,6 +1,6 @@
 ---
 layout: home
-title: Jekyll Gitbook Theme
+title: 程序员的自我修养
 permalink: /
 cover: https://sighingnow.github.io/jekyll-gitbook/assets/dinosaur.gif
 ---
