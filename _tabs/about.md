@@ -209,14 +209,16 @@ Moon
 
 ```markdown
 | Company                      | Contact          | Country |
-| :--------------------------- | ---------------- | ------: |
+| :--------------------------- | :--------------: | ------: |
+| 左对齐                        | 居中              | 右对齐  |
 | Alfreds Futterkiste          | Maria Anders     | Germany |
 | Island Trading               | Helen Bennett    |      UK |
 | Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
 ```
 
 | Company                      | Contact          | Country |
-| :--------------------------- | ---------------- | ------: |
+| :--------------------------- | :--------------: | ------: |
+| 左对齐                        | 居中              | 右对齐  |
 | Alfreds Futterkiste          | Maria Anders     | Germany |
 | Island Trading               | Helen Bennett    |      UK |
 | Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
