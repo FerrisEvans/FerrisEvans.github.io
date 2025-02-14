@@ -120,7 +120,7 @@ comments:
   # Giscus options › https://giscus.app 
   # Follow the configuration steps on https://giscus.app. After filling in the repository name, those values will automatically be given to you.
   giscus:
-    repo: https://github.com/FerrisEvans/FerrisEvans.github.io # <gh-username>/<repo>
+    repo: FerrisEvans/FerrisEvans.github.io # <gh-username>/<repo>
     repo_id: R_kgDONhZGoQ
     category: Announcements
     category_id: DIC_kwDONhZGoc4Cld4y
