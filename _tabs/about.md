@@ -228,12 +228,12 @@ Moon
 ```markdown
 <http://127.0.0.1:4000>
 
-The mathematics powered by [**MathJax**](https://www.mathjax.org/)
+[MathJax](https://www.mathjax.org/)
 ```
 
 <http://127.0.0.1:4000>
 
-[**MathJax**](https://www.mathjax.org/)
+[MathJax](https://www.mathjax.org/)
 
 ## 8. Footnote
 
