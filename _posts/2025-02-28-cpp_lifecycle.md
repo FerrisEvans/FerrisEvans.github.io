@@ -1,8 +1,8 @@
 ---
-title: "[C++读书笔记系列03] 对象的生命周期"
+title: "对象的生命周期"
 date: 2025-02-28
-categories: [Programming Language, C/C++]
-tags: [lifetime, oop]
+categories: [C/C++]
+tags: [lifecycle, oop]
 math: false
 mermaid: false
 render_with_liquid: false

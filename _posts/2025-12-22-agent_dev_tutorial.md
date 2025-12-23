@@ -35,14 +35,14 @@ Agent 系统的本质还是一个复杂的软件系统，依然需要以下工�
 1. Embedding
 2. 为什么需要向量数据库
 3. Cosine Similarity
-4. RAG[^rag]（检索增强生成）的本质
-5. ReAct(Reasoning and Acting)[^react] 模式如何让 LLM 和外部工具交互
+4. <u>RAG</u>[^rag]（检索增强生成）的本质
+5. <u>ReAct(Reasoning and Acting)</u>[^react] 模式如何让 LLM 和外部工具交互
 6. Function Calling 的工作流程
 
 > 不能把 LLM 当成一个黑盒 API，需要知道他能干嘛和不能干嘛以及大概是怎么干的。
 {: .prompt-info }
 
-[_Attention is all you need_](https://arxiv.org/html/1706.03762v7) 这篇论文可以啃一遍，然后可以用 PyTorch 实现一个简单的 Transformer，过程也许会很痛苦，但是会对 LLM 底层原理有一个比较深刻的理解。
+[`Attention is all you need`{: .filepath}](https://arxiv.org/html/1706.03762v7) 这篇论文可以啃一遍，然后可以用 PyTorch 实现一个简单的 Transformer，过程也许会很痛苦，但是会对 LLM 底层原理有一个比较深刻的理解。
 
 > **Prompt Engineering**
 > 
@@ -53,7 +53,7 @@ Agent 系统的本质还是一个复杂的软件系统，依然需要以下工�
 
 一开始我以为，向量数据库不就是「存 Embedding，然后做相似度搜索」吗？后来面试被问「为什么 Pinecone 用 HNSW 算法？Milvus 支持多种索引？什么场景下该选哪种？
 
-对向量数据库的理解最好不要停留在会用的层面，也要懂其中的原理。需要花点时间搞明白**向量检索的核心算法**。
+对向量数据库的理解最好不要停留在会用的层面，也要懂其中的原理。需要花点时间搞明白<span style="color: red;">向量检索的核心算法</span>。
 - HNSW（分层图结构）：查询快，但内存占用大。适合高 QPS 的场景。
 - IVF（倒排索引 + 聚类）：适合大规模离线检索。
 - Annoy（随机投影树）：内存占用小，但召回率稍低。
@@ -74,7 +74,8 @@ def naive_rag(query):
 ```
 以上 RAG 的问题是：检索质量差、上下文窗口浪费、无法处理多跳推理、缺乏可解释性。Naive RAG 只是基础版本，生产环境是不够用的，要学着去做优化。
 
-> - 搭一个完整的 RAG 系统，从文档上传到向量化到问答。
+> **搭一个完整的 RAG 系统，从文档上传到向量化到问答**
+> 
 > - 对比不同的 Embedding 模型（OpenAI/Cohere/BGE）。
 > - 实现 Hybrid Search + Reranking
 {: .prompt-tip }
@@ -121,11 +122,11 @@ def react_agent(task):
 ```
 
 这里的问题是：
-1. 推理错误怎么办：需要 Reflexion[^reflexion] 机制，让 Agent 反思自己的错误。
+1. 推理错误怎么办：需要 <u>Reflexion</u>[^reflexion] 机制，让 Agent 反思自己的错误。
 2. 推理效率低怎么办：需要 Few-shot 示例，提供高质量的推理样本。
 3. 任务太长怎么办：需要分层 ReAct，把任务拆解成子任务。
 
-### 4.2 Pand-and-Execute：复杂任务
+### 4.2 Plan-and-Execute：复杂任务
 
 这个模式是先让 LLM 生成一个完整的计划，然后逐步执行。
 
@@ -149,9 +150,10 @@ def plan_and_execute(task):
 - 什么时候出发重规划：执行失败、发现新信息、用户需求变更。
 - 哪些步骤可以并行：需要分析步骤之间的依赖关系。
 
+> 构建一个 Plan-and-Execute Agent。
+> 
 > - 学习 StateGraph 设计模式
 > - 实现复杂的 Agent 工作流。包括条件分支、循环、并行结构
-> - 构建一个 Plan-and-Execute Agent。
 {: .prompt-tip }
 
 ### 4.3 Multi-Agent 协作：最复杂
@@ -235,14 +237,13 @@ class VectorMemory:
 - 把 C 和 D 公司的用户增长数据做个对比。
 
 要实现这个需求，就需要折腾以下这些事儿：
-- **复杂数据处理**：PDF 中的表格怎么提取？图片中的文字怎么办？参考下 unstructured.io 库。
-- **核心 RAG 流程**：简单的文本块检索效果很差，就得研究更高级的 RAG 策略，比如 HyDE（Hypothetical Document Embeddings）或者 Multi-Query Retriver，甚至考虑 Graph RAG，把报告里的实体和关系抽出来建成知识图谱。
-- **Agentic 逻辑和 Tool Use**：当需要计算环比增长时，LLM 是算不明白的。这个时候就必须引入 Tool Use / Function Calling。需要自定义一个工具，当 LLM 再识别出计算意图时自己去调用这个函数，拿到结果后再回答。
+- <span style="color: red;">复杂数据处理</span>：PDF 中的表格怎么提取？图片中的文字怎么办？参考下 unstructured.io 库。
+- <span style="color: red;">核心 RAG 流程</span>：简单的文本块检索效果很差，就得研究更高级的 RAG 策略，比如 HyDE（Hypothetical Document Embeddings）或者 Multi-Query Retriver，甚至考虑 Graph RAG，把报告里的实体和关系抽出来建成知识图谱。
+- <span style="color: red;">Agentic 逻辑和 Tool Use</span>：当需要计算环比增长时，LLM 是算不明白的。这个时候就必须引入 Tool Use / Function Calling。需要自定义一个工具，当 LLM 再识别出计算意图时自己去调用这个函数，拿到结果后再回答。
 
 以上这个过程要怎么调试？LLM 为什么不按我们的意愿调用工具？也许需要用 LangGraph 或者自己实现一个 ReAct 循环来管理这个复杂的执行逻辑。
 
->最终，我们需要评估。Agent 做完以后，如何验证他比人看报告更好？我们需要构建一套评估体系。最简单的，找 20 份报告，设计 100 个问题和标注答案，形成一个评估集。然后用 Agent 跑一遍，使用 Ragas 这类框架计算一下 faithfulness（忠实度）、answer_relevancy（相关性）等指标。**没有评估，优化都是玄学。**评估里也会有很多坑，比如用户换个问法，生成的报告就驴唇不对马嘴，有可能是评估集太小，太干净了，没有覆盖真实、复杂的线上场景，需要自己踩坑。
-{: .prompt-tip }
+最终，我们需要评估。Agent 做完以后，如何验证他比人看报告更好？我们需要构建一套评估体系。最简单的，找 20 份报告，设计 100 个问题和标注答案，形成一个评估集。然后用 Agent 跑一遍，使用 Ragas 这类框架计算一下 faithfulness（忠实度）、answer_relevancy（相关性）等指标。<span style="color: red;">没有评估，优化都是玄学。</span>评估里也会有很多坑，比如用户换个问法，生成的报告就驴唇不对马嘴，有可能是评估集太小，太干净了，没有覆盖真实、复杂的线上场景，需要自己踩坑。
 
 这个项目搞下来之后，简历和面试中就有料可聊，比如你可以讲
 - PDF 是如何解析的，遇到了什么问题
@@ -269,7 +270,8 @@ LLM API 是按 token 烧钱的，一个设计不好的 Agent 链条，一个请�
 
 一个 Agent 的执行过程是个复杂的黑盒，需要引入类似 LangSmith / WanDB 这样的工具去追踪每一次调用的 Prompt、返回结果、中间步骤、token 消耗。线上出了问题可以快速定位哪个环节出问题了。
 
-> - Agent 追踪系统。
+> Agent 追踪系统
+> 
 > - 实现指标收集和监控。
 > - 构建可视化 Dashboard。
 {: .prompt-tip }

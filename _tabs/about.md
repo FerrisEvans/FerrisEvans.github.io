@@ -7,12 +7,12 @@ mermaid: true
 order: 4
 ---
 
-> ### 文档格式约定
+> **文档格式约定**
 >
 > **加粗字体**通常用于关键字、类名、等信息。通常不需要上下文信息也可正确理解其表达含义，如 **Object**、**TreeNode**。
 > `inline_code` 通常用于属性名、方法名、执行命令等。通常需要与上下文联系才能更好的理解。如 `_init()` 需要联系上下文才可以更好的理解具体是什么的初始化方法。
 > *倾斜字体*用于备注信息
-> <font color="red">彩色字体</font>用于强调。
+> <span style="color: red;">彩色字体</span> 用于强调。
 > <u>下划线字体</u>一般配合脚注使用，可以明确该脚注用来解释的关键词。
 {: .prompt-info }
 
@@ -20,7 +20,7 @@ order: 4
 import this
 ```
 
-> ##### the Zen of Python, by Tim Peters
+> **the Zen of Python, by Tim Peters**
 > 
 > - Beautiful is better than ugly. 优美胜于丑陋
 > - Explicit is better than implicit. 明了胜于晦涩

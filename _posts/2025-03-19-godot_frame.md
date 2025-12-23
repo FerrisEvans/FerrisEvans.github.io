@@ -1,5 +1,5 @@
 ---
-title: "[Godot学习随笔05] 移动力"
+title: "Godot 移动力"
 date: 2025-03-19
 categories: [Game Dev, Godot]
 tags: [frame]

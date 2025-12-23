@@ -1,5 +1,5 @@
 ---
-title: "[Godot学习随笔01] Godot2D 优秀项目、教程、文章、博客推荐"
+title: "Godot2D 优秀项目、教程、文章、博客推荐"
 date: 2025-02-11
 categories: [Game Dev, Godot]
 tags: [tutorial, open source]

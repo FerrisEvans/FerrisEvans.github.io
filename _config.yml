@@ -14,16 +14,17 @@ timezone: Asia/Shanghai
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Shameless # the main title
+title: Mainloop # the main title
 
-tagline: 我是智障我骄傲了吗 # it will display as the subtitle
+tagline: All problems are ultimately mathematical problems. # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  C C++ GDScript Godot technical writing or a personal notebook.
+  From Web2 to Web3; From algorithms to artificial intelligence; From engine to game; From theory to practice.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
 url: "https://ferrisevans.github.io"
+author: Ferris
 
 github:
   username: FerrisEvans # change to your GitHub username
@@ -98,7 +99,7 @@ theme_mode: # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: assets/avatar.jpeg
+avatar: assets/avatar.png
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.

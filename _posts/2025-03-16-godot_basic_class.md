@@ -1,5 +1,5 @@
 ---
-title: "[Godot学习随笔02] 四大基本概念"
+title: "Godot 四大基本概念"
 date: 2025-03-16
 categories: [Game Dev, Godot]
 tags: [node2d, scene, signal]

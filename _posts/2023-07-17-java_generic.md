@@ -1,7 +1,7 @@
 ---
 title: 手撕泛型
 date: 2021-07-17
-categories: [Programming Language, Java]
+categories: [Java]
 tags: [generic]
 math: false
 mermaid: false

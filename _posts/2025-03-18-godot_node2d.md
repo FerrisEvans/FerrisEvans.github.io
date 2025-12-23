@@ -1,5 +1,5 @@
 ---
-title: "[Godot学习随笔04] 节点"
+title: "Godot 节点"
 date: 2025-03-18
 categories: [Game Dev, Godot]
 tags: [node2d]

@@ -1,7 +1,7 @@
 ---
-title: "[C++读书笔记系列02] 声明"
+title: "声明"
 date: 2025-02-25
-categories: [Programming Language, C/C++]
+categories: [C/C++]
 tags: [declaration, definition, scope, initialization]
 math: false
 mermaid: false
