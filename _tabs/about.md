@@ -13,9 +13,11 @@ order: 4
 > 
 > `inline_code` 通常用于属性名、方法名、执行命令等。通常需要与上下文联系才能更好的理解。如 `_init()` 需要联系上下文才可以更好的理解具体是什么的初始化方法。
 > 
-> *倾斜字体*用于备注信息
+> *倾斜字体*用于提示特别注意。
+>
+> <sub>小字</sub>用于表示注释。
 > 
-> <span style="color: red;">彩色字体</span> 用于强调。
+> <span style="color: red;">彩色字体</span> 用于强调关键信息。
 > 
 > <u>下划线字体</u>一般配合脚注使用，可以明确该脚注用来解释的关键词。
 {: .prompt-info }
@@ -464,7 +466,7 @@ The image below will toggle dark/light mode based on theme preference, notice it
 
 ## 99. Reverse Footnote
 
+You can also take this [reference](https://chirpy.cotes.page/posts/write-a-new-post/#syntax)
+
 [^footnote]: The footnote source
 [^fn-nth-2]: The 2nd footnote source
-
-You can also take this [reference](https://chirpy.cotes.page/posts/write-a-new-post/#syntax)
