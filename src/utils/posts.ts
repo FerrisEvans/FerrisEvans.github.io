@@ -1,0 +1,30 @@
+import { readdirSync } from 'node:fs';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+export type Post = CollectionEntry<'blog'>;
+
+const caseMap = new Map(
+  readdirSync('./src/content/blog')
+    .filter((f) => f.endsWith('.md'))
+    .map((f) => {
+      const name = f.slice(0, -'.md'.length);
+      return [name.toLowerCase(), name];
+    })
+);
+
+export async function getPosts(): Promise<Post[]> {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+}
+
+export function postSlug(post: Post): string {
+  return caseMap.get(post.id) ?? post.id;
+}
+
+export function formatDate(date: Date): string {
+  return `${date.getUTCFullYear()}年${date.getUTCMonth() + 1}月${date.getUTCDate()}日`;
+}
+
+export function postUrl(post: Post): string {
+  return `/posts/${postSlug(post)}/`;
+}

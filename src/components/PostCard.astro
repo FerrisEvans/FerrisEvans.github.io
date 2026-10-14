@@ -1,0 +1,69 @@
+---
+import { formatDate, postUrl, type Post } from '../utils/posts';
+import CardCover from './CardCover.astro';
+import CategoryBadge from './CategoryBadge.astro';
+import TagChip from './TagChip.astro';
+
+interface Props {
+  post: Post;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+---
+
+{
+  featured ? (
+    <a
+      href={postUrl(post)}
+      class="group grid overflow-hidden rounded-2xl border border-line bg-paper-elev shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_2px_4px_rgba(0,0,0,0.05),0_20px_40px_-16px_rgba(0,0,0,0.25)] dark:border-line-dark dark:bg-night-elev md:grid-cols-2"
+    >
+      <CardCover category={post.data.category} class="aspect-[16/9] md:aspect-auto md:h-full md:min-h-72" />
+      <div class="flex flex-col gap-4 p-6 sm:p-8">
+        <div class="flex items-center gap-3">
+          <CategoryBadge category={post.data.category} />
+          <time class="text-xs text-ink-faint dark:text-snow-faint">{formatDate(post.data.pubDate)}</time>
+        </div>
+        <h2 class="font-serif text-2xl font-bold leading-snug text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark sm:text-3xl">
+          {post.data.title}
+        </h2>
+        {post.data.description && (
+          <p class="text-sm leading-7 text-ink-soft dark:text-snow-soft line-clamp-3">{post.data.description}</p>
+        )}
+        {post.data.tags.length > 0 && (
+          <div class="mt-auto flex flex-wrap gap-2 pt-2">
+            {post.data.tags.map((tag) => (
+              <TagChip tag={tag} />
+            ))}
+          </div>
+        )}
+      </div>
+    </a>
+  ) : (
+    <a
+      href={postUrl(post)}
+      class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-paper-elev shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_2px_4px_rgba(0,0,0,0.05),0_20px_40px_-16px_rgba(0,0,0,0.25)] dark:border-line-dark dark:bg-night-elev"
+    >
+      <CardCover category={post.data.category} />
+      <div class="flex flex-1 flex-col gap-3 p-5">
+        <div class="flex items-center gap-3">
+          <CategoryBadge category={post.data.category} />
+          <time class="text-xs text-ink-faint dark:text-snow-faint">{formatDate(post.data.pubDate)}</time>
+        </div>
+        <h2 class="font-serif text-lg font-bold leading-snug text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+          {post.data.title}
+        </h2>
+        {post.data.description && (
+          <p class="text-sm leading-6 text-ink-soft dark:text-snow-soft line-clamp-2">{post.data.description}</p>
+        )}
+        {post.data.tags.length > 0 && (
+          <div class="mt-auto flex flex-wrap gap-1.5 pt-1">
+            {post.data.tags.slice(0, 3).map((tag) => (
+              <TagChip tag={tag} />
+            ))}
+          </div>
+        )}
+      </div>
+    </a>
+  )
+}

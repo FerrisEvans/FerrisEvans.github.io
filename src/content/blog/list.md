@@ -1,0 +1,187 @@
+---
+title: 线性表
+description: 介绍线性表的抽象数据类型定义与顺序存储实现，给出 C 语言版基本操作代码。
+pubDate: 2025-02-18
+category: data-structures
+tags: [list]
+math: true
+---
+
+
+线性表是具有相同特性的数据元素的一个有限序列。
+
+线性表中数据元素的类型可以为简单类型，也可以为复杂类型。许多实际应用问题所涉及的基本操作有很大相似性，不应为每个具体应用单独编写一个程序。
+
+从具体应用中抽象出共性的逻辑结构和基本操作（抽象数据类型），然后实现其存储结构和基本操作。
+
+## ADT
+
+**数据对象**：每个元素类型均为DateType类型的集合 $\{ a_1, a_2, a_3, ..., a_n \}$
+
+
+**数据关系**：
+
+1. 除第一个元素$a_1$之外，每一个元素有且只有一个直接前驱元素
+2. 除了最后一个元素$a_n$外，每一个元素有且只有一个直接后继元素
+3. 数据元素之间的关系是一对一的关系
+
+
+**`InitList(*L)`**：初始化操作，建立一个空的线性表`L`
+
+
+**`DestroyList(*L)`**：销毁已经存在的线性表`L`
+
+
+**`ListEmpty(L)`**：若线性表为空，返回`true`，否则返回`false`
+
+
+**`ClearList(*L)`**：将线性表清空
+
+
+**`GetElem(L, i, *e)`**：将线性表`L`中的第`i`个位置元素值返回给`e`
+
+
+**`LocateElem(L, e)`**：在线性表`L`中查找与给定值`e`相等的元素，如果查找成功，返回该元素在表中序号；否则，返回0表示失败
+
+
+**`ListInsert(*L, i, e)`**：在线性表`L`中的第`i`个位置插入新元素`e`
+
+
+**`ListDelete(*L, i, *e)`**：删除线性表`L`中第`i`个位置元素，并用`e`返回其值
+
+
+**`ListLength(L)`**：返回线性表`L`的元素个数
+
+
+**`PriorElem(L, e, *pre_e)`**：返回`e`的前驱元素`pre_e`; 否则操作失败，`pre_e`无意义
+
+
+**`NextElem(L, e, *next_e)`**：返回e的后继元素`next_e`;若`e`是最后一个元素，则操作失败，`next_e`无意义
+
+
+**`ListTraverse(*L, visited())`**：依次对线性表中每个元素调用`visited()`
+
+
+## 算法分析
+
+**平均查找长度ASL(Average Search Length)**：为确定记录在表中的位置，需要与给定值进行比较的关键字的个数的期望值叫做查找算法的平均查找长度。
+
+
+$$
+ASL = \sum_{i=1}^{n}{P_i}{C_i}
+$$
+
+1. 利用数据元素的存储位置表示线性表中相邻数据元素之间的前后关系，即线性表的逻辑结构与存储结构一致。
+2. 在访问线性表时，可以快速地计算出任何一个数据元素的存储地址。
+
+因此可以粗略地认为，访问每个元素所花的时间相等。这种存取元素的方法被称为**随机存取法**。
+
+```c
+include <stdlib.h> /* 需要加载头文件 */
+malloc(m); /* 开辟m个字节长度的地址空间，并返回这段空间的首地址 */
+sizeof(m); /* 计算变量x的长度 */
+free(m); /* 释放指针p所指变量的存储空间，即彻底删除一个变量 */
+```
+
+```c
+Status visit(ElemType c) {
+    printf("<%d> ", c);
+    return OK;
+}
+
+Status InitList(SqList *L) {
+    L->length = 0;
+    return OK;
+}
+
+Status DestroyList(SqList *L) {
+    free(L);
+    return OK;
+}
+
+Status ListEmpty(SqList L) {
+    if (L.length == 0) return TRUE;
+    return FALSE;
+}
+
+Status ClearList(SqList *L) {
+    L->length = 0;
+    return OK;
+}
+
+int ListLength(SqList L) {
+    return L.length;
+}
+
+Status GetElem(SqList L, int i, ElemType *e) {
+    /* 判断i是否非法，i从1开始 */
+    if (L.length <= 0 || i < 1 || i > L.length) {
+        return ERROR;
+    }
+    *e = L.elem[i - 1];
+    return OK;
+}
+
+int LocateElem(SqList L, ElemType e) {
+    if (L.length <= 0) {
+        return 0;
+    }
+
+    for (int i = 0; i < L.length; ++i) {
+        if (e == L.elem[i]) {
+            return i + 1;
+        }
+    }
+
+    return 0;
+}
+
+Status ListInsert(SqList *L, int i, ElemType e) {
+    if (L->length > LIST_INIT_SIZE) return ERROR;
+
+    if (i < 1 || i > L->length + 1) return ERROR;
+
+    if (i <= L->length) {
+        for (int j = L->length - 1; j >= i - 1; --j) {
+            L->elem[j + 1] = L->elem[j];
+        }
+    }
+    L->elem[i - 1] = e;
+    L->length++;
+
+    return OK;
+}
+
+Status ListDelete(SqList *L, int i, ElemType *e) {
+    if (L->length <= 0) return ERROR;
+    if (i < 1 || i > L->length) return ERROR;
+
+    *e = L->elem[i - 1];
+
+    if (i < L->length) {
+        for (int j = i; j < L->length; ++j) {
+            L->elem[j - 1] = L->elem[j];
+        }
+    }
+    L->length--;
+    return OK;
+}
+
+Status ListTraverse(SqList L) {
+    if (L.length < 0) return ERROR;
+    for (int i = 0; i < L.length; ++i) visit(L.elem[i]);
+    printf("\n");
+    return OK;
+}
+
+void unionL(SqList *La, SqList Lb) {
+    int La_len = ListLength(*La);
+    int Lb_len = ListLength(Lb);
+
+    ElemType e;
+    for (int i = 1; i <= Lb_len; ++i) {
+        GetElem(Lb, i, &e);
+        if (!LocateElem(*La, e)) ListInsert(La, ++La_len, e);
+    }
+}
+```

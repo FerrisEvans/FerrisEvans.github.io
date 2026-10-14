@@ -1,0 +1,50 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const toc = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  toc.length > 0 && (
+    <nav aria-label="目录" class="text-sm">
+      <p class="mb-3 font-serif text-sm font-bold tracking-widest text-ink-faint dark:text-snow-faint">目录</p>
+      <ul class="space-y-2">
+        {toc.map((h) => (
+          <li class={h.depth === 3 ? 'pl-4' : ''}>
+            <a href={`#${h.slug}`} class="toc-link py-0.5 pl-3">
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<script is:inline>
+  (function () {
+    var links = Array.from(document.querySelectorAll('.toc-link'));
+    if (!links.length) return;
+    var headings = Array.from(document.querySelectorAll('.prose-custom h2[id], .prose-custom h3[id]'));
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var id = '#' + entry.target.id;
+            links.forEach(function (link) {
+              link.classList.toggle('active', link.getAttribute('href') === id);
+            });
+          }
+        });
+      },
+      { rootMargin: '0px 0px -65% 0px' }
+    );
+    headings.forEach(function (h) {
+      observer.observe(h);
+    });
+  })();
+</script>

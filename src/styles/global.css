@@ -1,0 +1,220 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-serif: "Songti SC", "Noto Serif SC", STSong, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --color-paper: #faf9f7;
+  --color-paper-elev: #ffffff;
+  --color-ink: #211d19;
+  --color-ink-soft: #6f6759;
+  --color-ink-faint: #a39a8c;
+  --color-line: #e9e4dc;
+  --color-accent: #b4530d;
+
+  --color-night: #0f1420;
+  --color-night-elev: #171e2e;
+  --color-snow: #e8e6e1;
+  --color-snow-soft: #9aa3b5;
+  --color-snow-faint: #5b6577;
+  --color-line-dark: #232c40;
+  --color-accent-dark: #e8934a;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-paper text-ink font-sans antialiased dark:bg-night dark:text-snow;
+}
+
+::selection {
+  @apply bg-accent/20 dark:bg-accent-dark/30;
+}
+
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-background) !important;
+}
+
+/* ---------- prose ---------- */
+
+.prose-custom {
+  @apply text-[1.0625rem] leading-8 text-ink dark:text-snow;
+}
+
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3,
+.prose-custom h4 {
+  @apply font-serif font-bold text-ink dark:text-snow scroll-mt-24;
+}
+
+.prose-custom h2 {
+  @apply mt-12 mb-5 text-2xl border-b border-line dark:border-line-dark pb-3;
+}
+
+.prose-custom h3 {
+  @apply mt-9 mb-4 text-xl;
+}
+
+.prose-custom h4 {
+  @apply mt-7 mb-3 text-lg;
+}
+
+.prose-custom p {
+  @apply my-5;
+}
+
+.prose-custom a {
+  @apply text-accent dark:text-accent-dark underline decoration-accent/30 dark:decoration-accent-dark/30 underline-offset-4 hover:decoration-accent dark:hover:decoration-accent-dark transition-colors break-words;
+}
+
+.prose-custom strong {
+  @apply font-semibold text-ink dark:text-snow;
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  @apply my-5 pl-6 space-y-2;
+}
+
+.prose-custom ul {
+  @apply list-disc;
+}
+
+.prose-custom ol {
+  @apply list-decimal;
+}
+
+.prose-custom li::marker {
+  @apply text-ink-faint dark:text-snow-faint;
+}
+
+.prose-custom blockquote {
+  @apply my-6 border-l-4 border-line dark:border-line-dark pl-5 py-1 text-ink-soft dark:text-snow-soft italic;
+}
+
+.prose-custom hr {
+  @apply my-10 border-line dark:border-line-dark;
+}
+
+.prose-custom :not(pre) > code {
+  @apply font-mono text-[0.875em] bg-ink/5 dark:bg-white/10 rounded px-1.5 py-0.5 text-accent dark:text-accent-dark break-words;
+}
+
+.prose-custom pre {
+  @apply my-6 rounded-xl p-5 overflow-x-auto text-sm leading-7 border border-line dark:border-line-dark;
+}
+
+.prose-custom pre code {
+  @apply font-mono bg-transparent p-0;
+}
+
+.prose-custom table {
+  @apply my-6 w-full text-[0.9375rem] border-collapse;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose-custom thead {
+  @apply border-b-2 border-line dark:border-line-dark;
+}
+
+.prose-custom th {
+  @apply px-4 py-2.5 text-left font-semibold whitespace-nowrap;
+}
+
+.prose-custom td {
+  @apply px-4 py-2.5 border-b border-line dark:border-line-dark align-top;
+}
+
+.prose-custom tbody tr:hover {
+  @apply bg-ink/[0.03] dark:bg-white/[0.04];
+}
+
+.prose-custom img {
+  @apply my-8 mx-auto rounded-xl shadow-md max-w-full;
+}
+
+.prose-custom kbd {
+  @apply inline-block font-sans text-[0.8125em] font-medium px-1.5 py-0.5 rounded-md border border-b-2 border-line dark:border-line-dark bg-paper-elev dark:bg-night-elev shadow-sm;
+}
+
+.prose-custom details {
+  @apply my-6 rounded-xl border border-line dark:border-line-dark bg-paper-elev dark:bg-night-elev px-5 py-4;
+}
+
+.prose-custom summary {
+  @apply cursor-pointer font-medium;
+}
+
+.prose-custom .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 0.25rem;
+}
+
+/* GitHub-style alerts */
+
+.prose-custom .markdown-alert {
+  @apply my-6 rounded-xl border-l-4 px-5 py-4 not-italic bg-paper-elev dark:bg-night-elev;
+}
+
+.prose-custom .markdown-alert > p {
+  @apply my-2;
+}
+
+.prose-custom .markdown-alert-title {
+  @apply flex items-center gap-2 font-semibold not-italic text-sm mb-1;
+}
+
+.prose-custom .markdown-alert-note {
+  @apply border-sky-500;
+}
+.prose-custom .markdown-alert-note .markdown-alert-title {
+  @apply text-sky-600 dark:text-sky-400;
+}
+
+.prose-custom .markdown-alert-tip {
+  @apply border-emerald-500;
+}
+.prose-custom .markdown-alert-tip .markdown-alert-title {
+  @apply text-emerald-600 dark:text-emerald-400;
+}
+
+.prose-custom .markdown-alert-important {
+  @apply border-violet-500;
+}
+.prose-custom .markdown-alert-important .markdown-alert-title {
+  @apply text-violet-600 dark:text-violet-400;
+}
+
+.prose-custom .markdown-alert-warning {
+  @apply border-amber-500;
+}
+.prose-custom .markdown-alert-warning .markdown-alert-title {
+  @apply text-amber-600 dark:text-amber-400;
+}
+
+.prose-custom .markdown-alert-caution {
+  @apply border-rose-500;
+}
+.prose-custom .markdown-alert-caution .markdown-alert-title {
+  @apply text-rose-600 dark:text-rose-400;
+}
+
+/* TOC scroll-spy */
+
+.toc-link {
+  @apply block border-l-2 border-transparent text-ink-soft dark:text-snow-soft hover:text-ink dark:hover:text-snow transition-colors;
+}
+
+.toc-link.active {
+  @apply border-accent dark:border-accent-dark text-accent dark:text-accent-dark font-medium;
+}

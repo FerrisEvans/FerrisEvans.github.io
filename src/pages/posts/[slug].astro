@@ -1,0 +1,121 @@
+---
+import { render } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Toc from '../../components/Toc.astro';
+import Giscus from '../../components/Giscus.astro';
+import CategoryBadge from '../../components/CategoryBadge.astro';
+import TagChip from '../../components/TagChip.astro';
+import { categoryOf } from '../../data/site';
+import { getPosts, formatDate, postUrl, postSlug, type Post } from '../../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { slug: postSlug(post) },
+    props: {
+      post,
+      older: posts[i + 1] ?? null,
+      newer: posts[i - 1] ?? null,
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, older, newer } = Astro.props as { post: Post; older: Post | null; newer: Post | null };
+const { Content, headings } = await render(post);
+const cat = categoryOf(post.data.category);
+const sub = post.data.subcategory ? cat.subcategories[post.data.subcategory] : undefined;
+
+if (post.data.math) {
+  await import('katex/dist/katex.min.css');
+}
+---
+
+<Base title={post.data.title} description={post.data.description}>
+  <div id="read-progress" class="fixed left-0 top-0 z-50 h-0.5 bg-accent dark:bg-accent-dark" style="width: 0%"></div>
+
+  <article class="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+    <header class="mx-auto max-w-3xl">
+      <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
+        <a href="/categories/" class="hover:text-ink dark:hover:text-snow">分类</a>
+        <span>/</span>
+        <a href={`/categories/${cat.slug}/`} class="hover:text-ink dark:hover:text-snow">{cat.label}</a>
+        {sub && (
+          <>
+            <span>/</span>
+            <span class="text-ink-soft dark:text-snow-soft">{sub}</span>
+          </>
+        )}
+      </nav>
+      <h1 class="font-serif text-3xl font-bold leading-tight sm:text-4xl">{post.data.title}</h1>
+      <div class="mt-5 flex flex-wrap items-center gap-3">
+        <CategoryBadge category={post.data.category} />
+        <time class="text-sm text-ink-faint dark:text-snow-faint">{formatDate(post.data.pubDate)}</time>
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-1.5">
+            {post.data.tags.map((tag) => <TagChip tag={tag} />)}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="mt-12 lg:grid lg:grid-cols-[minmax(0,1fr)_16rem] lg:gap-12">
+      <div data-pagefind-body class="prose-custom mx-auto max-w-3xl lg:mx-0">
+        <Content />
+      </div>
+      <aside data-pagefind-ignore class="mt-12 hidden lg:mt-0 lg:block">
+        <div class="sticky top-24">
+          <Toc headings={headings} />
+        </div>
+      </aside>
+    </div>
+
+    <nav data-pagefind-ignore class="mx-auto mt-16 grid max-w-3xl gap-4 border-t border-line pt-10 dark:border-line-dark sm:grid-cols-2">
+      {
+        older ? (
+          <a href={postUrl(older)} class="prev-next-card">
+            <span class="text-xs text-ink-faint dark:text-snow-faint">上一篇</span>
+            <span class="mt-1 font-serif font-bold leading-snug">{older.data.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        newer && (
+          <a href={postUrl(newer)} class="prev-next-card sm:text-right">
+            <span class="text-xs text-ink-faint dark:text-snow-faint">下一篇</span>
+            <span class="mt-1 font-serif font-bold leading-snug">{newer.data.title}</span>
+          </a>
+        )
+      }
+    </nav>
+
+    <div class="mx-auto max-w-3xl">
+      <Giscus />
+    </div>
+  </article>
+</Base>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .prev-next-card {
+    @apply flex flex-col rounded-xl border border-line bg-paper-elev p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:border-line-dark dark:bg-night-elev;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var bar = document.getElementById('read-progress');
+    if (!bar) return;
+    var update = function () {
+      var doc = document.documentElement;
+      var total = doc.scrollHeight - doc.clientHeight;
+      var pct = total > 0 ? (doc.scrollTop / total) * 100 : 0;
+      bar.style.width = pct + '%';
+    };
+    document.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script>

@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import CategoryBadge from '../components/CategoryBadge.astro';
+import { getPosts, postUrl, type Post } from '../utils/posts';
+
+const posts = await getPosts();
+
+const byYear = new Map<number, Map<number, Post[]>>();
+for (const post of posts) {
+  const y = post.data.pubDate.getUTCFullYear();
+  const m = post.data.pubDate.getUTCMonth() + 1;
+  if (!byYear.has(y)) byYear.set(y, new Map());
+  const months = byYear.get(y)!;
+  if (!months.has(m)) months.set(m, []);
+  months.get(m)!.push(post);
+}
+const years = [...byYear.entries()]
+  .sort((a, b) => b[0] - a[0])
+  .map(([year, months]) => ({
+    year,
+    months: [...months.entries()]
+      .sort((a, b) => b[0] - a[0])
+      .map(([month, list]) => ({ month, posts: list })),
+  }));
+---
+
+<Base title="归档">
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <header class="mb-12">
+      <h1 class="font-serif text-3xl font-bold sm:text-4xl">归档</h1>
+      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {posts.length} 篇文章。</p>
+    </header>
+
+    {
+      years.map(({ year, months }) => (
+        <section class="mb-14">
+          <h2 class="mb-8 font-serif text-5xl font-bold text-ink/15 dark:text-snow/15">{year}</h2>
+          {months.map(({ month, posts: list }) => (
+            <div class="mb-8">
+              <h3 class="mb-4 font-serif text-lg font-bold text-ink-soft dark:text-snow-soft">{month} 月</h3>
+              <ul class="relative space-y-4 border-l border-line pl-6 dark:border-line-dark">
+                {list.map((post) => (
+                  <li class="relative">
+                    <span class="absolute -left-[1.72rem] top-2 h-2.5 w-2.5 rounded-full border-2 border-paper bg-accent dark:border-night dark:bg-accent-dark" />
+                    <a href={postUrl(post)} class="group flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <time class="text-sm tabular-nums text-ink-faint dark:text-snow-faint">
+                        {String(post.data.pubDate.getUTCDate()).padStart(2, '0')} 日
+                      </time>
+                      <span class="font-medium transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
+                        {post.data.title}
+                      </span>
+                      <CategoryBadge category={post.data.category} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      ))
+    }
+  </section>
+</Base>
