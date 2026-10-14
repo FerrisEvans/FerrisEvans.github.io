@@ -4,42 +4,157 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - .gitignore
-      - README.md
-      - LICENSE
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
   pages: write
   id-token: write
 
 concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check Astro types and content schemas
+        run: npm run check
+
+      - name: Build site and search index
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          node --input-type=module <<'EOF'
+          import fs from 'node:fs';
+          import path from 'node:path';
+
+          const distDir = path.resolve('dist');
+          const requiredFiles = [
+            'index.html',
+            '404.html',
+            'rss.xml',
+            'sitemap-index.xml',
+            'pagefind/pagefind-entry.json',
+            '.nojekyll',
+          ];
+
+          for (const rel of requiredFiles) {
+            const full = path.join(distDir, rel);
+            if (!fs.existsSync(full)) {
+              throw new Error(`Missing required build output: dist/${rel}`);
+            }
+          }
+
+          function walkHtml(dir) {
+            const results = [];
+            for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+              const full = path.join(dir, entry.name);
+              if (entry.isDirectory()) results.push(...walkHtml(full));
+              else if (entry.isFile() && entry.name.endsWith('.html')) results.push(full);
+            }
+            return results;
+          }
+
+          const htmlFiles = walkHtml(distDir);
+          const postPages = htmlFiles.filter((f) =>
+            path.relative(distDir, f).replaceAll(path.sep, '/').startsWith('posts/')
+          );
+          if (postPages.length === 0) {
+            throw new Error('No blog post pages were generated under dist/posts/');
+          }
+
+          const attrRegex = /\b(?:href|src)="([^"]+)"/g;
+          const brokenLinks = [];
+
+          for (const file of htmlFiles) {
+            const html = fs.readFileSync(file, 'utf8');
+            const relFile = path.relative(distDir, file);
+            for (const match of html.matchAll(attrRegex)) {
+              const raw = match[1];
+              if (
+                !raw.startsWith('/') ||
+                raw.startsWith('//') ||
+                raw.startsWith('/cdn-cgi/')
+              ) {
+                continue;
+              }
+              const cleanPath = decodeURIComponent(raw.split('#')[0].split('?')[0]);
+              const target = path.join(distDir, cleanPath);
+              const exists =
+                (fs.existsSync(target) && fs.statSync(target).isFile()) ||
+                fs.existsSync(path.join(target, 'index.html')) ||
+                fs.existsSync(`${target}.html`);
+              if (!exists) {
+                brokenLinks.push(`${relFile} -> ${raw}`);
+              }
+            }
+          }
+
+          if (brokenLinks.length > 0) {
+            throw new Error(
+              `Found ${brokenLinks.length} broken internal link(s):\n` +
+                brokenLinks.slice(0, 20).join('\n')
+            );
+          }
+
+          console.log(
+            `Verified ${htmlFiles.length} HTML pages (${postPages.length} post pages) and all internal asset/page links.`
+          );
+          EOF
 
       - name: Setup Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
 
-      - name: Install, build and upload
-        uses: withastro/action@v3
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./dist
+          include-hidden-files: true
 
   deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Wait for legacy branch Pages build if active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in $(seq 1 30); do
+            active=$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${GITHUB_SHA}" \
+              --jq '[.workflow_runs[] | select(.path == "dynamic/pages/pages-build-deployment" and .status != "completed")] | length' 2>/dev/null || echo 0)
+            if [ "${active:-0}" -eq 0 ]; then
+              break
+            fi
+            echo "Waiting for legacy pages-build-deployment run to finish (${i}/30)..."
+            sleep 5
+          done
+
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
