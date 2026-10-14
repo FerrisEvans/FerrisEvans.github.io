@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+---
+
+<Base title="关于">
+  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
+    <div class="prose-custom">
+      <h1 class="mb-6 font-serif text-3xl font-bold sm:text-4xl">关于</h1>
+
+      <p>
+        你好，我是 <strong>Ferris</strong>，一名开发者。我的兴趣方向涵盖游戏开发、编程语言与 AI
+        Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。可以通过
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> 或
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> 找到我。
+      </p>
+
+      <blockquote>
+        <p><strong>文档格式约定</strong></p>
+        <p>
+          <strong>加粗字体</strong>通常用于关键字、类名、等信息。通常不需要上下文信息也可正确理解其表达含义，如
+          <strong>Object</strong>、<strong>TreeNode</strong>。
+        </p>
+        <p>
+          <code>inline_code</code> 通常用于属性名、方法名、执行命令等。通常需要与上下文联系才能更好的理解。如
+          <code>_init()</code> 需要联系上下文才可以更好的理解具体是什么的初始化方法。
+        </p>
+        <p><em>倾斜字体</em>用于提示特别注意。</p>
+        <p><sub>小字</sub>用于表示注释。</p>
+        <p><span style="color: red;">彩色字体</span> 用于强调关键信息。</p>
+        <p><u>下划线字体</u>一般配合脚注使用，可以明确该脚注用来解释的关键词。</p>
+      </blockquote>
+
+      <pre><code class="language-python">import this</code></pre>
+
+      <blockquote>
+        <p><strong>the Zen of Python, by Tim Peters</strong></p>
+        <ul>
+          <li>Beautiful is better than ugly. 优美胜于丑陋</li>
+          <li>Explicit is better than implicit. 明了胜于晦涩</li>
+          <li>Simple is better than complex. 简洁胜于复杂</li>
+          <li>Complex is better than complicated. 复杂胜于凌乱</li>
+          <li>Flat is better than nested. 扁平胜于嵌套</li>
+          <li>Sparse is better than dense. 间隔胜于紧凑</li>
+          <li>Readability counts. 可读性很重要</li>
+          <li>Special cases aren't special enough to break the rules. 任何特例都不足够违背这些原则</li>
+          <li>Although practicality beats purity. 实用性高于纯粹性</li>
+          <li>Errors should never pass silently. 但是错误永远不能静默处理</li>
+          <li>Unless explicitly silenced. 除非明确需要</li>
+          <li>In the face of ambiguity, refuse the temptation to guess. 当存在多种可能，不要尝试去猜测</li>
+          <li>There should be one-- and preferably only one --obvious way to do it. 而是尽量找一种，最好是唯一一种明显的解决方案。</li>
+          <li>Although that way may not be obvious at first unless you're Dutch. 虽然这并不容易，因为你不是Python之父</li>
+          <li>Now is better than never. 做好过不做</li>
+          <li>Although never is often better than right now. 但不假思索就动手还不如不做</li>
+          <li>If the implementation is hard to explain, it's a bad idea. 如果你无法向他们描述你的方案，那肯定不是一个好方案</li>
+          <li>If the implementation is easy to explain, it may be a good idea. 如果你可以非常简单的描述出你的方案，那这个方案也许是个好主意</li>
+          <li>Namespaces are one honking great idea -- let's do more of those! 命名空间是个绝妙的理念，我们应该多加利用</li>
+        </ul>
+      </blockquote>
+
+      <blockquote>
+        <p>Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive. —— John Carmack</p>
+      </blockquote>
+
+      <blockquote>
+        <p>Most of my programming career has involved finding something neat, writing my own version to understand it &amp; often throwing it away. —— Edward Kmett</p>
+      </blockquote>
+
+      <blockquote>
+        <p>I program those "clones" like I read papers: change a core part; redesign it. Gain progress or understanding why it is what it is. —— Edward Kmett</p>
+      </blockquote>
+
+      <ol>
+        <li>很多事都是熟能生巧，没有足够的练习不要谈天赋。练习不是一味的重复，或者去完全复刻别人的代码，每一次练习都应该增加难度，有突破自己认知的成长。这样反复的经过输入、评估、输出、纠正，会有惊人的变化。</li>
+        <li>英语水平决定了一个程序员的上限。</li>
+        <li>要有良好的习惯，才能事半功倍。</li>
+        <li>不要等准备好了再出发，优秀的程序员都是探路者。</li>
+        <li>愚者困惑，智者提问。</li>
+        <li>最简单的往往是最有效的。</li>
+        <li>向成功者学习，向成功的项目学习。</li>
+        <li>输出是最好的输入。</li>
+        <li>一定要坚持，保持长时间学习，甚至终身学习的态度。</li>
+        <li>一定要动手，不管例子多么简单，建议至少自己动手敲一遍看看是否理解了里头的细枝末节。</li>
+        <li>一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考。</li>
+        <li>不要乱买书，不要乱追新技术新名词，基础的东西经过很长时间积累，会在未来至少 10 年通用。</li>
+        <li>回顾一下历史，看看历史时间线上技术的发展，你才能明白明天会是什么样的。</li>
+      </ol>
+    </div>
+  </section>
+</Base>

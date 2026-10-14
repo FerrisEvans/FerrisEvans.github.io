@@ -1,0 +1,183 @@
+---
+title: "GDScript Style guide"
+description: 整理 GDScript 官方代码风格指南：格式化、命名约定、代码顺序与类型声明建议。
+pubDate: 2025-03-17
+category: game-dev
+subcategory: godot
+tags: [gdscript, godot]
+---
+
+
+本篇不讨论任何有关 GDScript 语法相关的内容。与之有关的问题可以查阅[官方文档](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/index.html)。
+我想主要记录的是代码风格。
+由于 GDScript 与 Python 十分相似，所以可以参考 [PEP08](https://peps.python.org/pep-0008/)。
+
+如下是参考了本篇[指南](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html)的完整例子。
+
+```gdscript
+class_name StateMachine
+extends Node
+## Hierarchical State machine for the player.
+##
+## Initializes states and delegates engine callbacks ([method Node._physics_process],
+## [method Node._unhandled_input]) to the state.
+
+signal state_changed(previous, new)
+
+@export var initial_state: Node
+var is_active = true:
+	set = set_is_active
+
+@onready var _state = initial_state:
+	set = set_state
+@onready var _state_name = _state.name
+
+
+func _init():
+	add_to_group("state_machine")
+
+
+func _enter_tree():
+	print("this happens before the ready method!")
+
+
+func _ready():
+	state_changed.connect(_on_state_changed)
+	_state.enter()
+
+
+func _unhandled_input(event):
+	_state.unhandled_input(event)
+
+
+func _physics_process(delta):
+	_state.physics_process(delta)
+
+
+func transition_to(target_state_path, msg={}):
+	if not has_node(target_state_path):
+		return
+
+	var target_state = get_node(target_state_path)
+	assert(target_state.is_composite == false)
+
+	_state.exit()
+	self._state = target_state
+	_state.enter(msg)
+	Events.player_state_changed.emit(_state.name)
+
+
+func set_is_active(value):
+	is_active = value
+	set_physics_process(value)
+	set_process_unhandled_input(value)
+	set_block_signals(not value)
+
+
+func set_state(value):
+	_state = value
+	_state_name = _state.name
+
+
+func _on_state_changed(previous, new):
+	print("state changed")
+	state_changed.emit()
+
+
+class State:
+	var foo = 0
+
+	func _init():
+		print("Hello!")
+```
+
+## 1. 格式化
+
+- 使用 LF 用作换行符
+- 使用不带有字节顺序标记的 UTF-8 进行编码
+- 使用 <kbd>Tab</kbd> 进行缩进而不是 <kbd>Space</kbd>。
+
+
+## 2. 命名约定
+
+| Type         | Convention    | Example                     |
+|:-------------|:--------------|:----------------------------|
+| File names   | snake_case    | `yaml_parser.gd`            |
+| Class names  | PascalCase    | `class_name YAMLParser`     |
+| Node names   | PascalCase    | `Camera3D` `Player`         |
+| Functions    | snake_case    | `func load_level():`        |
+| Variables    | snake_case    | `var particle_effect`       |
+| Signals      | snake_case    | `signal door_opened`        |
+| Constants    | CONSTANT_CASE | `const MAX_SPEED = 200`     |
+| Enum names   | PascalCase    | `enum Element`              |
+| Enum members | CONSTANT_CASE | `{EARTH, WATER, AIR, FIRE}` |
+
+## 3. 代码顺序
+
+```gdscript
+01. @tool, @icon, @static_unload
+02. class_name
+03. extends
+04. ## doc comment
+
+05. signals
+06. enums
+07. constants
+08. static variables
+09. @export variables
+10. remaining regular variables
+11. @onready variables
+
+12. _static_init()
+13. remaining static methods
+14. overridden built-in virtual methods:
+	1. _init()
+	2. _enter_tree()
+	3. _ready()
+	4. _process()
+	5. _physics_process()
+	6. remaining virtual methods
+15. overridden custom methods
+16. remaining methods
+17. subclasses
+```
+
+这份排序总体上遵循一下原则：
+1. 属性和信号排在最前，然后是方法/函数。
+2. `public` 在前，`private` 在后。
+3. Virtual callbacks 在 class interface 之前。
+4. 对象的构造函数和初始函数，例如 `_init()` & `_ready()` 在其他函数之前。接下来应该是 `_unhandled_input()` & `_physics_process()`。
+5. 标注 `@onready` 的变量，要正好在`_ready()` 函数之前。
+6. 定义 local variable 的时候，距离他第一次被使用的地方越近越好。
+
+## 4. 类型声明
+
+在未明确类型的时候，建议明确标注类型，而不是使用类型推断
+
+```gdscript
+# The type can be int or float, and thus should be stated explicitly.
+var health: int = 0 # Good
+
+# Typed as int, but it could be that float was intended.
+var health := 0 # Bad
+```
+
+相反，在已经明确类型的时候，使用类型推断即可，无需重复声明
+
+```gdscript
+# The type is clearly inferred as Vector3.
+var direction := Vector3(1, 2, 3) # Good
+# The type hint has redundant information.
+var direction: Vector3 = Vector3(1, 2, 3) # Bad
+# What type is this? It's not immediately clear to the reader
+var value := complex_function() # Bad
+```
+
+有时，我们希望明确声明类型，但有一些函数并不能返回一个确定的类型。
+
+```gdscript
+@onready var health_bar: ProgressBar = get_node("UI/LifeBar") # Good
+@onready var health_bar := get_node("UI/LifeBar") as ProgressBar # Good
+# The compiler can't infer the exact type and will use Node instead of ProgressBar
+@onready var health_bar := get_node("UI/LifeBar") # Bad
+```

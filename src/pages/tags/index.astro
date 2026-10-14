@@ -1,0 +1,42 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getPosts } from '../../utils/posts';
+
+const posts = await getPosts();
+const counts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  }
+}
+const tags = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+const max = Math.max(...tags.map(([, n]) => n), 1);
+const min = Math.min(...tags.map(([, n]) => n), 0);
+---
+
+<Base title="标签">
+  <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6">
+    <header class="mb-10">
+      <h1 class="font-serif text-3xl font-bold sm:text-4xl">标签</h1>
+      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {tags.length} 个标签。</p>
+    </header>
+    <div class="flex flex-wrap items-baseline gap-x-5 gap-y-4 rounded-2xl border border-line bg-paper-elev p-8 dark:border-line-dark dark:bg-night-elev">
+      {
+        tags.map(([tag, count]) => {
+          const ratio = max === min ? 0.5 : (count - min) / (max - min);
+          const size = 0.875 + ratio * 0.875;
+          return (
+            <a
+              href={`/tags/${encodeURIComponent(tag)}/`}
+              class="group inline-flex items-baseline gap-1.5 transition-colors hover:text-accent dark:hover:text-accent-dark"
+              style={`font-size: ${size.toFixed(3)}rem`}
+            >
+              <span class="font-serif font-medium">#{tag}</span>
+              <span class="text-xs text-ink-faint dark:text-snow-faint">{count}</span>
+            </a>
+          );
+        })
+      }
+    </div>
+  </section>
+</Base>

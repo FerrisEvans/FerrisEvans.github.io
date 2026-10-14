@@ -1,0 +1,80 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { SITE } from '../data/site';
+import { getPosts, type Post } from '../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  const featured = posts.find((p) => p.data.pin) ?? posts[0];
+  const pageSize = SITE.postsPerPage;
+  const lastPage = Math.max(1, Math.ceil(posts.length / pageSize));
+  const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
+  return Array.from({ length: lastPage }, (_, i) => {
+    const n = i + 1;
+    return {
+      params: { page: n === 1 ? undefined : `page/${n}` },
+      props: {
+        featured,
+        page: {
+          data: posts.slice(i * pageSize, (i + 1) * pageSize),
+          currentPage: n,
+          lastPage,
+          url: {
+            current: hrefFor(n),
+            prev: n > 1 ? hrefFor(n - 1) : undefined,
+            next: n < lastPage ? hrefFor(n + 1) : undefined,
+          },
+        },
+      },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+const { page, featured } = Astro.props as {
+  page: { data: Post[]; currentPage: number; lastPage: number; url: { current: string; prev?: string; next?: string } };
+  featured: Post;
+};
+const posts = page.data;
+const isFirst = page.currentPage === 1;
+const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
+---
+
+<Base>
+  <section class="mx-auto max-w-6xl px-4 sm:px-6">
+    {
+      isFirst && (
+        <div class="flex flex-col items-center gap-6 py-16 text-center sm:py-20">
+          <img
+            src={SITE.avatar}
+            alt={SITE.author}
+            class="h-24 w-24 rounded-full border-2 border-paper-elev object-cover shadow-lg dark:border-night-elev"
+          />
+          <div>
+            <h1 class="font-serif text-4xl font-bold tracking-wide sm:text-5xl">{SITE.title}</h1>
+            <p class="mt-4 font-serif text-lg text-ink-soft dark:text-snow-soft">{SITE.tagline}</p>
+            <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-ink-faint dark:text-snow-faint">
+              {SITE.description}
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      isFirst && featured && (
+        <div class="mb-10">
+          <PostCard post={featured} featured />
+        </div>
+      )
+    }
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {grid.map((post) => <PostCard post={post} />)}
+    </div>
+
+    <Pagination page={page} />
+  </section>
+</Base>

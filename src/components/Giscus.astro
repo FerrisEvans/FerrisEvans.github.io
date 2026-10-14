@@ -1,0 +1,35 @@
+---
+import { SITE } from '../data/site';
+
+const g = SITE.giscus;
+---
+
+<section class="mt-16 border-t border-line pt-10 dark:border-line-dark">
+  <h2 class="mb-6 font-serif text-xl font-bold">评论</h2>
+  <div class="giscus"></div>
+  <script
+    is:inline
+    src="https://giscus.app/client.js"
+    data-repo={g.repo}
+    data-repo-id={g.repoId}
+    data-category={g.category}
+    data-category-id={g.categoryId}
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang="zh-CN"
+    crossorigin="anonymous"
+    async></script>
+</section>
+
+<script is:inline>
+  window.addEventListener('theme-changed', function () {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    var theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
+  });
+</script>
