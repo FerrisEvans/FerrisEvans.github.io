@@ -12,76 +12,97 @@ const links = [
 
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+  href === '/' ? path === '/' || path.startsWith('/page/') : path.startsWith(href);
 ---
 
-<header data-pagefind-ignore class="sticky top-0 z-40 border-b border-line/70 bg-paper/80 backdrop-blur-md dark:border-line-dark/70 dark:bg-night/80">
-  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-    <a href="/" class="font-serif text-xl font-bold tracking-wide text-ink dark:text-snow">
-      {SITE.title}
+<header data-pagefind-ignore class="sticky top-0 z-40 border-b border-line/80 bg-paper/85 backdrop-blur-xl transition-colors dark:border-line-dark/80 dark:bg-night/85">
+  <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6" aria-label="主导航">
+    <a href="/" class="group flex items-center gap-3">
+      <div class="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl border border-line bg-paper-elev shadow-2xs transition-transform duration-200 group-hover:scale-105 dark:border-line-dark dark:bg-night-elev">
+        <img src={SITE.avatar} alt={SITE.author} class="h-full w-full object-cover" />
+      </div>
+      <div class="flex flex-col">
+        <span class="font-serif text-lg font-bold leading-none tracking-tight text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+          {SITE.title}
+        </span>
+        <span class="mt-1 font-mono text-[10px] font-medium uppercase tracking-widest text-ink-faint dark:text-snow-faint">
+          Ferris · Journal
+        </span>
+      </div>
     </a>
 
-    <div class="hidden items-center gap-1 md:flex">
+    <div class="hidden items-center gap-1 rounded-full border border-line/90 bg-paper-elev/90 p-1 shadow-2xs backdrop-blur md:flex dark:border-line-dark/90 dark:bg-night-elev/90">
       {
-        links.map((link) => (
-          <a
-            href={link.href}
-            class:list={[
-              'rounded-full px-3.5 py-1.5 text-sm transition-colors',
-              isActive(link.href)
-                ? 'bg-ink/5 font-medium text-ink dark:bg-white/10 dark:text-snow'
-                : 'text-ink-soft hover:text-ink dark:text-snow-soft dark:hover:text-snow',
-            ]}
-          >
-            {link.label}
-          </a>
-        ))
+        links.map((link) => {
+          const active = isActive(link.href);
+          return (
+            <a
+              href={link.href}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'relative inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm transition-all duration-200',
+                active
+                  ? 'bg-ink font-medium text-paper shadow-2xs dark:bg-snow dark:text-night'
+                  : 'text-ink-soft hover:bg-ink/[0.04] hover:text-ink dark:text-snow-soft dark:hover:bg-white/[0.06] dark:hover:text-snow',
+              ]}
+            >
+              {link.label}
+            </a>
+          );
+        })
       }
     </div>
 
-    <div class="flex items-center gap-1">
+    <div class="flex items-center gap-1.5">
       <a
         href="/search/"
         aria-label="搜索"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-soft hover:bg-ink/5 hover:text-ink dark:text-snow-soft dark:hover:bg-white/10 dark:hover:text-snow transition-colors"
+        class="inline-flex h-9 items-center gap-2 rounded-full border border-line bg-paper-elev px-3 text-xs text-ink-soft shadow-2xs transition-all hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow"
       >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="11" cy="11" r="7" />
           <path d="m20 20-3.5-3.5" />
         </svg>
+        <span class="hidden sm:inline">搜索文章...</span>
+        <kbd class="hidden rounded border border-line bg-paper-muted px-1.5 py-0.5 font-mono text-[10px] text-ink-faint sm:inline-block dark:border-line-dark dark:bg-night-muted dark:text-snow-faint">
+          ⌘K
+        </kbd>
       </a>
+
       <ThemeToggle />
+
       <button
         id="menu-toggle"
         type="button"
         aria-label="打开菜单"
         aria-expanded="false"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-soft hover:bg-ink/5 dark:text-snow-soft dark:hover:bg-white/10 md:hidden"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-paper-elev text-ink-soft shadow-2xs hover:text-ink md:hidden dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:text-snow"
       >
-        <svg id="menu-icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <svg id="menu-icon-open" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M4 7h16M4 12h16M4 17h16" />
         </svg>
-        <svg id="menu-icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <svg id="menu-icon-close" class="hidden h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <path d="M6 6l12 12M18 6L6 18" />
         </svg>
       </button>
     </div>
   </nav>
 
-  <div id="mobile-menu" class="hidden border-t border-line/70 dark:border-line-dark/70 md:hidden">
-    <div class="mx-auto flex max-w-6xl flex-col px-4 py-3 sm:px-6">
+  <div id="mobile-menu" class="hidden border-t border-line/80 bg-paper-elev/95 backdrop-blur-lg md:hidden dark:border-line-dark/80 dark:bg-night-elev/95">
+    <div class="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3 sm:px-6">
       {
         links.map((link) => (
           <a
             href={link.href}
             class:list={[
-              'rounded-lg px-3 py-2.5 text-sm',
+              'flex items-center justify-between rounded-xl px-3.5 py-2.5 text-sm transition-colors',
               isActive(link.href)
-                ? 'bg-ink/5 font-medium text-ink dark:bg-white/10 dark:text-snow'
-                : 'text-ink-soft dark:text-snow-soft',
+                ? 'bg-accent/10 font-semibold text-accent dark:bg-accent-dark/15 dark:text-accent-dark'
+                : 'text-ink-soft hover:bg-ink/5 hover:text-ink dark:text-snow-soft dark:hover:bg-white/5 dark:hover:text-snow',
             ]}
           >
-            {link.label}
+            <span>{link.label}</span>
+            {isActive(link.href) && <span class="h-1.5 w-1.5 rounded-full bg-accent dark:bg-accent-dark" />}
           </a>
         ))
       }

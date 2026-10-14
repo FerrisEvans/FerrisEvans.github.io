@@ -13,10 +13,10 @@ const cat = categoryOf(category);
 <a
   href={`/categories/${cat.slug}/`}
   class:list={[
-    'inline-flex items-center gap-1.5 rounded-full border border-line bg-paper-elev/90 px-2.5 py-0.5 text-xs font-medium text-ink-soft backdrop-blur transition-colors hover:text-ink dark:border-line-dark dark:bg-night-elev/90 dark:text-snow-soft dark:hover:text-snow',
+    'relative z-10 inline-flex items-center gap-1.5 rounded-full border border-line bg-paper-elev px-2.5 py-0.5 text-xs font-medium text-ink-soft shadow-2xs transition-all hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow',
     className,
   ]}
 >
-  <span class="h-1.5 w-1.5 rounded-full" style={`background: ${cat.gradient}`}></span>
+  <span class="h-1.5 w-1.5 rounded-full" style={`background: ${cat.accent}`}></span>
   {cat.label}
 </a>

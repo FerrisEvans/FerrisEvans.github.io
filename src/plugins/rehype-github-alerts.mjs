@@ -1,5 +1,12 @@
-const TYPES = ['NOTE', 'TIP', 'IMPORTANT', 'WARNING', 'CAUTION'];
 const MARKER = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/;
+
+const LABELS = {
+  note: 'NOTE · 注释',
+  tip: 'TIP · 技巧',
+  important: 'IMPORTANT · 重要',
+  warning: 'WARNING · 注意',
+  caution: 'CAUTION · 警示',
+};
 
 function firstTextNode(node) {
   if (!node) return null;
@@ -49,7 +56,7 @@ function transform(blockquote) {
     type: 'element',
     tagName: 'p',
     properties: { className: ['markdown-alert-title'] },
-    children: [{ type: 'text', value: match[1] }],
+    children: [{ type: 'text', value: LABELS[type] ?? match[1] }],
   });
 }
 

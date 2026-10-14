@@ -19,37 +19,51 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
 
 {
   lastPage > 1 && (
-    <nav aria-label="分页" class="mt-12 flex items-center justify-center gap-2">
-      {page.url.prev ? (
-        <a href={page.url.prev} class="pager-link" aria-label="上一页">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-        </a>
-      ) : (
-        <span class="pager-link opacity-30" aria-hidden="true">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
-        </span>
-      )}
-      {pages.map((n) => (
-        <a
-          href={hrefFor(n)}
-          aria-current={n === currentPage ? 'page' : undefined}
-          class:list={[
-            'pager-link min-w-9 px-2',
-            n === currentPage && 'bg-ink text-paper hover:bg-ink dark:bg-snow dark:text-night dark:hover:bg-snow',
-          ]}
-        >
-          {n}
-        </a>
-      ))}
-      {page.url.next ? (
-        <a href={page.url.next} class="pager-link" aria-label="下一页">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-        </a>
-      ) : (
-        <span class="pager-link opacity-30" aria-hidden="true">
-          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-        </span>
-      )}
+    <nav aria-label="分页" class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-line/80 pt-8 sm:flex-row dark:border-line-dark/80">
+      <p class="font-mono text-xs text-ink-faint dark:text-snow-faint">
+        PAGE <span class="font-semibold text-ink dark:text-snow">{currentPage}</span> OF <span class="font-semibold text-ink dark:text-snow">{lastPage}</span>
+      </p>
+
+      <div class="flex items-center gap-2">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="pager-link gap-1.5 px-3.5" aria-label="上一页">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+            <span>上一页</span>
+          </a>
+        ) : (
+          <span class="pager-link gap-1.5 px-3.5 opacity-35 cursor-not-allowed" aria-hidden="true">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+            <span>上一页</span>
+          </span>
+        )}
+
+        <div class="flex items-center gap-1.5">
+          {pages.map((n) => (
+            <a
+              href={hrefFor(n)}
+              aria-current={n === currentPage ? 'page' : undefined}
+              class:list={[
+                'pager-link min-w-9 px-2.5 font-mono',
+                n === currentPage && 'border-ink bg-ink text-paper hover:bg-ink hover:text-paper dark:border-snow dark:bg-snow dark:text-night dark:hover:bg-snow dark:hover:text-night',
+              ]}
+            >
+              {n}
+            </a>
+          ))}
+        </div>
+
+        {page.url.next ? (
+          <a href={page.url.next} class="pager-link gap-1.5 px-3.5" aria-label="下一页">
+            <span>下一页</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+          </a>
+        ) : (
+          <span class="pager-link gap-1.5 px-3.5 opacity-35 cursor-not-allowed" aria-hidden="true">
+            <span>下一页</span>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+          </span>
+        )}
+      </div>
     </nav>
   )
 }
@@ -58,6 +72,6 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
   @reference "../styles/global.css";
 
   .pager-link {
-    @apply inline-flex h-9 items-center justify-center rounded-full border border-line text-sm text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:bg-white/10 dark:hover:text-snow;
+    @apply inline-flex h-9 items-center justify-center rounded-xl border border-line bg-paper-elev text-xs font-medium text-ink-soft shadow-2xs transition-all hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow;
   }
 </style>

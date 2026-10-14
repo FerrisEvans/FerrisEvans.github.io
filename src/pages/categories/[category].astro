@@ -3,8 +3,8 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import CardCover from '../../components/CardCover.astro';
 import TagChip from '../../components/TagChip.astro';
-import { CATEGORIES, categoryOf } from '../../data/site';
-import { getPosts, formatDate, postUrl, type Post } from '../../utils/posts';
+import { CATEGORIES } from '../../data/site';
+import { getPosts, formatDate, getReadingTime, postUrl, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
@@ -30,59 +30,101 @@ const orderedKeys = [...Object.keys(category.subcategories), ...[...grouped.keys
 for (const key of orderedKeys) {
   const list = grouped.get(key);
   if (!list?.length) continue;
-  groups.push({ label: key ? (category.subcategories[key] ?? key) : '未分组', posts: list });
+  groups.push({ label: key ? (category.subcategories[key] ?? key) : '综合笔记', posts: list });
 }
 ---
 
 <Base title={category.label} description={category.description}>
-  <section class="mx-auto max-w-4xl px-4 py-14 sm:px-6">
-    <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
-      <a href="/categories/" class="hover:text-ink dark:hover:text-snow">分类</a>
-      <span>/</span>
-      <span class="text-ink-soft dark:text-snow-soft">{category.label}</span>
-    </nav>
+  <section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+      <nav aria-label="面包屑" class="flex items-center gap-2 font-mono text-xs text-ink-faint dark:text-snow-faint">
+        <a href="/" class="hover:text-ink dark:hover:text-snow">首页</a>
+        <span>/</span>
+        <a href="/categories/" class="hover:text-ink dark:hover:text-snow">分类</a>
+        <span>/</span>
+        <span class="text-ink-soft dark:text-snow-soft">{category.label}</span>
+      </nav>
 
-    <header class="mb-10 overflow-hidden rounded-2xl border border-line dark:border-line-dark">
-      <CardCover category={category.slug} class="aspect-[21/9] sm:aspect-[3/1]" />
-      <div class="bg-paper-elev p-6 dark:bg-night-elev sm:p-8">
-        <h1 class="font-serif text-3xl font-bold">{category.label}</h1>
-        <p class="mt-2 text-sm text-ink-soft dark:text-snow-soft">{category.description} · 共 {posts.length} 篇</p>
+      <div class="flex flex-wrap items-center gap-1.5">
+        {CATEGORIES.map((c) => (
+          <a
+            href={`/categories/${c.slug}/`}
+            class:list={[
+              'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors',
+              c.slug === category.slug
+                ? 'border-ink bg-ink text-paper dark:border-snow dark:bg-snow dark:text-night'
+                : 'border-line bg-paper-elev text-ink-soft hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:text-snow',
+            ]}
+          >
+            <span class="h-1.5 w-1.5 rounded-full" style={`background: ${c.accent}`} />
+            {c.label}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <header class="mb-12 overflow-hidden surface-card">
+      <CardCover category={category.slug} class="aspect-[21/9] sm:aspect-[3.4/1]" />
+      <div class="flex flex-col justify-between gap-4 p-6 sm:flex-row sm:items-center sm:p-8">
+        <div>
+          <h1 class="font-serif text-2xl font-bold sm:text-3xl">{category.label}</h1>
+          <p class="mt-2 text-sm text-ink-soft dark:text-snow-soft">{category.description}</p>
+        </div>
+        <div class="shrink-0 rounded-xl border border-line bg-paper-muted/60 px-4 py-2.5 text-center dark:border-line-dark dark:bg-night-muted/60">
+          <p class="font-mono text-xl font-bold text-ink dark:text-snow">{posts.length}</p>
+          <p class="text-[11px] text-ink-faint dark:text-snow-faint">篇文章</p>
+        </div>
       </div>
     </header>
 
     {
       groups.map((group) => (
         <section class="mb-12">
-          <h2 class="mb-5 flex items-center gap-3 font-serif text-xl font-bold">
-            {group.label}
-            <span class="text-sm font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
-          </h2>
-          <ul class="space-y-3">
-            {group.posts.map((post) => (
-              <li>
-                <a
-                  href={postUrl(post)}
-                  class="group flex flex-col gap-2 rounded-xl border border-line bg-paper-elev p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md dark:border-line-dark dark:bg-night-elev sm:flex-row sm:items-center sm:justify-between"
-                >
-                  <div class="min-w-0">
-                    <h3 class="font-serif font-bold leading-snug transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
-                      {post.data.title}
-                    </h3>
-                    {post.data.description && (
-                      <p class="mt-1 line-clamp-1 text-sm text-ink-soft dark:text-snow-soft">{post.data.description}</p>
-                    )}
-                    {post.data.tags.length > 0 && (
-                      <div class="mt-2 flex flex-wrap gap-1.5">
-                        {post.data.tags.map((tag) => (
-                          <TagChip tag={tag} />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                  <time class="shrink-0 text-sm text-ink-faint dark:text-snow-faint">{formatDate(post.data.pubDate)}</time>
-                </a>
-              </li>
-            ))}
+          <div class="mb-5 flex items-center justify-between border-b border-line pb-3 dark:border-line-dark">
+            <h2 class="flex items-center gap-2.5 font-serif text-xl font-bold">
+              <span class="h-4 w-1 rounded-full" style={`background: ${category.accent}`} />
+              {group.label}
+            </h2>
+            <span class="rounded-full bg-paper-muted px-2.5 py-0.5 font-mono text-xs text-ink-soft dark:bg-night-muted dark:text-snow-soft">
+              {group.posts.length} 篇
+            </span>
+          </div>
+
+          <ul class="space-y-3.5">
+            {group.posts.map((post) => {
+              const url = postUrl(post);
+              const minutes = getReadingTime(post);
+              return (
+                <li>
+                  <article class="group relative flex flex-col gap-3 surface-card-interactive p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+                    <div class="min-w-0 flex-1">
+                      <h3 class="font-serif text-lg font-bold leading-snug text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                        <a href={url} class="after:absolute after:inset-0 after:z-0">
+                          {post.data.title}
+                        </a>
+                      </h3>
+                      {post.data.description && (
+                        <p class="mt-1.5 line-clamp-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">
+                          {post.data.description}
+                        </p>
+                      )}
+                      {post.data.tags.length > 0 && (
+                        <div class="mt-3 flex flex-wrap gap-1.5">
+                          {post.data.tags.map((tag) => (
+                            <TagChip tag={tag} />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    <div class="flex shrink-0 items-center gap-2 font-mono text-xs text-ink-faint sm:flex-col sm:items-end dark:text-snow-faint">
+                      <time>{formatDate(post.data.pubDate)}</time>
+                      <span>约 {minutes} 分钟</span>
+                    </div>
+                  </article>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))
