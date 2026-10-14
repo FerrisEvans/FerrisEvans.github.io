@@ -53,5 +53,4 @@ src/
 ├── components/        # Nav / Footer / PostCard / TOC / Giscus 等
 ├── pages/             # 路由（首页、文章、分类、标签、归档、关于、搜索、RSS）
 └── styles/global.css  # 设计系统（色板、字体、正文排版）
-_others/               # 未发布的草稿与知识库笔记（不参与构建）
 ```
