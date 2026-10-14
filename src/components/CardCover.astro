@@ -4,33 +4,100 @@ import { categoryOf } from '../data/site';
 interface Props {
   category: string;
   label?: string;
+  subtitle?: string;
   class?: string;
 }
 
-const { category, label, class: className } = Astro.props;
+const { category, label, subtitle, class: className } = Astro.props;
 const cat = categoryOf(category);
 const text = label ?? cat.label;
+const sub = subtitle ?? cat.enLabel;
 ---
 
 <div
   class:list={[
-    'relative overflow-hidden bg-cover',
+    'relative overflow-hidden select-none',
     className ?? 'aspect-[16/9]',
   ]}
   style={`background-image: ${cat.gradient}; background-size: cover;`}
 >
-  <div class="absolute inset-0 card-cover-texture"></div>
-  <div class="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/10"></div>
-  <span
-    aria-hidden="true"
-    class="absolute -bottom-3 right-3 select-none font-serif text-5xl font-bold tracking-widest text-white/25 sm:text-6xl"
-  >
-    {text}
-  </span>
+  <div class="absolute inset-0 card-cover-texture opacity-70"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.22),transparent_55%)]"></div>
+  <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent"></div>
+
+  {/* Technical geometric motif per category */}
+  <div class="pointer-events-none absolute right-4 top-4 opacity-25 transition-transform duration-500 group-hover:scale-105 group-hover:opacity-35">
+    {cat.slug === 'programming-language' && (
+      <svg class="h-24 w-24 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="14" y="18" width="72" height="64" rx="8" />
+        <line x1="14" y1="32" x2="86" y2="32" />
+        <circle cx="24" cy="25" r="2" fill="currentColor" />
+        <circle cx="32" cy="25" r="2" fill="currentColor" />
+        <path d="M36 48L24 58L36 68" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M64 48L76 58L64 68" stroke-linecap="round" stroke-linejoin="round" />
+        <line x1="54" y1="44" x2="46" y2="72" stroke-linecap="round" />
+      </svg>
+    )}
+    {cat.slug === 'data-structures' && (
+      <svg class="h-24 w-24 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="50" y1="24" x2="26" y2="54" />
+        <line x1="50" y1="24" x2="74" y2="54" />
+        <line x1="26" y1="54" x2="16" y2="80" />
+        <line x1="26" y1="54" x2="40" y2="80" />
+        <line x1="74" y1="54" x2="64" y2="80" />
+        <circle cx="50" cy="22" r="9" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="26" cy="54" r="8" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="74" cy="54" r="8" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="16" cy="80" r="6" />
+        <circle cx="40" cy="80" r="6" />
+        <circle cx="64" cy="80" r="6" />
+      </svg>
+    )}
+    {cat.slug === 'game-dev' && (
+      <svg class="h-24 w-24 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="50,14 84,32 84,68 50,86 16,68 16,32" fill="currentColor" fill-opacity="0.12" />
+        <polyline points="16,32 50,50 84,32" />
+        <line x1="50" y1="50" x2="50" y2="86" />
+        <circle cx="50" cy="50" r="4" fill="currentColor" />
+      </svg>
+    )}
+    {cat.slug === 'ai' && (
+      <svg class="h-24 w-24 text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="50" cy="50" r="14" fill="currentColor" fill-opacity="0.2" />
+        <circle cx="50" cy="50" r="32" stroke-dasharray="4 4" />
+        <line x1="50" y1="18" x2="50" y2="36" />
+        <line x1="50" y1="64" x2="50" y2="82" />
+        <line x1="18" y1="50" x2="36" y2="50" />
+        <line x1="64" y1="50" x2="82" y2="50" />
+        <circle cx="50" cy="18" r="5" fill="currentColor" />
+        <circle cx="50" cy="82" r="5" fill="currentColor" />
+        <circle cx="18" cy="50" r="5" fill="currentColor" />
+        <circle cx="82" cy="50" r="5" fill="currentColor" />
+      </svg>
+    )}
+  </div>
+
+  <div class="absolute left-4 top-3.5 flex items-center gap-2">
+    <span class="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/25 px-2.5 py-0.5 font-mono text-[10px] font-semibold tracking-wider text-white/90 backdrop-blur-md">
+      <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+      {cat.code}
+    </span>
+  </div>
+
+  <div class="absolute bottom-3.5 left-4 right-4 flex items-end justify-between gap-2">
+    <div>
+      <p class="font-mono text-[10px] font-medium uppercase tracking-widest text-white/70">
+        {sub}
+      </p>
+      <p class="mt-0.5 font-serif text-lg font-bold tracking-wide text-white drop-shadow-xs">
+        {text}
+      </p>
+    </div>
+  </div>
 </div>
 
 <style>
   .card-cover-texture {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cpath d='M28 .5H0M.5 0v28' fill='none' stroke='%23ffffff' stroke-opacity='0.16'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M24 .5H0M.5 0v24' fill='none' stroke='%23ffffff' stroke-opacity='0.12'/%3E%3C/svg%3E");
   }
 </style>

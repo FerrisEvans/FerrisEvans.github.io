@@ -2,39 +2,95 @@
 import Base from '../../layouts/Base.astro';
 import CardCover from '../../components/CardCover.astro';
 import { CATEGORIES } from '../../data/site';
-import { getPosts } from '../../utils/posts';
+import { getPosts, formatShortDate, postUrl } from '../../utils/posts';
 
 const posts = await getPosts();
-const countOf = (slug: string) => posts.filter((p) => p.data.category === slug).length;
+const postsOf = (slug: string) => posts.filter((p) => p.data.category === slug);
 ---
 
 <Base title="分类">
-  <section class="mx-auto max-w-6xl px-4 py-14 sm:px-6">
-    <header class="mb-10">
-      <h1 class="font-serif text-3xl font-bold sm:text-4xl">分类</h1>
-      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {CATEGORIES.length} 个分类，{posts.length} 篇文章。</p>
+  <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+    <header class="mb-10 flex flex-col justify-between gap-4 border-b border-line pb-6 sm:flex-row sm:items-end dark:border-line-dark">
+      <div>
+        <p class="font-mono text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
+          KNOWLEDGE TAXONOMY
+        </p>
+        <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">分类专栏</h1>
+        <p class="mt-2 text-sm text-ink-soft dark:text-snow-soft">
+          按知识体系与技术领域组织的系统化学习笔记，共 {CATEGORIES.length} 个大类、{posts.length} 篇文章。
+        </p>
+      </div>
     </header>
-    <div class="grid gap-6 sm:grid-cols-2">
+
+    <div class="grid gap-6 md:grid-cols-2">
       {
-        CATEGORIES.map((cat) => (
-          <a
-            href={`/categories/${cat.slug}/`}
-            class="group overflow-hidden rounded-2xl border border-line bg-paper-elev shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.12)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_2px_4px_rgba(0,0,0,0.05),0_20px_40px_-16px_rgba(0,0,0,0.25)] dark:border-line-dark dark:bg-night-elev"
-          >
-            <CardCover category={cat.slug} class="aspect-[21/9]" />
-            <div class="flex items-start justify-between gap-4 p-6">
-              <div>
-                <h2 class="font-serif text-xl font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
-                  {cat.label}
-                </h2>
-                <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
+        CATEGORIES.map((cat) => {
+          const catPosts = postsOf(cat.slug);
+          const subEntries = Object.entries(cat.subcategories);
+          return (
+            <article class="group flex flex-col overflow-hidden surface-card-interactive">
+              <a href={`/categories/${cat.slug}/`} class="block overflow-hidden">
+                <CardCover category={cat.slug} class="aspect-[21/9]" />
+              </a>
+
+              <div class="flex flex-1 flex-col justify-between gap-5 p-6">
+                <div>
+                  <div class="flex items-start justify-between gap-4">
+                    <div>
+                      <h2 class="font-serif text-xl font-bold text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                        <a href={`/categories/${cat.slug}/`}>{cat.label}</a>
+                      </h2>
+                      <p class="mt-1.5 text-sm leading-6 text-ink-soft dark:text-snow-soft">
+                        {cat.description}
+                      </p>
+                    </div>
+                    <span class="shrink-0 rounded-full border border-line bg-paper-muted/80 px-3 py-1 font-mono text-xs font-semibold text-ink-soft dark:border-line-dark dark:bg-night-muted dark:text-snow-soft">
+                      {catPosts.length} 篇
+                    </span>
+                  </div>
+
+                  {subEntries.length > 0 && (
+                    <div class="mt-4 flex flex-wrap items-center gap-1.5">
+                      <span class="font-mono text-[11px] text-ink-faint dark:text-snow-faint">子方向:</span>
+                      {subEntries.map(([, subLabel]) => (
+                        <span class="rounded-md border border-line/80 bg-paper px-2 py-0.5 font-mono text-[11px] text-ink-soft dark:border-line-dark dark:bg-night dark:text-snow-soft">
+                          {subLabel}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {catPosts.length > 0 && (
+                    <ul class="mt-5 space-y-2 border-t border-line/70 pt-4 dark:border-line-dark/70">
+                      {catPosts.slice(0, 3).map((post) => (
+                        <li class="flex items-center justify-between gap-3 text-xs">
+                          <a
+                            href={postUrl(post)}
+                            class="truncate font-medium text-ink-soft transition-colors hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark"
+                          >
+                            · {post.data.title}
+                          </a>
+                          <time class="shrink-0 font-mono text-[11px] text-ink-faint dark:text-snow-faint">
+                            {formatShortDate(post.data.pubDate)}
+                          </time>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+
+                <div class="flex items-center justify-end border-t border-line/60 pt-3.5 dark:border-line-dark/60">
+                  <a
+                    href={`/categories/${cat.slug}/`}
+                    class="inline-flex items-center gap-1 font-mono text-xs font-semibold text-accent transition-transform group-hover:translate-x-0.5 dark:text-accent-dark"
+                  >
+                    进入专栏 ({catPosts.length}) →
+                  </a>
+                </div>
               </div>
-              <span class="shrink-0 rounded-full bg-ink/[0.05] px-2.5 py-1 text-xs font-medium text-ink-soft dark:bg-white/10 dark:text-snow-soft">
-                {countOf(cat.slug)} 篇
-              </span>
-            </div>
-          </a>
-        ))
+            </article>
+          );
+        })
       }
     </div>
   </section>

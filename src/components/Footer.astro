@@ -1,38 +1,92 @@
 ---
-import { SITE } from '../data/site';
+import { SITE, CATEGORIES } from '../data/site';
 
 const year = 2026;
 ---
 
-<footer data-pagefind-ignore class="mt-20 border-t border-line dark:border-line-dark">
-  <div class="mx-auto flex max-w-6xl flex-col items-center gap-5 px-4 py-10 sm:px-6">
-    <div class="flex items-center gap-2">
-      <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="footer-icon">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.11-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.27 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
-        </svg>
-      </a>
-      <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="footer-icon">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.4L6.47 22H3.33l7.24-8.28L1.2 2h6.4l4.42 5.85L18.9 2zm-1.1 18.1h1.72L7.75 3.8H5.9l11.9 16.3z" />
-        </svg>
-      </a>
-      <a href={`mailto:${SITE.email}`} aria-label="Email" class="footer-icon">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="5" width="18" height="14" rx="2" />
-          <path d="m3 7 9 6 9-6" />
-        </svg>
-      </a>
-      <a href="/rss.xml" aria-label="RSS" class="footer-icon">
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" />
-          <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none" />
-        </svg>
-      </a>
+<footer data-pagefind-ignore class="mt-24 border-t border-line bg-paper-elev/60 dark:border-line-dark dark:bg-night-elev/40">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <div class="grid gap-10 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <a href="/" class="inline-flex items-center gap-3">
+          <img src={SITE.avatar} alt={SITE.author} class="h-8 w-8 rounded-lg border border-line object-cover dark:border-line-dark" />
+          <span class="font-serif text-lg font-bold tracking-tight text-ink dark:text-snow">{SITE.title}</span>
+        </a>
+        <p class="mt-3 font-serif text-sm italic text-ink-soft dark:text-snow-soft">
+          “{SITE.tagline}”
+        </p>
+        <p class="mt-2 max-w-sm text-xs leading-6 text-ink-faint dark:text-snow-faint">
+          {SITE.description}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 md:col-span-7">
+        <div>
+          <p class="font-mono text-xs font-semibold uppercase tracking-wider text-ink dark:text-snow">导航</p>
+          <ul class="mt-3 space-y-2 text-sm text-ink-soft dark:text-snow-soft">
+            <li><a href="/" class="hover:text-accent dark:hover:text-accent-dark transition-colors">首页</a></li>
+            <li><a href="/categories/" class="hover:text-accent dark:hover:text-accent-dark transition-colors">分类专栏</a></li>
+            <li><a href="/tags/" class="hover:text-accent dark:hover:text-accent-dark transition-colors">标签索引</a></li>
+            <li><a href="/archives/" class="hover:text-accent dark:hover:text-accent-dark transition-colors">时间归档</a></li>
+            <li><a href="/about/" class="hover:text-accent dark:hover:text-accent-dark transition-colors">关于作者</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-mono text-xs font-semibold uppercase tracking-wider text-ink dark:text-snow">知识领域</p>
+          <ul class="mt-3 space-y-2 text-sm text-ink-soft dark:text-snow-soft">
+            {
+              CATEGORIES.map((cat) => (
+                <li>
+                  <a href={`/categories/${cat.slug}/`} class="inline-flex items-center gap-2 hover:text-accent dark:hover:text-accent-dark transition-colors">
+                    <span class="h-1.5 w-1.5 rounded-full" style={`background: ${cat.accent}`} />
+                    {cat.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="col-span-2 sm:col-span-1">
+          <p class="font-mono text-xs font-semibold uppercase tracking-wider text-ink dark:text-snow">订阅与联系</p>
+          <div class="mt-3 flex flex-wrap items-center gap-2">
+            <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub" class="footer-icon">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.11-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.7 5.38-5.27 5.66.41.36.78 1.06.78 2.14v3.17c0 .3.2.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z" />
+              </svg>
+            </a>
+            <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter" title="X / Twitter" class="footer-icon">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.9 2H22l-6.77 7.74L23.2 22h-6.24l-4.89-6.4L6.47 22H3.33l7.24-8.28L1.2 2h6.4l4.42 5.85L18.9 2zm-1.1 18.1h1.72L7.75 3.8H5.9l11.9 16.3z" />
+              </svg>
+            </a>
+            <a href={`mailto:${SITE.email}`} aria-label="Email" title={SITE.email} class="footer-icon">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3 7 9 6 9-6" />
+              </svg>
+            </a>
+            <a href="/rss.xml" aria-label="RSS" title="RSS Feed" class="footer-icon">
+              <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" />
+                <circle cx="5" cy="19" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+          <p class="mt-3 font-mono text-xs text-ink-faint dark:text-snow-faint break-all">
+            {SITE.email}
+          </p>
+        </div>
+      </div>
     </div>
-    <p class="text-sm text-ink-faint dark:text-snow-faint">
-      © {year} {SITE.author} · Powered by <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 hover:text-ink dark:hover:text-snow">Astro</a>
-    </p>
+
+    <div class="mt-10 flex flex-col items-center justify-between gap-3 border-t border-line/70 pt-6 text-xs text-ink-faint sm:flex-row dark:border-line-dark/70 dark:text-snow-faint">
+      <p>© {year} {SITE.author}. All rights reserved.</p>
+      <p>
+        Built with <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="font-medium text-ink-soft underline underline-offset-4 hover:text-ink dark:text-snow-soft dark:hover:text-snow">Astro</a> &amp; <a href="https://pagefind.app" target="_blank" rel="noopener noreferrer" class="font-medium text-ink-soft underline underline-offset-4 hover:text-ink dark:text-snow-soft dark:hover:text-snow">Pagefind</a>
+      </p>
+    </div>
   </div>
 </footer>
 
@@ -40,6 +94,6 @@ const year = 2026;
   @reference "../styles/global.css";
 
   .footer-icon {
-    @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink dark:text-snow-soft dark:hover:bg-white/10 dark:hover:text-snow;
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-xl border border-line bg-paper-elev text-ink-soft shadow-2xs transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-accent-dark;
   }
 </style>

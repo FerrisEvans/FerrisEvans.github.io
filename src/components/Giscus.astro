@@ -4,8 +4,16 @@ import { SITE } from '../data/site';
 const g = SITE.giscus;
 ---
 
-<section class="mt-16 border-t border-line pt-10 dark:border-line-dark">
-  <h2 class="mb-6 font-serif text-xl font-bold">评论</h2>
+<section class="mt-14 surface-card p-6 sm:p-8">
+  <div class="mb-6 flex items-center justify-between border-b border-line/80 pb-4 dark:border-line-dark/80">
+    <div class="flex items-center gap-2.5">
+      <svg class="h-5 w-5 text-accent dark:text-accent-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+      </svg>
+      <h2 class="font-serif text-lg font-bold">讨论与评论</h2>
+    </div>
+    <span class="font-mono text-xs text-ink-faint dark:text-snow-faint">Powered by Giscus</span>
+  </div>
   <div class="giscus"></div>
   <script
     is:inline

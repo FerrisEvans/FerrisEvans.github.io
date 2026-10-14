@@ -3,37 +3,60 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-serif: "Songti SC", "Noto Serif SC", STSong, serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
-  --color-paper: #faf9f7;
+  --color-paper: #f7f7f5;
   --color-paper-elev: #ffffff;
-  --color-ink: #211d19;
-  --color-ink-soft: #6f6759;
-  --color-ink-faint: #a39a8c;
-  --color-line: #e9e4dc;
-  --color-accent: #b4530d;
+  --color-paper-muted: #efefec;
+  --color-ink: #14161c;
+  --color-ink-soft: #525866;
+  --color-ink-faint: #868c98;
+  --color-line: #e4e5e9;
+  --color-accent: #4f46e5;
+  --color-accent-warm: #d97706;
 
-  --color-night: #0f1420;
-  --color-night-elev: #171e2e;
-  --color-snow: #e8e6e1;
-  --color-snow-soft: #9aa3b5;
-  --color-snow-faint: #5b6577;
-  --color-line-dark: #232c40;
-  --color-accent-dark: #e8934a;
+  --color-night: #0b0e14;
+  --color-night-elev: #121722;
+  --color-night-muted: #19202e;
+  --color-snow: #f1f3f7;
+  --color-snow-soft: #9BA3B4;
+  --color-snow-faint: #636b7d;
+  --color-line-dark: #212838;
+  --color-accent-dark: #818cf8;
 }
 
 html {
   scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  @apply bg-paper text-ink font-sans antialiased dark:bg-night dark:text-snow;
+  @apply bg-paper text-ink font-sans antialiased dark:bg-night dark:text-snow selection:bg-accent/15 selection:text-accent dark:selection:bg-accent-dark/25 dark:selection:text-snow;
 }
 
-::selection {
-  @apply bg-accent/20 dark:bg-accent-dark/30;
+/* Subtle ambient background pattern */
+.bg-grid-pattern {
+  background-size: 32px 32px;
+  background-image:
+    linear-gradient(to right, rgba(20, 22, 28, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 22, 28, 0.035) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Reusable elevated surface utility */
+.surface-card {
+  @apply rounded-2xl border border-line bg-paper-elev shadow-[0_1px_2px_rgba(15,23,42,0.03),0_8px_24px_-12px_rgba(15,23,42,0.07)] dark:border-line-dark dark:bg-night-elev dark:shadow-[0_1px_2px_rgba(0,0,0,0.3),0_12px_28px_-12px_rgba(0,0,0,0.5)];
+}
+
+.surface-card-interactive {
+  @apply rounded-2xl border border-line bg-paper-elev shadow-[0_1px_2px_rgba(15,23,42,0.03),0_8px_24px_-12px_rgba(15,23,42,0.07)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/35 hover:shadow-[0_4px_12px_rgba(15,23,42,0.05),0_20px_36px_-16px_rgba(79,70,229,0.14)] dark:border-line-dark dark:bg-night-elev dark:shadow-[0_1px_2px_rgba(0,0,0,0.3),0_12px_28px_-12px_rgba(0,0,0,0.5)] dark:hover:border-accent-dark/40 dark:hover:shadow-[0_4px_12px_rgba(0,0,0,0.4),0_20px_36px_-16px_rgba(129,140,248,0.18)];
 }
 
 .dark .astro-code,
@@ -45,26 +68,31 @@ body {
 /* ---------- prose ---------- */
 
 .prose-custom {
-  @apply text-[1.0625rem] leading-8 text-ink dark:text-snow;
+  @apply text-[1.03125rem] leading-[1.9] text-ink/92 dark:text-snow/92;
 }
 
 .prose-custom h1,
 .prose-custom h2,
 .prose-custom h3,
 .prose-custom h4 {
-  @apply font-serif font-bold text-ink dark:text-snow scroll-mt-24;
+  @apply font-sans font-bold tracking-tight text-ink dark:text-snow scroll-mt-24;
 }
 
 .prose-custom h2 {
-  @apply mt-12 mb-5 text-2xl border-b border-line dark:border-line-dark pb-3;
+  @apply relative mt-14 mb-5 flex items-center gap-2.5 text-[1.45rem] leading-snug border-b border-line dark:border-line-dark pb-3.5;
+}
+
+.prose-custom h2::before {
+  content: "";
+  @apply inline-block h-5 w-1 shrink-0 rounded-full bg-accent dark:bg-accent-dark;
 }
 
 .prose-custom h3 {
-  @apply mt-9 mb-4 text-xl;
+  @apply mt-9 mb-3.5 text-[1.1875rem] leading-snug;
 }
 
 .prose-custom h4 {
-  @apply mt-7 mb-3 text-lg;
+  @apply mt-7 mb-2.5 text-base font-semibold;
 }
 
 .prose-custom p {
@@ -72,16 +100,24 @@ body {
 }
 
 .prose-custom a {
-  @apply text-accent dark:text-accent-dark underline decoration-accent/30 dark:decoration-accent-dark/30 underline-offset-4 hover:decoration-accent dark:hover:decoration-accent-dark transition-colors break-words;
+  @apply font-medium text-accent dark:text-accent-dark underline decoration-accent/35 dark:decoration-accent-dark/35 underline-offset-4 hover:decoration-accent dark:hover:decoration-accent-dark transition-colors break-words;
 }
 
 .prose-custom strong {
   @apply font-semibold text-ink dark:text-snow;
 }
 
+.prose-custom em {
+  @apply text-ink-soft dark:text-snow-soft italic;
+}
+
+.prose-custom u {
+  @apply decoration-accent/50 dark:decoration-accent-dark/50 underline-offset-4;
+}
+
 .prose-custom ul,
 .prose-custom ol {
-  @apply my-5 pl-6 space-y-2;
+  @apply my-5 pl-6 space-y-2.5;
 }
 
 .prose-custom ul {
@@ -92,58 +128,76 @@ body {
   @apply list-decimal;
 }
 
-.prose-custom li::marker {
-  @apply text-ink-faint dark:text-snow-faint;
+.prose-custom li {
+  @apply leading-[1.85] pl-1;
 }
 
-.prose-custom blockquote {
-  @apply my-6 border-l-4 border-line dark:border-line-dark pl-5 py-1 text-ink-soft dark:text-snow-soft italic;
+.prose-custom li::marker {
+  @apply font-mono text-sm font-medium text-accent/70 dark:text-accent-dark/70;
+}
+
+.prose-custom blockquote:not(.markdown-alert) {
+  @apply my-7 rounded-r-xl border-l-4 border-accent/60 bg-paper-muted/60 px-6 py-4 text-ink-soft not-italic dark:border-accent-dark/60 dark:bg-night-muted/50 dark:text-snow-soft;
+}
+
+.prose-custom blockquote:not(.markdown-alert) > p {
+  @apply my-2;
 }
 
 .prose-custom hr {
-  @apply my-10 border-line dark:border-line-dark;
+  @apply my-12 border-line dark:border-line-dark;
 }
 
 .prose-custom :not(pre) > code {
-  @apply font-mono text-[0.875em] bg-ink/5 dark:bg-white/10 rounded px-1.5 py-0.5 text-accent dark:text-accent-dark break-words;
+  @apply font-mono text-[0.86em] font-medium bg-paper-muted dark:bg-night-muted border border-line/80 dark:border-line-dark rounded-md px-1.5 py-0.5 text-accent dark:text-accent-dark break-words;
 }
 
 .prose-custom pre {
-  @apply my-6 rounded-xl p-5 overflow-x-auto text-sm leading-7 border border-line dark:border-line-dark;
+  @apply relative my-7 rounded-xl p-5 overflow-x-auto text-[0.875rem] leading-7 border border-line dark:border-line-dark shadow-xs;
 }
 
 .prose-custom pre code {
-  @apply font-mono bg-transparent p-0;
+  @apply font-mono bg-transparent p-0 border-0 text-inherit;
 }
 
 .prose-custom table {
-  @apply my-6 w-full text-[0.9375rem] border-collapse;
-  display: block;
-  overflow-x: auto;
+  @apply my-7 w-full text-[0.925rem] border-collapse rounded-xl border border-line dark:border-line-dark overflow-hidden;
+  display: table;
+}
+
+@media (max-width: 640px) {
+  .prose-custom table {
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 .prose-custom thead {
-  @apply border-b-2 border-line dark:border-line-dark;
+  @apply bg-paper-muted/80 dark:bg-night-muted/80 border-b border-line dark:border-line-dark;
 }
 
 .prose-custom th {
-  @apply px-4 py-2.5 text-left font-semibold whitespace-nowrap;
+  @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-ink-soft dark:text-snow-soft whitespace-nowrap;
 }
 
 .prose-custom td {
-  @apply px-4 py-2.5 border-b border-line dark:border-line-dark align-top;
+  @apply px-4 py-3 border-b border-line/70 dark:border-line-dark/70 align-top;
+}
+
+.prose-custom tbody tr:last-child td {
+  @apply border-b-0;
 }
 
 .prose-custom tbody tr:hover {
-  @apply bg-ink/[0.03] dark:bg-white/[0.04];
+  @apply bg-ink/[0.02] dark:bg-white/[0.03];
 }
 
 .prose-custom img {
-  @apply my-8 mx-auto rounded-xl shadow-md max-w-full;
+  @apply my-8 mx-auto rounded-2xl border border-line dark:border-line-dark shadow-md max-w-full;
 }
 
 .prose-custom kbd {
-  @apply inline-block font-sans text-[0.8125em] font-medium px-1.5 py-0.5 rounded-md border border-b-2 border-line dark:border-line-dark bg-paper-elev dark:bg-night-elev shadow-sm;
+  @apply inline-block font-mono text-[0.8em] font-medium px-1.5 py-0.5 rounded-md border border-b-2 border-line dark:border-line-dark bg-paper-elev dark:bg-night-elev shadow-2xs;
 }
 
 .prose-custom details {
@@ -151,59 +205,63 @@ body {
 }
 
 .prose-custom summary {
-  @apply cursor-pointer font-medium;
+  @apply cursor-pointer font-semibold select-none;
 }
 
 .prose-custom .katex-display {
+  @apply my-6 rounded-xl bg-paper-muted/50 dark:bg-night-muted/40 border border-line/60 dark:border-line-dark/60 px-4 py-3;
   overflow-x: auto;
   overflow-y: hidden;
-  padding-block: 0.25rem;
+}
+
+.prose-custom .footnotes {
+  @apply mt-14 border-t border-line dark:border-line-dark pt-6 text-sm text-ink-soft dark:text-snow-soft;
 }
 
 /* GitHub-style alerts */
 
 .prose-custom .markdown-alert {
-  @apply my-6 rounded-xl border-l-4 px-5 py-4 not-italic bg-paper-elev dark:bg-night-elev;
+  @apply my-6 rounded-xl border border-line dark:border-line-dark border-l-4 px-5 py-4 not-italic bg-paper-elev dark:bg-night-elev shadow-2xs;
 }
 
 .prose-custom .markdown-alert > p {
-  @apply my-2;
+  @apply my-1.5 text-[0.95rem] leading-7;
 }
 
 .prose-custom .markdown-alert-title {
-  @apply flex items-center gap-2 font-semibold not-italic text-sm mb-1;
+  @apply flex items-center gap-2 font-mono text-xs font-bold tracking-wider uppercase not-italic mb-2;
 }
 
 .prose-custom .markdown-alert-note {
-  @apply border-sky-500;
+  @apply border-l-sky-500 bg-sky-500/[0.04] dark:bg-sky-400/[0.06];
 }
 .prose-custom .markdown-alert-note .markdown-alert-title {
   @apply text-sky-600 dark:text-sky-400;
 }
 
 .prose-custom .markdown-alert-tip {
-  @apply border-emerald-500;
+  @apply border-l-emerald-500 bg-emerald-500/[0.04] dark:bg-emerald-400/[0.06];
 }
 .prose-custom .markdown-alert-tip .markdown-alert-title {
   @apply text-emerald-600 dark:text-emerald-400;
 }
 
 .prose-custom .markdown-alert-important {
-  @apply border-violet-500;
+  @apply border-l-violet-500 bg-violet-500/[0.04] dark:bg-violet-400/[0.06];
 }
 .prose-custom .markdown-alert-important .markdown-alert-title {
   @apply text-violet-600 dark:text-violet-400;
 }
 
 .prose-custom .markdown-alert-warning {
-  @apply border-amber-500;
+  @apply border-l-amber-500 bg-amber-500/[0.05] dark:bg-amber-400/[0.07];
 }
 .prose-custom .markdown-alert-warning .markdown-alert-title {
   @apply text-amber-600 dark:text-amber-400;
 }
 
 .prose-custom .markdown-alert-caution {
-  @apply border-rose-500;
+  @apply border-l-rose-500 bg-rose-500/[0.05] dark:bg-rose-400/[0.07];
 }
 .prose-custom .markdown-alert-caution .markdown-alert-title {
   @apply text-rose-600 dark:text-rose-400;
@@ -212,9 +270,30 @@ body {
 /* TOC scroll-spy */
 
 .toc-link {
-  @apply block border-l-2 border-transparent text-ink-soft dark:text-snow-soft hover:text-ink dark:hover:text-snow transition-colors;
+  @apply block border-l-2 border-transparent text-ink-soft dark:text-snow-soft hover:text-ink dark:hover:text-snow hover:border-line dark:hover:border-line-dark transition-all duration-150;
 }
 
 .toc-link.active {
-  @apply border-accent dark:border-accent-dark text-accent dark:text-accent-dark font-medium;
+  @apply border-accent dark:border-accent-dark bg-accent/[0.06] dark:bg-accent-dark/[0.1] text-accent dark:text-accent-dark font-medium rounded-r-md;
+}
+
+/* Pagefind custom theme integration */
+:root {
+  --pagefind-ui-scale: 0.95;
+  --pagefind-ui-primary: #4f46e5;
+  --pagefind-ui-text: #14161c;
+  --pagefind-ui-background: #ffffff;
+  --pagefind-ui-border: #e4e5e9;
+  --pagefind-ui-tag: #efefec;
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 0.875rem;
+  --pagefind-ui-font: var(--font-sans);
+}
+
+.dark {
+  --pagefind-ui-primary: #818cf8;
+  --pagefind-ui-text: #f1f3f7;
+  --pagefind-ui-background: #121722;
+  --pagefind-ui-border: #212838;
+  --pagefind-ui-tag: #19202e;
 }

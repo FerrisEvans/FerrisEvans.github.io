@@ -3,12 +3,13 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Pagination from '../components/Pagination.astro';
-import { SITE } from '../data/site';
+import { SITE, CATEGORIES } from '../data/site';
 import { getPosts, type Post } from '../utils/posts';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
   const featured = posts.find((p) => p.data.pin) ?? posts[0];
+  const totalTags = new Set(posts.flatMap((p) => p.data.tags)).size;
   const pageSize = SITE.postsPerPage;
   const lastPage = Math.max(1, Math.ceil(posts.length / pageSize));
   const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
@@ -18,6 +19,11 @@ export const getStaticPaths = (async () => {
       params: { page: n === 1 ? undefined : `page/${n}` },
       props: {
         featured,
+        totalPosts: posts.length,
+        totalTags,
+        categoryCounts: Object.fromEntries(
+          CATEGORIES.map((c) => [c.slug, posts.filter((p) => p.data.category === c.slug).length])
+        ),
         page: {
           data: posts.slice(i * pageSize, (i + 1) * pageSize),
           currentPage: n,
@@ -33,31 +39,112 @@ export const getStaticPaths = (async () => {
   });
 }) satisfies GetStaticPaths;
 
-const { page, featured } = Astro.props as {
+const { page, featured, totalPosts, totalTags, categoryCounts } = Astro.props as {
   page: { data: Post[]; currentPage: number; lastPage: number; url: { current: string; prev?: string; next?: string } };
   featured: Post;
+  totalPosts: number;
+  totalTags: number;
+  categoryCounts: Record<string, number>;
 };
 const posts = page.data;
 const isFirst = page.currentPage === 1;
 const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
+
+const pillars = [
+  { from: 'Web2', to: 'Web3' },
+  { from: 'Algorithms', to: 'AI' },
+  { from: 'Engine', to: 'Game' },
+  { from: 'Theory', to: 'Practice' },
+];
 ---
 
 <Base>
-  <section class="mx-auto max-w-6xl px-4 sm:px-6">
+  <section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
     {
       isFirst && (
-        <div class="flex flex-col items-center gap-6 py-16 text-center sm:py-20">
-          <img
-            src={SITE.avatar}
-            alt={SITE.author}
-            class="h-24 w-24 rounded-full border-2 border-paper-elev object-cover shadow-lg dark:border-night-elev"
+        <div class="mb-14 surface-card relative overflow-hidden p-6 sm:p-10">
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent/[0.07] blur-3xl dark:bg-accent-dark/[0.12]"
           />
-          <div>
-            <h1 class="font-serif text-4xl font-bold tracking-wide sm:text-5xl">{SITE.title}</h1>
-            <p class="mt-4 font-serif text-lg text-ink-soft dark:text-snow-soft">{SITE.tagline}</p>
-            <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-ink-faint dark:text-snow-faint">
-              {SITE.description}
-            </p>
+
+          <div class="relative grid items-center gap-8 lg:grid-cols-12">
+            <div class="lg:col-span-8">
+              <div class="inline-flex items-center gap-2.5 rounded-full border border-line bg-paper-muted/70 px-3 py-1 text-xs text-ink-soft dark:border-line-dark dark:bg-night-muted/80 dark:text-snow-soft">
+                <img src={SITE.avatar} alt={SITE.author} class="h-5 w-5 rounded-full object-cover" />
+                <span class="font-medium text-ink dark:text-snow">{SITE.author}</span>
+                <span class="text-ink-faint dark:text-snow-faint">/</span>
+                <span class="font-mono text-[11px] uppercase tracking-wider text-accent dark:text-accent-dark">
+                  Engineering Notes
+                </span>
+              </div>
+
+              <h1 class="mt-4 font-serif text-3xl font-bold tracking-tight text-ink sm:text-5xl dark:text-snow">
+                {SITE.title}
+              </h1>
+
+              <p class="mt-3 font-serif text-base italic text-ink-soft sm:text-lg dark:text-snow-soft">
+                “{SITE.tagline}”
+              </p>
+
+              <div class="mt-5 flex flex-wrap gap-2">
+                {pillars.map((p) => (
+                  <span class="inline-flex items-center gap-1.5 rounded-lg border border-line/80 bg-paper/80 px-2.5 py-1 font-mono text-xs text-ink-soft dark:border-line-dark dark:bg-night/60 dark:text-snow-soft">
+                    <span>{p.from}</span>
+                    <span class="text-accent dark:text-accent-dark">→</span>
+                    <span class="font-medium text-ink dark:text-snow">{p.to}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 border-t border-line/70 pt-6 lg:col-span-4 lg:border-l lg:border-t-0 lg:pl-8 lg:pt-0 dark:border-line-dark/70">
+              <a href="/archives/" class="group rounded-xl border border-line/70 bg-paper/70 p-3.5 text-center transition-colors hover:border-accent/40 dark:border-line-dark/70 dark:bg-night/50">
+                <p class="font-mono text-2xl font-bold text-ink group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                  {totalPosts}
+                </p>
+                <p class="mt-1 text-xs text-ink-faint dark:text-snow-faint">技术文章</p>
+              </a>
+              <a href="/categories/" class="group rounded-xl border border-line/70 bg-paper/70 p-3.5 text-center transition-colors hover:border-accent/40 dark:border-line-dark/70 dark:bg-night/50">
+                <p class="font-mono text-2xl font-bold text-ink group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                  {CATEGORIES.length}
+                </p>
+                <p class="mt-1 text-xs text-ink-faint dark:text-snow-faint">核心专栏</p>
+              </a>
+              <a href="/tags/" class="group rounded-xl border border-line/70 bg-paper/70 p-3.5 text-center transition-colors hover:border-accent/40 dark:border-line-dark/70 dark:bg-night/50">
+                <p class="font-mono text-2xl font-bold text-ink group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                  {totalTags}
+                </p>
+                <p class="mt-1 text-xs text-ink-faint dark:text-snow-faint">细分标签</p>
+              </a>
+            </div>
+          </div>
+
+          <div class="mt-7 flex flex-wrap items-center justify-between gap-3 border-t border-line/70 pt-5 dark:border-line-dark/70">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="mr-1 font-mono text-xs font-semibold uppercase tracking-wider text-ink-faint dark:text-snow-faint">
+                专题导航:
+              </span>
+              {CATEGORIES.map((cat) => (
+                <a
+                  href={`/categories/${cat.slug}/`}
+                  class="inline-flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-1 text-xs font-medium text-ink-soft transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow"
+                >
+                  <span class="h-2 w-2 rounded-full" style={`background: ${cat.accent}`} />
+                  <span>{cat.label}</span>
+                  <span class="font-mono text-[10px] text-ink-faint dark:text-snow-faint">
+                    {categoryCounts[cat.slug] ?? 0}
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            <a
+              href="/archives/"
+              class="inline-flex items-center gap-1 font-mono text-xs font-medium text-ink-soft hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark"
+            >
+              查看全部归档 →
+            </a>
           </div>
         </div>
       )
@@ -65,14 +152,35 @@ const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
 
     {
       isFirst && featured && (
-        <div class="mb-10">
+        <div class="mb-12">
+          <div class="mb-4 flex items-center justify-between">
+            <h2 class="flex items-center gap-2 font-serif text-lg font-bold text-ink dark:text-snow">
+              <span class="h-2 w-2 rounded-full bg-accent dark:bg-accent-dark" />
+              精选文章
+            </h2>
+            <span class="font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-snow-faint">
+              Featured Dispatch
+            </span>
+          </div>
           <PostCard post={featured} featured />
         </div>
       )
     }
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {grid.map((post) => <PostCard post={post} />)}
+    <div>
+      <div class="mb-5 flex items-center justify-between">
+        <h2 class="flex items-center gap-2 font-serif text-lg font-bold text-ink dark:text-snow">
+          <span class="h-2 w-2 rounded-full bg-ink-faint dark:bg-snow-faint" />
+          {isFirst ? '最新文章' : `文章列表 · 第 ${page.currentPage} 页`}
+        </h2>
+        <span class="font-mono text-xs uppercase tracking-wider text-ink-faint dark:text-snow-faint">
+          Page {page.currentPage} / {page.lastPage}
+        </span>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {grid.map((post) => <PostCard post={post} />)}
+      </div>
     </div>
 
     <Pagination page={page} />

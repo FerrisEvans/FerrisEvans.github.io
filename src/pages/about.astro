@@ -1,20 +1,53 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE } from '../data/site';
+import { SITE, CATEGORIES } from '../data/site';
 ---
 
 <Base title="关于">
-  <section class="mx-auto max-w-3xl px-4 py-14 sm:px-6">
-    <div class="prose-custom">
-      <h1 class="mb-6 font-serif text-3xl font-bold sm:text-4xl">关于</h1>
+  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
+    {/* Author Profile Card */}
+    <div class="surface-card mb-10 overflow-hidden p-6 sm:p-10">
+      <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+        <img
+          src={SITE.avatar}
+          alt={SITE.author}
+          class="h-20 w-20 shrink-0 rounded-2xl border border-line object-cover shadow-md dark:border-line-dark"
+        />
+        <div class="flex-1">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <h1 class="font-serif text-2xl font-bold sm:text-3xl">关于 · {SITE.author}</h1>
+            <span class="rounded-full bg-accent/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-accent dark:bg-accent-dark/15 dark:text-accent-dark">
+              Developer &amp; Builder
+            </span>
+          </div>
+          <p class="mt-3 text-sm leading-7 text-ink-soft dark:text-snow-soft">
+            你好，我是 <strong class="font-semibold text-ink dark:text-snow">Ferris</strong>，一名开发者。我的兴趣方向涵盖游戏开发、编程语言与 AI
+            Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。可以通过
+            <a href={`mailto:${SITE.email}`} class="font-medium text-accent underline underline-offset-4 dark:text-accent-dark">{SITE.email}</a> 或
+            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="font-medium text-accent underline underline-offset-4 dark:text-accent-dark">GitHub</a> 找到我。
+          </p>
+        </div>
+      </div>
 
-      <p>
-        你好，我是 <strong>Ferris</strong>，一名开发者。我的兴趣方向涵盖游戏开发、编程语言与 AI
-        Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。可以通过
-        <a href={`mailto:${SITE.email}`}>{SITE.email}</a> 或
-        <a href={SITE.github} target="_blank" rel="noopener noreferrer">GitHub</a> 找到我。
-      </p>
+      <div class="mt-6 grid grid-cols-2 gap-3 border-t border-line/70 pt-6 sm:grid-cols-4 dark:border-line-dark/70">
+        {CATEGORIES.map((cat) => (
+          <a
+            href={`/categories/${cat.slug}/`}
+            class="rounded-xl border border-line/80 bg-paper/70 p-3 transition-colors hover:border-accent/40 dark:border-line-dark dark:bg-night/50"
+          >
+            <div class="flex items-center gap-1.5 font-mono text-[10px] text-ink-faint dark:text-snow-faint">
+              <span class="h-1.5 w-1.5 rounded-full" style={`background: ${cat.accent}`} />
+              {cat.code}
+            </div>
+            <p class="mt-1 font-serif text-sm font-bold text-ink dark:text-snow">{cat.label}</p>
+          </a>
+        ))}
+      </div>
+    </div>
 
+    {/* Main Content */}
+    <div class="surface-card p-6 sm:p-10 prose-custom">
+      <h2>文档格式约定</h2>
       <blockquote>
         <p><strong>文档格式约定</strong></p>
         <p>
@@ -27,10 +60,11 @@ import { SITE } from '../data/site';
         </p>
         <p><em>倾斜字体</em>用于提示特别注意。</p>
         <p><sub>小字</sub>用于表示注释。</p>
-        <p><span style="color: red;">彩色字体</span> 用于强调关键信息。</p>
+        <p><span style="color: #e11d48; font-weight: 600;">彩色字体</span> 用于强调关键信息。</p>
         <p><u>下划线字体</u>一般配合脚注使用，可以明确该脚注用来解释的关键词。</p>
       </blockquote>
 
+      <h2>The Zen of Python</h2>
       <pre><code class="language-python">import this</code></pre>
 
       <blockquote>
@@ -58,6 +92,7 @@ import { SITE } from '../data/site';
         </ul>
       </blockquote>
 
+      <h2>编程箴言与原则</h2>
       <blockquote>
         <p>Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive. —— John Carmack</p>
       </blockquote>
