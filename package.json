@@ -4,9 +4,13 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
+    "check": "astro sync && tsc --noEmit",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
+  },
+  "engines": {
+    "node": ">=22.19.0"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
