@@ -25,28 +25,27 @@ export function formatDate(date: Date): string {
   return `${date.getUTCFullYear()}年${date.getUTCMonth() + 1}月${date.getUTCDate()}日`;
 }
 
-export function formatShortDate(date: Date): string {
-  const y = date.getUTCFullYear();
-  const m = String(date.getUTCMonth() + 1).padStart(2, '0');
-  const d = String(date.getUTCDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+function readingMetrics(post: Post) {
+  const text = (post.body ?? '')
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`[^`]*`/g, ' ')
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
+  const chinese = text.match(/[\u3400-\u9fff]/g)?.length ?? 0;
+  const words = text.replace(/[\u3400-\u9fff]/g, ' ').match(/[A-Za-z0-9]+(?:[._-][A-Za-z0-9]+)*/g)?.length ?? 0;
+  return { chinese, words };
+}
+
+export function wordCount(post: Post): number {
+  const { chinese, words } = readingMetrics(post);
+  return chinese + words;
+}
+
+export function readingTime(post: Post): number {
+  const { chinese, words } = readingMetrics(post);
+  return Math.max(1, Math.ceil(chinese / 350 + words / 200));
 }
 
 export function postUrl(post: Post): string {
   return `/posts/${postSlug(post)}/`;
-}
-
-export function getWordCount(post: Post): number {
-  const raw = (post.body ?? '')
-    .replace(/```[\s\S]*?```/g, ' ')
-    .replace(/`[^`]*`/g, ' ')
-    .replace(/[#>*_~\[\]()!-]/g, ' ');
-  const cjk = (raw.match(/[\u4e00-\u9fa5]/g) ?? []).length;
-  const words = (raw.replace(/[\u4e00-\u9fa5]/g, ' ').match(/[a-zA-Z0-9_]+/g) ?? []).length;
-  return Math.max(50, cjk + words);
-}
-
-export function getReadingTime(post: Post): number {
-  const count = getWordCount(post);
-  return Math.max(1, Math.round(count / 320));
 }

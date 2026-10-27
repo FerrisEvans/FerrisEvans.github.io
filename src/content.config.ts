@@ -1,6 +1,10 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+  message: 'Use lowercase letters, numbers, and hyphens, e.g. "machine-learning"',
+});
+
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
@@ -8,8 +12,8 @@ const blog = defineCollection({
     description: z.string().optional(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    category: z.enum(['programming-language', 'data-structures', 'game-dev', 'ai']),
-    subcategory: z.string().optional(),
+    category: slugSchema,
+    subcategory: slugSchema.optional(),
     tags: z.array(z.string()).default([]),
     pin: z.boolean().default(false),
     draft: z.boolean().default(false),

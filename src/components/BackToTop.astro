@@ -1,0 +1,50 @@
+<button id="back-to-top" type="button" aria-label="返回顶部" aria-hidden="true" tabindex="-1" class="back-to-top" data-visible="false">
+  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m6 15 6-6 6 6" />
+  </svg>
+</button>
+
+<style>
+  @reference "../styles/global.css";
+
+  .back-to-top {
+    @apply pointer-events-none fixed bottom-5 right-5 z-30 inline-flex h-10 w-10 translate-y-2 items-center justify-center rounded-full border border-line bg-paper-elev/90 text-ink-soft opacity-0 shadow-lg backdrop-blur dark:border-line-dark dark:bg-night-elev/90 dark:text-snow-soft;
+    transition: opacity 180ms ease, transform 180ms ease, color 180ms ease, border-color 180ms ease;
+  }
+
+  .back-to-top[data-visible="true"] {
+    @apply pointer-events-auto translate-y-0 opacity-100;
+  }
+
+  .back-to-top:hover {
+    @apply border-accent/40 text-accent dark:border-accent-dark/40 dark:text-accent-dark;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var button = document.getElementById('back-to-top');
+    if (!button) return;
+    var ticking = false;
+
+    function update() {
+      var visible = window.scrollY > 600;
+      button.dataset.visible = String(visible);
+      button.setAttribute('aria-hidden', String(!visible));
+      button.tabIndex = visible ? 0 : -1;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        window.requestAnimationFrame(update);
+        ticking = true;
+      }
+    }, { passive: true });
+    button.addEventListener('click', function () {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+    });
+    update();
+  })();
+</script>

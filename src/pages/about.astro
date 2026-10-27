@@ -1,125 +1,127 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, CATEGORIES } from '../data/site';
+import { SITE, categoryOf } from '../data/site';
+
+const interests = ['programming-language', 'game-dev', 'ai'].map(categoryOf);
+const principles = [
+  '很多事都是熟能生巧，没有足够的练习不要谈天赋。练习不是一味的重复，或者去完全复刻别人的代码，每一次练习都应该增加难度，有突破自己认知的成长。这样反复的经过输入、评估、输出、纠正，会有惊人的变化。',
+  '英语水平决定了一个程序员的上限。',
+  '要有良好的习惯，才能事半功倍。',
+  '不要等准备好了再出发，优秀的程序员都是探路者。',
+  '愚者困惑，智者提问。',
+  '最简单的往往是最有效的。',
+  '向成功者学习，向成功的项目学习。',
+  '输出是最好的输入。',
+  '一定要坚持，保持长时间学习，甚至终身学习的态度。',
+  '一定要动手，不管例子多么简单，建议至少自己动手敲一遍看看是否理解了里头的细枝末节。',
+  '一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考。',
+  '不要乱买书，不要乱追新技术新名词，基础的东西经过很长时间积累，会在未来至少 10 年通用。',
+  '回顾一下历史，看看历史时间线上技术的发展，你才能明白明天会是什么样的。',
+];
+const zen = [
+  'Beautiful is better than ugly. 优美胜于丑陋',
+  'Explicit is better than implicit. 明了胜于晦涩',
+  'Simple is better than complex. 简洁胜于复杂',
+  'Complex is better than complicated. 复杂胜于凌乱',
+  'Flat is better than nested. 扁平胜于嵌套',
+  'Sparse is better than dense. 间隔胜于紧凑',
+  'Readability counts. 可读性很重要',
+  "Special cases aren't special enough to break the rules. 任何特例都不足够违背这些原则",
+  'Although practicality beats purity. 实用性高于纯粹性',
+  'Errors should never pass silently. 错误永远不应该被静默处理',
+  'Unless explicitly silenced. 除非明确地让它静默',
+  'In the face of ambiguity, refuse the temptation to guess. 面对二义性，拒绝猜测的诱惑',
+  'There should be one-- and preferably only one --obvious way to do it. 应该有一种——而且最好只有一种——明显的方法去做一件事',
+  "Although that way may not be obvious at first unless you're Dutch. 虽然那种方法一开始可能并不明显，除非你是 Python 之父",
+  'Now is better than never. 现在做总比不做好',
+  'Although never is often better than *right* now. 但永远不做通常比贸然行动好',
+  "If the implementation is hard to explain, it's a bad idea. 如果实现很难解释，它就不是好主意",
+  'If the implementation is easy to explain, it may be a good idea. 如果实现容易解释，它可能是一个好主意',
+  "Namespaces are one honking great idea -- let's do more of those! 命名空间是一个绝妙的主意——我们应该多多使用",
+];
 ---
 
 <Base title="关于">
-  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
-    {/* Author Profile Card */}
-    <div class="surface-card mb-10 overflow-hidden p-6 sm:p-10">
-      <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-        <img
-          src={SITE.avatar}
-          alt={SITE.author}
-          class="h-20 w-20 shrink-0 rounded-2xl border border-line object-cover shadow-md dark:border-line-dark"
-        />
-        <div class="flex-1">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <h1 class="font-serif text-2xl font-bold sm:text-3xl">关于 · {SITE.author}</h1>
-            <span class="rounded-full bg-accent/10 px-2.5 py-0.5 font-mono text-xs font-semibold text-accent dark:bg-accent-dark/15 dark:text-accent-dark">
-              Developer &amp; Builder
-            </span>
-          </div>
-          <p class="mt-3 text-sm leading-7 text-ink-soft dark:text-snow-soft">
-            你好，我是 <strong class="font-semibold text-ink dark:text-snow">Ferris</strong>，一名开发者。我的兴趣方向涵盖游戏开发、编程语言与 AI
-            Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。可以通过
-            <a href={`mailto:${SITE.email}`} class="font-medium text-accent underline underline-offset-4 dark:text-accent-dark">{SITE.email}</a> 或
-            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="font-medium text-accent underline underline-offset-4 dark:text-accent-dark">GitHub</a> 找到我。
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
+    <header class="border-b border-line pb-10 dark:border-line-dark">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+        <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover shadow-sm dark:border-line-dark" />
+        <div>
+          <p class="eyebrow">About / 关于</p>
+          <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">你好，我是 Ferris。</h1>
+          <p class="mt-4 max-w-2xl leading-8 text-ink-soft dark:text-snow-soft">
+            一名开发者。兴趣方向涵盖游戏开发、编程语言与 AI Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。
           </p>
+          <div class="mt-5 flex flex-wrap gap-2.5">
+            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-10 items-center rounded-full bg-ink px-4 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85">
+              GitHub <span class="ml-1.5" aria-hidden="true">↗</span>
+            </a>
+            <a href={`mailto:${SITE.email}`} class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm text-ink-soft transition-colors hover:border-ink/20 hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:border-white/20 dark:hover:text-snow">
+              {SITE.email}
+            </a>
+          </div>
         </div>
       </div>
+    </header>
 
-      <div class="mt-6 grid grid-cols-2 gap-3 border-t border-line/70 pt-6 sm:grid-cols-4 dark:border-line-dark/70">
-        {CATEGORIES.map((cat) => (
-          <a
-            href={`/categories/${cat.slug}/`}
-            class="rounded-xl border border-line/80 bg-paper/70 p-3 transition-colors hover:border-accent/40 dark:border-line-dark dark:bg-night/50"
-          >
-            <div class="flex items-center gap-1.5 font-mono text-[10px] text-ink-faint dark:text-snow-faint">
-              <span class="h-1.5 w-1.5 rounded-full" style={`background: ${cat.accent}`} />
-              {cat.code}
+    <section aria-labelledby="interests-heading" class="mt-10">
+      <p class="eyebrow">Interests / 研究方向</p>
+      <h2 id="interests-heading" class="sr-only">研究方向</h2>
+      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        {interests.map((cat, index) => (
+          <a href={`/categories/${cat.slug}/`} class="group rounded-xl border border-line bg-paper-elev p-5 transition-colors hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20">
+            <div class="flex items-center justify-between">
+              <span class="font-mono text-xs text-ink-faint dark:text-snow-faint">0{index + 1}</span>
+              <span class="font-mono text-sm" style={`color: ${cat.accent};`}>{cat.mark}</span>
             </div>
-            <p class="mt-1 font-serif text-sm font-bold text-ink dark:text-snow">{cat.label}</p>
+            <h3 class="mt-4 font-serif text-lg font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
+            <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
           </a>
         ))}
       </div>
-    </div>
+    </section>
 
-    {/* Main Content */}
-    <div class="surface-card p-6 sm:p-10 prose-custom">
-      <h2>文档格式约定</h2>
-      <blockquote>
-        <p><strong>文档格式约定</strong></p>
-        <p>
-          <strong>加粗字体</strong>通常用于关键字、类名、等信息。通常不需要上下文信息也可正确理解其表达含义，如
-          <strong>Object</strong>、<strong>TreeNode</strong>。
-        </p>
-        <p>
-          <code>inline_code</code> 通常用于属性名、方法名、执行命令等。通常需要与上下文联系才能更好的理解。如
-          <code>_init()</code> 需要联系上下文才可以更好的理解具体是什么的初始化方法。
-        </p>
-        <p><em>倾斜字体</em>用于提示特别注意。</p>
-        <p><sub>小字</sub>用于表示注释。</p>
-        <p><span style="color: #e11d48; font-weight: 600;">彩色字体</span> 用于强调关键信息。</p>
-        <p><u>下划线字体</u>一般配合脚注使用，可以明确该脚注用来解释的关键词。</p>
-      </blockquote>
-
-      <h2>The Zen of Python</h2>
-      <pre><code class="language-python">import this</code></pre>
-
-      <blockquote>
-        <p><strong>the Zen of Python, by Tim Peters</strong></p>
-        <ul>
-          <li>Beautiful is better than ugly. 优美胜于丑陋</li>
-          <li>Explicit is better than implicit. 明了胜于晦涩</li>
-          <li>Simple is better than complex. 简洁胜于复杂</li>
-          <li>Complex is better than complicated. 复杂胜于凌乱</li>
-          <li>Flat is better than nested. 扁平胜于嵌套</li>
-          <li>Sparse is better than dense. 间隔胜于紧凑</li>
-          <li>Readability counts. 可读性很重要</li>
-          <li>Special cases aren't special enough to break the rules. 任何特例都不足够违背这些原则</li>
-          <li>Although practicality beats purity. 实用性高于纯粹性</li>
-          <li>Errors should never pass silently. 但是错误永远不能静默处理</li>
-          <li>Unless explicitly silenced. 除非明确需要</li>
-          <li>In the face of ambiguity, refuse the temptation to guess. 当存在多种可能，不要尝试去猜测</li>
-          <li>There should be one-- and preferably only one --obvious way to do it. 而是尽量找一种，最好是唯一一种明显的解决方案。</li>
-          <li>Although that way may not be obvious at first unless you're Dutch. 虽然这并不容易，因为你不是Python之父</li>
-          <li>Now is better than never. 做好过不做</li>
-          <li>Although never is often better than right now. 但不假思索就动手还不如不做</li>
-          <li>If the implementation is hard to explain, it's a bad idea. 如果你无法向他们描述你的方案，那肯定不是一个好方案</li>
-          <li>If the implementation is easy to explain, it may be a good idea. 如果你可以非常简单的描述出你的方案，那这个方案也许是个好主意</li>
-          <li>Namespaces are one honking great idea -- let's do more of those! 命名空间是个绝妙的理念，我们应该多加利用</li>
-        </ul>
-      </blockquote>
-
-      <h2>编程箴言与原则</h2>
-      <blockquote>
-        <p>Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive. —— John Carmack</p>
-      </blockquote>
-
-      <blockquote>
-        <p>Most of my programming career has involved finding something neat, writing my own version to understand it &amp; often throwing it away. —— Edward Kmett</p>
-      </blockquote>
-
-      <blockquote>
-        <p>I program those "clones" like I read papers: change a core part; redesign it. Gain progress or understanding why it is what it is. —— Edward Kmett</p>
-      </blockquote>
-
-      <ol>
-        <li>很多事都是熟能生巧，没有足够的练习不要谈天赋。练习不是一味的重复，或者去完全复刻别人的代码，每一次练习都应该增加难度，有突破自己认知的成长。这样反复的经过输入、评估、输出、纠正，会有惊人的变化。</li>
-        <li>英语水平决定了一个程序员的上限。</li>
-        <li>要有良好的习惯，才能事半功倍。</li>
-        <li>不要等准备好了再出发，优秀的程序员都是探路者。</li>
-        <li>愚者困惑，智者提问。</li>
-        <li>最简单的往往是最有效的。</li>
-        <li>向成功者学习，向成功的项目学习。</li>
-        <li>输出是最好的输入。</li>
-        <li>一定要坚持，保持长时间学习，甚至终身学习的态度。</li>
-        <li>一定要动手，不管例子多么简单，建议至少自己动手敲一遍看看是否理解了里头的细枝末节。</li>
-        <li>一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考。</li>
-        <li>不要乱买书，不要乱追新技术新名词，基础的东西经过很长时间积累，会在未来至少 10 年通用。</li>
-        <li>回顾一下历史，看看历史时间线上技术的发展，你才能明白明天会是什么样的。</li>
+    <section aria-labelledby="principles-heading" class="mt-14">
+      <p class="eyebrow">Notes to self</p>
+      <h2 id="principles-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">一些相信的事</h2>
+      <ol class="mt-5 sm:grid sm:grid-cols-2 sm:gap-x-10">
+        {principles.map((principle, index) => (
+          <li class="flex gap-4 border-t border-line py-4 dark:border-line-dark">
+            <span class="shrink-0 font-mono text-xs leading-7 text-ink-faint dark:text-snow-faint">{String(index + 1).padStart(2, '0')}</span>
+            <p class="text-sm leading-7 text-ink-soft dark:text-snow-soft">{principle}</p>
+          </li>
+        ))}
       </ol>
+    </section>
+
+    <section aria-labelledby="quotes-heading" class="mt-14">
+      <p class="eyebrow">On practice</p>
+      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">实践与长期主义</h2>
+      <blockquote class="mt-6 border-l-2 border-accent/50 pl-5 text-[0.9375rem] leading-8 text-ink-soft dark:border-accent-dark/50 dark:text-snow-soft">
+        <p>Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive.</p>
+        <p class="mt-4">Most of my programming career has involved finding something neat, writing my own version to understand it &amp; often throwing it away.</p>
+        <p class="mt-4">I program those "clones" like I read papers: change a core part; redesign it. Gain progress or understanding why it is what it is.</p>
+        <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">—— John Carmack</footer>
+      </blockquote>
+    </section>
+
+    <div class="mt-14 space-y-4">
+      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+        <summary>The Zen of Python <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">Tim Peters</span></summary>
+        <div class="prose-custom mt-5">
+          <pre><code class="language-python">import this</code></pre>
+          <ol>{zen.map((line) => <li>{line}</li>)}</ol>
+        </div>
+      </details>
+
+      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+        <summary>文档格式约定</summary>
+        <div class="prose-custom mt-5">
+          <p><strong>加粗字体</strong>通常用于关键字、类名等信息，通常不需要上下文即可理解，例如 <strong>Object</strong>、<strong>TreeNode</strong>。</p>
+          <p><code>inline_code</code> 通常用于属性名、方法名、执行命令等，例如 <code>_init()</code> 表示某个类或对象的初始化方法。</p>
+          <p><em>倾斜字体</em>用于提示特别注意；<sub>小字</sub>用于表示注释；<span class="text-accent dark:text-accent-dark">彩色字体</span>用于强调关键信息；<u>下划线字体</u>一般配合脚注使用。</p>
+        </div>
+      </details>
     </div>
-  </section>
+  </div>
 </Base>

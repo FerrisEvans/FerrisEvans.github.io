@@ -3,96 +3,26 @@ import type { MarkdownHeading } from 'astro';
 
 interface Props {
   headings: MarkdownHeading[];
+  showTitle?: boolean;
 }
 
-const toc = Astro.props.headings.filter((h) => h.depth === 2 || h.depth === 3);
+const { headings, showTitle = true } = Astro.props;
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
 ---
 
 {
   toc.length > 0 && (
-    <nav aria-label="目录" class="surface-card p-5 text-sm">
-      <div class="mb-3.5 flex items-center justify-between border-b border-line/80 pb-3 dark:border-line-dark/80">
-        <div class="flex items-center gap-2">
-          <svg class="h-4 w-4 text-accent dark:text-accent-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="8" y1="6" x2="21" y2="6" />
-            <line x1="8" y1="12" x2="21" y2="12" />
-            <line x1="8" y1="18" x2="21" y2="18" />
-            <line x1="3" y1="6" x2="3.01" y2="6" />
-            <line x1="3" y1="12" x2="3.01" y2="12" />
-            <line x1="3" y1="18" x2="3.01" y2="18" />
-          </svg>
-          <span class="font-mono text-xs font-bold uppercase tracking-wider text-ink dark:text-snow">
-            文章目录
-          </span>
-        </div>
-        <span id="toc-progress-label" class="font-mono text-[11px] font-medium text-ink-faint dark:text-snow-faint">
-          0%
-        </span>
-      </div>
-
-      <ul class="max-h-[calc(100vh-14rem)] space-y-1 overflow-y-auto pr-1 text-[13px] leading-snug">
-        {toc.map((h) => (
-          <li class={h.depth === 3 ? 'pl-3.5' : ''}>
-            <a href={`#${h.slug}`} class="toc-link py-1.5 pl-3 pr-2">
-              {h.text}
+    <nav aria-label="目录" class="text-sm">
+      {showTitle && <p class="eyebrow mb-4">On this page / 目录</p>}
+      <ul class="space-y-1.5">
+        {toc.map((heading) => (
+          <li class={heading.depth === 3 ? 'pl-4' : ''}>
+            <a href={`#${heading.slug}`} class="toc-link py-1 pl-3 leading-5">
+              {heading.text}
             </a>
           </li>
         ))}
       </ul>
-
-      <div class="mt-4 border-t border-line/70 pt-3 dark:border-line-dark/70">
-        <button
-          id="back-to-top"
-          type="button"
-          class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-paper-muted/80 px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:bg-accent/10 hover:text-accent dark:bg-night-muted/80 dark:text-snow-soft dark:hover:bg-accent-dark/15 dark:hover:text-accent-dark"
-        >
-          <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m18 15-6-6-6 6" />
-          </svg>
-          返回顶部
-        </button>
-      </div>
     </nav>
   )
 }
-
-<script is:inline>
-  (function () {
-    var links = Array.from(document.querySelectorAll('.toc-link'));
-    var backBtn = document.getElementById('back-to-top');
-    var pctLabel = document.getElementById('toc-progress-label');
-
-    backBtn?.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    var updatePct = function () {
-      if (!pctLabel) return;
-      var doc = document.documentElement;
-      var total = doc.scrollHeight - doc.clientHeight;
-      var pct = total > 0 ? Math.min(100, Math.max(0, Math.round((doc.scrollTop / total) * 100))) : 0;
-      pctLabel.textContent = pct + '%';
-    };
-    document.addEventListener('scroll', updatePct, { passive: true });
-    updatePct();
-
-    if (!links.length) return;
-    var headings = Array.from(document.querySelectorAll('.prose-custom h2[id], .prose-custom h3[id]'));
-    var observer = new IntersectionObserver(
-      function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var id = '#' + entry.target.id;
-            links.forEach(function (link) {
-              link.classList.toggle('active', link.getAttribute('href') === id);
-            });
-          }
-        });
-      },
-      { rootMargin: '0px 0px -65% 0px' }
-    );
-    headings.forEach(function (h) {
-      observer.observe(h);
-    });
-  })();
-</script>

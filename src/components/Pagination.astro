@@ -19,19 +19,19 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
 
 {
   lastPage > 1 && (
-    <nav aria-label="分页" class="mt-14 flex flex-col items-center justify-between gap-4 border-t border-line/80 pt-8 sm:flex-row dark:border-line-dark/80">
+    <nav aria-label="分页" class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-line pt-8 dark:border-line-dark sm:flex-row">
       <p class="font-mono text-xs text-ink-faint dark:text-snow-faint">
         PAGE <span class="font-semibold text-ink dark:text-snow">{currentPage}</span> OF <span class="font-semibold text-ink dark:text-snow">{lastPage}</span>
       </p>
 
       <div class="flex items-center gap-2">
         {page.url.prev ? (
-          <a href={page.url.prev} class="pager-link gap-1.5 px-3.5" aria-label="上一页">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+          <a href={page.url.prev} class="pager-link gap-1.5 px-3" aria-label="上一页">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
             <span>上一页</span>
           </a>
         ) : (
-          <span class="pager-link gap-1.5 px-3.5 opacity-35 cursor-not-allowed" aria-hidden="true">
+          <span class="pager-link cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg>
             <span>上一页</span>
           </span>
@@ -43,7 +43,7 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
               href={hrefFor(n)}
               aria-current={n === currentPage ? 'page' : undefined}
               class:list={[
-                'pager-link min-w-9 px-2.5 font-mono',
+                'pager-link min-w-10 px-2 font-mono',
                 n === currentPage && 'border-ink bg-ink text-paper hover:bg-ink hover:text-paper dark:border-snow dark:bg-snow dark:text-night dark:hover:bg-snow dark:hover:text-night',
               ]}
             >
@@ -53,12 +53,12 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
         </div>
 
         {page.url.next ? (
-          <a href={page.url.next} class="pager-link gap-1.5 px-3.5" aria-label="下一页">
+          <a href={page.url.next} class="pager-link gap-1.5 px-3" aria-label="下一页">
             <span>下一页</span>
-            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
           </a>
         ) : (
-          <span class="pager-link gap-1.5 px-3.5 opacity-35 cursor-not-allowed" aria-hidden="true">
+          <span class="pager-link cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
             <span>下一页</span>
             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg>
           </span>
@@ -72,6 +72,6 @@ const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
   @reference "../styles/global.css";
 
   .pager-link {
-    @apply inline-flex h-9 items-center justify-center rounded-xl border border-line bg-paper-elev text-xs font-medium text-ink-soft shadow-2xs transition-all hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow;
+    @apply inline-flex h-10 items-center justify-center rounded-full border border-line bg-paper-elev text-xs font-medium text-ink-soft transition-colors hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow;
   }
 </style>

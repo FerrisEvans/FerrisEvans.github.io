@@ -13,69 +13,54 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 ---
 
 <Base title="标签">
-  <section class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
-    <header class="mb-10 flex flex-col justify-between gap-4 border-b border-line pb-6 sm:flex-row sm:items-end dark:border-line-dark">
-      <div>
-        <p class="font-mono text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
-          TOPIC INDEX
-        </p>
-        <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">标签索引</h1>
-        <p class="mt-2 text-sm text-ink-soft dark:text-snow-soft">
-          共计 {tags.length} 个技术标签，覆盖各个细分主题与关键词。
-        </p>
-      </div>
-
-      <div class="relative w-full sm:w-64">
-        <input
-          id="tag-filter"
-          type="search"
-          placeholder="筛选标签..."
-          aria-label="筛选标签"
-          class="w-full rounded-xl border border-line bg-paper-elev px-3.5 py-2 font-mono text-xs text-ink placeholder:text-ink-faint focus:border-accent focus:outline-none dark:border-line-dark dark:bg-night-elev dark:text-snow dark:placeholder:text-snow-faint dark:focus:border-accent-dark"
-        />
-      </div>
+  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
+    <header class="mb-7">
+      <p class="eyebrow">Tags / 主题索引</p>
+      <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">标签</h1>
+      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {tags.length} 个标签，按文章数量排列。</p>
     </header>
 
-    <div class="surface-card p-6 sm:p-8">
-      <div id="tag-list" class="flex flex-wrap gap-2.5">
-        {
-          tags.map(([tag, count]) => {
-            const isPopular = count >= 2;
-            return (
-              <a
-                href={`/tags/${encodeURIComponent(tag)}/`}
-                data-tag={tag.toLowerCase()}
-                class:list={[
-                  'tag-item group inline-flex items-center gap-2 rounded-xl border px-3.5 py-2 transition-all duration-200 hover:-translate-y-0.5',
-                  isPopular
-                    ? 'border-accent/30 bg-accent/[0.04] hover:border-accent hover:bg-accent/10 dark:border-accent-dark/30 dark:bg-accent-dark/[0.08] dark:hover:border-accent-dark'
-                    : 'border-line bg-paper hover:border-accent/40 hover:bg-paper-muted/70 dark:border-line-dark dark:bg-night dark:hover:border-accent-dark/40',
-                ]}
-              >
-                <span class="font-mono text-sm font-medium text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
-                  #{tag}
-                </span>
-                <span class="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-paper-muted px-1.5 font-mono text-[11px] font-semibold text-ink-soft dark:bg-night-muted dark:text-snow-soft">
-                  {count}
-                </span>
-              </a>
-            );
-          })
-        }
-      </div>
+    <div class="mb-7 flex sm:justify-end">
+      <input
+        id="tag-filter"
+        type="search"
+        placeholder="筛选标签…"
+        aria-label="筛选标签"
+        class="w-full rounded-xl border border-line bg-paper-elev px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent dark:border-line-dark dark:bg-night-elev dark:text-snow dark:placeholder:text-snow-faint dark:focus:border-accent-dark sm:w-64"
+      />
     </div>
-  </section>
+
+    <div class="flex flex-wrap gap-2.5">
+      {
+        tags.map(([tag, count]) => (
+          <a
+            href={`/tags/${encodeURIComponent(tag)}/`}
+            data-tag={tag.toLowerCase()}
+            class="tag-item group inline-flex min-h-10 items-center gap-2 rounded-full border border-line bg-paper-elev px-3.5 py-2 text-sm transition-colors hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+          >
+            <span>#{tag}</span>
+            <span class="rounded-full bg-ink/[0.05] px-1.5 py-0.5 font-mono text-[0.625rem] leading-none text-ink-faint dark:bg-white/[0.07] dark:text-snow-faint">{count}</span>
+          </a>
+        ))
+      }
+    </div>
+    <p id="tag-empty" hidden class="rounded-xl border border-dashed border-line p-6 text-sm text-ink-faint dark:border-line-dark dark:text-snow-faint">没有匹配的标签。</p>
+  </div>
 
   <script is:inline>
     (function () {
       var input = document.getElementById('tag-filter');
+      var empty = document.getElementById('tag-empty');
       var items = Array.from(document.querySelectorAll('.tag-item'));
       input?.addEventListener('input', function () {
-        var q = input.value.trim().toLowerCase();
-        items.forEach(function (el) {
-          var t = el.getAttribute('data-tag') || '';
-          el.classList.toggle('hidden', q !== '' && !t.includes(q));
+        var query = input.value.trim().toLowerCase();
+        var visible = 0;
+        items.forEach(function (item) {
+          var matches = (item.getAttribute('data-tag') || '').includes(query);
+          item.hidden = !matches;
+          if (matches) visible++;
         });
+        if (empty) empty.hidden = visible !== 0;
       });
     })();
   </script>

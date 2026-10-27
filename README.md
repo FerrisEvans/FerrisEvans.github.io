@@ -29,13 +29,15 @@ npm run preview   # 预览构建产物
 title: 文章标题
 description: 一句话摘要，用于卡片和 SEO
 pubDate: 2026-10-14
-category: programming-language   # programming-language | data-structures | game-dev | ai
-subcategory: cpp                 # 可选，取值见 src/data/site.ts
+category: programming-language   # 小写字母、数字和连字符组成的 slug
+subcategory: cpp                 # 可选，使用相同的 slug 规则
 tags: [pointer, array]
 pin: false                       # 可选，置顶到首页特色位
 math: false                      # 有数学公式时设 true
 ---
 ```
+
+分类和子分类可以直接使用新的 slug，无需先修改配置。系统会自动生成默认名称、封面、首页入口和分类页面，并在构建时提醒未注册分类。需要中文名称、定制颜色或子分类显示名时，只需在 `src/data/site.ts` 的 `CATEGORIES` 中添加定制项。
 
 正文中可用的扩展语法：
 

@@ -1,8 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import CategoryBadge from '../components/CategoryBadge.astro';
-import { getPosts, getReadingTime, postUrl, type Post } from '../utils/posts';
-import { CATEGORIES } from '../data/site';
+import { getPosts, postUrl, type Post } from '../utils/posts';
 
 const posts = await getPosts();
 
@@ -17,90 +16,49 @@ for (const post of posts) {
 }
 const years = [...byYear.entries()]
   .sort((a, b) => b[0] - a[0])
-  .map(([year, months]) => {
-    const monthList = [...months.entries()]
+  .map(([year, months]) => ({
+    year,
+    months: [...months.entries()]
       .sort((a, b) => b[0] - a[0])
-      .map(([month, list]) => ({ month, posts: list }));
-    const count = monthList.reduce((acc, m) => acc + m.posts.length, 0);
-    return { year, count, months: monthList };
-  });
+      .map(([month, list]) => ({ month, posts: list })),
+  }));
 ---
 
 <Base title="归档">
-  <section class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
-    <header class="mb-12 flex flex-col justify-between gap-4 border-b border-line pb-6 sm:flex-row sm:items-end dark:border-line-dark">
-      <div>
-        <p class="font-mono text-xs font-semibold uppercase tracking-widest text-accent dark:text-accent-dark">
-          CHRONOLOGICAL ARCHIVE
-        </p>
-        <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">文章归档</h1>
-        <p class="mt-2 text-sm text-ink-soft dark:text-snow-soft">
-          按时间线回溯全部写作记录，共收录 {posts.length} 篇技术笔记。
-        </p>
-      </div>
-
-      <div class="flex items-center gap-3 font-mono text-xs text-ink-faint dark:text-snow-faint">
-        <span>{years.length} 个年份</span>
-        <span>·</span>
-        <span>{CATEGORIES.length} 个分类</span>
-      </div>
+  <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-14">
+    <header class="mb-12">
+      <p class="eyebrow">Archive / 时间索引</p>
+      <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">归档</h1>
+      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {posts.length} 篇文章，按时间倒序排列。</p>
     </header>
 
-    <div class="space-y-12">
-      {
-        years.map(({ year, count, months }) => (
-          <section class="surface-card p-6 sm:p-8">
-            <div class="mb-6 flex items-baseline justify-between border-b border-line/80 pb-4 dark:border-line-dark/80">
-              <h2 class="font-mono text-3xl font-bold tracking-tight text-ink dark:text-snow">{year}</h2>
-              <span class="rounded-full bg-paper-muted px-3 py-0.5 font-mono text-xs font-medium text-ink-soft dark:bg-night-muted dark:text-snow-soft">
-                {count} 篇文章
-              </span>
+    {
+      years.map(({ year, months }) => (
+        <section class="mb-14">
+          <h2 class="mb-8 font-mono text-5xl font-medium tracking-tight text-ink/20 dark:text-snow/20">{year}</h2>
+          {months.map(({ month, posts: list }) => (
+            <div class="mb-9">
+              <h3 class="mb-4 font-serif text-lg font-bold text-ink-soft dark:text-snow-soft">{month} 月</h3>
+              <ul class="relative space-y-5 border-l border-line pl-6 dark:border-line-dark">
+                {list.map((post) => (
+                  <li class="group relative">
+                    <span class="absolute -left-[1.72rem] top-2 h-2.5 w-2.5 rounded-full border-2 border-paper bg-accent dark:border-night dark:bg-accent-dark" />
+                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+                      <time datetime={post.data.pubDate.toISOString()} class="text-sm tabular-nums text-ink-faint dark:text-snow-faint">
+                        {String(post.data.pubDate.getUTCDate()).padStart(2, '0')} 日
+                      </time>
+                      <a href={postUrl(post)} class="font-medium transition-colors after:absolute after:inset-0 after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
+                        {post.data.title}
+                      </a>
+                      <CategoryBadge category={post.data.category} />
+                    </div>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <div class="space-y-8">
-              {months.map(({ month, posts: list }) => (
-                <div>
-                  <h3 class="mb-3.5 inline-flex items-center gap-2 font-mono text-xs font-bold uppercase tracking-wider text-accent dark:text-accent-dark">
-                    <span class="h-1.5 w-1.5 rounded-full bg-accent dark:bg-accent-dark" />
-                    {year} 年 {String(month).padStart(2, '0')} 月
-                  </h3>
-
-                  <ul class="relative ml-2 space-y-2.5 border-l border-line pl-5 dark:border-line-dark">
-                    {list.map((post) => {
-                      const url = postUrl(post);
-                      const minutes = getReadingTime(post);
-                      return (
-                        <li class="group relative">
-                          <span class="absolute -left-[1.48rem] top-4 h-2 w-2 rounded-full border-2 border-paper-elev bg-ink-faint transition-colors group-hover:bg-accent dark:border-night-elev dark:bg-snow-faint dark:group-hover:bg-accent-dark" />
-
-                          <article class="relative flex flex-col justify-between gap-2 rounded-xl border border-transparent p-2.5 transition-colors hover:border-line hover:bg-paper/80 sm:flex-row sm:items-center dark:hover:border-line-dark dark:hover:bg-night/60">
-                            <div class="flex min-w-0 items-baseline gap-3">
-                              <time class="shrink-0 font-mono text-xs tabular-nums text-ink-faint dark:text-snow-faint">
-                                {String(month).padStart(2, '0')}-{String(post.data.pubDate.getUTCDate()).padStart(2, '0')}
-                              </time>
-                              <a
-                                href={url}
-                                class="truncate font-serif text-base font-bold text-ink transition-colors after:absolute after:inset-0 after:z-0 group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark"
-                              >
-                                {post.data.title}
-                              </a>
-                            </div>
-
-                            <div class="flex shrink-0 items-center gap-2.5 pl-12 sm:pl-0">
-                              <span class="font-mono text-[11px] text-ink-faint dark:text-snow-faint">{minutes}m</span>
-                              <CategoryBadge category={post.data.category} />
-                            </div>
-                          </article>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))
-      }
-    </div>
-  </section>
+          ))}
+        </section>
+      ))
+    }
+  </div>
 </Base>

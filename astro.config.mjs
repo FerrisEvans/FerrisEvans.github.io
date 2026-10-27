@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeGithubAlerts from './src/plugins/rehype-github-alerts.mjs';
+import rehypeReading from './src/plugins/rehype-reading.mjs';
 
 export default defineConfig({
   site: 'https://ferrisevans.github.io',
@@ -13,7 +14,7 @@ export default defineConfig({
   },
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeGithubAlerts, rehypeKatex],
+    rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex],
     shikiConfig: {
       themes: {
         light: 'github-light-default',
