@@ -1,56 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, categoryOf } from '../data/site';
+import { SITE } from '../data/site';
+import { ABOUT, aboutGreeting, aboutInterests } from '../data/room-about';
 
-const interests = ['programming-language', 'game-dev', 'ai'].map(categoryOf);
-const principles = [
-  '很多事都是熟能生巧，没有足够的练习不要谈天赋。练习不是一味的重复，或者去完全复刻别人的代码，每一次练习都应该增加难度，有突破自己认知的成长。这样反复的经过输入、评估、输出、纠正，会有惊人的变化。',
-  '英语水平决定了一个程序员的上限。',
-  '要有良好的习惯，才能事半功倍。',
-  '不要等准备好了再出发，优秀的程序员都是探路者。',
-  '愚者困惑，智者提问。',
-  '最简单的往往是最有效的。',
-  '向成功者学习，向成功的项目学习。',
-  '输出是最好的输入。',
-  '一定要坚持，保持长时间学习，甚至终身学习的态度。',
-  '一定要动手，不管例子多么简单，建议至少自己动手敲一遍看看是否理解了里头的细枝末节。',
-  '一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考。',
-  '不要乱买书，不要乱追新技术新名词，基础的东西经过很长时间积累，会在未来至少 10 年通用。',
-  '回顾一下历史，看看历史时间线上技术的发展，你才能明白明天会是什么样的。',
-];
-const zen = [
-  'Beautiful is better than ugly. 优美胜于丑陋',
-  'Explicit is better than implicit. 明了胜于晦涩',
-  'Simple is better than complex. 简洁胜于复杂',
-  'Complex is better than complicated. 复杂胜于凌乱',
-  'Flat is better than nested. 扁平胜于嵌套',
-  'Sparse is better than dense. 间隔胜于紧凑',
-  'Readability counts. 可读性很重要',
-  "Special cases aren't special enough to break the rules. 任何特例都不足够违背这些原则",
-  'Although practicality beats purity. 实用性高于纯粹性',
-  'Errors should never pass silently. 错误永远不应该被静默处理',
-  'Unless explicitly silenced. 除非明确地让它静默',
-  'In the face of ambiguity, refuse the temptation to guess. 面对二义性，拒绝猜测的诱惑',
-  'There should be one-- and preferably only one --obvious way to do it. 应该有一种——而且最好只有一种——明显的方法去做一件事',
-  "Although that way may not be obvious at first unless you're Dutch. 虽然那种方法一开始可能并不明显，除非你是 Python 之父",
-  'Now is better than never. 现在做总比不做好',
-  'Although never is often better than *right* now. 但永远不做通常比贸然行动好',
-  "If the implementation is hard to explain, it's a bad idea. 如果实现很难解释，它就不是好主意",
-  'If the implementation is easy to explain, it may be a good idea. 如果实现容易解释，它可能是一个好主意',
-  "Namespaces are one honking great idea -- let's do more of those! 命名空间是一个绝妙的主意——我们应该多多使用",
-];
+const interests = aboutInterests();
+const principles = ABOUT.principles;
+const zen = ABOUT.zen.lines;
 ---
 
 <Base title="关于">
   <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="border-b border-line pb-10 dark:border-line-dark">
+    <header class="page-header p-7 sm:p-9">
       <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
         <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover shadow-sm dark:border-line-dark" />
         <div>
           <p class="eyebrow">About / 关于</p>
-          <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">你好，我是 Ferris。</h1>
+          <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">{aboutGreeting(SITE.author)}</h1>
           <p class="mt-4 max-w-2xl leading-8 text-ink-soft dark:text-snow-soft">
-            一名开发者。兴趣方向涵盖游戏开发、编程语言与 AI Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。
+            {ABOUT.intro}
           </p>
           <div class="mt-5 flex flex-wrap gap-2.5">
             <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-10 items-center rounded-full bg-ink px-4 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85">
@@ -96,30 +63,31 @@ const zen = [
 
     <section aria-labelledby="quotes-heading" class="mt-14">
       <p class="eyebrow">On practice</p>
-      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">实践与长期主义</h2>
+      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">{ABOUT.practice.title}</h2>
       <blockquote class="mt-6 border-l-2 border-accent/50 pl-5 text-[0.9375rem] leading-8 text-ink-soft dark:border-accent-dark/50 dark:text-snow-soft">
-        <p>Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive.</p>
-        <p class="mt-4">Most of my programming career has involved finding something neat, writing my own version to understand it &amp; often throwing it away.</p>
-        <p class="mt-4">I program those "clones" like I read papers: change a core part; redesign it. Gain progress or understanding why it is what it is.</p>
-        <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">—— John Carmack</footer>
+        {ABOUT.practice.quotes.map((quote, index) => <p class={index > 0 ? 'mt-4' : undefined}>{quote}</p>)}
+        <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">{ABOUT.practice.attribution}</footer>
       </blockquote>
     </section>
 
     <div class="mt-14 space-y-4">
       <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
-        <summary>The Zen of Python <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">Tim Peters</span></summary>
+        <summary>{ABOUT.zen.title} <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">{ABOUT.zen.author}</span></summary>
         <div class="prose-custom mt-5">
-          <pre><code class="language-python">import this</code></pre>
+          <pre><code class="language-python">{ABOUT.zen.command}</code></pre>
           <ol>{zen.map((line) => <li>{line}</li>)}</ol>
         </div>
       </details>
 
       <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
-        <summary>文档格式约定</summary>
+        <summary>{ABOUT.formatting.title}</summary>
         <div class="prose-custom mt-5">
-          <p><strong>加粗字体</strong>通常用于关键字、类名等信息，通常不需要上下文即可理解，例如 <strong>Object</strong>、<strong>TreeNode</strong>。</p>
-          <p><code>inline_code</code> 通常用于属性名、方法名、执行命令等，例如 <code>_init()</code> 表示某个类或对象的初始化方法。</p>
-          <p><em>倾斜字体</em>用于提示特别注意；<sub>小字</sub>用于表示注释；<span class="text-accent dark:text-accent-dark">彩色字体</span>用于强调关键信息；<u>下划线字体</u>一般配合脚注使用。</p>
+          {ABOUT.formatting.paragraphs.map((paragraph) => (
+            <p>{paragraph.map((part) => {
+              const Tag = part.tag ?? 'span';
+              return <Tag class={part.accent ? 'text-accent dark:text-accent-dark' : undefined}>{part.text}</Tag>;
+            })}</p>
+          ))}
         </div>
       </details>
     </div>

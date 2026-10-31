@@ -1,0 +1,53 @@
+/* ---------- Pagefind ---------- */
+
+#pagefind-search {
+  --pagefind-ui-scale: 0.9;
+  --pagefind-ui-primary: var(--color-accent);
+  --pagefind-ui-text: var(--color-ink);
+  --pagefind-ui-background: var(--color-paper-elev);
+  --pagefind-ui-border: var(--color-line);
+  --pagefind-ui-tag: var(--color-paper-subtle);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: 12px;
+  --pagefind-ui-image-border-radius: 12px;
+  --pagefind-ui-font: var(--font-sans);
+}
+
+.dark #pagefind-search {
+  --pagefind-ui-primary: var(--color-accent-dark);
+  --pagefind-ui-text: var(--color-snow);
+  --pagefind-ui-background: var(--color-night-elev);
+  --pagefind-ui-border: var(--color-line-dark);
+  --pagefind-ui-tag: var(--color-night-subtle);
+}
+
+#pagefind-search mark {
+  padding-inline: 0.125em;
+  border-radius: 0.125rem;
+  background-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  color: var(--color-accent);
+}
+
+.dark #pagefind-search mark {
+  background-color: color-mix(in srgb, var(--color-accent-dark) 20%, transparent);
+  color: var(--color-accent-dark);
+}
+
+#pagefind-search .pagefind-ui__search-input {
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+#pagefind-search .pagefind-ui__search-clear,
+#pagefind-search .pagefind-ui__button {
+  font-weight: 500;
+}
+
+#pagefind-search .pagefind-ui__result {
+  padding-block: 1.25rem;
+}
+
+#pagefind-search .pagefind-ui__result-title {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+}

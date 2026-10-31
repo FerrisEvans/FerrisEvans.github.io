@@ -35,10 +35,27 @@ const g = SITE.giscus;
 </section>
 
 <script is:inline>
-  window.addEventListener('theme-changed', function () {
+  function syncGiscusTheme() {
     var iframe = document.querySelector('iframe.giscus-frame');
     if (!iframe) return;
     var theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
-  });
+  }
+
+  window.addEventListener('theme-changed', syncGiscusTheme);
+  var watchedGiscusFrames = new WeakSet();
+  function watchGiscusFrame() {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (!iframe) return;
+    if (!watchedGiscusFrames.has(iframe)) {
+      watchedGiscusFrames.add(iframe);
+      iframe.addEventListener('load', syncGiscusTheme);
+    }
+    syncGiscusTheme();
+  }
+  var giscusRoot = document.querySelector('.giscus');
+  if (giscusRoot) {
+    new MutationObserver(watchGiscusFrame).observe(giscusRoot, { childList: true, subtree: true });
+    watchGiscusFrame();
+  }
 </script>

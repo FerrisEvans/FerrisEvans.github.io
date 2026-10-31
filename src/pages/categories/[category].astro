@@ -2,9 +2,9 @@
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import CardCover from '../../components/CardCover.astro';
-import TagChip from '../../components/TagChip.astro';
+import PostListItem from '../../components/PostListItem.astro';
 import { categoriesFor, labelFromSlug, type CategoryDef } from '../../data/site';
-import { getPosts, formatDate, postUrl, type Post } from '../../utils/posts';
+import { getPosts, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
   const posts = await getPosts();
@@ -59,28 +59,7 @@ for (const key of orderedKeys) {
             <span class="text-sm font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
           </h2>
           <ul class="space-y-3">
-            {group.posts.map((post) => (
-              <li class="group relative rounded-xl border border-line bg-paper-elev p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20 sm:flex sm:items-center sm:justify-between sm:gap-6">
-                <div class="min-w-0">
-                  <h3 class="font-serif text-lg font-bold leading-snug">
-                    <a href={postUrl(post)} class="transition-colors after:absolute after:inset-0 after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
-                      {post.data.title}
-                    </a>
-                  </h3>
-                  {post.data.description && (
-                    <p class="mt-1.5 line-clamp-1 text-sm leading-6 text-ink-soft dark:text-snow-soft">{post.data.description}</p>
-                  )}
-                  {post.data.tags.length > 0 && (
-                    <div class="mt-3 flex flex-wrap gap-1.5">
-                      {post.data.tags.map((tag) => <TagChip tag={tag} />)}
-                    </div>
-                  )}
-                </div>
-                <time datetime={post.data.pubDate.toISOString()} class="mt-3 block shrink-0 text-sm text-ink-faint dark:text-snow-faint sm:mt-0">
-                  {formatDate(post.data.pubDate)}
-                </time>
-              </li>
-            ))}
+            {group.posts.map((post) => <PostListItem post={post} headingLevel={3} showTags />)}
           </ul>
         </section>
       ))

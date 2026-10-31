@@ -11,9 +11,9 @@ const countOf = (slug: string) => posts.filter((post) => post.data.category === 
 
 <Base title="分类">
   <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="mb-10">
+    <header class="page-header mb-10 p-7 sm:p-9">
       <p class="eyebrow">Categories / 知识地图</p>
-      <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">分类</h1>
+      <h1 class="page-title">分类</h1>
       <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {categories.length} 个分类，{posts.length} 篇文章。</p>
     </header>
     <div class="grid gap-5 sm:grid-cols-2">

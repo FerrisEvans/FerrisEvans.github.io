@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Pagination from '../components/Pagination.astro';
+import LofiHero from '../components/LofiHero';
 import { categoriesFor, SITE, type CategoryDef } from '../data/site';
 import { getPosts, type Post } from '../utils/posts';
 
@@ -51,55 +52,30 @@ const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
 ---
 
 <Base>
-  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6">
     {
       isFirst && (
-        <header class="border-b border-line py-8 dark:border-line-dark sm:py-14">
-          <div class="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_25rem] lg:gap-16">
-            <div class="hero-enter">
-              <div class="flex items-center gap-4">
-                <img
-                  src={SITE.avatar}
-                  alt={SITE.author}
-                  width="56"
-                  height="56"
-                  class="h-14 w-14 rounded-full border border-line object-cover shadow-sm dark:border-line-dark"
-                />
-                <div>
-                  <p class="eyebrow">Ferris / Personal notes</p>
-                  <p class="mt-1.5 text-sm text-ink-soft dark:text-snow-soft">在循环里学习，在实践中校准。</p>
-                </div>
-              </div>
-              <h1 class="mt-6 font-serif text-4xl font-bold tracking-tight sm:text-6xl">
-                Mainloop<span class="text-accent dark:text-accent-dark">.</span>
-              </h1>
-              <p class="mt-4 max-w-2xl font-serif text-lg leading-8 text-ink-soft dark:text-snow-soft sm:text-xl">
-                {SITE.tagline}
-              </p>
-              <p class="mt-3 hidden max-w-xl text-sm leading-7 text-ink-faint dark:text-snow-faint sm:block sm:text-[0.9375rem]">
-                {SITE.intro}
-              </p>
-            </div>
-
-            <nav aria-label="按分类浏览" class="hero-enter hero-enter-delay flex flex-wrap gap-2 lg:grid lg:grid-cols-2 lg:gap-3">
-              {categories.map((cat, index) => (
-                <a
-                  href={`/categories/${cat.slug}/`}
-                  class="topic-link group rounded-full border border-line bg-paper-elev px-3.5 py-2 transition-colors hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20 lg:rounded-xl lg:p-4"
-                >
-                  <div class="flex items-center gap-2.5">
-                    <span class="font-mono text-sm font-semibold" style={`color: ${cat.accent};`}>{cat.mark}</span>
-                    <span class="text-sm font-medium">{cat.label}</span>
-                  </div>
-                  <div class="mt-3 hidden items-center justify-between text-xs text-ink-faint dark:text-snow-faint lg:flex">
-                    <span class="font-mono">{String(index + 1).padStart(2, '0')}</span>
-                    <span>{categoryCounts[cat.slug]} 篇文章</span>
-                  </div>
-                </a>
-              ))}
-            </nav>
-          </div>
-        </header>
+        <>
+          <header class="mt-6 sm:mt-10">
+            <LofiHero client:load tagline={SITE.tagline} intro={SITE.intro} />
+          </header>
+          <nav aria-label="按分类浏览" class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {categories.map((cat, index) => (
+              <a
+                href={`/categories/${cat.slug}/`}
+                class="tape-link group relative overflow-hidden rounded-lg border border-[#3a352d] bg-[#1a222a] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d6a45f]/50 sm:p-5"
+              >
+                <span class="absolute inset-y-0 left-0 w-1" style={`background: ${cat.accent};`} aria-hidden="true"></span>
+                <span class="flex items-center justify-between gap-2">
+                  <span class="font-mono text-sm font-semibold" style={`color: color-mix(in srgb, ${cat.accent} 55%, white)`}>{cat.mark}</span>
+                  <span class="font-mono text-[0.625rem] text-[#b8ab96]">{String(index + 1).padStart(2, '0')}</span>
+                </span>
+                <span class="mt-4 block font-serif text-lg font-medium text-[#ece3d2] transition-colors group-hover:text-[#e5b978]">{cat.label}</span>
+                <span class="mt-1 block text-xs text-[#b8ab96]">{categoryCounts[cat.slug]} 篇文章</span>
+              </a>
+            ))}
+          </nav>
+        </>
       )
     }
 

@@ -16,7 +16,7 @@
 <script is:inline>
   document.getElementById('theme-toggle')?.addEventListener('click', function () {
     var isDark = document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch {}
     window.dispatchEvent(new CustomEvent('theme-changed'));
   });
 </script>

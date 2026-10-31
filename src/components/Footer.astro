@@ -1,14 +1,15 @@
 ---
 import { SITE } from '../data/site';
+import Brand from './Brand.astro';
 
-const year = 2026;
+const year = new Date().getFullYear();
 ---
 
 <footer data-pagefind-ignore class="mt-20 border-t border-line dark:border-line-dark">
   <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-4 py-8 sm:flex-row sm:px-6">
     <div class="text-center sm:text-left">
-      <a href="/" class="font-serif text-lg font-bold tracking-tight">
-        {SITE.title}<span class="text-accent dark:text-accent-dark">.</span>
+      <a href="/" aria-label={`${SITE.title} 首页`} class="inline-flex text-ink dark:text-snow">
+        <Brand width={142} />
       </a>
       <p class="mt-1.5 text-xs leading-5 text-ink-faint dark:text-snow-faint">
         © {year} {SITE.author} · Powered by <a href="https://astro.build" target="_blank" rel="noopener noreferrer" class="underline underline-offset-4 transition-colors hover:text-ink dark:hover:text-snow">Astro</a>

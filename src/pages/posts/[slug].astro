@@ -62,7 +62,7 @@ if (post.data.math) {
 
   <article class="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
     <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-x-12">
-      <header class="min-w-0 lg:col-start-1 lg:row-start-1">
+      <header class="page-header min-w-0 p-6 sm:p-8 lg:col-start-1 lg:row-start-1">
         <nav aria-label="面包屑" class="mb-6 flex flex-wrap items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
           <a href="/categories/" class="transition-colors hover:text-ink dark:hover:text-snow">分类</a>
           <span>/</span>
@@ -134,8 +134,8 @@ if (post.data.math) {
                 <Toc headings={headings} showTitle={false} />
               </div>
             </details>
-            <div class="mt-12 hidden lg:block">
-              <div class="toc-scroll sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
+            <div class="sticky top-24 mt-12 hidden lg:block">
+              <div class="toc-scroll max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
                 <Toc headings={headings} />
               </div>
             </div>
