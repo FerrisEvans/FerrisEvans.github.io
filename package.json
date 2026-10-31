@@ -1,11 +1,11 @@
 {
   "name": "mainloop-blog",
   "type": "module",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit",
-    "build": "astro build && node scripts/room/prune-delivery.mjs && pagefind --site dist",
+    "build": "astro build && node scripts/room/prune-delivery.mjs && pagefind --site dist && node scripts/write-release.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "font:check": "node scripts/room/font-coverage.mjs --check",
@@ -17,7 +17,9 @@
     "assets:check": "node scripts/room/check-static-assets.mjs",
     "test:content": "node --test scripts/room/content.test.mjs scripts/room/font-coverage.test.mjs",
     "prebuild": "npm run font:check && npm run test:content && npm run assets:check",
-    "test": "node --test scripts/room/*.test.mjs"
+    "test": "node --test scripts/room/*.test.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "verify:build": "node scripts/verify-build.mjs"
   },
   "engines": {
     "node": ">=22.19.0"
