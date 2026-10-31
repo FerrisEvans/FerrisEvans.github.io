@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-31",
+  "method": "built-in imagegen, reference-guided original panorama",
+  "input": "public/room/city-night-v3.png",
+  "sourceType": "Project-generated image; no third-party photo/model download and no reference-site assets",
+  "output": "city-panorama-v1.png",
+  "dimensions": [
+    2172,
+    724
+  ],
+  "native4K": false,
+  "runtime": "city-panorama-v1.webp",
+  "encoding": "cwebp -q 94; no resize or sharpening",
+  "promptFile": "city-panorama-v1.prompt.txt",
+  "depth": "Hand-traced building/roof/tree/gantry silhouettes in src/scripts/room/weather.ts; independent of previous plate",
+  "projection": {
+    "uvScale": [
+      0.5,
+      0.84375
+    ],
+    "uvOffset": [
+      0.25,
+      0.052
+    ],
+    "worldWidth": 29.12
+  },
+  "limitations": [
+    "Not a real photographed location",
+    "Not native 4K",
+    "A bounded depth-warped plate, not full 3D reconstruction"
+  ],
+  "generationId": "exec-244a773c-3440-4d23-8aa9-e1234b0f8080",
+  "runtimeBytes": 625664,
+  "sourceBytes": 2971933,
+  "priorRuntimeBytes": 451500
+}

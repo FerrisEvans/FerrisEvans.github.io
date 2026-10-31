@@ -8,6 +8,11 @@ node_modules
 dist
 .astro
 
+# Reproducible Blender working files (GLB is exported to public/room)
+.room-build/
+__pycache__/
+*.pyc
+
 # IDE configurations
 .idea
 .vscode

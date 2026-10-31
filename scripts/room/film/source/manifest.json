@@ -1,0 +1,19 @@
+{
+  "file": "idea-room.blend",
+  "bytes": 8235367,
+  "sha256": "ae3579826064a60c5440ee439c1423c5559e048824a87c46fb81b503dca9ac4d",
+  "source": "Accepted Mainloop room authoring scene, immutable snapshot before high-quality upgrade",
+  "purpose": "Computer chapter lighting/geometry context; all required images packed; no runtime download",
+  "packedImages": [
+    "city-night-v3.png",
+    "walnut-grain-v1.png"
+  ],
+  "externalImageFilesRequired": false,
+  "note": "Off-camera geometry is preserved to keep approved indirect lighting and reflections unchanged.",
+  "verifiedWith": "Blender 5.2.1 LTS",
+  "packedImageBytes": {
+    "city-night-v3.png": 2701257,
+    "walnut-grain-v1.png": 2209350
+  },
+  "externalFontsInSource": []
+}

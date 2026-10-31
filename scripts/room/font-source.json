@@ -1,0 +1,25 @@
+{
+  "family": "Fusion Pixel Font",
+  "selectedFace": "fusion-pixel-12px-proportional-zh_hans.otf.woff2",
+  "version": "2026.10.25",
+  "release": "https://github.com/TakWolf/fusion-pixel-font/releases/tag/2026.10.25",
+  "archive": "https://github.com/TakWolf/fusion-pixel-font/releases/download/2026.10.25/fusion-pixel-font-12px-proportional-otf.woff2-v2026.10.25.zip",
+  "archiveSha256": "0501b4f770887eef5fc5ac94401b3b7bb38253ffed3a549e2cb0be89a0a03fe3",
+  "faceSha256": "b67eb7aa592622e5bc1152b800d32404bb887a1e3a2e669b0c2a873d388590d6",
+  "license": "SIL Open Font License 1.1",
+  "licenseSource": "https://raw.githubusercontent.com/TakWolf/fusion-pixel-font/2026.10.25/LICENSE-OFL",
+  "author": "Copyright (c) 2022, TakWolf (https://takwolf.com).",
+  "upstreamRepository": "https://github.com/TakWolf/fusion-pixel-font",
+  "upstreamFontIsComposite": true,
+  "includedAdditionalNotices": [
+    "public/fonts/LICENSES/ark-pixel/OFL.txt",
+    "public/fonts/LICENSES/cubic-11/OFL.txt",
+    "public/fonts/LICENSES/galmuri/LICENSE.txt"
+  ],
+  "sourceLocalPath": ".room-build/fonts/fusion-pixel-12px-proportional-zh_hans.otf.woff2",
+  "publicSubset": "public/fonts/room-pixel-zh.woff2",
+  "subsetFamily": "Mainloop UI Pixel",
+  "reason": "Ark Pixel upstream currently warns about incomplete CJK coverage and recommends Fusion Pixel as a transitional option. Fusion 12px proportional zh-Hans covers all requested CJK UI and article-title characters in this project snapshot.",
+  "downloadVerified": "2026-10-29",
+  "systemPackagesInstalled": false
+}

@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "site": "Mainloop",
+  "author": "Ferris",
+  "recommended": "a-loop",
+  "source": "Original integer-grid paths and custom pixel letterforms authored for this project. No original-site assets, external font services, or third-party logos were used.",
+  "wordmark": {
+    "text": "MAINLOOP",
+    "viewBox": [
+      0,
+      0,
+      119,
+      16
+    ],
+    "glyphs": {
+      "M": [
+        "10001",
+        "11011",
+        "10101",
+        "10101",
+        "10001",
+        "10001",
+        "10001"
+      ],
+      "A": [
+        "01110",
+        "11011",
+        "10001",
+        "11111",
+        "10001",
+        "10001",
+        "10001"
+      ],
+      "I": [
+        "111",
+        "010",
+        "010",
+        "010",
+        "010",
+        "010",
+        "111"
+      ],
+      "N": [
+        "10001",
+        "11001",
+        "11001",
+        "10101",
+        "10011",
+        "10011",
+        "10001"
+      ],
+      "L": [
+        "10000",
+        "10000",
+        "10000",
+        "10000",
+        "10000",
+        "10000",
+        "11111"
+      ],
+      "O": [
+        "01110",
+        "11011",
+        "10001",
+        "10001",
+        "10001",
+        "11011",
+        "01110"
+      ],
+      "P": [
+        "11110",
+        "10011",
+        "10001",
+        "11110",
+        "10000",
+        "10000",
+        "10000"
+      ]
+    },
+    "glyphPixelSize": 2,
+    "letterGap": 3,
+    "xStart": 22
+  },
+  "palette": {
+    "ink": "#253A33",
+    "paper": "#EEE8DB",
+    "night": "#15241F",
+    "muted": "#9BAFA2",
+    "amber": "#DCA45C",
+    "phosphor": "#A8D6B6",
+    "blue": "#94B8C5"
+  },
+  "preview": {
+    "svg": "/brand/concepts/brand-options.svg",
+    "png": "/brand/concepts/brand-options.png"
+  },
+  "concepts": [
+    {
+      "id": "a-loop",
+      "label": "A",
+      "name": "循环光点",
+      "english": "THE MAIN LOOP",
+      "accent": "#DCA45C",
+      "recommended": true,
+      "reason": "用两条连续的像素回路表达 Mainloop；右侧单点是运行状态。轮廓不依赖某件道具，适合 3D 书房与长期阅读品牌。",
+      "tradeoff": "更抽象，需要通过字标建立名称记忆。",
+      "files": {
+        "markLightBackground": "/brand/concepts/a-loop-mark-ink.svg",
+        "markDarkBackground": "/brand/concepts/a-loop-mark-paper.svg",
+        "wordmarkLightBackground": "/brand/concepts/a-loop-wordmark-ink.svg",
+        "wordmarkDarkBackground": "/brand/concepts/a-loop-wordmark-paper.svg",
+        "faviconSVG": "/brand/concepts/a-loop-favicon-16.svg",
+        "faviconICO": "/brand/concepts/a-loop-favicon.ico",
+        "faviconPNG": {
+          "16": "/brand/concepts/a-loop-favicon-16.png",
+          "32": "/brand/concepts/a-loop-favicon-32.png",
+          "180": "/brand/concepts/a-loop-favicon-180.png",
+          "192": "/brand/concepts/a-loop-favicon-192.png",
+          "512": "/brand/concepts/a-loop-favicon-512.png"
+        }
+      },
+      "grid": [
+        "................",
+        "................",
+        "................",
+        "...###....###...",
+        "..#####..#####..",
+        ".##...####...##.",
+        ".##....##....##.",
+        ".##....##....##.",
+        ".##...####...##.",
+        "..#####..#####..",
+        "...###....##+...",
+        "................",
+        "................",
+        "................",
+        "................",
+        "................"
+      ]
+    },
+    {
+      "id": "b-crt",
+      "label": "B",
+      "name": "显像管终端",
+      "english": "PHOSPHOR STUDIO",
+      "accent": "#A8D6B6",
+      "recommended": false,
+      "reason": "厚边框、弧形切角和短底座保留旧显像管的辨识度，绿色光标呼应 CRT 内容与开发者身份。",
+      "tradeoff": "场景关联最直接，但比闭环符号更具题材限定。",
+      "files": {
+        "markLightBackground": "/brand/concepts/b-crt-mark-ink.svg",
+        "markDarkBackground": "/brand/concepts/b-crt-mark-paper.svg",
+        "wordmarkLightBackground": "/brand/concepts/b-crt-wordmark-ink.svg",
+        "wordmarkDarkBackground": "/brand/concepts/b-crt-wordmark-paper.svg",
+        "faviconSVG": "/brand/concepts/b-crt-favicon-16.svg",
+        "faviconICO": "/brand/concepts/b-crt-favicon.ico",
+        "faviconPNG": {
+          "16": "/brand/concepts/b-crt-favicon-16.png",
+          "32": "/brand/concepts/b-crt-favicon-32.png",
+          "180": "/brand/concepts/b-crt-favicon-180.png",
+          "192": "/brand/concepts/b-crt-favicon-192.png",
+          "512": "/brand/concepts/b-crt-favicon-512.png"
+        }
+      },
+      "grid": [
+        "................",
+        "...##########...",
+        "..############..",
+        ".###.......####.",
+        ".##.........###.",
+        ".##.........###.",
+        ".##.........###.",
+        ".##..++.....###.",
+        ".##..++.....###.",
+        ".###.......####.",
+        "..############..",
+        "...##########...",
+        "......####......",
+        "....########....",
+        "................",
+        "................"
+      ]
+    },
+    {
+      "id": "c-window",
+      "label": "C",
+      "name": "夜窗工坊",
+      "english": "NIGHT WINDOW",
+      "accent": "#DCA45C",
+      "recommended": false,
+      "reason": "不对称窗格与一束暖光表现雨夜里的个人工作室；避免四个同等彩色窗格，与常见系统图标区分。",
+      "tradeoff": "空间感更强，技术与编程含义相对含蓄。",
+      "files": {
+        "markLightBackground": "/brand/concepts/c-window-mark-ink.svg",
+        "markDarkBackground": "/brand/concepts/c-window-mark-paper.svg",
+        "wordmarkLightBackground": "/brand/concepts/c-window-wordmark-ink.svg",
+        "wordmarkDarkBackground": "/brand/concepts/c-window-wordmark-paper.svg",
+        "faviconSVG": "/brand/concepts/c-window-favicon-16.svg",
+        "faviconICO": "/brand/concepts/c-window-favicon.ico",
+        "faviconPNG": {
+          "16": "/brand/concepts/c-window-favicon-16.png",
+          "32": "/brand/concepts/c-window-favicon-32.png",
+          "180": "/brand/concepts/c-window-favicon-180.png",
+          "192": "/brand/concepts/c-window-favicon-192.png",
+          "512": "/brand/concepts/c-window-favicon-512.png"
+        }
+      },
+      "grid": [
+        "................",
+        "...##########...",
+        "..############..",
+        "..############..",
+        "..##....##..##..",
+        "..##....##..##..",
+        "..##....##..##..",
+        "..############..",
+        "..############..",
+        "..##....##..##..",
+        "..##+++.##..##..",
+        "..##+++.##..##..",
+        "..############..",
+        "..############..",
+        "................",
+        "................"
+      ]
+    }
+  ],
+  "integrationNote": "Concept assets only. Existing Nav, Base, room, favicon references and site identity have not been modified. Favicon PNG sizes use nearest-neighbor pixel-grid scaling; production tiny PNG/ICO may be regenerated from chosen grid."
+}

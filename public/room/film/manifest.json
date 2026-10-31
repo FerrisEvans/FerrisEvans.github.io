@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "title": "NIGHT LOG",
+  "duration": 48,
+  "fps": 24,
+  "width": 960,
+  "height": 720,
+  "posterTime": 7.958333333333333,
+  "video": "/room/film/night-log.mp4",
+  "poster": "/room/film/night-log-still.webp",
+  "light": "/room/film/night-log-light.json",
+  "encoding": {
+    "codec": "H.264",
+    "pixelFormat": "yuv420p",
+    "profile": "High",
+    "level": "3.1",
+    "crf": 22,
+    "colorPrimaries": "BT.709",
+    "transfer": "sRGB (IEC 61966-2-1)",
+    "matrix": "BT.709",
+    "range": "limited",
+    "audioTracks": 0
+  },
+  "audio": "none; the existing synchronized Mainloop synthesized score remains authoritative",
+  "chapters": [
+    {
+      "start": 0,
+      "duration": 16,
+      "title": "THE LAST TRAIN HOME"
+    },
+    {
+      "start": 16,
+      "duration": 16,
+      "title": "ONE SMALL IDEA"
+    },
+    {
+      "start": 32,
+      "duration": 16,
+      "title": "A WORLD TAKES SHAPE"
+    }
+  ],
+  "files": {
+    "night-log.mp4": {
+      "bytes": 6030806,
+      "sha256": "091ece1434512b4ea0bd3f7fde032e0bdf2ef891abec5c3528ba0595baea7948"
+    },
+    "night-log-still.webp": {
+      "bytes": 61708,
+      "sha256": "39dcee93531435cd1d2a779de45198e2580a4436d8f879e372bc37d0b1652b65"
+    },
+    "night-log-light.json": {
+      "bytes": 33088,
+      "sha256": "a3c261b9b055d63da2a20fd03e512641a0e83ad98ec61bd8bf354b0e04f7d16a"
+    }
+  },
+  "decodeBudget": {
+    "rgbaTextureBytes": 2764800,
+    "yuv420FrameBytes": 1036800,
+    "note": "Decoder surface count and hardware acceleration vary by browser; measure actual playback, not only this per-frame estimate."
+  }
+}

@@ -11,7 +11,7 @@ export const getStaticPaths = (async () => {
   const featured = posts.find((p) => p.data.pin) ?? posts[0];
   const pageSize = SITE.postsPerPage;
   const lastPage = Math.max(1, Math.ceil(posts.length / pageSize));
-  const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
+  const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
   const categories = categoriesFor(posts.map((post) => post.data.category));
   const categoryCounts = Object.fromEntries(
     categories.map((cat) => [cat.slug, posts.filter((post) => post.data.category === cat.slug).length]),
@@ -19,7 +19,7 @@ export const getStaticPaths = (async () => {
   return Array.from({ length: lastPage }, (_, i) => {
     const n = i + 1;
     return {
-      params: { page: n === 1 ? undefined : `page/${n}` },
+      params: { page: n === 1 ? 'lofi' : `page/${n}` },
       props: {
         featured,
         categories,

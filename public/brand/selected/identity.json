@@ -1,0 +1,20 @@
+{
+  "name": "Mainloop",
+  "concept": "a-loop",
+  "approvedChoice": "A 循环光点",
+  "color": "Ink inherits currentColor; steady amber active-state pixel",
+  "wordmarkViewBox": [
+    0,
+    0,
+    119,
+    16
+  ],
+  "faviconGrid": [
+    16,
+    16
+  ],
+  "source": "Independently drawn SVG paths and pixel letterforms; no external fonts or source-site assets.",
+  "component": "src/components/Brand.astro",
+  "faviconRoot": "/assets/img/favicons/",
+  "cacheVersion": "loop-1"
+}

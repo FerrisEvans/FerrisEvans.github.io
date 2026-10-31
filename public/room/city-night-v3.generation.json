@@ -1,0 +1,13 @@
+{
+  "method": "built-in imagegen image edit",
+  "source": "city-night-v2.png",
+  "prompt": "scripts/room/city-night-v3.prompt.txt",
+  "dimensions": [
+    1672,
+    941
+  ],
+  "native4K": false,
+  "cameraAndLayout": "Preserved existing camera and building/rail silhouettes; approximate occlusion mask checked visually in round11/city-mask-comparison.jpg.",
+  "runtime": "city-night-v3.webp, quality 92",
+  "scope": "Lighting, wet reflections and existing billboard; no new rain shader or geometry."
+}

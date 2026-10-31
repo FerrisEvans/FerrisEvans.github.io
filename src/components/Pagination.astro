@@ -14,7 +14,7 @@ const { page } = Astro.props;
 const { currentPage, lastPage } = page;
 
 const pages = Array.from({ length: lastPage }, (_, i) => i + 1);
-const hrefFor = (n: number) => (n === 1 ? '/' : `/page/${n}/`);
+const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
 ---
 
 {

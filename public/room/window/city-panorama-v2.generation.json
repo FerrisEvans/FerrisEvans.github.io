@@ -1,0 +1,15 @@
+{
+  "method": "built-in imagegen edit; only generated sign interior composited into unchanged original source",
+  "source": "city-panorama-v1.png",
+  "output": "city-panorama-v2.png",
+  "prompt": "Edit this exact panoramic city photograph. Remove ONLY the dark MAINLOOP lettering from the small warm illuminated rectangular billboard around 70% of image width and 30% of image height. Leave the illuminated sign blank. Preserve all geometry, buildings, lighting, tracks, trees, perspective and the same 3:1 panoramic composition.",
+  "compositeRegion": {
+    "left": 1494,
+    "top": 205,
+    "width": 53,
+    "height": 21
+  },
+  "unchangedOutsideRegion": true,
+  "sourceSha256": "98e131abdd98246de922e0da8cc18eea0b3121ffa4e789110fd43b2cc0456cec",
+  "outputSha256": "f910524ddd126bf1d644ecdc0da22891fbfef04f9b241495d1df4915361cdc83"
+}

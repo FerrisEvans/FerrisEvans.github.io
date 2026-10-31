@@ -1,0 +1,46 @@
+{
+  "stage": "greybox",
+  "viewport": [
+    1440,
+    960
+  ],
+  "camera": "HomeCamera",
+  "anchors": {
+    "tvTopLeft": [
+      0.35731,
+      0.40296
+    ],
+    "tvBottomRight": [
+      0.60665,
+      0.77994
+    ],
+    "screenCenter": [
+      0.48306,
+      0.55147
+    ],
+    "windowLeft": [
+      0.08945,
+      0.29382
+    ],
+    "windowRight": [
+      0.79486,
+      0.29382
+    ],
+    "windowCrossbar": [
+      0.44348,
+      0.14614
+    ],
+    "windowBottom": [
+      0.44492,
+      0.62613
+    ],
+    "lampBase": [
+      0.15045,
+      0.82861
+    ],
+    "deskFront": [
+      0.48118,
+      0.9327
+    ]
+  }
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "id": "pointers",
+    "object": "VHS_A_1",
+    "title": "指针与内存地址",
+    "label": "POINTERS",
+    "description": "概念可视化：指针保存对象的地址，解引用沿该地址读取对象。画面中的地址和值是解释用的示意数据。",
+    "href": "/posts/cpp_pointer01/",
+    "kind": "pointer"
+  },
+  {
+    "id": "arrays",
+    "object": "VHS_A_2",
+    "title": "数组与指针步长",
+    "label": "ARRAY WALK",
+    "description": "概念可视化：沿连续数组逐项访问，并展示元素大小如何影响指针运算。示例假定每个 int 占 4 字节，不表示所有平台都如此。",
+    "href": "/posts/cpp_pointer02/",
+    "kind": "array"
+  },
+  {
+    "id": "strings",
+    "object": "VHS_A_3",
+    "title": "字符串的结束标记",
+    "label": "STRING SCAN",
+    "description": "概念可视化：扫描 C 风格字符串，遇到空字符停止。终止字符占用存储空间，但不计入字符串长度。",
+    "href": "/posts/cpp_pointer03/",
+    "kind": "string"
+  },
+  {
+    "id": "references",
+    "object": "VHS_A_4",
+    "title": "引用是对象的别名",
+    "label": "REFERENCES",
+    "description": "概念可视化：变量名与引用名通向同一个 int 对象，通过引用修改后，两种访问方式看到相同的值。",
+    "href": "/posts/cpp_pointer04/",
+    "kind": "reference"
+  },
+  {
+    "id": "stack",
+    "object": "VHS_A_5",
+    "title": "栈的后进先出",
+    "label": "STACK / LIFO",
+    "description": "概念可视化：A、B、C 依次入栈，再按 C、B、A 的顺序出栈。动画展示抽象栈操作，不暗示具体机器栈的地址方向。",
+    "href": "/posts/stack/",
+    "kind": "stack"
+  },
+  {
+    "id": "linked-list",
+    "object": "VHS_B_1",
+    "title": "沿着 next 遍历链表",
+    "label": "LINKED LIST",
+    "description": "概念可视化：从头指针沿 next 访问分散的结点，最后遇到空指针。结点的逻辑顺序不要求与存储地址顺序一致。",
+    "href": "/posts/linked_list/",
+    "kind": "linked-list"
+  },
+  {
+    "id": "scene-tree",
+    "object": "VHS_B_2",
+    "title": "场景树与信号",
+    "label": "SCENE TREE",
+    "description": "概念可视化：以 World、Player、UI 的小场景树展示父子关系，再用一条 health_changed 信号表达 Player 与 UI 之间的通知。",
+    "href": "/posts/godot_basic_class/",
+    "kind": "scene-tree"
+  },
+  {
+    "id": "node-transform",
+    "object": "VHS_B_3",
+    "title": "局部坐标与父级变换",
+    "label": "NODE 2D",
+    "description": "概念可视化：子结点保持固定局部位置，父结点旋转时，子结点的世界位置随之改变。二维坐标采用屏幕向下为正的方向。",
+    "href": "/posts/godot_node2d/",
+    "kind": "transform"
+  },
+  {
+    "id": "delta-time",
+    "object": "VHS_B_4",
+    "title": "帧率与 Delta Time",
+    "label": "DELTA TIME",
+    "description": "概念可视化：用同一速度分别按 30 Hz 与 60 Hz 采样位置，展示乘以 delta 后，运动距离由经过的时间决定。",
+    "href": "/posts/godot_frame/",
+    "kind": "delta"
+  },
+  {
+    "id": "gdscript",
+    "object": "VHS_B_5",
+    "title": "GDScript 代码笔记",
+    "label": "GDSCRIPT",
+    "description": "概念可视化：一段简短的 Godot 移动代码逐行显现，突出命名、缩进与类型标注。这是代码展示，不是在浏览器中执行 GDScript。",
+    "href": "/posts/GDScript/",
+    "kind": "code"
+  },
+  {
+    "id": "rag",
+    "object": "VHS_B_6",
+    "title": "RAG 检索与上下文",
+    "label": "RAG / CONTEXT",
+    "description": "概念可视化：示意查询、向量表示、检索片段、组装上下文与回答之间的流程。片段与排序是说明素材，没有调用真实模型或检索服务。",
+    "href": "/posts/agent_dev_tutorial/",
+    "kind": "rag"
+  },
+  {
+    "id": "pixel-motion",
+    "object": "VHS_B_7",
+    "title": "二维像素运动习作",
+    "label": "PIXEL MOTION",
+    "description": "原创概念可视化：自动循环的小角色、地形、跳跃与多层背景，用来展示二维场景中的运动与层次。不是用户既有作品或可操控的完整游戏。",
+    "href": "/posts/godot_project/",
+    "kind": "pixel-game"
+  }
+]

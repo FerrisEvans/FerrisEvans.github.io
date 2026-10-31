@@ -1,0 +1,268 @@
+---
+import Brand from '../components/Brand.astro';
+import { ABOUT } from '../data/room-about';
+import '../styles/room-fallback.css';
+import { SITE, categoryOf } from '../data/site';
+import { getPosts, postUrl } from '../utils/posts';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { resolve } from 'node:path';
+const assetRoot = resolve('public');
+type AtlasFiles = { albedo: string; orm: string; normal: string; entry?:{orm?:string;normal?:string}; opacity?:string; cutout?:boolean; alphaTest?:number; room: { file: string; preview?:string }; tv: { file: string;preview?:string }; lampOff?: {file:string} };
+const manifest: { buildId?:string; model?: string; reflection?:{file:string}; city?: string; homeFilm?:string; atlases: Record<string, AtlasFiles> } = JSON.parse(readFileSync(resolve(assetRoot, 'room/materials/manifest.json'), 'utf8'));
+const posterVersion = manifest.buildId ?? '18';
+const urls = ['/room/materials/' + (manifest.model ?? 'study.glb'), '/room/materials/manifest.json', manifest.city ?? '/room/city-night-v1.png', '/room/fonts/VT323-Regular.ttf','/fonts/room-pixel-zh.woff2'];
+if(manifest.reflection)urls.push('/room/materials/'+manifest.reflection.file);
+const streamUrls=new Set<string>();
+if(manifest.homeFilm){const film=JSON.parse(readFileSync(resolve(assetRoot,'.'+manifest.homeFilm),'utf8'));urls.push(manifest.homeFilm,film.video,film.poster,film.light);streamUrls.add(film.video);}
+for (const atlas of Object.values(manifest.atlases)) {
+  for (const file of [atlas.albedo, atlas.orm, atlas.normal, ...Object.values(atlas.entry??{}), atlas.room.file, ...(atlas.room.preview?[atlas.room.preview]:[]), atlas.tv.file,...(atlas.tv.preview?[atlas.tv.preview]:[]), ...(atlas.lampOff ? [atlas.lampOff.file] : []),...(atlas.opacity?[atlas.opacity]:[])]) urls.push('/room/materials/' + file);
+}
+const deferredUrls = new Set(Object.values(manifest.atlases).flatMap(atlas => [
+  ...(atlas.lampOff ? ['/room/materials/' + atlas.lampOff.file] : []),
+  ...(atlas.room.preview ? ['/room/materials/' + atlas.room.file] : []),
+  ...(atlas.tv.preview ? ['/room/materials/' + atlas.tv.file] : []),
+  ...(atlas.entry?.normal ? ['/room/materials/' + atlas.normal] : []),
+  ...(atlas.entry?.orm ? ['/room/materials/' + atlas.orm] : []),
+]));
+const files = urls.map(url => ({ url, bytes: statSync(resolve(assetRoot, '.' + url)).size, deferred: deferredUrls.has(url), stream:streamUrls.has(url), priority:url===urls[0]?'high':undefined }));
+// A font, film or texture can change independently of the model build. Version
+// the complete delivery set so repeat visits can reuse fresh HTTP cache entries.
+const assetDigest = createHash('sha256');
+for (const url of [...new Set(urls)].sort()) {
+  assetDigest.update(url).update('\0').update(readFileSync(resolve(assetRoot, '.' + url))).update('\0');
+}
+const assetVersion = assetDigest.digest('hex').slice(0, 20);
+const hasPoster = existsSync(resolve(assetRoot, 'room/loading.jpg'));
+const posts = await getPosts();
+const canonical = new URL('/', Astro.site);
+const description = 'Mainloop：Ferris 的编程语言、游戏开发与 AI 笔记。';
+const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
+const content = {
+  author: SITE.author, intro: ABOUT.intro, github: SITE.github, email: SITE.email,
+  posts: posts.map(post => ({ title: post.data.title, href: postUrl(post), date: post.data.pubDate.toISOString().slice(0,10), category: categoryOf(post.data.category).label })),
+  topics: ['programming-language','game-dev','ai'].map(slug => { const category = categoryOf(slug); return { title: category.label, description: category.description, href: `/categories/${slug}/` }; }),
+};
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content={Astro.url.pathname.startsWith('/room') ? 'noindex,follow' : 'index,follow'} />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content="Mainloop" />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={shareImage} />
+    <link rel="alternate" type="application/rss+xml" title="Mainloop RSS" href="/rss.xml" />
+    <title>{SITE.title}</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=loop-1" />
+  </head>
+  <body>
+    <main id="room" data-state="loading" data-asset-version={assetVersion} aria-label="Mainloop" style={`--room-reading-image: url('/room/reading.jpg?v=${posterVersion}')`}>
+      <div id="scene" role="img" aria-label="城市夜景前的木质书桌、CRT 电视、暖色台灯和录像带"></div>
+      {hasPoster && <picture id="poster" aria-hidden="true">
+        <source media="(min-width: 701px) and (min-aspect-ratio: 6/5)" srcset={`/room/loading.jpg?v=${posterVersion}`} />
+        <img src={`/room/loading.jpg?v=${posterVersion}`} width="1440" height="1440" alt="" fetchpriority="high" />
+      </picture>}
+      <div id="osd">
+        <canvas id="osd-canvas" width="768" height="576" aria-hidden="true"></canvas>
+        <button id="enter-room" type="button" aria-label="进入场景" aria-describedby="sound-note" disabled><span class="sr-only">进入场景</span></button>
+        <p id="sound-note" class="sr-only">声音由独立开关控制，初次访问默认关闭。</p>
+      </div>
+      <header>
+        <a href="/" class="name" aria-label="Mainloop 首页"><Brand variant="room" width={158} /></a>
+        <span class="stage">MAINLOOP</span>
+        <nav id="room-navigation" aria-label="网站导航">
+          <a href="#home" data-room-view="home">HOME</a>
+          <a href="#work" data-room-view="work">WORK</a>
+          <a href="#posts" data-room-view="posts">POSTS</a>
+          <a href="#about" data-room-view="about">ABOUT</a>
+          <a href="#online" data-room-view="online">ONLINE</a>
+        </nav>
+      </header>
+      <div id="surface-layer"></div>
+      <details id="object-menu"><summary>物件 / 操作</summary><div>
+        <p>拖动鼠标环顾。N 拿起笔记；ESC 先放下，再返回。</p>
+        {[['lamp','台灯 L'],['window','窗外 W'],['curtain','窗帘'],['work','记事本 N'],['play','播放 / 暂停'],['previous','上一盒'],['next','下一盒'],['stop','停止录像'],['eject','退出录像带'],['power','电视电源'],['coffee','咖啡'],['phone','电话'],['cd','CD'],['calculator','计算器'],['music','CD 播放'],['pager','寻呼机'],['floppy','软盘'],['clock','时钟'],['pencil','铅笔'],['credits','制作记录'],['rss','RSS'],['walkman','随身听'],['underscan','UNDERSCAN'],['delay','H/V DELAY'],['blue','BLUE ONLY']].map(([action,label]) => <button data-room-action={action}>{label}</button>)}
+      </div></details>
+      <div id="object-hint" hidden aria-hidden="true"></div>
+      <canvas id="window-transition" aria-hidden="true"></canvas>
+      <section id="window-controls" aria-label="窗外浏览">
+        <div><button type="button" data-window-mode="overview" aria-pressed="false">全景 <kbd>0</kbd></button><button type="button" data-window-mode="detail" aria-pressed="true">近景</button></div>
+        <p>拖动探索 · 滚轮缩放 · 双击复位</p>
+        <button id="window-return" type="button">返回桌面 <kbd>ESC</kbd></button>
+      </section>
+      <div id="guides" hidden aria-hidden="true">
+        <div class="guide tv"><span>电视 · 参考轮廓</span></div>
+        <div class="guide window"><span>窗户 · 参考范围</span></div>
+        <div class="guide desk"><span>桌沿</span></div>
+      </div>
+      <section class="caption" aria-label="场景状态">
+        <p class="eyebrow"><span class="scene-label">Mainloop</span><span class="fallback-label">MAINLOOP / READING</span></p>
+        <h1 class="fallback-title">Mainloop</h1>
+        <p id="status" role="status" aria-live="polite">准备加载场景…</p>
+        <noscript><p id="room-no-script">当前未启用 JavaScript。进入 LO-FI 阅读版，继续浏览文章、分类与搜索。</p></noscript>
+        <p id="progress" role="progressbar" aria-label="场景资源加载进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" class="sr-only"></p>
+        <p class="detail">切换电视颜色，观察录像机顶面和桌前沿的冷暖变化。</p>
+        <button id="retry" hidden>重新加载</button>
+      </section>
+      <aside id="performance-notice" role="status" hidden>
+        <p>阅读版可更流畅</p>
+        <a href="/lofi/">LO-FI ↗</a>
+        <button id="dismiss-performance" type="button" aria-label="继续观看，不再提示">×</button>
+      </aside>
+      <nav id="room-actions" aria-label="场景操作">
+        <button id="back-home" type="button">← 返回桌面</button>
+        <button id="next-channel" type="button" disabled>下一盒录像带</button>
+        <button id="standby" type="button" disabled>待机</button>
+        <button id="home-play" type="button" data-room-action="home-play" aria-pressed="false">播放节目</button>
+        <button id="sound" type="button" aria-pressed="false" aria-label="开启雨声与交互声音">SOUND OFF</button>
+        <select id="tv-channel" aria-label="电视测试画面" disabled>
+          <option value="blue">电视 / 蓝色</option>
+          <option value="white">电视 / 白色</option>
+          <option value="amber">电视 / 琥珀色</option>
+          <option value="off">电视 / 关闭</option>
+        </select>
+        <button id="toggle-guides" type="button" aria-pressed="false" disabled>显示参考框</button>
+        <a class="lofi-link" href="/lofi/"><span class="scene-label">LO-FI / 阅读博客 ↗</span><span class="fallback-label">进入 LO-FI 阅读版 <span aria-hidden="true">→</span></span></a>
+      </nav>
+      <p class="fallback-footnote">文章、分类与搜索照常可用。<br />桌面宽窗口可体验完整的交互场景。</p>
+      <section class="reading-links" aria-label="最新文章"><h2>最新文章</h2><ul>{content.posts.slice(0, 6).map(post => <li><a href={post.href}>{post.title}</a><time datetime={post.date}>{post.date}</time></li>)}</ul><a href="/lofi/">全部文章 →</a></section>
+    </main>
+    <script id="room-assets" type="application/json" set:html={JSON.stringify(files)} />
+    <script id="room-content" type="application/json" set:html={JSON.stringify(content).replaceAll('<', '\\u003c')} />
+    <script>
+      import { mountRoom } from '../scripts/room/entry';
+      mountRoom();
+    </script>
+  </body>
+</html>
+
+<style>
+  /* Match the existing article pages so Back can restore a BFCache document without an opt-in mismatch. */
+  @view-transition { navigation: auto; }
+  :global(::view-transition-old(root)), :global(::view-transition-new(root)) { animation-duration: 120ms; }
+  :global(*) { box-sizing: border-box; }
+  :global([hidden]) { display: none !important; }
+  :global(body) { margin: 0; background: #353638; color: #fff; font-family: ui-monospace, 'SFMono-Regular', Consolas, 'PingFang SC', monospace; }
+  /* clip must not create a scroll container: focusing controls must never pan the room. */
+  #room { position: relative; width: 100%; height: 100svh; overflow: clip; }
+  #scene { position: absolute; inset: 0; }
+  #scene :global(canvas) { width: 100%; height: 100%; display: block; }
+  #scene {touch-action:none;}
+  #window-transition {position:absolute;inset:0;width:100%;height:100%;z-index:3;opacity:0;pointer-events:none;}
+  #window-controls {position:absolute;inset:24px 28px auto;display:none;align-items:center;gap:24px;z-index:4;font:12px/1.6 system-ui,sans-serif;color:#d9dfdf;opacity:1;transition:opacity .7s;}
+  #window-controls div {display:flex;gap:6px;}
+  #window-controls p {color:#b6c2c8;text-shadow:0 1px 8px #000;}
+  #window-controls button {padding:8px 12px;background:#172129a8;border-color:#c7d0d333;font:12px system-ui,sans-serif;}
+  #window-controls kbd {font:10px ui-monospace,monospace;opacity:.55;margin-left:5px;}
+  #window-return {margin-left:auto;}
+  #room[data-inspection='window'] #window-controls {display:flex;}
+  #room[data-inspection='window'] :is(header,#room-actions,#object-menu,.caption,#performance-notice) {opacity:0;pointer-events:none;visibility:hidden;}
+  #room[data-inspection='window'][data-window-controls='quiet'] #window-controls:not(:focus-within):not(:hover) {opacity:0;pointer-events:none;}
+  #performance-notice {position:absolute;right:28px;bottom:66px;z-index:5;display:flex;align-items:center;gap:10px;padding:4px 8px;color:#c4c9c6;background:#1420249c;border-radius:4px;font:11px/1.5 system-ui,sans-serif;}
+  #performance-notice a {color:#ddc9a2;}
+  #performance-notice button {padding:0 3px;background:none;border:0;font:16px/1.3 system-ui,sans-serif;color:#c4c9c6;}
+  #room:not([data-state='active']) #performance-notice {display:none;}
+  #object-menu {position:absolute;left:28px;top:78px;font:16px RoomPixelZH,monospace;max-width:340px;max-height:70vh;overflow:auto;background:#15241fed;border:1px solid #eee8db44;padding:10px 14px;color:#eee8db;z-index:4;}
+  #object-menu summary {cursor:pointer;}
+  #object-menu p {font-size:12px;line-height:1.8;margin:12px 0;}
+  #object-menu button {margin:3px;font:14px RoomPixelZH,monospace;}
+  #room:not([data-state='active']) #object-menu {display:none;}
+  #surface-layer { position: absolute; inset: 0; pointer-events: none; }
+  #surface-layer :global(.surface-controls) { position: absolute; top: 0; left: 0; transform-origin: 0 0; pointer-events: none; }
+  #surface-layer :global(a), #surface-layer :global(button) { position: absolute; padding: 0; border: 0; border-radius: 4px; background: transparent; pointer-events: auto; cursor: pointer; }
+  #surface-layer :global(a:hover), #surface-layer :global(button:not(:disabled):hover) { background: #ffffff14; outline: 2px solid #ffffff40; }
+  #surface-layer :global(:focus-visible) { outline: 3px solid #f5d696; outline-offset: -2px; background: #ffffff18; }
+  #surface-layer :global(button:disabled) { pointer-events: none; }
+  #object-hint { position: absolute; padding: 7px 12px; background: #172019e8; color: #fff; border: 1px solid #ffffff40; border-radius: 4px; font-size: 13px; pointer-events: none; }
+  #poster { position: absolute; left: 0; top: 50%; width: 100%; transform: translateY(-50%); pointer-events: none; opacity: 1; }
+  #poster img { display: block; width: 100%; height: auto; }
+  #osd { position: absolute; top: 0; left: 0; width: 768px; height: 576px; transform-origin: 0 0; border-radius: 30px; overflow: hidden; }
+  #osd canvas { display: block; width: 100%; height: 100%; }
+  #enter-room { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: none; border-radius: inherit; background: transparent; opacity: 1; }
+  #enter-room:focus-visible { outline: 6px solid #f5d696; outline-offset: -24px; }
+  #room[data-state='entering'] #poster { opacity: 0; transition: opacity 650ms ease; }
+  #room[data-state='active'] #poster { opacity: 0; }
+  #room:is([data-state='entering'], [data-state='active']) #osd { opacity: 0; pointer-events: none; }
+  #room[data-state='entering'] #osd { transition: opacity 180ms ease; }
+  #room[data-state='active'] #osd { visibility: hidden; }
+  #room:not([data-state='active']) #next-channel, #room:not(:is([data-state='active'], [data-state='entering'])) #standby { display: none; }
+  #room:not([data-state='active']) #room-navigation, #room:not([data-state='active']) #back-home,
+  #room[data-view='home'] #back-home, #room:not([data-view='home']) #next-channel { display: none; }
+  #home-play { display:none; }
+  #room[data-state='active'][data-motion='reduced'][data-view='home'][data-tv-source='home'][data-television='on']:not([data-inspection='cd']):not([data-inspection='calculator']) #home-play {display:inline-flex;}
+  #room[data-state='active'] .stage { display: none; }
+  #room:not([data-study]) :is(#tv-channel, #toggle-guides, .detail) { display: none; }
+  #room[data-study] :is(#poster, #osd, #sound, #next-channel, #standby, #progress) { display: none; }
+  #room[data-capture] > :not(#scene) { display: none !important; }
+  #room[data-capture] :global(astro-dev-toolbar) { display: none !important; }
+  :global(body:has(#room[data-capture]) astro-dev-toolbar) { display: none !important; }
+  .sr-only, #surface-layer :global(.sr-only) { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  header { position: absolute; inset: 24px 28px auto; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+  #room-navigation { position: static; display: flex; gap: 26px; pointer-events: auto; }
+  #room-navigation a { font: 30px RoomPixel, monospace; padding: 0; background: none; border: 0; border-radius: 0; color: #eee8dd; text-shadow: 0 2px 8px #0009; }
+  #room-navigation a:hover, #room-navigation a[aria-current] { color: #ffe0a4; }
+  a { color: inherit; text-decoration: none; }
+  .name {display:flex;align-items:center;color:#eee8db;}
+  .name { font-family: RoomPixel, monospace; font-size: 30px; font-weight: 400; letter-spacing: .04em; pointer-events: auto; }
+  .stage { font-size: 13px; letter-spacing: .12em; opacity: .75; }
+  .caption { position: absolute; left: 28px; bottom: 26px; max-width: min(450px, 43vw); padding: 13px 17px; background: #202124d9; border: 1px solid #ffffff24; border-radius: 8px; }
+  p { margin: 0; }
+  .eyebrow { font-size: 11px; letter-spacing: .13em; color: #c6c9cc; margin-bottom: 6px; }
+  #status { font-family:RoomPixelZH,monospace; font-size: 16px; line-height: 1.5; }
+  .detail { margin-top: 4px; font-size: 11px; color: #b5b8bd; line-height: 1.7; }
+  nav { position: absolute; right: 28px; bottom: 26px; display: flex; gap: 8px; }
+  button, nav a, select { color: #f5f4ef; font: inherit; font-size: 12px; padding: 10px 14px; border: 1px solid #ffffff3b; border-radius: 20px; background: #202124e6; cursor: pointer; }
+  button:hover, nav a:hover { background: #424548; }
+  button:disabled { opacity: .5; cursor: default; }
+  :is(a, button, select):focus-visible { outline: 2px solid #f5d696; outline-offset: 4px; }
+  button[aria-pressed='true'] { border-color: #f5d696; color: #f5d696; }
+  #guides { position: absolute; left: 0; top: 50%; width: 100%; aspect-ratio: 3 / 2; transform: translateY(-50%); pointer-events: none; }
+  .guide { position: absolute; border: 1px dashed #f5d696; color: #ffe6b5; font-size: 11px; }
+  .guide span { position: absolute; top: -22px; left: 0; padding: 2px 4px; background: #202124e0; white-space: nowrap; }
+  .guide.tv { left: 35.8%; top: 40.3%; width: 25.3%; height: 37.4%; }
+  .guide.window { left: 8.9%; top: 0; width: 70.4%; height: 65%; }
+  .guide.window span { top: 56px; }
+  .guide.desk { left: 0; top: 94%; width: 100%; border-width: 1px 0 0; }
+  .fallback-label, .fallback-title, .fallback-footnote { display: none; }
+  #room[data-state='fallback'] :is(#scene, #osd, #sound) { display: none; }
+  #room[data-state='fallback'] .detail { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    #poster, #osd, #window-controls, #window-transition { transition: none !important; }
+    :global(::view-transition-old(root)), :global(::view-transition-new(root)) { animation: none !important; }
+  }
+  @media (min-width: 701px) and (max-width: 1100px) {
+    .caption { bottom: 84px; max-width: calc(100vw - 56px); }
+  }
+  @media (max-width: 700px), (max-aspect-ratio: 6/5) {
+    header { inset: 20px 20px auto; }
+    #osd, #sound, #surface-layer, #room-navigation, #object-menu { display: none; }
+    .caption { left: 20px; right: 20px; bottom: 85px; max-width: none; }
+    nav { left: 20px; right: auto; bottom: 25px; }
+    select, #toggle-guides { display: none; }
+  }
+
+  /* The complete action list remains keyboard-accessible; research UI is opt-in. */
+  #room:not([data-debug]):not([data-study]) #object-menu:not(:focus-within) { width:1px; height:1px; padding:0; border:0; overflow:hidden; clip-path:inset(50%); }
+  #room:not([data-debug]):not([data-study]) #object-menu:focus-within { top:auto; bottom:62px; }
+  #room[data-state='active']:not([data-debug]) .caption { left:28px; bottom:24px; padding:0; background:none; border:0; border-radius:0; max-width:min(650px,56vw); text-shadow:0 1px 5px #000; }
+  #room[data-state='active']:not([data-debug]) .caption .eyebrow { display:none; }
+  #room[data-state='active']:not([data-debug]) #status { font-size:13px; }
+  #room[data-state='active']:not([data-debug]) #room-actions { bottom:18px; gap:6px; }
+  #room[data-state='active']:not([data-debug]) #room-actions :is(button,a) { padding:7px 11px; font-size:11px; }
+  #room:not([data-debug]) :is(#standby,#next-channel):not(:focus-visible) { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+  #room[data-state='active']:not([data-debug]) #back-home { display:none; }
+  @media(min-width:701px) and (max-width:1100px) { #room[data-state='active']:not([data-debug]) .caption { bottom:61px; max-width:calc(100% - 56px); } }
+
+</style>

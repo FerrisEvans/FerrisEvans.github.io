@@ -1,0 +1,135 @@
+{
+  "source": "Canonical About content shared by /about/ and the room computer",
+  "greeting": "你好，我是 {author}。",
+  "intro": "一名开发者。兴趣方向涵盖游戏开发、编程语言与 AI Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。",
+  "interests": [
+    "programming-language",
+    "game-dev",
+    "ai"
+  ],
+  "principles": [
+    "很多事都是熟能生巧，没有足够的练习不要谈天赋。练习不是一味的重复，或者去完全复刻别人的代码，每一次练习都应该增加难度，有突破自己认知的成长。这样反复的经过输入、评估、输出、纠正，会有惊人的变化。",
+    "英语水平决定了一个程序员的上限。",
+    "要有良好的习惯，才能事半功倍。",
+    "不要等准备好了再出发，优秀的程序员都是探路者。",
+    "愚者困惑，智者提问。",
+    "最简单的往往是最有效的。",
+    "向成功者学习，向成功的项目学习。",
+    "输出是最好的输入。",
+    "一定要坚持，保持长时间学习，甚至终身学习的态度。",
+    "一定要动手，不管例子多么简单，建议至少自己动手敲一遍看看是否理解了里头的细枝末节。",
+    "一定要学会思考，思考为什么要这样，而不是那样。还要举一反三地思考。",
+    "不要乱买书，不要乱追新技术新名词，基础的东西经过很长时间积累，会在未来至少 10 年通用。",
+    "回顾一下历史，看看历史时间线上技术的发展，你才能明白明天会是什么样的。"
+  ],
+  "practice": {
+    "title": "实践与长期主义",
+    "quotes": [
+      "Write lots of code. Clone existing things as exercises. Learn deeply. Alternate trying yourself and reading literature. Be obsessive.",
+      "Most of my programming career has involved finding something neat, writing my own version to understand it & often throwing it away.",
+      "I program those \"clones\" like I read papers: change a core part; redesign it. Gain progress or understanding why it is what it is."
+    ],
+    "attribution": "—— John Carmack"
+  },
+  "zen": {
+    "title": "The Zen of Python",
+    "author": "Tim Peters",
+    "command": "import this",
+    "lines": [
+      "Beautiful is better than ugly. 优美胜于丑陋",
+      "Explicit is better than implicit. 明了胜于晦涩",
+      "Simple is better than complex. 简洁胜于复杂",
+      "Complex is better than complicated. 复杂胜于凌乱",
+      "Flat is better than nested. 扁平胜于嵌套",
+      "Sparse is better than dense. 间隔胜于紧凑",
+      "Readability counts. 可读性很重要",
+      "Special cases aren't special enough to break the rules. 任何特例都不足够违背这些原则",
+      "Although practicality beats purity. 实用性高于纯粹性",
+      "Errors should never pass silently. 错误永远不应该被静默处理",
+      "Unless explicitly silenced. 除非明确地让它静默",
+      "In the face of ambiguity, refuse the temptation to guess. 面对二义性，拒绝猜测的诱惑",
+      "There should be one-- and preferably only one --obvious way to do it. 应该有一种——而且最好只有一种——明显的方法去做一件事",
+      "Although that way may not be obvious at first unless you're Dutch. 虽然那种方法一开始可能并不明显，除非你是 Python 之父",
+      "Now is better than never. 现在做总比不做好",
+      "Although never is often better than *right* now. 但永远不做通常比贸然行动好",
+      "If the implementation is hard to explain, it's a bad idea. 如果实现很难解释，它就不是好主意",
+      "If the implementation is easy to explain, it may be a good idea. 如果实现容易解释，它可能是一个好主意",
+      "Namespaces are one honking great idea -- let's do more of those! 命名空间是一个绝妙的主意——我们应该多多使用"
+    ]
+  },
+  "formatting": {
+    "title": "文档格式约定",
+    "paragraphs": [
+      [
+        {
+          "tag": "strong",
+          "text": "加粗字体"
+        },
+        {
+          "text": "通常用于关键字、类名等信息，通常不需要上下文即可理解，例如 "
+        },
+        {
+          "tag": "strong",
+          "text": "Object"
+        },
+        {
+          "text": "、"
+        },
+        {
+          "tag": "strong",
+          "text": "TreeNode"
+        },
+        {
+          "text": "。"
+        }
+      ],
+      [
+        {
+          "tag": "code",
+          "text": "inline_code"
+        },
+        {
+          "text": " 通常用于属性名、方法名、执行命令等，例如 "
+        },
+        {
+          "tag": "code",
+          "text": "_init()"
+        },
+        {
+          "text": " 表示某个类或对象的初始化方法。"
+        }
+      ],
+      [
+        {
+          "tag": "em",
+          "text": "倾斜字体"
+        },
+        {
+          "text": "用于提示特别注意；"
+        },
+        {
+          "tag": "sub",
+          "text": "小字"
+        },
+        {
+          "text": "用于表示注释；"
+        },
+        {
+          "tag": "span",
+          "accent": true,
+          "text": "彩色字体"
+        },
+        {
+          "text": "用于强调关键信息；"
+        },
+        {
+          "tag": "u",
+          "text": "下划线字体"
+        },
+        {
+          "text": "一般配合脚注使用。"
+        }
+      ]
+    ]
+  }
+}

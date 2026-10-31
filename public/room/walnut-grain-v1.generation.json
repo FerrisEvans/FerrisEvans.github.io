@@ -1,0 +1,58 @@
+{
+  "asset": "walnut-grain-v1.png",
+  "generatedAt": "2026-10-29 12:50:29 UTC",
+  "tool": "Built-in image_gen.imagegen (image_gen__imagegen)",
+  "useCase": "photorealistic-natural",
+  "intendedUse": "Unlit walnut base-color/albedo for the 3D desktop; horizontal grain; visually approximately 2 m × 1.1 m.",
+  "requestedResolution": {
+    "width": 2048,
+    "height": 1152
+  },
+  "output": {
+    "path": "public/room/walnut-grain-v1.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2209350,
+    "sha256": "621fd95882b153ae8426a3be31b717df74eea6234e95200be30570e9cb0464db",
+    "edgeDifferenceRgb255": {
+      "leftRight": 9.975203684024088,
+      "topBottom": 9.184011164274322
+    }
+  },
+  "generation": {
+    "prompt": "Use case: photorealistic-natural.\nAsset type: high-resolution seamless wood ALBEDO / BASE-COLOR texture for a physically based 3D desktop, horizontal landscape, target output 2048 × 1152 pixels.\nPrimary request: an original, convincingly photographic scan of a medium-dark warm walnut wood surface. The complete image represents approximately 2 meters of wood width by 1.1 meters of wood height. Fill every pixel with wood. The wood grain runs horizontally across the image.\nAcquisition and lighting: perfectly orthographic straight-down material scan, cross-polarized capture with completely even diffuse illumination. Deliver albedo information only: no directional illumination, baked shading, ambient-occlusion gradients, highlights, specular reflections or vignetting. Preserve real pore and grain color variation without lighting variation.\nMaterial character: natural warm walnut brown with restrained muted golden-brown undertones, moderate color variation, real irregular pores, slow gently curving grain, broad and narrow grain bands interspersed unevenly, a few subtle understated cathedral-grain patterns. Prefer an unbroken wood surface rather than a row of identical planks. At most one very small inconspicuous knot. The natural pattern should vary over the large approximately 2-meter sample, with broad quiet areas as well as finer grain.\nTiling: make the opposite left/right edges and top/bottom edges as continuous and compatible as possible for seamless repetition. Keep edge color and grain density consistent; avoid an obvious recognizable feature at the borders. Do not show a seam or border in the image.\nColor: medium-dark neutral-warm walnut, realistic restrained saturation, no exaggerated orange or red cast, no near-black striping.\nConstraints: texture only. No object, furniture silhouette, table edge, plank joint or seam line, gaps, perspective, bevel, shadow, highlight, labels, ruler, text, logo or watermark. No evenly spaced dense barcode stripes, no repetitive synthetic procedural grain, no dramatic cracks, gouges, scratches, strong distressing, big knots, painted finish or glossy lacquer. Flat lighting must not make the natural material uniformly patterned; the wood itself should remain organically uneven.",
+    "transparentBackground": false,
+    "imageInputs": [],
+    "output": "/Users/ferris/.codex/generated_images/01a186b9-6275-7591-b9ed-3e0f24ff1009/exec-3490acc3-f41e-40d4-922d-9289da2e2a1d.png",
+    "measurements": {
+      "width": 1672,
+      "height": 941,
+      "bytes": 2468128,
+      "sha256": "83f7c6e94144d69991a2b7826f8339cbf71b92e7fe5cd4fddc95f71c7d088c7d",
+      "edgeDifferenceRgb255": {
+        "leftRight": 13.314913212894083,
+        "topBottom": 11.471491228070175
+      },
+      "internalNeighborDifferenceRgb255": {
+        "horizontal": 2.283740701381509,
+        "vertical": 7.616228070175438
+      }
+    }
+  },
+  "refinement": {
+    "useCase": "precise-object-edit",
+    "prompt": "Use case: precise-object-edit.\nEdit target: the supplied walnut albedo texture. Preserve its existing natural grain, medium-dark restrained brown palette, pores, wide and narrow irregular horizontal bands, tiny knot, entirely flat lighting and full-frame texture-only composition.\nChange only the tiling continuity: make this a genuinely seamless repeating texture. The wood grain must continue smoothly across the LEFT/RIGHT image boundary, and the TOP/BOTTOM image boundary must match without a horizontal line. Align the grain structure and local color at opposite edges; do not create mirrored seams, edge bands, borders, plank joints, a cross-shaped join, uniform stripes, blur strips or an obvious repeated central feature. Keep the middle texture and overall material character as close as possible to the input.\nNo added lighting, highlights, shadows, AO, vignette, objects, tabletop edges, text or markings.\nOutput the finished albedo map only, in a 2048 × 1152 landscape image if available. The visual material scale remains approximately 2 m × 1.1 m.",
+    "imageInputs": [
+      "The independently generated first-pass walnut texture above"
+    ],
+    "selectedOutput": "/Users/ferris/.codex/generated_images/01a186b9-6275-7591-b9ed-3e0f24ff1009/exec-bf3211c2-3e28-4766-901a-ba3c7f526bcd.png"
+  },
+  "sourceDescription": "Original AI-generated material texture from a written brief, followed by a built-in edit targeting opposite-edge continuity. No reference photograph, third-party texture or commercial texture library was supplied. This is a synthetic albedo approximation, not a calibrated material scan.",
+  "processing": "Selected built-in output copied unchanged into the project. No local resize, color correction, illumination removal or seam painting. Actual tool output dimensions are retained.",
+  "visualReview": {
+    "checkedWith": "view_image",
+    "result": "Flat orthographic material appearance; natural irregular horizontal grain and pore detail; restrained warm brown; no objects, table edges, seam lines, text, directional shadows or specular highlights.",
+    "tiling": "Opposite-edge mean RGB differences improved from 13.31/11.47 to 9.98/9.18 (left-right/top-bottom, on a 0–255 scale). This is improved edge compatibility, not proof of mathematically seamless tiling; inspect repetition at the intended UV scale.",
+    "resolution": "The built-in tool returned 1672×941 despite the requested 2048×1152; no upscaling was applied."
+  }
+}

@@ -6,9 +6,11 @@ import rehypeKatex from 'rehype-katex';
 import rehypeGithubAlerts from './src/plugins/rehype-github-alerts.mjs';
 import rehypeReading from './src/plugins/rehype-reading.mjs';
 
+import react from '@astrojs/react';
+
 export default defineConfig({
   site: 'https://ferrisevans.github.io',
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: page => new URL(page).pathname !== '/room/' }), react()],
   vite: {
     plugins: [tailwindcss()],
   },

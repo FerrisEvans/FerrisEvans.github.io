@@ -1,28 +1,54 @@
 {
   "name": "mainloop-blog",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && node scripts/room/prune-delivery.mjs && pagefind --site dist",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "font:check": "node scripts/room/font-coverage.mjs --check",
+    "font:generate": "python3 scripts/room/subset-font.py",
+    "assets:model": "node scripts/room/build-model.mjs",
+    "assets:lighting": "node scripts/room/build-entry-lighting.mjs",
+    "assets:reflection": "node scripts/room/build-reflection.mjs",
+    "assets:posters": "node scripts/room/capture-posters.mjs",
+    "assets:check": "node scripts/room/check-static-assets.mjs",
+    "test:content": "node --test scripts/room/content.test.mjs scripts/room/font-coverage.test.mjs",
+    "prebuild": "npm run font:check && npm run test:content && npm run assets:check",
+    "test": "node --test scripts/room/*.test.mjs"
   },
   "engines": {
     "node": ">=22.19.0"
   },
   "dependencies": {
+    "@astrojs/react": "4.4.2",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.4.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "astro": "^5.13.0",
+    "clsx": "^2.1.1",
     "katex": "^0.16.22",
+    "motion": "^14.9.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "rehype-katex": "^7.0.1",
-    "remark-math": "^6.0.0"
+    "remark-math": "^6.0.0",
+    "tailwind-merge": "^3.7.0",
+    "three": "^0.186.1"
   },
   "devDependencies": {
+    "@gltf-transform/core": "4.2.1",
+    "@gltf-transform/extensions": "4.2.1",
+    "@gltf-transform/functions": "4.2.1",
     "@tailwindcss/vite": "^4.1.11",
+    "@types/three": "^0.186.0",
+    "meshoptimizer": "0.24.0",
     "pagefind": "^1.3.0",
+    "playwright": "1.62.1",
+    "sharp": "0.34.5",
     "tailwindcss": "^4.1.11"
   }
 }

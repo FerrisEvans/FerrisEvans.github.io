@@ -1,0 +1,17 @@
+{
+  "sources": [
+    "src/pages/room.astro",
+    "src/data/site.ts",
+    "src/scripts/room/**/*.ts",
+    "src/data/room*.ts",
+    "src/data/room*.json",
+    "src/components/*.astro"
+  ],
+  "frontMatter": ["src/content/blog/**/*.md"],
+  "baseRange": [32, 126],
+  "extraCodepoints": [160],
+  "systemFallbacks": [
+    { "codepoint": 8721, "character": "∑", "reason": "Fusion Pixel 2026.10.25 does not contain U+2211; mathematical category mark uses system fallback." },
+    { "codepoint": 8800, "character": "≠", "reason": "Fusion Pixel 2026.10.25 does not contain U+2260; the tape diagram uses system fallback." }
+  ]
+}

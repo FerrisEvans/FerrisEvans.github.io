@@ -1,0 +1,28 @@
+{
+  "author": "Mainloop",
+  "work": "NIGHT LOG",
+  "geometry": "Original Blender geometry authored in scripts/room/film/render.py; existing repository room scene for chapter 2",
+  "roomAuthoringSnapshotSha256": "eec086937ee8a661203491ab5a76c70a47d307795b1f94f6ee231d4bbf51943d",
+  "materials": "Original procedural materials plus existing local Mainloop room materials; no reference-site media",
+  "fonts": [
+    {
+      "name": "VT323",
+      "source": "public/room/fonts/VT323-Regular.ttf",
+      "license": "SIL OFL 1.1",
+      "licenseFile": "public/room/fonts/OFL.txt",
+      "usage": "Rasterized physical computer screen text"
+    },
+    {
+      "name": "Arial",
+      "source": "macOS locally installed font",
+      "usage": "Rasterized carriage livery, plan labels and captions; font file is not redistributed",
+      "fallback": "Blender built-in Bfont for scene text; Pillow default for captions"
+    }
+  ],
+  "encodingTool": "FFmpeg via project-local PyPI imageio-ffmpeg 0.7.0; development-only dependency, not shipped",
+  "thirdPartyModelOrFilmDownloads": false,
+  "preservedRoomSource": "scripts/room/film/source/idea-room.blend",
+  "preservedRoomSourceSha256": "ae3579826064a60c5440ee439c1423c5559e048824a87c46fb81b503dca9ac4d",
+  "visibleLettering": "Functional labels only; no site name on objects, screens, livery or captions",
+  "letteringRefreshRecipe": "scripts/room/film/refresh-lettering.py"
+}

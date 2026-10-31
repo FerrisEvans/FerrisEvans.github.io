@@ -1,0 +1,28 @@
+{
+  "asset": "city-night-v2.png",
+  "generatedAt": "2026-10-29 12:00:31 UTC",
+  "tool": "Built-in image_gen.imagegen (image_gen__imagegen)",
+  "mode": "generate",
+  "useCase": "photorealistic-natural",
+  "prompt": "Use case: photorealistic-natural.\nAsset type: a standalone exterior city background bitmap for a 3D room website, 16:9 landscape, 2048 × 1152 pixels if available.\nPrimary request: independently create a convincingly photographic rainy-night industrial and railway district. The image must show only the outdoor view and fill the entire frame.\nComposition: the camera is about 8–10 meters above street level, approximately a second or third-floor viewpoint, looking slightly downward. A low, dense horizon sits around the upper-middle of the image, with modest overcast sky above it. Old utilitarian commercial buildings, warehouses, flat or shallow industrial roofs and service yards form overlapping near, middle and distant layers. Across the middle distance is a broad low rectangular building with horizontal rows of small window panes. On the upper-right side of the built area, place a few prominent cool-white illuminated windows and one bright blank lightbox without writing. In the near foreground, wet railway tracks and a narrow industrial railway overpass cross diagonally from lower left toward the middle-right distance. Maintain believable real-world building and rail scale.\nLighting and atmosphere: late rainy night, low-saturation blue-gray ambient light, thin drifting rain mist and gentle atmospheric loss of contrast with distance. Most buildings are dark. Selected windows, service-yard lamps and the upper-right cool-white lights create irregular realistic pools of light; a few restrained warm lights provide depth. Wet dark roofs and rails reflect these lights in narrow broken highlights. Preserve shadow detail without flattening the night contrast.\nStyle: real architectural night photography, natural perspective and exposure, believable worn concrete, brick, painted metal and roofing, subtle photographic grain, understated haze, no stylized illustration or CGI look. A quiet practical railway-commercial neighborhood rather than a picturesque tourist district.\nConstraints: exterior only. No room, no window frame, no glazing or glass raindrops, no curtains, no desk, no indoor objects, no people. No readable text, trademarks, brand logos or watermark. No church spires, cathedral towers, ornate European old-town facades, tall skyline, landmark tower, saturated neon or cyberpunk signs. Rain is represented only by damp surfaces and light atmospheric mist; do not place large visible rain streaks, drops on the lens or foreground droplets. This is an original new scene, not a replica of any particular building or photograph.",
+  "transparentBackground": false,
+  "imageInputsPassedToGenerator": [],
+  "sources": {
+    "generatedOutput": "/Users/ferris/.codex/generated_images/01a186b9-6275-7591-b9ed-3e0f24ff1009/exec-4a479d67-7c85-4e66-b02c-b548927550bd.png",
+    "visualReferencesInspected": [
+      "/Users/ferris/.codex/visualizations/2026/10/29/01a1854a-4989-7380-bd9a-93ec64ed47ac/reference/01-home.png",
+      "public/room/city-night-v1.png"
+    ],
+    "description": "Original AI-generated exterior scene from a written brief. The two local references were inspected for scene scale, composition and light placement only; no reference pixels were supplied to the generator. Buildings are fictional and are not a photograph of an identified real place."
+  },
+  "output": {
+    "path": "public/room/city-night-v2.png",
+    "width": 1672,
+    "height": 941,
+    "bytes": 2667950,
+    "sha256": "9688f55f3abfbe5379bd53f3a33c48ee0afc40cc997c4c838ef96839c99bd619"
+  },
+  "processing": "Unmodified tool output copied to the project; no cropping, recoloring, resizing or rain overlay applied. city-night-v1.png is preserved.",
+  "intendedUse": "Exterior city backdrop. The room renderer supplies window structure and rain separately.",
+  "review": "Inspected using view_image: photographic industrial buildings and horizontal window rows, diagonal wet railway/overpass, cool low-saturation night atmosphere, right-side white lightbox without readable text. No interior or window/glass elements present."
+}

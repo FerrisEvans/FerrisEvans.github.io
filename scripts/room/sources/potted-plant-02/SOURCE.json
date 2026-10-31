@@ -1,0 +1,80 @@
+{
+  "asset": "Potted Plant 02",
+  "author": "Rico Cilliers / Poly Haven",
+  "source": "https://polyhaven.com/a/potted_plant_02",
+  "license": "CC0-1.0",
+  "licenseURL": "https://polyhaven.com/license",
+  "retrieved": "2026-10-31",
+  "files": [
+    {
+      "path": "textures/potted_plant_02_leaves_diff_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_leaves_diff_2k.jpg",
+      "sha256": "f70de9a4b735b740e79d4e7720a47eae5e2bb4a289880cdae5905d156223bd7d",
+      "bytes": 584084
+    },
+    {
+      "path": "textures/potted_plant_02_leaves_nor_gl_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_leaves_nor_gl_2k.jpg",
+      "sha256": "2ae648b12ea457fb720f9adc6f8dc9feb8d5409e43f3b9f2ce7f089b3eef12f6",
+      "bytes": 481780
+    },
+    {
+      "path": "textures/potted_plant_02_pot_diff_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_pot_diff_2k.jpg",
+      "sha256": "21672040b5de49e7dae07452431b4fe5cf401494f5ab5157b5f54a146cc68383",
+      "bytes": 596006
+    },
+    {
+      "path": "potted_plant_02.bin",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/8k/potted_plant_02/potted_plant_02.bin",
+      "sha256": "9c9812482c78a59789ed32fa842b4cbd9365e09c900c31ebb998e5efe627fe97",
+      "bytes": 1852244
+    },
+    {
+      "path": "textures/potted_plant_02_leaves_rough_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_leaves_rough_2k.jpg",
+      "sha256": "399e61a82069b3e344cece76c128f84a664dd44719331450877b671906e01e27",
+      "bytes": 435284
+    },
+    {
+      "path": "textures/potted_plant_02_pot_nor_gl_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_pot_nor_gl_2k.jpg",
+      "sha256": "8e8c2e96de90e793712a9db8a6cea7a38f7fd5ec489b8134b586a42ebbbfcb11",
+      "bytes": 494387
+    },
+    {
+      "path": "textures/potted_plant_02_pot_rough_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_pot_rough_2k.jpg",
+      "sha256": "c1f341bfa5e610dab2fd31aad4068fa20cf957b098912da5949bca996d7649bf",
+      "bytes": 426559
+    },
+    {
+      "path": "potted_plant_02_2k.gltf",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/potted_plant_02/potted_plant_02_2k.gltf",
+      "sha256": "80ab49cb61737244f50b805ddde3dd64e461b2a244817f8882e95a97c916d158",
+      "bytes": 6653
+    },
+    {
+      "path": "textures/potted_plant_02_leaves_alpha_2k.png",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/potted_plant_02/potted_plant_02_leaves_alpha_2k.png",
+      "sha256": "487f86c1fc838dcd24bf67f9bd99706e3415271cecd34ce2ddaca9021707c781",
+      "bytes": 229028
+    }
+  ],
+  "usage": "Locally hosted derived foliage in the Mainloop room candidate. Only leaf/petiole geometry and leaf textures are retained; Mainloop pot and soil are unchanged.",
+  "adaptation": "Only leaf/stem mesh, referenced buffer ranges and leaf maps retained. Existing Mainloop pot and soil are unchanged. Local coordinates and UVs remain source-original; build script places them.",
+  "derivedFiles": {
+    "foliage.gltf": "c1ba82139c7a50cfa2f54aad2d5c280dbe3e8cbe70596d9db22dce2f264a7ee8",
+    "foliage.bin": "e21cc8b76d625aba68d762f6f00a975a8490d330630487b6b982dfd28015b8f6",
+    "textures/potted_plant_02_leaves_nor_gl_2k.jpg": "2ae648b12ea457fb720f9adc6f8dc9feb8d5409e43f3b9f2ce7f089b3eef12f6",
+    "textures/potted_plant_02_leaves_diff_2k.jpg": "f70de9a4b735b740e79d4e7720a47eae5e2bb4a289880cdae5905d156223bd7d",
+    "textures/potted_plant_02_leaves_rough_2k.jpg": "399e61a82069b3e344cece76c128f84a664dd44719331450877b671906e01e27",
+    "textures/potted_plant_02_leaves_disp_2k.jpg": "803360c4400504a808699ba7802105d681b23d90e7c97cb722f598c084ece73c",
+    "textures/potted_plant_02_leaves_alpha_2k.png": "487f86c1fc838dcd24bf67f9bd99706e3415271cecd34ce2ddaca9021707c781"
+  },
+  "additionalSource": {
+    "file": "textures/potted_plant_02_leaves_disp_2k.jpg",
+    "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/potted_plant_02/potted_plant_02_leaves_disp_2k.jpg",
+    "md5": "f635b0895146bccb802a9384de426769"
+  }
+}
