@@ -127,9 +127,11 @@ export async function mountRoom() {
   function stopLoop() { cancelAnimationFrame(frame); frame = 0; lastRendered=0; fpsSince=0;fpsFrames=0;delete room.dataset.renderFps;qualityMonitor.reset(); }
   function draw(time: number) {
     if (!viewer || document.hidden) return;
+    const reducedMotion=isReduced(),motion=reducedMotion?'reduced':'full';
+    if(room.dataset.motion!==motion)room.dataset.motion=motion;
     const reveal = state === 'entering' ? Math.min((time - start) / 650, 1) : state === 'active' ? 1 : 0;
     const smooth = reveal * reveal * (3 - 2 * reveal);
-    viewer.render(time / 1000, !isReduced(), staticUntil > time ? (staticUntil - time) / 150 : 0, smooth);
+    viewer.render(time / 1000, !reducedMotion, staticUntil > time ? (staticUntil - time) / 150 : 0, smooth);
     const homePlaying=room.dataset.homeProgram==='playing';
     if(homePlaying!==lastHomePlaying){homePlay.textContent=homePlaying?'暂停节目':'播放节目';homePlay.setAttribute('aria-pressed',String(homePlaying));lastHomePlaying=homePlaying;}
     if(room.dataset.inspection!==lastInspection){lastInspection=room.dataset.inspection;if(lastInspection==='window')revealWindowControls();else{clearTimeout(windowHintTimer);delete room.dataset.windowControls;}}
