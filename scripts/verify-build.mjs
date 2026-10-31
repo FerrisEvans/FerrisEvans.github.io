@@ -21,17 +21,17 @@ for (const rel of requiredFiles) {
   }
 }
 
-function walkHtml(dir) {
+function walkFiles(dir, extension) {
   const results = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) results.push(...walkHtml(full));
-    else if (entry.isFile() && entry.name.endsWith('.html')) results.push(full);
+    if (entry.isDirectory()) results.push(...walkFiles(full, extension));
+    else if (entry.isFile() && entry.name.endsWith(extension)) results.push(full);
   }
   return results;
 }
 
-const htmlFiles = walkHtml(distDir);
+const htmlFiles = walkFiles(distDir, '.html');
 // Room resources live in JSON rather than href/src, so HTML link checks alone
 // cannot detect a missing texture, stale size, or an accidentally pruned model.
 for (const entry of ['index.html', 'room/index.html']) {
@@ -66,6 +66,20 @@ if (postPages.length === 0) {
 const attrRegex = /\b(?:href|src)="([^"]+)"/g;
 const brokenLinks = [];
 
+// Stylesheets can exist even when their fonts/images were omitted from the
+// production bundle. Validate those references as well as HTML href/src.
+for (const file of walkFiles(distDir, '.css')) {
+  const relative = path.relative(distDir, file).replaceAll(path.sep, '/');
+  const css = fs.readFileSync(file, 'utf8');
+  for (const match of css.matchAll(/url\(\s*(['"]?)(.*?)\1\s*\)/g)) {
+    const raw = match[2].trim();
+    if (!raw || /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(raw)) continue;
+    const pathname = decodeURIComponent(new URL(raw, `https://build.invalid/${relative}`).pathname);
+    const target = path.join(distDir, pathname);
+    if (!fs.existsSync(target) || !fs.statSync(target).isFile()) brokenLinks.push(`${relative} -> ${raw}`);
+  }
+}
+
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, 'utf8');
   const relFile = path.relative(distDir, file);
@@ -98,5 +112,5 @@ if (brokenLinks.length > 0) {
 }
 
 console.log(
-  `Verified ${htmlFiles.length} HTML pages (${postPages.length} post pages) and all internal asset/page links.`
+  `Verified ${htmlFiles.length} HTML pages (${postPages.length} post pages), CSS resources and internal asset/page links.`
 );

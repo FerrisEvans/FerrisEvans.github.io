@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Audit dependencies
+        run: npm run audit:deps
+
       - name: Check TypeScript and content schemas
         run: npm run check
 

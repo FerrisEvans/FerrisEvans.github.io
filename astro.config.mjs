@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
@@ -10,13 +11,16 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   site: 'https://ferrisevans.github.io',
+  compressHTML: true,
   integrations: [sitemap({ filter: page => new URL(page).pathname !== '/room/' }), react()],
   vite: {
     plugins: [tailwindcss()],
   },
   markdown: {
-    remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex],
+    processor: unified({
+      remarkPlugins: [remarkMath],
+      rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex],
+    }),
     shikiConfig: {
       themes: {
         light: 'github-light-default',

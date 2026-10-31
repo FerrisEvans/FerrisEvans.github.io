@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import katexStyles from 'katex/dist/katex.min.css?url';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import Toc from '../../components/Toc.astro';
@@ -52,12 +53,12 @@ const words = wordCount(post);
 const hasToc = headings.some((heading) => heading.depth === 2 || heading.depth === 3);
 const tocCount = headings.filter((heading) => heading.depth === 2 || heading.depth === 3).length;
 
-if (post.data.math) {
-  await import('katex/dist/katex.min.css');
-}
 ---
 
 <Base title={post.data.title} description={post.data.description}>
+  <Fragment slot="head">
+    {post.data.math && <link rel="stylesheet" href={katexStyles} />}
+  </Fragment>
   <div id="read-progress" class="fixed left-0 top-0 z-50 h-0.5 bg-accent dark:bg-accent-dark" style="width: 0%" aria-hidden="true"></div>
 
   <article class="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">

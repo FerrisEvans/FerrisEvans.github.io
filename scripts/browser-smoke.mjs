@@ -73,6 +73,14 @@ try {
   await screenshot(page, 'article-toc');
   console.log('PASS: desktop article directory remains visible while scrolling');
 
+  await page.goto(url('/posts/cpp_pointer01/'));
+  const formula = page.locator('.katex').first();
+  await formula.waitFor({ state: 'visible' });
+  assert.equal(await page.locator('.katex-error').count(), 0);
+  assert.match(await formula.evaluate((element) => getComputedStyle(element).fontFamily), /KaTeX_Main/);
+  assert(await page.evaluate(async () => (await document.fonts.load('16px KaTeX_Main')).length > 0), 'math fonts must load from the production CSS');
+  console.log('PASS: production math includes KaTeX styling and loaded fonts');
+
   await page.goto(url('/search/'));
   await page.locator('.pagefind-ui__search-input').fill('指针');
   await page.locator('.pagefind-ui__result').first().waitFor({ state: 'visible' });

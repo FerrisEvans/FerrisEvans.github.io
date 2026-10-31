@@ -40,6 +40,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=loop-1" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=loop-1" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <slot name="head" />
     <script is:inline>
       (function () {
         var stored;

@@ -1,8 +1,9 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
+import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
 const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
-  message: 'Use lowercase letters, numbers, and hyphens, e.g. "machine-learning"',
+  error: 'Use lowercase letters, numbers, and hyphens, e.g. "machine-learning"',
 });
 
 const blog = defineCollection({

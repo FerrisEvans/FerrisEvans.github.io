@@ -4,7 +4,7 @@ Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 
 
 ## 技术栈
 
-- **Astro 5** — 静态站点生成，内容用 Markdown 内容集合管理
+- **Astro 7** — 静态站点生成，内容用 Markdown 内容集合管理
 - **React islands** — 只为需要交互的组件提供客户端水合
 - **Tailwind CSS v4** — 样式采用 CSS-first 配置，入口为 `src/styles/global.css`
 - **Motion Primitives / Kokonut UI** — 标题过渡与雨玻璃交互，组件源码保存在项目内
@@ -23,11 +23,14 @@ Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 
 
 ## 本地开发
 
+使用 Node.js 24（最低 22.23.4）。
+
 ```bash
 npm install
 npm run dev       # 开发服务器（搜索索引仅在构建后可用）
 npm run check     # 内容 schema 与 TypeScript 检查
 npm test          # 资源加载、播放、导航、动画与内容回归
+npm run audit:deps # 完整依赖树安全检查（含开发依赖）
 npm run build     # 构建到 dist/ 并生成 pagefind 搜索索引
 npm run verify:build # 检查路由、静态链接和 3D 资源清单
 npm run preview   # 预览构建产物
@@ -40,13 +43,18 @@ npm run preview   # 预览构建产物
 ## 发布与 3D 资源
 
 GitHub Pages 的发布源使用 **GitHub Actions**，只发布经过检查的 `dist/`。
-流水线运行 TypeScript、完整单元测试、资源 hash 检查、链接检查和真实浏览器阅读路径回归，
+流水线运行依赖审计、TypeScript、完整单元测试、资源 hash 检查、链接检查和真实浏览器阅读路径回归，
 不在 CI 重建 Blender 模型或依赖软件 GPU 重新烘焙。`/release.json` 可核对线上版本、提交和模型 build ID。
 
 站点保持 Astro 静态生成。GitHub Pages 没有 SSR 服务器运行时，SSR 也不能承担客户端 WebGL 绘制。
 3D 使用预烘焙光照与反射、分阶段纹理准备、独立视频流及按内容版本的浏览器缓存；
 手机和能力不足的设备仍使用 LO-FI。构建会从发布产物移除源 PNG 和未压缩传输模型，
 源文件留在仓库供复现。这减少发布体积，不代表增加 FPS 或减少本来就不会请求的资源下载。
+
+Astro 7 显式使用 `@astrojs/markdown-remark` 的 Unified 处理器，保留数学、GitHub alert、
+图片缩放、代码高亮及原有 HTML 空格处理。KaTeX 固定为安全版本，并用 npm override
+统一 `rehype-katex` / `micromark-extension-math` 的嵌套依赖；移除此 override 前，应确认上游
+已采用安全版本，并运行 Markdown 与浏览器回归。Sharp 同样使用统一的安全版本。
 
 ## 写文章
 
