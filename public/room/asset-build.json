@@ -1,5 +1,5 @@
 {
-  "buildId": "92ed730a14267ce6",
+  "buildId": "7ecf28724b1d670d",
   "bakeBuildId": "e920f58fcc714cd7",
   "assets": {
     "study-meshopt.glb.bin": "82eee102832ff7fa8c9f1068d3c344eec0254a073e4268ecfdaa3c9a48ffffd0",
@@ -101,9 +101,9 @@
     "tape-lamp-off.webp": "d95da4215a7f09c6f7dcb1a8a29f64c23eff49f39d90ea1632d85a5db878977c"
   },
   "posters": {
-    "loading.jpg": "33cd9acb7dc0fb9537c6dd413938eff2c1ef203acbf04fc10dff536b771c1fbe",
-    "reading.jpg": "6b99b8ed77694253514e740043b97eefec439e638311e8e6ed5f970cbae5b737",
-    "share.jpg": "f6008325c7998808d30eb130ca420a5bc81b7f95a5e9ccfacf70129eb1ea6fca"
+    "loading.jpg": "d0315fe9e6f4b9eeb542c7f45e718c5375f2392e665fdfcf5b6cccab41a85e2b",
+    "reading.jpg": "2030d624fbb22c2d0d9a245c02de5fb95273832019113ce1e2a1ee3b33cd8098",
+    "share.jpg": "ba13b845abebe9b4c67fed7f68132bae9934a7a26c0994ff82d311e24330e23a"
   },
   "capture": {
     "browser": "156.0.8078.74",
@@ -112,19 +112,19 @@
         "file": "loading.jpg",
         "width": 1440,
         "height": 1440,
-        "buildId": "92ed730a14267ce6"
+        "buildId": "7ecf28724b1d670d"
       },
       {
         "file": "reading.jpg",
         "width": 1440,
         "height": 900,
-        "buildId": "92ed730a14267ce6"
+        "buildId": "7ecf28724b1d670d"
       },
       {
         "file": "share.jpg",
         "width": 1200,
         "height": 630,
-        "buildId": "92ed730a14267ce6"
+        "buildId": "7ecf28724b1d670d"
       }
     ]
   }

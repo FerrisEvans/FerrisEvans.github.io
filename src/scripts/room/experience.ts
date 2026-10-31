@@ -15,7 +15,7 @@ import { createHomeTimeline, isHomePlaying } from './home-program';
 import { renderPixelRatio } from './quality';
 import { yieldForLoading, type LoadingReporter } from './loading';
 import { createRoomGlow } from './glow';
-import { warmScene } from './warmup';
+import { hasVisibleTransmission, warmScene } from './warmup';
 import { createWindowScene } from './window-scene';
 import { textureBytes } from './texture-budget';
 import type { RoomContent, RoomView } from './content';
@@ -305,15 +305,17 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     await compile('glow',()=>glow.compile());
     await compile('window',()=>renderer.compileAsync(windowScene,camera));
     await compile('window-glow',()=>glow.compile(windowScene));
-    // Spectacle transmission redraws the opaque room into a linear target.
-    // Its shaders differ from the AgX beauty pass; warming isolated materials
-    // alone leaves this full-room variant to compile synchronously on entry.
-    const transmissionTarget=new WebGLRenderTarget(1,1,{type:HalfFloatType});
-    try{
-      renderer.setRenderTarget(transmissionTarget);
-      await compile('transmission',()=>renderer.compileAsync(scene,camera));
-      await warmScene(renderer,scene,camera,()=>yieldForLoading(signal));
-    }finally{renderer.setRenderTarget(null);transmissionTarget.dispose();}
+    // Only actual transmission redraws the opaque room into a linear target.
+    // Retain its warmup if such a material returns, without compiling an unused
+    // full-room variant for today's clearcoat/opacity glass.
+    if(hasVisibleTransmission(scene,camera)){
+      const transmissionTarget=new WebGLRenderTarget(1,1,{type:HalfFloatType});
+      try{
+        renderer.setRenderTarget(transmissionTarget);
+        await compile('transmission',()=>renderer.compileAsync(scene,camera));
+        await warmScene(renderer,scene,camera,()=>yieldForLoading(signal));
+      }finally{renderer.setRenderTarget(null);transmissionTarget.dispose();}
+    }
     progress({stage:'shaders',completed:shaderVariants,total:shaderVariants});await yieldForLoading(signal);
     endShaders?.();
     if(signal.aborted)throw new DOMException('Aborted','AbortError');

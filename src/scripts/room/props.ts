@@ -3,6 +3,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 import type { Tape } from './tapes';
 import { batchRoom } from './batch';
 import { leafMotion } from './leaf-motion';
+import { createNormalUpdater } from './dynamic-normals';
 import { createPaperContact } from './paper-contact';
 import { createObjectContact } from './object-contact';
 import { paperFlex } from './paper-shape';
@@ -57,7 +58,7 @@ export function createProps(root: Object3D, resources: Resources) {
   const syncPaperContact=createPaperContact(root,paper,resources);
   const corners=anchors.surfaces.work.map(p=>paper.worldToLocal(new Vector3(...p as [number,number,number])));
   const along=corners[1].clone().sub(corners[0]),down=corners[3].clone().sub(corners[0]);
-  const flexSheets:{mesh:Mesh;rest:Float32Array;u:Float32Array;v:Float32Array;direction:Vector3}[]=[];
+  const flexSheets:{mesh:Mesh;rest:Float32Array;u:Float32Array;v:Float32Array;direction:Vector3;updateNormals:()=>void}[]=[];
   paper.traverse(object=>{
     if(!(object instanceof Mesh)||!/^Work_Notepad(?:$|_Loose)/.test(object.name))return;
     const geometry=object.geometry.clone();resources.add(geometry);object.geometry=geometry;
@@ -68,7 +69,7 @@ export function createProps(root: Object3D, resources: Resources) {
       u[i]=Math.max(0,Math.min(1,point.dot(along)/along.lengthSq()));v[i]=Math.max(0,Math.min(1,point.dot(down)/down.lengthSq()));
     }
     geometry.computeBoundingSphere();if(geometry.boundingSphere)geometry.boundingSphere.radius+=.025;
-    flexSheets.push({mesh:object,rest,u,v,direction});
+    flexSheets.push({mesh:object,rest,u,v,direction,updateNormals:createNormalUpdater(geometry)});
   });
   let flex=0,flexVelocity=0;
   function flexPaper(amount:number){
@@ -79,7 +80,7 @@ export function createProps(root: Object3D, resources: Resources) {
         const offset=paperFlex(sheet.u[i],sheet.v[i],amount);
         positions.setXYZ(i,sheet.rest[i*3]+offset*sheet.direction.x,sheet.rest[i*3+1]+offset*sheet.direction.y,sheet.rest[i*3+2]+offset*sheet.direction.z);
       }
-      positions.needsUpdate=true;sheet.mesh.geometry.computeVertexNormals();
+      positions.needsUpdate=true;sheet.updateNormals();
     }
   }
   if(!pad.userData.paper_bend)paper.traverse(o=>{if(o instanceof Mesh&&o.material instanceof MeshStandardMaterial){o.material=o.material.clone();o.material.emissive=new Color(.12,.12,.12);o.material.emissiveMap=o.material.map;resources.add(o.material);}});
@@ -88,7 +89,7 @@ export function createProps(root: Object3D, resources: Resources) {
   // Small idle sways retain local occlusion and lamp irradiance. Replacing
   // them with unshadowed hemisphere fill made even the resting leaves flat.
   stems.forEach(o=>plant.attach(o)); live(plant,true);
-  const leaves:{pivot:Group;phase:number;blade?:{mesh:Mesh;rest:Float32Array;normal:Float32Array;weight:Float32Array;flex:number}}[]=[];
+  const leaves:{pivot:Group;phase:number;blade?:{mesh:Mesh;rest:Float32Array;normal:Float32Array;weight:Float32Array;flex:number;updateNormals:()=>void}}[]=[];
   for(const object of stems) {
     const base=object.userData.leaf_base;
     if(!/^Plant_Leaf/.test(object.name)||!Array.isArray(base)||base.length!==3)continue;
@@ -106,18 +107,18 @@ export function createProps(root: Object3D, resources: Resources) {
       for(let i=0;i<weight.length;i++)weight[i]=Math.pow(weight[i]/Math.max(.001,length),1.7);
       // Rest bounds include a small deformation margin for raycasting/culling.
       geometry.computeBoundingSphere();if(geometry.boundingSphere)geometry.boundingSphere.radius+=.055;
-      blade={mesh:object,rest,normal:coordinates(geometry.attributes.normal),weight,flex:Number(object.userData.leaf_flex??.014)};
+      blade={mesh:object,rest,normal:coordinates(geometry.attributes.normal),weight,flex:Number(object.userData.leaf_flex??.014),updateNormals:createNormalUpdater(geometry)};
     }
     leaves.push({pivot,phase,blade});
   }
-  const curtains:{mesh:Mesh;original:Float32Array;normals:Float32Array;bounds:Box3}[]=[];
+  const curtains:{mesh:Mesh;original:Float32Array;normals:Float32Array;bounds:Box3;updateNormals:()=>void}[]=[];
   root.traverse(o=>{
     if(o instanceof Mesh&&/^Curtain_/.test(o.name)) {
       o.userData.roomDynamic=true;
       // Separate attributes before in-place deformation; shader UVs stay fixed.
       const geometry=o.geometry.clone(); resources.add(geometry);o.geometry=geometry;
       geometry.computeBoundingBox();
-      curtains.push({mesh:o,original:coordinates(geometry.attributes.position),normals:coordinates(geometry.attributes.normal),bounds:geometry.boundingBox!.clone()});
+      curtains.push({mesh:o,original:coordinates(geometry.attributes.position),normals:coordinates(geometry.attributes.normal),bounds:geometry.boundingBox!.clone(),updateNormals:createNormalUpdater(geometry)});
     }
   });
   const shade=root.getObjectByName('Lamp_Shade');
@@ -241,7 +242,7 @@ export function createProps(root: Object3D, resources: Resources) {
         attr.setXYZ(i,blade.rest[i*3]+blade.normal[i*3]*offset,blade.rest[i*3+1]+blade.normal[i*3+1]*offset,blade.rest[i*3+2]+blade.normal[i*3+2]*offset);
       }
       attr.needsUpdate=true;
-      if(motion)blade.mesh.geometry.computeVertexNormals();
+      if(motion)blade.updateNormals();
       else {const normals=blade.mesh.geometry.attributes.normal;for(let i=0;i<normals.count;i++)normals.setXYZ(i,blade.normal[i*3],blade.normal[i*3+1],blade.normal[i*3+2]);normals.needsUpdate=true;}
     }
     if(shade&&shadeRest)shade.quaternion.copy(shadeRest).multiply(new Quaternion().setFromAxisAngle(new Vector3(0,0,1),motion?Math.sin((time-lampKick)*11)*Math.exp(-(time-lampKick)*5)*.018:0));
@@ -249,7 +250,7 @@ export function createProps(root: Object3D, resources: Resources) {
     // Cloth can update at 30 Hz while camera motion renders at 60 Hz.
     const updateCloth=motion?(time-lastCloth>=1/30||!clothWasMoving):clothWasMoving||lastCloth<0;
     if(updateCloth){lastCloth=time;clothWasMoving=motion;}
-    for(const {mesh,original,normals,bounds} of updateCloth?curtains:[]) {
+    for(const {mesh,original,normals,bounds,updateNormals} of updateCloth?curtains:[]) {
       const attr=mesh.geometry.attributes.position;
       const extent=bounds.max.y-bounds.min.y;
       for(let i=0;i<attr.count;i++) {
@@ -258,7 +259,7 @@ export function createProps(root: Object3D, resources: Resources) {
         attr.setXYZ(i,x+wave*.25,y,z+wave);
       }
       attr.needsUpdate=true;
-      if(motion&&dt>0)mesh.geometry.computeVertexNormals();
+      if(motion&&dt>0)updateNormals();
       else if(!motion){const normal=mesh.geometry.attributes.normal;for(let i=0;i<normal.count;i++)normal.setXYZ(i,normals[i*3],normals[i*3+1],normals[i*3+2]);normal.needsUpdate=true;}
     }
     if(tapePhase!=='idle') {

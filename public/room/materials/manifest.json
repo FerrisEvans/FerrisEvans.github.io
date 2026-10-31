@@ -1,6 +1,6 @@
 {
   "version": 18,
-  "buildId": "92ed730a14267ce6",
+  "buildId": "7ecf28724b1d670d",
   "quality": "final",
   "encoding": "RGBM8",
   "city": "/room/window/city-panorama-v2.webp",
@@ -744,7 +744,7 @@
       "scripts/room/build-reflection.mjs": "b109c51b62e2e01f7c53c4780ebb6419a1c60abb82c22a81477d185f0bd36d67",
       "scripts/room/capture-reflection.ts": "59e8decf157e9f66f67e0ce9274643622cc642241970112abd88792699b4485a",
       "src/scripts/room/crt.ts": "caace3fa4bdca5a1de340675e7777ba502e65e9adf4261cb41f03248b19a233b",
-      "src/scripts/room/lighting.ts": "5d2a75e5ca11059d685fc29d66fc1f1fbbbf5be2d2b4c56b2a3d2aaf219ead42",
+      "src/scripts/room/lighting.ts": "4eb8b31fd7f455f391c35833bd15c6af00910b24b65fe6c67e73e87e691caf6f",
       "src/scripts/room/model.ts": "fbc6f2c14e416932b089e8759e8d06d47e3c4e62644413451c120078893a2f7d",
       "src/scripts/room/reflection.ts": "27efe0c8f60a523e26ff22ceab18bb48fe15717a4f8ee35674263dcfd6850a77",
       "src/scripts/room/weather.ts": "9b33b11c50175d960779688d8e00650ae7a1e6b8a4097386d27987743ee4f70a"

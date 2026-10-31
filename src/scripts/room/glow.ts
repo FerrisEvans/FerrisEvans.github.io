@@ -72,7 +72,12 @@ export function createRoomGlow(renderer:WebGLRenderer,scene:Scene,camera:Camera)
     const oldBackground=targetScene.background,oldAutoClear=renderer.autoClear;
     targetScene.background=background;maskMaterials(targetScene);
     try {
-      renderer.setRenderTarget(mask);renderer.clear();renderer.render(targetScene,camera);
+      renderer.setRenderTarget(mask);renderer.clear();
+      // The beauty pass just updated this graph. Only materials/background
+      // changed for the mask, so its world matrices remain exactly the same.
+      const oldMatrixAutoUpdate=targetScene.matrixWorldAutoUpdate;
+      try{targetScene.matrixWorldAutoUpdate=false;renderer.render(targetScene,camera);}
+      finally{targetScene.matrixWorldAutoUpdate=oldMatrixAutoUpdate;}
       bloom.render(renderer,mask,mask,0,false);
     }finally{
       restoreMaterials();

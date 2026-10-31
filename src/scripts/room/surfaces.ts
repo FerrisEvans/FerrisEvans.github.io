@@ -1,4 +1,4 @@
-import { BufferGeometry, CanvasTexture, DoubleSide, Float32BufferAttribute, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Texture, Object3D, PerspectiveCamera, SRGBColorSpace, Vector3 } from 'three';
+import { BufferGeometry, CanvasTexture, DoubleSide, Float32BufferAttribute, Matrix4, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, Texture, Object3D, PerspectiveCamera, SRGBColorSpace, Vector3 } from 'three';
 import anchors from './anchors.json';
 import { mapPlane } from './osd';
 import { pageInfo, pageSize, wrapText, type RoomContent, type RoomView } from './content';
@@ -13,12 +13,13 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
   callbacks:{page(page:number):void;tape(index:number):void;paper():void;navigate(view:RoomView):void;wake():void}, paper:Object3D, environment:Texture) {
   const layer=document.querySelector<HTMLElement>('#surface-layer')!;
   const controls=new Map<SurfaceView,HTMLElement>();
+  let projectionDirty=true;
   for(const view of ['posts','work','about','online'] as SurfaceView[]) {
     const el=document.createElement('section');el.className=`surface-controls surface-${view}`;
     el.setAttribute('aria-label', {posts:'电视中的文章列表',work:'记事本上的录像带目录',about:'电脑中的个人介绍',online:'电脑中的在线联系'}[view]);
     Object.assign(el.style,{width:`${width}px`,height:`${height}px`});el.hidden=true;layer.append(el);controls.set(view,el);
   }
-  function place(el:HTMLElement,[x,y,w,h]:number[]){el.dataset.rect=JSON.stringify([x,y,w,h]);Object.assign(el.style,{left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`});}
+  function place(el:HTMLElement,[x,y,w,h]:number[]){projectionDirty=true;el.dataset.rect=JSON.stringify([x,y,w,h]);Object.assign(el.style,{left:`${x}px`,top:`${y}px`,width:`${w}px`,height:`${h}px`});}
   function label(el:HTMLElement,text:string){el.setAttribute('aria-label',text);el.title=text;el.append(Object.assign(document.createElement('span'),{className:'sr-only',textContent:text}));}
   function link(parent:HTMLElement,text:string,href:string,rect:number[],external=false){const a=document.createElement('a');a.href=href;label(a,text);if(external){a.target='_blank';a.rel='noopener noreferrer';}place(a,rect);parent.append(a);return a;}
   function button(parent:HTMLElement,text:string,rect:number[],action:()=>void){const b=document.createElement('button');b.type='button';label(b,text);place(b,rect);b.addEventListener('click',action);parent.append(b);return b;}
@@ -123,6 +124,8 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
   }
   paintWork();paintPC();setPage(0);
   let previousPaperFlex=NaN;
+  const projectedView=new Matrix4(),projectedLens=new Matrix4(),projectedPaper=new Matrix4();
+  let projected:{view:RoomView;w:number;h:number;enabled:boolean;raised:boolean;dialing:boolean;flex:number}|undefined;
   function project(camera:PerspectiveCamera,view:RoomView,w:number,h:number,enabled:boolean,raised:boolean){
     const flex=paper.userData.flex??0;
     if(flex!==previousPaperFlex){
@@ -130,12 +133,21 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
       for(let y=0;y<=18;y++)for(let x=0;x<=24;x++){const point=paperPoint(x/24,y/18);positions.setXYZ(y*25+x,point.x,point.y,point.z);}
       positions.needsUpdate=true;work.mesh.geometry.computeVertexNormals();previousPaperFlex=flex;
     }
+    const visible=enabled&&controls.has(view as SurfaceView)&&!(view==='work'&&!raised)&&!(view==='online'&&dialing);
+    if(visible&&view==='work')paper.updateWorldMatrix(true,false);
+    // Exact input equality keeps static native hit areas in place without
+    // solving their homographies again. Rebuilt controls always invalidate it.
+    if(!projectionDirty&&projected&&projected.view===view&&projected.w===w&&projected.h===h&&projected.enabled===enabled&&projected.raised===raised&&projected.dialing===dialing
+      &&(!visible||(projectedView.equals(camera.matrixWorldInverse)&&projectedLens.equals(camera.projectionMatrix)
+        &&(view!=='work'||(projected.flex===flex&&projectedPaper.equals(paper.matrixWorld))))))return;
+    projected={view,w,h,enabled,raised,dialing,flex};projectionDirty=false;
+    projectedView.copy(camera.matrixWorldInverse);projectedLens.copy(camera.projectionMatrix);projectedPaper.copy(paper.matrixWorld);
     for(const[key,el]of controls){el.hidden=!enabled||key!==view||(key==='work'&&!raised)||(key==='online'&&dialing);if(el.hidden)continue;
       if(key==='work') {
         el.style.transform='none';el.style.width=w+'px';el.style.height=h+'px';
         for(const control of el.querySelectorAll<HTMLElement>('[data-rect]')) {
           const [x,y,cw,ch]=JSON.parse(control.dataset.rect!);
-          const points=[[x,y],[x+cw,y],[x+cw,y+ch],[x,y+ch]].map(([px,py])=>{const p=paper.localToWorld(paperPoint(px/width,py/height)).project(camera);return[(p.x+1)*w/2,(1-p.y)*h/2];});
+          const points=[[x,y],[x+cw,y],[x+cw,y+ch],[x,y+ch]].map(([px,py])=>{const p=paperPoint(px/width,py/height).applyMatrix4(paper.matrixWorld).project(camera);return[(p.x+1)*w/2,(1-p.y)*h/2];});
           Object.assign(control.style,{left:'0',top:'0',transformOrigin:'0 0'});mapPlane(control,cw,ch,points);
         }
         continue;

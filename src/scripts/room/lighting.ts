@@ -13,6 +13,7 @@ import { createWeather } from './weather';
 import { textureBytes } from './texture-budget';
 import { homeFrameRate } from './home-program';
 import { yieldForLoading, type LoadingReporter } from './loading';
+import { createLoadingUploadQueue } from './loading-upload';
 import {createHomeVideo, type HomeFilmManifest} from './home-video';
 import {captureRoomReflection, loadRoomReflection, type ReflectionAsset} from './reflection';
 
@@ -45,7 +46,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   if(filmManifest)initialTextures.add(`${filmManifest.poster}/true/0`);
   const textureTotal=initialTextures.size+1+(filmManifest?1:0);let preparedTextures=0;
   const textureCache=new Map<string,Promise<Texture>>();
-  let uploadQueue=Promise.resolve();
+  const uploadQueue=createLoadingUploadQueue({signal:loading.signal});
   const textureProgress=()=>loading.progress?.({stage:'textures',completed:preparedTextures,total:textureTotal,detail:`${preparedTextures}/${textureTotal}`});
   textureProgress();
   async function texture(path: string, color = false, channel = 0) {
@@ -56,13 +57,15 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   }
   async function loadTexture(path:string,color:boolean,channel:number,key:string) {
     const info={url:path,atlas:path.split('/').pop()?.replace(/-(albedo|orm|normal|room|tv|lamp-off)\.webp$/,'')};
+    const bytes=assets?await assets.read(path):undefined;
     const endDecode=assets?.timing?.start('texture.decode',info);
     let objectUrl: string | undefined;
-    if (assets) objectUrl = URL.createObjectURL(new Blob([await assets.read(path)], { type: path.endsWith('.webp') ? 'image/webp' : 'image/png' }));
+    if (bytes) objectUrl = URL.createObjectURL(new Blob([bytes], { type: path.endsWith('.webp') ? 'image/webp' : 'image/png' }));
     let map: Texture;
     try { map = await loader.loadAsync(objectUrl ?? path); }
+    catch(error){endDecode?.('error',{error:String(error)});throw error;}
     finally { if (objectUrl) URL.revokeObjectURL(objectUrl); }
-    if(assets?.isDisposed){map.dispose();throw new DOMException('Aborted','AbortError');}
+    if(assets?.isDisposed){endDecode?.('aborted');map.dispose();throw new DOMException('Aborted','AbortError');}
     resources.add(map);
     try{
     map.flipY = false; // glTF UV convention
@@ -73,15 +76,14 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     const image=map.image as {width:number;height:number};
     endDecode?.('ok',{...info,width:image.width,height:image.height,decodedBytes:image.width*image.height*4,textureBytes:textureBytes(image.width,image.height,4,map.generateMipmaps)});
     const endQueue=assets?.timing?.start('texture.upload-queue',info);
-    const uploaded=uploadQueue.then(async()=>{
-      await yieldForLoading(loading.signal);
+    await uploadQueue(()=>{
       endQueue?.();const endUpload=assets?.timing?.start('texture.upload-submit',info);
-      renderer.initTexture(map);endUpload?.();
+      try{renderer.initTexture(map);endUpload?.();}
+      catch(error){endUpload?.('error',{error:String(error)});throw error;}
       if(initialTextures.has(key)){preparedTextures++;textureProgress();}
-    });
-    uploadQueue=uploaded.catch(()=>{});await uploaded;
+    }).catch(error=>{endQueue?.(loading.signal?.aborted?'aborted':'error',{error:String(error)});throw error;});
     return map;
-    }catch(error){resources.delete(map);map.dispose();throw error;}
+    }catch(error){endDecode?.(loading.signal?.aborted?'aborted':'error',{error:String(error)});resources.delete(map);map.dispose();throw error;}
   }
   const tvColor = { value: new Color() };
   const lampLevel = {value:1};

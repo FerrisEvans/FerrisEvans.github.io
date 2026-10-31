@@ -1,4 +1,16 @@
-import { Mesh, Vector4, type Camera, type Scene, type WebGLRenderer } from 'three';
+import { Mesh, MeshPhysicalMaterial, Vector4, type Camera, type Scene, type WebGLRenderer } from 'three';
+
+/** Only transmission materials trigger Three's extra opaque-room pass.
+ * Reflective glass using clearcoat or opacity does not need that variant. */
+export function hasVisibleTransmission(scene:Scene,camera:Camera) {
+  let found=false;
+  scene.traverseVisible(object=>{
+    if(found||!(object instanceof Mesh)||!object.layers.test(camera.layers))return;
+    const materials=Array.isArray(object.material)?object.material:[object.material];
+    found=materials.some(material=>material.visible&&material instanceof MeshPhysicalMaterial&&material.transmission>0);
+  });
+  return found;
+}
 
 /** compileAsync links shaders, but drivers can still create pipelines and upload
  * geometry on the first draw. Submit those draws in material-sized batches while
