@@ -80,6 +80,7 @@ test('relocated clock and Rolodex inspection poses follow the delivered prop fam
   const room=new Scene(),material=new MeshBasicMaterial();
   function part(name,center,size){const mesh=new Mesh(new BoxGeometry(...size),material);mesh.name=name;mesh.position.fromArray(center);room.add(mesh);return mesh;}
   const clock=part('Desk_Clock',[3.649,.815,.37],[.142,.260,.220]);
+  clock.rotation.y=-Math.PI/2;
   part('Desk_Rolodex',[-1.02,.735,-.35],[.400,.100,.300]);
   part('Desk_Rolodex_Cards',[-1.02,.90078,-.35],[.350,.23156,.220]);
   const {camera,nav}=setup(1440,900,room);
@@ -89,6 +90,22 @@ test('relocated clock and Rolodex inspection poses follow the delivered prop fam
     assert.ok(camera.position.clone().sub(target).dot(front)>.5,'view approaches the physical front');
   }
   clock.geometry.dispose();room.traverse(object=>object.geometry?.dispose());material.dispose();
+});
+
+test('clock inspection follows the delivered face orientation without changing Home limits or pose',()=>{
+  const material=new MeshBasicMaterial();
+  for(const yaw of [0,-Math.PI/2,.36]){
+    const room=new Scene(),clock=new Mesh(new BoxGeometry(.22,.26,.142),material);clock.name='Desk_Clock';clock.position.set(3.1,.815,.25);clock.rotation.y=yaw;room.add(clock);
+    const {camera,nav}=setup(1440,900,room),home=camera.position.clone(),orientation=camera.quaternion.clone();
+    nav.go('clock',0,true);nav.update(0,0,false);camera.updateMatrixWorld(true);
+    const towardCamera=camera.position.clone().sub(clock.position),front=new Vector3(0,0,1).applyQuaternion(clock.quaternion);
+    assert.ok(Math.abs(towardCamera.dot(front)-.62)<1e-7,'inspection remains in front of the authored dial');
+    const dial=clock.position.clone().project(camera);assert.ok(Math.abs(dial.x)<1e-7&&Math.abs(dial.y)<1e-7,'dial stays centred');
+    nav.go('home',1,true);nav.update(1,0,false);
+    assert.ok(camera.position.distanceTo(home)<1e-7);assert.ok(camera.quaternion.angleTo(orientation)<1e-7);
+    clock.geometry.dispose();
+  }
+  material.dispose();
 });
 
 test('TV inspection keeps the whole cabinet and lowest physical slider visible at common sizes and after resize',()=>{

@@ -28,7 +28,9 @@ export function createNavigation(camera:PerspectiveCamera,windowProjection:Windo
     const bounds=familyBounds(n=>n===prefix||n.startsWith(prefix+'_'));if(!bounds)return;
     const target=bounds.getCenter(new Vector3());poses[name]=pose(target.clone().add(offset).toArray(),target.toArray());
   }
-  inspectFamily('clock','Desk_Clock',new Vector3(-.62,.10,0));
+  const clock=room?.getObjectByName('Desk_Clock'),clockOffset=new Vector3(0,.10,.62);
+  if(clock)clockOffset.applyQuaternion(clock.getWorldQuaternion(new Quaternion()));
+  inspectFamily('clock','Desk_Clock',clockOffset);
   inspectFamily('rolodex','Desk_Rolodex',new Vector3(-.14,.30,.70));
   const tvBounds=familyBounds(n=>n==='CRT_Case'||n==='CRT_ControlPanel'||n.startsWith('CRT_Slider'));
   function frameTV(){

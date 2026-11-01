@@ -697,13 +697,19 @@ def area(name, location, target, power, color, width, height=None):
 
 
 bpy.context.view_layer.update()
+# Follow the actual screen when the workstation is repositioned; an old fixed
+# emitter would leave green light in the empty corner behind the computer.
+computer_screen = scene.objects['Computer_Screen']
+computer_center = computer_screen.matrix_world.translation.copy()
+computer_forward = (computer_screen.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
 room_lights = [
     area("Lamp", lamp_bottom.lerp(lamp_bulb, .65), (-1.65, -0.30, 0.65), 160, (1.0, 0.69, 0.43), 0.20),
     area("Window", (-0.3, 1.08, 2.6), (0, -0.5, 0.7), 50, (0.58, 0.68, 0.82), 3.6, 2.1),
     area("Room bounce", (-2.3, -3.0, 2.8), (0, 0, 1.2), 60, (1.0, 0.75, 0.51), 3.0, 2.0),
     area("Curtain bounce", (1.3, 0, 2.1), (2.2, .7, 2.7), 18, (1.0, .78, .57), .5, 1.0),
     area("Overhead reflection", (-.89, -.35, 3.67), (-1.40, -.17, 1.96), 24, (1.0, .83, .67), .35, 1.0),
-    area("Computer phosphor", (3.20, -1.25, 1.343), (2.84, -1.25, .72), 3, (.30,.75,.42), .58, .44),
+    area("Computer phosphor", computer_center+computer_forward*.038,
+         computer_center+computer_forward*.40+Vector((0,0,-.623)), 3, (.30,.75,.42), .58, .44),
 ]
 bulb_data = bpy.data.lights.new("Lamp interior", "POINT")
 bulb_data.energy = .8

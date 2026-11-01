@@ -7,6 +7,7 @@ import {gunzipSync} from 'node:zlib';
 
 // Also usable before promotion: ROOM_MODEL_ROOT=.room-build/<candidate>/packed
 // node --test scripts/room/delivered-model.test.mjs. No WebGL or image decoding.
+// ROOM_ANCHORS_FILE can pair a previous build with its own source anchors.
 const root = process.env.ROOM_MODEL_ROOT
   ? resolve(process.env.ROOM_MODEL_ROOT)
   : fileURLToPath(new URL('../../public/room/materials/', import.meta.url));
@@ -29,6 +30,24 @@ const mesh = name => {
   assert(gltf.meshes[node.mesh].primitives.length > 0, `${name} must retain geometry`);
   return node;
 };
+async function decodeDelivered() {
+  const [{GLTFLoader}, {MeshoptDecoder}, {Box3, MeshBasicMaterial, Vector3}] = await Promise.all([
+    import('three/addons/loaders/GLTFLoader.js'),
+    import('three/addons/libs/meshopt_decoder.module.js'),
+    import('three'),
+  ]);
+  // Decode actual delivered geometry, including Meshopt, without images/WebGL.
+  const material = new MeshBasicMaterial();
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder)
+    .register(() => ({name: 'geometry-contract', loadMaterial: async () => material}));
+  const {scene} = await loader.parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
+  scene.traverse(object => { if (object.userData.name) object.name = object.userData.name; });
+  scene.updateMatrixWorld(true);
+  return {scene, Box3, Vector3, dispose() {
+    scene.traverse(object => { if (object.isMesh) object.geometry.dispose(); });
+    material.dispose();
+  }};
+}
 
 test('delivered scene has no removed remote or rotary TV control geometry', () => {
   assert.deepEqual([...byName.keys()].filter(name => /^(Desk_Remote|Remote_Key|CRT_Knob)(?:[_.]|$)/.test(name)), []);
@@ -86,20 +105,11 @@ test('delivered hardware preserves 101 PBT keycaps and distinct equipment finish
 });
 
 test('delivered hardware corner normals never point through their own triangles', async () => {
-  const [{GLTFLoader}, {MeshoptDecoder}, {MeshBasicMaterial, Vector3}] = await Promise.all([
-    import('three/addons/loaders/GLTFLoader.js'),
-    import('three/addons/libs/meshopt_decoder.module.js'),
-    import('three'),
-  ]);
-  // Decode actual delivered geometry, including Meshopt, without images/WebGL.
-  const material = new MeshBasicMaterial();
-  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder)
-    .register(() => ({name: 'geometry-contract', loadMaterial: async () => material}));
-  const {scene} = await loader.parseAsync(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength), '');
-  scene.traverse(object => { if (object.userData.name) object.name = object.userData.name; });
+  const {scene, Vector3, dispose} = await decodeDelivered();
   const a = new Vector3(), b = new Vector3(), c = new Vector3(), faceNormal = new Vector3(), cornerNormal = new Vector3();
   try {
-    for (const name of ['Computer_Monitor', 'Computer_Keyboard', 'Computer_Mouse', 'CRT_Case', 'VCR_Body']) {
+    for (const name of ['Computer_Monitor', 'Computer_Keyboard', 'Computer_Mouse', 'CRT_Case', 'VCR_Body',
+      'Retro_Phone', 'Retro_Phone_Handset', 'Retro_Phone_DialWheel']) {
       const object = scene.getObjectByName(name);
       assert(object?.isMesh, `${name}: decoded mesh`);
       const {geometry} = object, positions = geometry.getAttribute('position'), normals = geometry.getAttribute('normal');
@@ -122,7 +132,72 @@ test('delivered hardware corner normals never point through their own triangles'
       assert(tested > 0, `${name}: nondegenerate surface triangles`);
     }
   } finally {
-    scene.traverse(object => { if (object.isMesh) object.geometry.dispose(); });
-    material.dispose();
+    dispose();
   }
+});
+
+test('delivered computer glass and shared native/Canvas anchors describe the same upright 4:3 screen', async () => {
+  const {scene, Vector3, dispose} = await decodeDelivered();
+  const anchors = JSON.parse(readFileSync(process.env.ROOM_ANCHORS_FILE
+    ? resolve(process.env.ROOM_ANCHORS_FILE)
+    : new URL('../../src/scripts/room/anchors.json', import.meta.url)));
+  try {
+    const screen = scene.getObjectByName('Computer_Screen');
+    assert(screen?.isMesh, 'delivered computer screen geometry');
+    screen.geometry.computeBoundingBox();
+    const {min, max} = screen.geometry.boundingBox;
+    const corners = anchors.surfaces.about.map(point => new Vector3(...point));
+    const local = corners.map(point => screen.worldToLocal(point.clone()));
+    const expected = [[min.x,max.y],[max.x,max.y],[max.x,min.y],[min.x,min.y]];
+    const scale = screen.getWorldScale(new Vector3());
+    for (let i = 0; i < 4; i++) {
+      close(local[i].x, expected[i][0], `screen corner ${i}: horizontal alignment`);
+      close(local[i].y, expected[i][1], `screen corner ${i}: vertical alignment`);
+      close(local[i].z, local[0].z, `screen corner ${i}: coplanar native surface`);
+      const clearance = (local[i].z - max.z) * scale.z;
+      assert(clearance >= -.0001 && clearance <= .006,
+        `screen corner ${i}: overlay must sit on the glass face, not inside or far above it (${clearance} m)`);
+    }
+    close(corners[0].distanceTo(corners[1]) / corners[0].distanceTo(corners[3]), 4/3, 'native/Canvas screen aspect');
+    close((max.x-min.x)*scale.x / ((max.y-min.y)*scale.y), 4/3, 'physical glass aspect');
+    const screenNormal = new Vector3(0,0,1).transformDirection(screen.matrixWorld);
+    const anchorNormal = corners[3].clone().sub(corners[0]).cross(corners[1].clone().sub(corners[0])).normalize();
+    assert(screenNormal.dot(anchorNormal) > .99999, 'native controls and screen face must share orientation');
+  } finally { dispose(); }
+});
+
+test('delivered keyboard and mouse remain above the desktop with every foot supported', async () => {
+  const {scene, Box3, Vector3, dispose} = await decodeDelivered();
+  try {
+    const desktops = ['Desk_Top','Desk_Return'].map(name => {
+      const object = scene.getObjectByName(name);assert(object?.isMesh, `${name}: desktop receiver`);
+      return new Box3().setFromObject(object);
+    });
+    const supports = [];
+    scene.traverse(object => {
+      if (object.isMesh && /^(Computer_KeyboardFoot|Computer_Mouse_Foot)/.test(object.name)) supports.push(object);
+    });
+    assert(supports.some(object => object.name.startsWith('Computer_KeyboardFoot')), 'keyboard needs physical feet');
+    assert(supports.some(object => object.name.startsWith('Computer_Mouse_Foot')), 'mouse needs physical feet');
+    const bodies = ['Computer_Keyboard','Computer_Mouse'].map(name => {
+      const object = scene.getObjectByName(name);assert(object?.isMesh, `${name}: input device shell`);return object;
+    });
+    for (const object of [...bodies,...supports]) {
+      const positions = object.geometry.getAttribute('position');
+      const points = Array.from({length:positions.count}, (_,i) => new Vector3().fromBufferAttribute(positions,i).applyMatrix4(object.matrixWorld));
+      const bottom = Math.min(...points.map(point => point.y));
+      let contactPoints = 0;
+      for (const point of points) {
+        const under = desktops.filter(box => point.x >= box.min.x-.002 && point.x <= box.max.x+.002 && point.z >= box.min.z-.002 && point.z <= box.max.z+.002);
+        assert(under.length, `${object.name}: vertex overhangs the desktop at ${point.toArray()}`);
+        const top = Math.max(...under.map(box => box.max.y));
+        assert(point.y >= top-.001, `${object.name}: geometry penetrates the desktop by ${top-point.y} m`);
+        if (supports.includes(object) && point.y <= bottom+.0001) {
+          assert(Math.abs(point.y-top) <= .002, `${object.name}: foot must rest on the desktop, gap ${point.y-top} m`);
+          contactPoints++;
+        }
+      }
+      if (supports.includes(object)) assert(contactPoints > 0, `${object.name}: tested foot contact vertices`);
+    }
+  } finally { dispose(); }
 });

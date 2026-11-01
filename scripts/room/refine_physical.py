@@ -84,7 +84,8 @@ def refine_physical(scene, text):
             wire('Window_CurtainHook',[(x,.58,4.113),(x,.60,4.080),(x,.64,4.075)],.0022,rodmat,'window')
 
     # Horizontal 486 chassis, tapered CRT on a tilt foot, keyboard and mouse
-    # face the working seat at the inside of the desk return.
+    # face the working seat at the inside corner. The diagonal position keeps
+    # the screen reachable with a single Home turn, within its existing limits.
     remove('Computer')
     remove('Print_PC_Brand')
     remove('Print_PC_Model')
@@ -134,7 +135,7 @@ def refine_physical(scene, text):
         if obj.parent is None:obj.matrix_world=monitor_scale@obj.matrix_world
     devices=refine_input_devices(scene,ivory,keys,dark,ink,text)
     keyboard,mouse=devices['keyboard'],devices['mouse']
-    matrix=assembly_transform('Computer',(3.53,-1.25,0),math.radians(-90))
+    matrix=assembly_transform('Computer',(3.05,0,0),math.radians(-35))
     bpy.context.view_layer.update()
     tops=[bounds(scene.objects[name])for name in ('Desk_Top','Desk_Return')]
     for obj in (keyboard,mouse):
@@ -242,7 +243,7 @@ def refine_physical(scene, text):
     vcr=scene.objects['VCR_Body'];vcr.data.materials.clear();vcr.data.materials.append(finish('VCR folded graphite enamel',(.055,.063,.067),.28,.48,.045));vcr['surface_profile']='satin-metal'
     bpy.context.view_layer.update()
     return {'computerSurface':[[p.x,p.z,-p.y]for p in screen_corners],
-            'computerPosition':[3.53,-1.25,0],'computerYawDegrees':-90,
+            'computerPosition':[3.05,0,0],'computerYawDegrees':-35,
             'computerMonitorScale':1.25,'computerScreenWidth':.60,'televisionScreenWidth':.90,
             'inputDevices':{k:v for k,v in devices.items()if k not in ('keyboard','mouse')},
             'curtainRodHeight':4.14,'glassesRemoved':True,'phoneHandset':'continuous cradled receiver',

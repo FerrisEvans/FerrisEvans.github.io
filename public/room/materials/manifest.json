@@ -1,6 +1,6 @@
 {
   "version": 18,
-  "buildId": "a9c96e2b7eb88bcf",
+  "buildId": "ddb6828400e83bfe",
   "quality": "final",
   "encoding": "RGBM8",
   "city": "/room/window/city-panorama-v2.webp",
@@ -21,18 +21,18 @@
       "room": {
         "file": "architecture-room.webp",
         "range": 4,
-        "peak": 2.1021347045898438,
+        "peak": 2.111346960067749,
         "preview": "architecture-room-entry.webp"
       },
       "lampOff": {
         "file": "architecture-lamp-off.webp",
         "range": 1,
-        "peak": 0.11304997652769089
+        "peak": 0.11257892102003098
       },
       "tv": {
         "file": "architecture-tv.webp",
         "range": 1,
-        "peak": 0.12668800354003906,
+        "peak": 0.12674018740653992,
         "preview": "architecture-tv-entry.webp"
       },
       "entry": {
@@ -47,19 +47,19 @@
       "normal": "desk-normal.webp",
       "room": {
         "file": "desk-room.webp",
-        "range": 64,
-        "peak": 32.072635650634766,
+        "range": 32,
+        "peak": 31.478017807006836,
         "preview": "desk-room-entry.webp"
       },
       "lampOff": {
         "file": "desk-lamp-off.webp",
         "range": 1,
-        "peak": 0.27738645672798157
+        "peak": 0.27518099546432495
       },
       "tv": {
         "file": "desk-tv.webp",
         "range": 1,
-        "peak": 0.48888319730758667,
+        "peak": 0.48861247301101685,
         "preview": "desk-tv-entry.webp"
       },
       "entry": {
@@ -74,18 +74,18 @@
       "room": {
         "file": "props-room.webp",
         "range": 64,
-        "peak": 58.76227951049805,
+        "peak": 58.61966323852539,
         "preview": "props-room-entry.webp"
       },
       "lampOff": {
         "file": "props-lamp-off.webp",
         "range": 1,
-        "peak": 0.7556500434875488
+        "peak": 0.7564481496810913
       },
       "tv": {
         "file": "props-tv.webp",
         "range": 1,
-        "peak": 0.29538291692733765,
+        "peak": 0.2994835674762726,
         "preview": "props-tv-entry.webp"
       },
       "entry": {
@@ -100,19 +100,19 @@
       "normal": "lamp-normal.webp",
       "room": {
         "file": "lamp-room.webp",
-        "range": 1024,
-        "peak": 513.9832763671875,
+        "range": 512,
+        "peak": 503.3746032714844,
         "preview": "lamp-room-entry.webp"
       },
       "lampOff": {
         "file": "lamp-lamp-off.webp",
         "range": 2,
-        "peak": 1.5534605979919434
+        "peak": 1.543495774269104
       },
       "tv": {
         "file": "lamp-tv.webp",
         "range": 1,
-        "peak": 0.024557048454880714,
+        "peak": 0.024449268355965614,
         "preview": "lamp-tv-entry.webp"
       },
       "entry": {
@@ -128,18 +128,18 @@
       "room": {
         "file": "curtains-room.webp",
         "range": 4,
-        "peak": 2.2446706295013428,
+        "peak": 2.232998847961426,
         "preview": "curtains-room-entry.webp"
       },
       "lampOff": {
         "file": "curtains-lamp-off.webp",
         "range": 1,
-        "peak": 0.7055699825286865
+        "peak": 0.706036388874054
       },
       "tv": {
         "file": "curtains-tv.webp",
         "range": 1,
-        "peak": 0.0070920903235673904,
+        "peak": 0.006986142136156559,
         "preview": "curtains-tv-entry.webp"
       },
       "entry": {
@@ -155,18 +155,18 @@
       "room": {
         "file": "window-room.webp",
         "range": 8,
-        "peak": 4.322520732879639,
+        "peak": 4.417561054229736,
         "preview": "window-room-entry.webp"
       },
       "lampOff": {
         "file": "window-lamp-off.webp",
         "range": 2,
-        "peak": 1.8973488807678223
+        "peak": 1.9188590049743652
       },
       "tv": {
         "file": "window-tv.webp",
         "range": 1,
-        "peak": 0.01793440617620945,
+        "peak": 0.017972154542803764,
         "preview": "window-tv-entry.webp"
       },
       "entry": {
@@ -182,18 +182,18 @@
       "room": {
         "file": "walls-room.webp",
         "range": 2,
-        "peak": 1.194509506225586,
+        "peak": 1.1907567977905273,
         "preview": "walls-room-entry.webp"
       },
       "lampOff": {
         "file": "walls-lamp-off.webp",
         "range": 2,
-        "peak": 1.1830484867095947
+        "peak": 1.1853915452957153
       },
       "tv": {
         "file": "walls-tv.webp",
         "range": 1,
-        "peak": 0.006018261890858412,
+        "peak": 0.005863455589860678,
         "preview": "walls-tv-entry.webp"
       },
       "entry": {
@@ -209,18 +209,18 @@
       "room": {
         "file": "ceramic-room.webp",
         "range": 64,
-        "peak": 57.70855712890625,
+        "peak": 57.9764518737793,
         "preview": "ceramic-room-entry.webp"
       },
       "lampOff": {
         "file": "ceramic-lamp-off.webp",
         "range": 1,
-        "peak": 0.38061851263046265
+        "peak": 0.38367998600006104
       },
       "tv": {
         "file": "ceramic-tv.webp",
         "range": 1,
-        "peak": 0.7196691036224365,
+        "peak": 0.7244896292686462,
         "preview": "ceramic-tv-entry.webp"
       },
       "entry": {
@@ -236,18 +236,18 @@
       "room": {
         "file": "equipment-room.webp",
         "range": 64,
-        "peak": 37.32310104370117,
+        "peak": 59.2918586730957,
         "preview": "equipment-room-entry.webp"
       },
       "lampOff": {
         "file": "equipment-lamp-off.webp",
         "range": 2,
-        "peak": 1.3346413373947144
+        "peak": 1.3881642818450928
       },
       "tv": {
         "file": "equipment-tv.webp",
         "range": 8,
-        "peak": 7.843008518218994,
+        "peak": 5.646556377410889,
         "preview": "equipment-tv-entry.webp"
       },
       "entry": {
@@ -263,18 +263,18 @@
       "room": {
         "file": "foliage-room.webp",
         "range": 256,
-        "peak": 169.24276733398438,
+        "peak": 177.4024658203125,
         "preview": "foliage-room-entry.webp"
       },
       "lampOff": {
         "file": "foliage-lamp-off.webp",
         "range": 2,
-        "peak": 1.8238898515701294
+        "peak": 1.8291878700256348
       },
       "tv": {
         "file": "foliage-tv.webp",
         "range": 1,
-        "peak": 0.13911540806293488,
+        "peak": 0.13904955983161926,
         "preview": "foliage-tv-entry.webp"
       },
       "cutout": true,
@@ -292,17 +292,17 @@
       "room": {
         "file": "paper-room.webp",
         "range": 1,
-        "peak": 0.794233500957489
+        "peak": 0.7864375710487366
       },
       "lampOff": {
         "file": "paper-lamp-off.webp",
         "range": 1,
-        "peak": 0.21980170905590057
+        "peak": 0.3312610685825348
       },
       "tv": {
         "file": "paper-tv.webp",
         "range": 1,
-        "peak": 0.5604181289672852,
+        "peak": 0.5400374531745911,
         "preview": "paper-tv-entry.webp"
       },
       "entry": {}
@@ -315,18 +315,18 @@
       "room": {
         "file": "tape-room.webp",
         "range": 4,
-        "peak": 2.2502236366271973,
+        "peak": 2.217041492462158,
         "preview": "tape-room-entry.webp"
       },
       "lampOff": {
         "file": "tape-lamp-off.webp",
         "range": 1,
-        "peak": 0.6908788084983826
+        "peak": 0.7045843601226807
       },
       "tv": {
         "file": "tape-tv.webp",
         "range": 1,
-        "peak": 0.17596784234046936,
+        "peak": 0.21305343508720398,
         "preview": "tape-tv-entry.webp"
       },
       "entry": {
@@ -433,171 +433,171 @@
   "model": "study-meshopt.glb.bin",
   "modelEncoding": "gzip",
   "transport": "webp-gzip",
-  "bakeBuildId": "53bc2454c06b0acc",
+  "bakeBuildId": "1dbfe49efd6dfd6a",
   "packingScriptSha256": "b624e942e8f03e300cfa84f89dba8a8dd6b630110efbc9df079f6418af0caeb4",
   "homeFilm": "/room/film/manifest.json",
   "geometryTransport": {
     "source": "study.glb.bin",
-    "sourceSha256": "43326e9c3d1d062c50d0a4dc22abacac9c71d857dcae29e8a626fbaf1624262e",
-    "sha256": "ed35c02e54fde0192a3e8330ec1d2f58bcba083dba57debd4c5a1a1befc12eb4",
+    "sourceSha256": "fba2ecbcdc83c2c2301fec7038250b829a0cbb5333c1fd1130d85eed169e75b5",
+    "sha256": "7aa294f8b93f5d2e0f459b184f986b4fbbcb408e3d7546172bf2477deca31bad",
     "extension": "EXT_meshopt_compression",
     "normalBits": 16,
     "uvBits": 16,
     "positions": "unchanged",
-    "nodes": 889,
-    "sourceBytes": 5679841,
-    "bytes": 2904190,
+    "nodes": 895,
+    "sourceBytes": 6131006,
+    "bytes": 3181986,
     "scriptSha256": "0372edb0acf6cd9f7089367f4ac6185ae1f960cb18de1934cb8300ebe070535e"
   },
   "entryLighting": {
     "sources": {
       "architecture-room.webp": {
-        "sha256": "dee88a8d656213ce4673548517a4638bf284a7ebec103d284a079cf474728f5f",
+        "sha256": "1573936bfbbb5f8bcc3bbafc3cb565c519f81780d42a91eb4d827056cd79fa56",
         "range": 4
       },
       "architecture-tv.webp": {
-        "sha256": "1a2ff94b378b2484cf7e9e224f2cc11f2e31526e9d7639d59a0e5ccdf15c837d",
+        "sha256": "cf513bcf406c63ed8339238b59ab7a83c4527ba902523992626cc6593871b6f0",
         "range": 1
       },
       "architecture-normal.webp": {
         "sha256": "04390b767ba1ba3e616f246f3035002d40be19aea2efee0c96083dbf844749df"
       },
       "architecture-orm.webp": {
-        "sha256": "6dd64e86eecf5a23a3d4d45625376fcd281cf1404472c760a04f599410c6dcfe"
+        "sha256": "22b2bad3f68204420b7a4c2052599de3e206755be84097e43258e0a51406477a"
       },
       "desk-room.webp": {
-        "sha256": "8a1c00732b1bf5ecd4d0b5ac498fc8d7bb19904351a0f27df6a96e45cd6820ae",
-        "range": 64
+        "sha256": "da83d5b51cf8cfe76d0e4d7d83edb21b98b9e01654658fe021070931be78b6ff",
+        "range": 32
       },
       "desk-tv.webp": {
-        "sha256": "56894a16ada1c32a3fa83c741149c9ad57064d4c7e724ddbf09cc2b9f1488ad7",
+        "sha256": "1f52f91fd43cea8a3507705101ba669166db1a9f03d88948b7da8c2259dc3b1c",
         "range": 1
       },
       "desk-normal.webp": {
         "sha256": "d4da61f8e0402d261205e967e6a437ed9a632e7e32128f39a8d917f66a738a74"
       },
       "props-room.webp": {
-        "sha256": "e668c401501d1ce5fe05eee34169fcd24b90243d5a61326c24dd731ec25a6d91",
+        "sha256": "b5097df97759d604a045bc2c0c17f2eec86b2a8468d97127aeed71a04f479a3f",
         "range": 64
       },
       "props-tv.webp": {
-        "sha256": "0584eea1db4bd635a3a10c974cedaac1fbb8445dc51f62107cd7356146cf1100",
+        "sha256": "f4fb1097d898cc24f0688b8cbecfba8ccb025a67d64fd208a3d5b6fedf194f54",
         "range": 1
       },
       "props-normal.webp": {
-        "sha256": "1686cf72235774557e6e4a63c5336f932bdfd3ec49ed6291df838baf37f5a4a5"
+        "sha256": "daf8f3d150fdb18c59a9ccfb15b42122696233140d2e38127176abcc7c341891"
       },
       "props-orm.webp": {
-        "sha256": "273961e8ce2ffcd2e1f679b4184e124d11e618697a9296f126d346e4863463fb"
+        "sha256": "3cfd4251d21203468e2f092733ad0ad872dd10f00d4ce2929d30dd861075ecea"
       },
       "lamp-room.webp": {
-        "sha256": "738e8e02040fc05367c1bc72f055a041664f431d79e0183e3e90918b5c4b22f7",
-        "range": 1024
+        "sha256": "8ec56d28a74682cc2ea0f5c8bcffc5bdb684e68bad533317f26bb14028e85897",
+        "range": 512
       },
       "lamp-tv.webp": {
-        "sha256": "0cb0ebb2fef4ff54d88c878af8ec5409da0aa45acfbc74a8091d5a6026c28c2b",
+        "sha256": "93855668e1483a1761183236f00b0929712ff2bd0993dc0305e85d6eeba1ffa1",
         "range": 1
       },
       "lamp-normal.webp": {
-        "sha256": "2c2aedbe4791a310ba1d45e7e16b45eb4fe734fb45e236452612115e882650e8"
+        "sha256": "33eaa30ef641c73329e838d94d1c4f9c3d7d1b02d15eeb46d23824b9577957d7"
       },
       "lamp-orm.webp": {
         "sha256": "1c5a879c4107dd53ac3776d03cb605d00e13ca1b152cd9eaf35c6836dba08714"
       },
       "curtains-room.webp": {
-        "sha256": "dce3a0bd1d59497869883b3c7708606fe04f5ffa31be1479b671263bb9cdfc38",
+        "sha256": "3c51b32dfe98d6c08e43246878171d38819ab99fbfa1620c76f3d75b0de37a99",
         "range": 4
       },
       "curtains-tv.webp": {
-        "sha256": "025ffcd74f6c74f77e1c1e1b16a5b201d53b84af665dd33e4afaf7a4222787d3",
+        "sha256": "e8e0fe1370b3b2949643c5a2a9b54b342bdd24df146d23a76797cf29560af45a",
         "range": 1
       },
       "curtains-normal.webp": {
-        "sha256": "4b5c4aa661f63a187d9feafe2244aec153945f04a561b46de0c6879720d9212a"
+        "sha256": "442c642e336a77fb677ce27f37ac16ab0ff194f6ed189c8588b66fe9a029da0f"
       },
       "curtains-orm.webp": {
         "sha256": "9225ff494aca671b8ad3281933d81f2af1f64d410296795444500622b3a975be"
       },
       "window-room.webp": {
-        "sha256": "854710abd190ba5b7f570bb1234bade914fb85a2d001933aa8adc759a2aedbac",
+        "sha256": "f2621ba7ef423c0391e935952c3393d23af63c7a237b6a46a020a527158d2b2d",
         "range": 8
       },
       "window-tv.webp": {
-        "sha256": "6744b4572a5912e4a4d243a7f2260e95a06b0308c6d84d912eacd437301806ea",
+        "sha256": "cf589e9859c0c3a1f228b7963472629364d5ed45b5f78d67af4e9205bbe912ef",
         "range": 1
       },
       "window-normal.webp": {
-        "sha256": "23b5fcb9155374fc49f03c03cd95c8f616aaea67dcf52e8dc33a21e45fd5a782"
+        "sha256": "58a710fd2e6a54a5a02caffafb719627fb8cf27eca03ca8066f9f47e660de30a"
       },
       "window-orm.webp": {
-        "sha256": "737f1ace291ec33ca738863ada94e06159e81dc9961a3dddde73421cf7440738"
+        "sha256": "962bbe5ca4e56647abbea5e0096a503720c3616910f2dd275e276d423c3ff358"
       },
       "walls-room.webp": {
-        "sha256": "6496cadc420c05f911c4f3ec98abf1635e1be39e0b40b0b8f14bfbb7cc4e4f5f",
+        "sha256": "7ea9657147f82b4ad1954905d924a015de1133dce24cc97e7a9a071d20e069c5",
         "range": 2
       },
       "walls-tv.webp": {
-        "sha256": "254ddbc73c5b72131392c11822b5f79b7c27e7472690002bf653656e6ef4a8f4",
+        "sha256": "477ad04f4ca1787db2976e430a7d0bac37030c9cc3ae0042c00fbc885a2a0b06",
         "range": 1
       },
       "walls-normal.webp": {
         "sha256": "0014038bbd78e0b1b4c8d6366a43f417dbce8cf9ff553ebac6effa17ea8141e5"
       },
       "walls-orm.webp": {
-        "sha256": "50f6512f80a698e947e053b7ac60645c514d049c9b44a63eb70c285152bd988b"
+        "sha256": "3d650285d9fffd84da20ab45ad08d6c49e2b9c18ec928f57d6befe8355c60025"
       },
       "ceramic-room.webp": {
-        "sha256": "85f9181e9249171e74afd04d2ad500ae3b52e1a855d1b87aca21c44db666ca15",
+        "sha256": "9cf23a7cef09e23b45aed63534be2e5faf6a0215bcf2ad734826dce3316c44f0",
         "range": 64
       },
       "ceramic-tv.webp": {
-        "sha256": "e6e326895a41ec5a4819ff9957c5f116a98b6d808b702c4ee8f98104efe410d6",
+        "sha256": "0b2cb389713e143f6b48eac730f7c27045626d572918cb62d0eca2e89fbdfbf9",
         "range": 1
       },
       "ceramic-normal.webp": {
-        "sha256": "83899cffe4cb6bc94dbbf2a987efb5d031ad9f74286c66859f83acace09ed29f"
+        "sha256": "d67a8470458d72dd069ce033f14eb6e9dd2da12c2fb58ff850e4d3e22601bd7f"
       },
       "ceramic-orm.webp": {
         "sha256": "fc28b52034a1d8beea11dc6940b77133cf67bb4d60767632f25c1ee4cdbada4b"
       },
       "equipment-room.webp": {
-        "sha256": "21beb43989bb7f151d753cd4094120e32bcac94aa314b2ce2e6bf7ec02cf5959",
+        "sha256": "fa1ff135995a4a4231b1ac15a6d2b226e4489833ad48f0d62299e6437581b7f8",
         "range": 64
       },
       "equipment-tv.webp": {
-        "sha256": "ca5d56694c919c4b74328fbf24b719c02d0c0241b2a5f39a5c4be528ca00c7d7",
+        "sha256": "63d1234982de16cb2249371795b416e99907333f2dec9c78de826fe532421605",
         "range": 8
       },
       "equipment-normal.webp": {
-        "sha256": "59c21484218694a2be332d3cf7e94f184959bffe70a6942b13161f5eb6cb3ac4"
+        "sha256": "59377d1afb64ce8ba1a4e37d81ca9a17ddb0d716c8d083b7ed42549587d17aed"
       },
       "equipment-orm.webp": {
-        "sha256": "79798fd44c01c4dd237ba787e1d38efac7584b5ba2770483693153d4c7d24b4d"
+        "sha256": "2d7ccebeb0e6e9b9b591c99ebb423f1a6c93d56a63d347f4c0b369e540bc21ad"
       },
       "foliage-room.webp": {
-        "sha256": "f8e69ce8e149020371f68ba1080e89dbca63ce6866e080a815fad754716e310b",
+        "sha256": "b3cbe83c5e542edf1b8e3470bb520497e6ab528846b75055e1b6102acbdd37f7",
         "range": 256
       },
       "foliage-tv.webp": {
-        "sha256": "10095dc94c6daf8b481e5ea51a46d90a11fd4182cfd586af3101e03cc0f7004a",
+        "sha256": "46870ef811b1253a5e871d4e0367e8ea600ddf84b41188d470bafd6361a31eac",
         "range": 1
       },
       "foliage-normal.webp": {
-        "sha256": "d9268736dbb2591f44e8a14257a58c72e9aed9e8857d9b1f541f38d1eb96c459"
+        "sha256": "a880766b7aa99839ff60c5602b8dc8cd95a67f9aed18c7626f451b93f97c5e01"
       },
       "foliage-orm.webp": {
-        "sha256": "ce97e7208747823889301976d66387f6802dc1453af4736361e0fa516fd04d8b"
+        "sha256": "5d79104669045ee33d3326f23b5395599a16fe3f81a5df8c96b2e11eafdc421e"
       },
       "paper-tv.webp": {
-        "sha256": "6cb0935ffc2994423b49ba48e8a426a87514c84cb9e37170c0dd714a76514815",
+        "sha256": "5ca87a38eab20156e6664e9cf50337e28b5827ba4cbc57bc3c2891aa08b0489f",
         "range": 1
       },
       "tape-room.webp": {
-        "sha256": "0efed6348346b0e5dda733bf04829fe2796b312601a7ff3c186a584fca42ede8",
+        "sha256": "b78d9466841b205c1faf478d6ba3e71843098e1d104bec7e01314e916076fb20",
         "range": 4
       },
       "tape-tv.webp": {
-        "sha256": "3bed2ac80d2f9989ba03078119bdf9bd9c931eccfae496292d8319dc392f357a",
+        "sha256": "b44b6c3881fcc26ed6f2c18dd747cfdb7ae3c098c6d04d0252e56d2a5d0059fb",
         "range": 1
       },
       "tape-normal.webp": {
@@ -608,54 +608,54 @@
       }
     },
     "files": {
-      "architecture-room-entry.webp": "4c7e080ff407f8297e8aba7aaf77e5207b30d0bb7fee30321cc80ea31f4c6a63",
-      "architecture-tv-entry.webp": "8748532e1fca81319e09cd1995a136a79a572f1eb9e3a7ba7514e5fb77d18395",
+      "architecture-room-entry.webp": "77a469ec27fb07f49a03fc27fda98ee72794b09225653d753ca2a73cb1df1df1",
+      "architecture-tv-entry.webp": "2242acba3e870f2bd3a6bf4eae1b79d7ab0a16719bfb014723c88860c0d6c928",
       "architecture-normal-entry.webp": "a5df79ee7b6531047ae1aebabf9bb9b22d8a9739368f15f334800c1ea8d5387b",
       "architecture-orm-entry.webp": "a9cb2ced65d085ffc8938f713397448bc6398a1df1876c1d358942de221fae7c",
-      "desk-room-entry.webp": "ffbc4a430dcde529d8087d0fb25411b7e961d3323c398549a70f96d9a8aad1bb",
-      "desk-tv-entry.webp": "63d2273ebb98f7a8a7cb9ee7bfcab16fbea09110cb1da89be801a34a33955e73",
+      "desk-room-entry.webp": "46e872cfd2724fc8f39f8c758d2d8c1a4f8bda9e3db52a95b1911e8ac3a34053",
+      "desk-tv-entry.webp": "5c061a5494d3bd7020780d3ab6a8502f097709c87654543f73bf58cccfe1d004",
       "desk-normal-entry.webp": "9ec6077e4508236bc5402383f2cd597360dba8bbc4da021cd93e34b079b799ee",
-      "props-room-entry.webp": "9941d0c5099160549540b753f23ef4ae44a1e49e98b530c79b5470b58a05918e",
-      "props-tv-entry.webp": "ff046e9127b16bd92c378b6f6bee3eb0e4edbea642918db42d4d448318c8c657",
-      "props-normal-entry.webp": "00366d3fe801e80f37fab6fa87df0124b6836ba360711995eca0e662ce017342",
-      "props-orm-entry.webp": "cd08f693ad3d44c92cdb19645879c672f74de3440737325a9821546f0dfbcf01",
-      "lamp-room-entry.webp": "16505c1871d3d9dab0cfcde3818d16c157804bac35b23d46ff81d8e36941fd65",
-      "lamp-tv-entry.webp": "c0a141636a58657a13f72dd5d99c8e8b9740205e64df511dda60174cf048e0c6",
-      "lamp-normal-entry.webp": "0a6ef12ceb35829ee963e605d0a50dc0a70732e437d3210ae7d8656abfe2b3ee",
+      "props-room-entry.webp": "5ceb504880b42385548b37be896111dcc6a0590d2e15ba3b4be5302715fc6b03",
+      "props-tv-entry.webp": "111ef402063ca5915dc0eba9d3416cdd93bcec44249f1c3b7aa2a2151c8f28d2",
+      "props-normal-entry.webp": "260501a9986e91b435e590c2b173e0e9b2d071d4ceac69d4f7161cc07cf74b21",
+      "props-orm-entry.webp": "508453dd480d6875f645e87177483a8ee11e1530135800465ae977faf8a3db5f",
+      "lamp-room-entry.webp": "ac022ca990d15fdd26272efc77068cc8b631960d6d0a563518a8c3f67f303d65",
+      "lamp-tv-entry.webp": "563812fbe2bc8947d948fed763c0235289a2bce238f0d0451ff10fb3e3b37fb5",
+      "lamp-normal-entry.webp": "48303fdfc7d0309ccdab1e09eda215433cc0f597811042df8bbf361a736cf018",
       "lamp-orm-entry.webp": "4b8f49d3834c2083b5793daa96e0324a14edbb7cec6b72d0fdaf85bfb2bcaea2",
-      "curtains-room-entry.webp": "a3c4acdb11c6c4ef3510c360094f2ae209ec0962ea69a1c4df4d4994f3c9e953",
-      "curtains-tv-entry.webp": "eb2ea7c70d91095f9b63b395d94891e851100563c0b13e16ae646c5432bd3a6f",
+      "curtains-room-entry.webp": "1f052b7c62e71e4811d0f24ddda446df2dcbfbeadcbbc64ea779bb70aed6ed6c",
+      "curtains-tv-entry.webp": "ae8c7e9578ef3e9e14e905e934362861b78efc9e5df90d14317c7b9dabfb36d0",
       "curtains-normal-entry.webp": "3bac8a93feca8f6dd8d6e8bbe787864785f9ac7ed267a33d4aa051c19ed46bf0",
       "curtains-orm-entry.webp": "b496397622aaa04a06208e6186589240e3192c1b8841f3df403249a2f4dbe5b4",
-      "window-room-entry.webp": "e832b53b9b3783d226615aa07a30b25a0b3d29a6f05f324f5837f25b9945ed30",
-      "window-tv-entry.webp": "8631093f26997292a80b90a1fe2b3abb4a8ad47b077ed6edd24a73665597413f",
-      "window-normal-entry.webp": "7e28e6292a189b08ba58a3a8b53f157d8b55cf17d765ad52b5528fa32fcbdff9",
-      "window-orm-entry.webp": "107815802a2d22492bef41db825fc224070641811876d000adbf9cb52ac85bb8",
-      "walls-room-entry.webp": "f77ae86e3580892658bc4aedb1c28223e48beff4e90274920058c13d01fb09b2",
-      "walls-tv-entry.webp": "da222a0f5904b7ccd89b941743f38185876176573c5ec770916cad1a403ea63b",
+      "window-room-entry.webp": "dd13bf9ea662001a095fb1f7c726cbf89655bffe19fcbcf1ec7c9a4f32d7e09a",
+      "window-tv-entry.webp": "ce155df8e610786b4bab005ec25eea2737352a85de106cc254ed640f28e067e9",
+      "window-normal-entry.webp": "fe8200facaac3641de27e44c0fe38770ab05aab2ceacb38a671626438978cc09",
+      "window-orm-entry.webp": "1aead7d7cf85eee10fd6d88f50d1dce3d743f2ba8caba5d571c3c328fbfccae3",
+      "walls-room-entry.webp": "7da748e223ebe00a2113554b5c8d100e961581631dbea62b7e54c1dd7b143436",
+      "walls-tv-entry.webp": "7197abb76f12f3025ed5d942914de7206b974d6cafc609c6dd929aaba752f468",
       "walls-normal-entry.webp": "9f9aefda6f7ae63d20f230488ef6e798b06741056bf63bcc6fd822aa52fdebe9",
       "walls-orm-entry.webp": "6a4cbaebac0fe0966b408a080242f33fdec1627e9d55a329fe62dc4bf74e0458",
-      "ceramic-room-entry.webp": "03af03c62feb1a34ee616ea7896cc2f404d6e6006e4bc1f9000e2acb88278815",
-      "ceramic-tv-entry.webp": "1986b3ef87d0a590c7d6a6f185f5aa3386cc12e71360f31849c9b1c2d41df328",
-      "ceramic-normal-entry.webp": "19fd4e631585b9eab54225f38e756b9af86f9f59aaa03861448d4736e58f9aea",
+      "ceramic-room-entry.webp": "5bfdd30869e0ac50c374552b78f9c55bb8bbb2bafedf132e816f78307e367124",
+      "ceramic-tv-entry.webp": "50f9036bd64baf9fb79130ed0675624d8259d006cc38aae5efd1562e987ccfce",
+      "ceramic-normal-entry.webp": "843ac4aa8efff24c32269f808a0868e3e802f297daf31a71d517b9ebef5dbd0b",
       "ceramic-orm-entry.webp": "8ee37457c54cbb6964c72a9ce4e0cd4063ab01125aa44376d7de66d04485a46a",
-      "equipment-room-entry.webp": "7086097b1906fb3b480b99c0b2c90d5a110cdb38d8b4115dc139ad8f7b0864ea",
-      "equipment-tv-entry.webp": "26285fa03dd469012763937c0528ee3ff67d9b2308df57bb7dff34f41a88de80",
-      "equipment-normal-entry.webp": "506825325479c60b0ed9336099529bd17763b222a9ddc0661bd6949bf1cb89d0",
-      "equipment-orm-entry.webp": "73c456a8bb87e3da7a32b5d4f23d5edb6563289745e84710b683bb4ba63ff586",
-      "foliage-room-entry.webp": "cfb3b78a9325fe9afdcfdf2a7deb2bee2968e4048c417bed11eb25c432cda71d",
-      "foliage-tv-entry.webp": "2d6bcfe8c288dea4a945780b0c6d3dd90a69ec110af6d22ab19b761985a8a1b3",
+      "equipment-room-entry.webp": "03fb517080f302eb26b1d7b6004ec4b12636fc57174795968bef6314579f1615",
+      "equipment-tv-entry.webp": "0805f73b5a3ee7d0ba66e96956730667a9372ac1c895e189305703691ddb13f0",
+      "equipment-normal-entry.webp": "06e13123c7d2e69e728d0330bb6c8afc01155106368df39d4b3f6a92c0268bd9",
+      "equipment-orm-entry.webp": "c5305dadeb254b95a407a54c3d2acd8faa0431ad995d29f3511016fce7397d23",
+      "foliage-room-entry.webp": "ca3c06bb6aa48cbef3b07cca8a76c7c30baaa15569396ad25b90d266bb29996e",
+      "foliage-tv-entry.webp": "78fa114d761cc787df1ac758f87e273336bb9953220fd7950b0961491a3263a1",
       "foliage-normal-entry.webp": "60e9dc1e3bae19523e6a887715d2c6d91eef2c6ae5b828bb25b72cf039588ed9",
       "foliage-orm-entry.webp": "eec26d6b275d7336fded78a71d6c15c47e098337c0be39322b0857e3309ee3d3",
-      "paper-tv-entry.webp": "9bbd9fd9288752452e9ad65695d341c8bf808cd349d2dfc363f0e0869af8b0b7",
-      "tape-room-entry.webp": "794c94c3bc5bded85f3f12fbd55654dce5a53aaad751e240ea739d5f491fc87f",
-      "tape-tv-entry.webp": "009aeb9a09fd8d04fb4093d1c9feba596f35e90a17f2ea7b370cd20cc8d44901",
+      "paper-tv-entry.webp": "1d3df18291bbbf341c8bd33ee95d904e5820a9486e826006db45fbe9ea43fdea",
+      "tape-room-entry.webp": "75c66f195bda1cbe8c327441fa5622ae1398d54bd7c06fb8a1484591f753de12",
+      "tape-tv-entry.webp": "85ee0a31fea6a9b8d5eec291e960b39984dfa0196bb172b8de02bcef5113a4a7",
       "tape-normal-entry.webp": "bf620c8cf33c2d5bf9ff2b7d87e5cc9cda14f1bb78f40606c4df9a3a89ac000e",
       "tape-orm-entry.webp": "972ef774159ba771b94a5b434d42fae86d22ddcae23751d940e6730f0443da5c"
     },
     "scriptSha256": "c14b27fcd9ec041d23dda0466c662ccb9be657ea6d7b625a95d01ff315b315a0",
-    "fullBytes": 7940662,
-    "entryBytes": 1624034
+    "fullBytes": 8164428,
+    "entryBytes": 1656402
   },
   "reflection": {
     "file": "reflection-cubeuv.bin",
@@ -663,83 +663,83 @@
     "width": 384,
     "height": 512,
     "threeRevision": "186",
-    "manifestSha256": "6f6f14763f359684cd93ea5d6a6c899f54aef175ef3167b14abe0cbe6a754095",
-    "sha256": "539ea330d00d7d4f0eb207335834025fbd2c713dc0ba74e64810dbd51778f1a4",
+    "manifestSha256": "7d5a182e8a54ceb8e26ea128c07c2c2d1970a5a8c8c17f487b5ef4ee49a48f2b",
+    "sha256": "b3dfffd31f86287cd25c9162ee657b8efbf31cd84946995c5bcdf7e5e36a6c98",
     "sources": {
       "node_modules/three/package.json": "f9c474a27c920b9435353a6235968f4453436bee0444fac7e5fd289c8fa463de",
       "public/room/materials/architecture-albedo.webp": "92da7a6eeae5b8e97f2b55697711b1be38b082fe606f17e96cfbb2a215a59a09",
-      "public/room/materials/architecture-lamp-off.webp": "2533ca492433de6ab972f58bce6cab114c87fd1eb68437ba10bcd2c5edfadfbf",
+      "public/room/materials/architecture-lamp-off.webp": "4924fa9f6e1b862ad27244e31dbd96730e3b1c637f1a77efe1b3cd893931f422",
       "public/room/materials/architecture-normal.webp": "04390b767ba1ba3e616f246f3035002d40be19aea2efee0c96083dbf844749df",
-      "public/room/materials/architecture-orm.webp": "6dd64e86eecf5a23a3d4d45625376fcd281cf1404472c760a04f599410c6dcfe",
-      "public/room/materials/architecture-room.webp": "dee88a8d656213ce4673548517a4638bf284a7ebec103d284a079cf474728f5f",
-      "public/room/materials/architecture-tv.webp": "1a2ff94b378b2484cf7e9e224f2cc11f2e31526e9d7639d59a0e5ccdf15c837d",
+      "public/room/materials/architecture-orm.webp": "22b2bad3f68204420b7a4c2052599de3e206755be84097e43258e0a51406477a",
+      "public/room/materials/architecture-room.webp": "1573936bfbbb5f8bcc3bbafc3cb565c519f81780d42a91eb4d827056cd79fa56",
+      "public/room/materials/architecture-tv.webp": "cf513bcf406c63ed8339238b59ab7a83c4527ba902523992626cc6593871b6f0",
       "public/room/materials/ceramic-albedo.webp": "28bf13c7acc7722547fab8af52b8bc3bae4e39a2e4b6def0c9103c972ed916b0",
-      "public/room/materials/ceramic-lamp-off.webp": "5b0a1f4bfd5f426c5cd73e3f29041b42b7e59b839dfec8ba26388d2b77cd5b20",
-      "public/room/materials/ceramic-normal.webp": "83899cffe4cb6bc94dbbf2a987efb5d031ad9f74286c66859f83acace09ed29f",
+      "public/room/materials/ceramic-lamp-off.webp": "b0fb6c03ced81cf465879c7ea7f30506bcd4e92f828a74ff919082b00213c034",
+      "public/room/materials/ceramic-normal.webp": "d67a8470458d72dd069ce033f14eb6e9dd2da12c2fb58ff850e4d3e22601bd7f",
       "public/room/materials/ceramic-orm.webp": "fc28b52034a1d8beea11dc6940b77133cf67bb4d60767632f25c1ee4cdbada4b",
-      "public/room/materials/ceramic-room.webp": "85f9181e9249171e74afd04d2ad500ae3b52e1a855d1b87aca21c44db666ca15",
-      "public/room/materials/ceramic-tv.webp": "e6e326895a41ec5a4819ff9957c5f116a98b6d808b702c4ee8f98104efe410d6",
+      "public/room/materials/ceramic-room.webp": "9cf23a7cef09e23b45aed63534be2e5faf6a0215bcf2ad734826dce3316c44f0",
+      "public/room/materials/ceramic-tv.webp": "0b2cb389713e143f6b48eac730f7c27045626d572918cb62d0eca2e89fbdfbf9",
       "public/room/materials/curtains-albedo.webp": "01c3c3150b99d9d7d428744a5fcdc4beddc34a2a80818a59e1227dbe2818c7c8",
-      "public/room/materials/curtains-lamp-off.webp": "a2386cdcf87aba1d0cd3eea926912120145da9c439789faf37283409bc8942c2",
-      "public/room/materials/curtains-normal.webp": "4b5c4aa661f63a187d9feafe2244aec153945f04a561b46de0c6879720d9212a",
+      "public/room/materials/curtains-lamp-off.webp": "6dad9de421d70bf22af02390857732f0986f646c31c9ed2795a5ed770ca0f53c",
+      "public/room/materials/curtains-normal.webp": "442c642e336a77fb677ce27f37ac16ab0ff194f6ed189c8588b66fe9a029da0f",
       "public/room/materials/curtains-orm.webp": "9225ff494aca671b8ad3281933d81f2af1f64d410296795444500622b3a975be",
-      "public/room/materials/curtains-room.webp": "dce3a0bd1d59497869883b3c7708606fe04f5ffa31be1479b671263bb9cdfc38",
-      "public/room/materials/curtains-tv.webp": "025ffcd74f6c74f77e1c1e1b16a5b201d53b84af665dd33e4afaf7a4222787d3",
-      "public/room/materials/desk-albedo.webp": "a3e265964687a748624c9d3efa227d5ff0ccfa1e999ddf2ec4ea5d3108b30c8f",
-      "public/room/materials/desk-lamp-off.webp": "a200abe60a1b0a025d6faa6874f04a5f4fb68d1eb86b2ed915b6922cecd99182",
+      "public/room/materials/curtains-room.webp": "3c51b32dfe98d6c08e43246878171d38819ab99fbfa1620c76f3d75b0de37a99",
+      "public/room/materials/curtains-tv.webp": "e8e0fe1370b3b2949643c5a2a9b54b342bdd24df146d23a76797cf29560af45a",
+      "public/room/materials/desk-albedo.webp": "638d87e882739d708c971e5e0f4f2dfc4c18cefa6795b7638ae2a65dd5bc53d7",
+      "public/room/materials/desk-lamp-off.webp": "2454a69e3c9e9ec135b0adbf68726f0497d5e6aa43fc08286986e3795f8848f1",
       "public/room/materials/desk-normal.webp": "d4da61f8e0402d261205e967e6a437ed9a632e7e32128f39a8d917f66a738a74",
-      "public/room/materials/desk-orm.webp": "3371a0e9e219c06728231b4a826b834dbdeecb552148cb52527f9244dc24e29a",
-      "public/room/materials/desk-room.webp": "8a1c00732b1bf5ecd4d0b5ac498fc8d7bb19904351a0f27df6a96e45cd6820ae",
-      "public/room/materials/desk-tv.webp": "56894a16ada1c32a3fa83c741149c9ad57064d4c7e724ddbf09cc2b9f1488ad7",
-      "public/room/materials/equipment-albedo.webp": "8fd715e0687035ad1f8d0983e8d272a28212b3c1b1123feed6a710037ee20388",
-      "public/room/materials/equipment-lamp-off.webp": "d9c9624207db422988bfdfbac7cfae11b74cb16646fe0e8d8a9ec1bcd0ccdf42",
-      "public/room/materials/equipment-normal.webp": "59c21484218694a2be332d3cf7e94f184959bffe70a6942b13161f5eb6cb3ac4",
-      "public/room/materials/equipment-orm.webp": "79798fd44c01c4dd237ba787e1d38efac7584b5ba2770483693153d4c7d24b4d",
-      "public/room/materials/equipment-room.webp": "21beb43989bb7f151d753cd4094120e32bcac94aa314b2ce2e6bf7ec02cf5959",
-      "public/room/materials/equipment-tv.webp": "ca5d56694c919c4b74328fbf24b719c02d0c0241b2a5f39a5c4be528ca00c7d7",
-      "public/room/materials/foliage-albedo.webp": "4e644c5d8e86b0e070f901b6eecf66ecdd00e9b92ad8eae2b68c3062999753cf",
-      "public/room/materials/foliage-lamp-off.webp": "942dd6693a708684e04bef148a0bbb665285d51d1cdf7e5e2c8033c54d179c39",
-      "public/room/materials/foliage-normal.webp": "d9268736dbb2591f44e8a14257a58c72e9aed9e8857d9b1f541f38d1eb96c459",
-      "public/room/materials/foliage-orm.webp": "ce97e7208747823889301976d66387f6802dc1453af4736361e0fa516fd04d8b",
-      "public/room/materials/foliage-room.webp": "f8e69ce8e149020371f68ba1080e89dbca63ce6866e080a815fad754716e310b",
-      "public/room/materials/foliage-tv.webp": "10095dc94c6daf8b481e5ea51a46d90a11fd4182cfd586af3101e03cc0f7004a",
+      "public/room/materials/desk-orm.webp": "765290db3b6f4c23a2e78e83b8cddad31192f78ff3d0a88e5c3d234ae786182e",
+      "public/room/materials/desk-room.webp": "da83d5b51cf8cfe76d0e4d7d83edb21b98b9e01654658fe021070931be78b6ff",
+      "public/room/materials/desk-tv.webp": "1f52f91fd43cea8a3507705101ba669166db1a9f03d88948b7da8c2259dc3b1c",
+      "public/room/materials/equipment-albedo.webp": "f61d0d17762fa46268885cda79311ef3bf1b619a89314e0f36cb18f2fc14e974",
+      "public/room/materials/equipment-lamp-off.webp": "c44d25b341e12068ff1cec2f2ceb5d10d1f67899ac2f090755f54f432b46f530",
+      "public/room/materials/equipment-normal.webp": "59377d1afb64ce8ba1a4e37d81ca9a17ddb0d716c8d083b7ed42549587d17aed",
+      "public/room/materials/equipment-orm.webp": "2d7ccebeb0e6e9b9b591c99ebb423f1a6c93d56a63d347f4c0b369e540bc21ad",
+      "public/room/materials/equipment-room.webp": "fa1ff135995a4a4231b1ac15a6d2b226e4489833ad48f0d62299e6437581b7f8",
+      "public/room/materials/equipment-tv.webp": "63d1234982de16cb2249371795b416e99907333f2dec9c78de826fe532421605",
+      "public/room/materials/foliage-albedo.webp": "5b97ef858ac31ceb2ade8bc66d8b28549a7f357407fe57ce50db6cc8aa98f861",
+      "public/room/materials/foliage-lamp-off.webp": "8b6da27d3868d8ef7f73272ac6e1b19da1ef2bdf240f44262397fbe2437e02d3",
+      "public/room/materials/foliage-normal.webp": "a880766b7aa99839ff60c5602b8dc8cd95a67f9aed18c7626f451b93f97c5e01",
+      "public/room/materials/foliage-orm.webp": "5d79104669045ee33d3326f23b5395599a16fe3f81a5df8c96b2e11eafdc421e",
+      "public/room/materials/foliage-room.webp": "b3cbe83c5e542edf1b8e3470bb520497e6ab528846b75055e1b6102acbdd37f7",
+      "public/room/materials/foliage-tv.webp": "46870ef811b1253a5e871d4e0367e8ea600ddf84b41188d470bafd6361a31eac",
       "public/room/materials/lamp-albedo.webp": "7156254a69c2a1087e4df37212dccc7a2094591ae66740186e948bba74c6d116",
-      "public/room/materials/lamp-lamp-off.webp": "1b21a23565e951bd82415773205955ae1a71c28fc6c4c192c30357bd80f62ea6",
-      "public/room/materials/lamp-normal.webp": "2c2aedbe4791a310ba1d45e7e16b45eb4fe734fb45e236452612115e882650e8",
+      "public/room/materials/lamp-lamp-off.webp": "79910b74f716439d8972df2788770e88945e9d40e36bad0073c82c60608377e9",
+      "public/room/materials/lamp-normal.webp": "33eaa30ef641c73329e838d94d1c4f9c3d7d1b02d15eeb46d23824b9577957d7",
       "public/room/materials/lamp-orm.webp": "1c5a879c4107dd53ac3776d03cb605d00e13ca1b152cd9eaf35c6836dba08714",
-      "public/room/materials/lamp-room.webp": "738e8e02040fc05367c1bc72f055a041664f431d79e0183e3e90918b5c4b22f7",
-      "public/room/materials/lamp-tv.webp": "0cb0ebb2fef4ff54d88c878af8ec5409da0aa45acfbc74a8091d5a6026c28c2b",
+      "public/room/materials/lamp-room.webp": "8ec56d28a74682cc2ea0f5c8bcffc5bdb684e68bad533317f26bb14028e85897",
+      "public/room/materials/lamp-tv.webp": "93855668e1483a1761183236f00b0929712ff2bd0993dc0305e85d6eeba1ffa1",
       "public/room/materials/paper-albedo.webp": "02aec3a717491f3c6db4c98aa9c2493fafb7ddd703e5ba9462cb286cca7f9c1f",
-      "public/room/materials/paper-lamp-off.webp": "e30029bbcef68d00373271ba87695b2db3e8f95139a630404eba8d67a49bc479",
-      "public/room/materials/paper-normal.webp": "c686610556e8ac01aefcd2de387aedfd6d9b23f9a9172e2cb6ce7428f6bd171e",
+      "public/room/materials/paper-lamp-off.webp": "a6bc57489d40e9f34e14bb92b975a533cf177bb7ef661ff31258e09c51917862",
+      "public/room/materials/paper-normal.webp": "55898304161cff529fa054ffddbd95e50df6640f803fd4ec1d0760d4180c341a",
       "public/room/materials/paper-orm.webp": "9e345645507860d1c274fb2011d41f4421a664d02e96f2c9d2f1eba0d992483b",
-      "public/room/materials/paper-room.webp": "94aacb19de21b5f69eab846c0a126d1fe1028ed9c8fea163d036cf3ca2d2933b",
-      "public/room/materials/paper-tv.webp": "6cb0935ffc2994423b49ba48e8a426a87514c84cb9e37170c0dd714a76514815",
-      "public/room/materials/props-albedo.webp": "ea033a2abcb788c0cef8e895a9cc5cee3be6678c25cefa8aa8cf8e448f708308",
-      "public/room/materials/props-lamp-off.webp": "0703f3257288df7248917ebef2b896b579d08f6e175948aac52bc8822521d44a",
-      "public/room/materials/props-normal.webp": "1686cf72235774557e6e4a63c5336f932bdfd3ec49ed6291df838baf37f5a4a5",
-      "public/room/materials/props-orm.webp": "273961e8ce2ffcd2e1f679b4184e124d11e618697a9296f126d346e4863463fb",
-      "public/room/materials/props-room.webp": "e668c401501d1ce5fe05eee34169fcd24b90243d5a61326c24dd731ec25a6d91",
-      "public/room/materials/props-tv.webp": "0584eea1db4bd635a3a10c974cedaac1fbb8445dc51f62107cd7356146cf1100",
-      "public/room/materials/study-meshopt.glb.bin": "ed35c02e54fde0192a3e8330ec1d2f58bcba083dba57debd4c5a1a1befc12eb4",
+      "public/room/materials/paper-room.webp": "0829398b0a1b47406ee34585b002641167521ce790db00294e9fcf9e0d3ef14e",
+      "public/room/materials/paper-tv.webp": "5ca87a38eab20156e6664e9cf50337e28b5827ba4cbc57bc3c2891aa08b0489f",
+      "public/room/materials/props-albedo.webp": "6d0afbe02469f9ed316d7b3cdfdafcf823d007820fb372b065ff212f47c25ce2",
+      "public/room/materials/props-lamp-off.webp": "913c3b3f64eb72df5971c231fda984ba75b5bec640c9327881f00257078366ca",
+      "public/room/materials/props-normal.webp": "daf8f3d150fdb18c59a9ccfb15b42122696233140d2e38127176abcc7c341891",
+      "public/room/materials/props-orm.webp": "3cfd4251d21203468e2f092733ad0ad872dd10f00d4ce2929d30dd861075ecea",
+      "public/room/materials/props-room.webp": "b5097df97759d604a045bc2c0c17f2eec86b2a8468d97127aeed71a04f479a3f",
+      "public/room/materials/props-tv.webp": "f4fb1097d898cc24f0688b8cbecfba8ccb025a67d64fd208a3d5b6fedf194f54",
+      "public/room/materials/study-meshopt.glb.bin": "7aa294f8b93f5d2e0f459b184f986b4fbbcb408e3d7546172bf2477deca31bad",
       "public/room/materials/tape-albedo.webp": "5604b9f47dbe932449a0db5afe2fb8bb5a0ffbb1a22dd84a4d8e55ada146522f",
-      "public/room/materials/tape-lamp-off.webp": "408609ee2addb6e99d90b89a4ee28897e7be0495425a9266a9c3d79ab7f1103f",
+      "public/room/materials/tape-lamp-off.webp": "215663bd0702b6e1260e29ab33039651a8310d78e40d6930163fff173bc30f0f",
       "public/room/materials/tape-normal.webp": "72ff64ae6f47854d7a1674ee2aee152d766e36898b4557883818d791d8ca8000",
       "public/room/materials/tape-orm.webp": "da263b60bde93871d7c1d85b108320fb13ed7e3fcf155de07758217eb72e1fc2",
-      "public/room/materials/tape-room.webp": "0efed6348346b0e5dda733bf04829fe2796b312601a7ff3c186a584fca42ede8",
-      "public/room/materials/tape-tv.webp": "3bed2ac80d2f9989ba03078119bdf9bd9c931eccfae496292d8319dc392f357a",
+      "public/room/materials/tape-room.webp": "b78d9466841b205c1faf478d6ba3e71843098e1d104bec7e01314e916076fb20",
+      "public/room/materials/tape-tv.webp": "b44b6c3881fcc26ed6f2c18dd747cfdb7ae3c098c6d04d0252e56d2a5d0059fb",
       "public/room/materials/walls-albedo.webp": "c9da4602e67b5a02bdb0edc384390fd75b94064fd648704c3b3c66494960c605",
-      "public/room/materials/walls-lamp-off.webp": "e982536ffd8f3e8146800d7398e83925c25718a4c84cb56fa202badffb8a0670",
+      "public/room/materials/walls-lamp-off.webp": "42159b396ed5fc6bd98f7e05e910163955ffaee394a5e530d4d10f2f42f07727",
       "public/room/materials/walls-normal.webp": "0014038bbd78e0b1b4c8d6366a43f417dbce8cf9ff553ebac6effa17ea8141e5",
-      "public/room/materials/walls-orm.webp": "50f6512f80a698e947e053b7ac60645c514d049c9b44a63eb70c285152bd988b",
-      "public/room/materials/walls-room.webp": "6496cadc420c05f911c4f3ec98abf1635e1be39e0b40b0b8f14bfbb7cc4e4f5f",
-      "public/room/materials/walls-tv.webp": "254ddbc73c5b72131392c11822b5f79b7c27e7472690002bf653656e6ef4a8f4",
-      "public/room/materials/window-albedo.webp": "64376161379a2d677ba7410106b80149cf266ef3ec71a694e7a30a6419f0c1b5",
-      "public/room/materials/window-lamp-off.webp": "22eef8d87176dace5d9f003559f521b56b0a9bd5e16889bce965d3c9279dff8b",
-      "public/room/materials/window-normal.webp": "23b5fcb9155374fc49f03c03cd95c8f616aaea67dcf52e8dc33a21e45fd5a782",
-      "public/room/materials/window-orm.webp": "737f1ace291ec33ca738863ada94e06159e81dc9961a3dddde73421cf7440738",
-      "public/room/materials/window-room.webp": "854710abd190ba5b7f570bb1234bade914fb85a2d001933aa8adc759a2aedbac",
-      "public/room/materials/window-tv.webp": "6744b4572a5912e4a4d243a7f2260e95a06b0308c6d84d912eacd437301806ea",
+      "public/room/materials/walls-orm.webp": "3d650285d9fffd84da20ab45ad08d6c49e2b9c18ec928f57d6befe8355c60025",
+      "public/room/materials/walls-room.webp": "7ea9657147f82b4ad1954905d924a015de1133dce24cc97e7a9a071d20e069c5",
+      "public/room/materials/walls-tv.webp": "477ad04f4ca1787db2976e430a7d0bac37030c9cc3ae0042c00fbc885a2a0b06",
+      "public/room/materials/window-albedo.webp": "3ffd93ce9abac5f2105626939b82a9a7b44c8e7553ebd625d75611ea2bc77402",
+      "public/room/materials/window-lamp-off.webp": "0a973b92c7e5a0eea92604d58fc8cf968a5054654d7d14003d8d96e62a51c1f3",
+      "public/room/materials/window-normal.webp": "58a710fd2e6a54a5a02caffafb719627fb8cf27eca03ca8066f9f47e660de30a",
+      "public/room/materials/window-orm.webp": "962bbe5ca4e56647abbea5e0096a503720c3616910f2dd275e276d423c3ff358",
+      "public/room/materials/window-room.webp": "f2621ba7ef423c0391e935952c3393d23af63c7a237b6a46a020a527158d2b2d",
+      "public/room/materials/window-tv.webp": "cf589e9859c0c3a1f228b7963472629364d5ed45b5f78d67af4e9205bbe912ef",
       "public/room/window/city-panorama-v2.webp": "56be003236d3f9a68de626a47b1928db720e10b526b5f4be6026ebdc8ae7be88",
       "scripts/room/build-reflection.mjs": "b109c51b62e2e01f7c53c4780ebb6419a1c60abb82c22a81477d185f0bd36d67",
       "scripts/room/capture-reflection.ts": "59e8decf157e9f66f67e0ce9274643622cc642241970112abd88792699b4485a",

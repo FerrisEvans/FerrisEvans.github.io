@@ -9,6 +9,7 @@ import bmesh
 from mathutils import Matrix, Vector
 from refine_geometry import _box, _activate
 from refine_equipment import finish, bounds, subtract, loft
+from refine_telephone import refine_telephone
 
 
 SLIDERS = (
@@ -192,8 +193,10 @@ def refine_control_layout(scene, text):
 
     # Preserve each object's entire hierarchy, including labels and cord.
     move('Desk_Rolodex', (-1.02, .35, .707))
-    move('Retro_Phone', (3.12, -.35, .736), math.radians(-78))
-    move('Desk_Clock', (3.66, -.37, .815), math.radians(-90))
+    telephone = refine_telephone(scene, text)
+    telephone.pop('root')
+    move('Retro_Phone', (-1.00, -.10, .685))
+    move('Desk_Clock', (-1.44, .62, .815))
     monitor_lip = monitor_front_lip(scene.objects['Computer_Monitor'])
 
     # Broad panels need controlled edge normals and differentiated finishes,
@@ -239,7 +242,7 @@ def refine_control_layout(scene, text):
     assert key_count == 101, ('Expected physical 101-key keyboard', key_count)
     bpy.context.view_layer.update()
     assert not any(matches(obj, prefix) for obj in scene.objects for prefix in ('Desk_Remote','Remote_Key','CRT_Knob'))
-    return {'remoteRemoved':True, 'sliders':slider_report,
+    return {'remoteRemoved':True, 'sliders':slider_report, 'telephone':telephone,
             'positionsBlender':{name:list(scene.objects[name].matrix_world.translation) for name in ('Desk_Rolodex','Desk_Clock','Retro_Phone')},
             'finishNormalsRebuilt':list(assignments), 'monitorFrontLip':monitor_lip,
             'pbtKeyCount':key_count, 'enamelMetallic':0}
