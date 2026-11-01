@@ -1,6 +1,6 @@
 {
   "version": 18,
-  "buildId": "70900811924b2ba9",
+  "buildId": "a9c96e2b7eb88bcf",
   "quality": "final",
   "encoding": "RGBM8",
   "city": "/room/window/city-panorama-v2.webp",
@@ -664,7 +664,7 @@
     "height": 512,
     "threeRevision": "186",
     "manifestSha256": "6f6f14763f359684cd93ea5d6a6c899f54aef175ef3167b14abe0cbe6a754095",
-    "sha256": "233247fd51a81477e6e35e7d5c724389ab79e259f1273290293016ad4193589a",
+    "sha256": "539ea330d00d7d4f0eb207335834025fbd2c713dc0ba74e64810dbd51778f1a4",
     "sources": {
       "node_modules/three/package.json": "f9c474a27c920b9435353a6235968f4453436bee0444fac7e5fd289c8fa463de",
       "public/room/materials/architecture-albedo.webp": "92da7a6eeae5b8e97f2b55697711b1be38b082fe606f17e96cfbb2a215a59a09",
@@ -747,7 +747,7 @@
       "src/scripts/room/lighting.ts": "3a80192239acbc8ba4bcd6c0ddd600e701bc8ffca393a686a5d2cd619c7998a3",
       "src/scripts/room/model.ts": "fbc6f2c14e416932b089e8759e8d06d47e3c4e62644413451c120078893a2f7d",
       "src/scripts/room/reflection.ts": "27efe0c8f60a523e26ff22ceab18bb48fe15717a4f8ee35674263dcfd6850a77",
-      "src/scripts/room/weather.ts": "498e9c91ea8d43a8fb9bdc54582f0f9ebf0444f9afa006c629ddb9b97badc571"
+      "src/scripts/room/weather.ts": "b04dc1efdb9f071d6c56ecef4123732b3c6b5064344cf49f49cfc0a9ed49a4c8"
     }
   }
 }

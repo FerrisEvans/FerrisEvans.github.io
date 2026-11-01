@@ -1,9 +1,9 @@
 {
-  "buildId": "70900811924b2ba9",
+  "buildId": "a9c96e2b7eb88bcf",
   "bakeBuildId": "53bc2454c06b0acc",
   "assets": {
     "study-meshopt.glb.bin": "ed35c02e54fde0192a3e8330ec1d2f58bcba083dba57debd4c5a1a1befc12eb4",
-    "reflection-cubeuv.bin": "233247fd51a81477e6e35e7d5c724389ab79e259f1273290293016ad4193589a",
+    "reflection-cubeuv.bin": "539ea330d00d7d4f0eb207335834025fbd2c713dc0ba74e64810dbd51778f1a4",
     "architecture-albedo.webp": "92da7a6eeae5b8e97f2b55697711b1be38b082fe606f17e96cfbb2a215a59a09",
     "architecture-normal.webp": "04390b767ba1ba3e616f246f3035002d40be19aea2efee0c96083dbf844749df",
     "architecture-orm.webp": "6dd64e86eecf5a23a3d4d45625376fcd281cf1404472c760a04f599410c6dcfe",
@@ -101,9 +101,9 @@
     "tape-lamp-off.webp": "408609ee2addb6e99d90b89a4ee28897e7be0495425a9266a9c3d79ab7f1103f"
   },
   "posters": {
-    "loading.jpg": "b6ad2461909d80a5929a64ccc65b0f796b6be559eafb06170fab5277ea94b63a",
-    "reading.jpg": "2d4a0285ee50a64b192cfa635375e467c52cb4725108a699d965b2877969d532",
-    "share.jpg": "31a6ab1fc5a178c3f750c0698bd3c90dcac42e0249e32b0b16cfe1d606e370ee"
+    "loading.jpg": "4456f418010560e618167263ea7df90b7bea25ca1a33a7d8ddb0fb76fe4b2608",
+    "reading.jpg": "493daa86a5da36045b09ac4abcc04a0a25c68db307c088a1489a2e4b9695d319",
+    "share.jpg": "0c34b7f5977a016a4878f108d895c5980fa6b5d886911e1814ada933f9c7dc1b"
   },
   "capture": {
     "browser": "156.0.8078.74",
@@ -112,19 +112,19 @@
         "file": "loading.jpg",
         "width": 1440,
         "height": 1440,
-        "buildId": "70900811924b2ba9"
+        "buildId": "a9c96e2b7eb88bcf"
       },
       {
         "file": "reading.jpg",
         "width": 1440,
         "height": 900,
-        "buildId": "70900811924b2ba9"
+        "buildId": "a9c96e2b7eb88bcf"
       },
       {
         "file": "share.jpg",
         "width": 1200,
         "height": 630,
-        "buildId": "70900811924b2ba9"
+        "buildId": "a9c96e2b7eb88bcf"
       }
     ]
   }

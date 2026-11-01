@@ -120,11 +120,13 @@ export function createWeather(cityMap: Texture) {
         q.y-=weatherTime*speed;
         vec2 id=floor(q),p=fract(q);
         float seed=rainHash(id),x=.12+.76*rainHash(id+3.1);
-        float aa=max(fwidth(p.x),.001);
+        // Differentiate the continuous coordinate: fract() jumps at cell
+        // edges would otherwise turn dense rain into flashing wide streaks.
+        float aa=max(fwidth(q.x),.001);
         float streak=1.-smoothstep(.0015,.004+aa,abs(p.x-x));
         // Longer, fine trails read as falling rain instead of bright dust.
-        float segment=smoothstep(.02,.07,p.y)*(1.-smoothstep(.58,.82,p.y));
-        return streak*segment*step(.73,seed);
+        float segment=smoothstep(.01,.045,p.y)*(1.-smoothstep(.72,.98,p.y));
+        return streak*segment*step(.36,seed);
       }
       vec3 rainLayer(vec2 p, float density, float speed) {
         vec2 grid = p * vec2(density, density * .31);
@@ -140,7 +142,7 @@ export function createWeather(cityMap: Texture) {
         vec2 delta = vec2((cell.x-x) * 1.2, (cell.y-y) * stretch) / size;
         float dist = length(delta);
         float aa = max(fwidth(dist), .012);
-        float present = step(.58, seed);
+        float present = step(.48, seed);
         float drop = (1. - smoothstep(.045, .065 + aa, dist)) * present;
         float tailLength = mix(.12, .42, rainHash(id + vec2(11.8,3.1)));
         float tailX = x + sin((cell.y-y)*6. + seed*14.)*.012;
@@ -156,11 +158,11 @@ export function createWeather(cityMap: Texture) {
         // of drawing one long equally spaced line for nearly every column.
         vec2 grid = p*vec2(3.2,1.25);
         float column = floor(grid.x);
-        float speed = mix(.025,.080,rainHash(vec2(column,4.3)));
+        float speed = mix(.045,.12,rainHash(vec2(column,4.3)));
         grid.y += weatherTime*speed;
         vec2 id = floor(grid), cell = fract(grid);
         float seed = rainHash(id+vec2(7.3,12.8));
-        float present = step(.78,seed);
+        float present = step(.64,seed);
         float headY = .13 + rainHash(id+vec2(2.1,4.8))*.12;
         float dy = cell.y-headY;
         float length = mix(.12,.62,rainHash(id+vec2(11.2,9.8)));
@@ -216,7 +218,7 @@ export function createWeather(cityMap: Texture) {
       // The glass stays at z=-.89; the city card is much farther behind it.
       float distanceToGlass = (-.89-cameraPosition.z) / min(ray.z,-.001);
       vec2 glass = (cameraPosition + ray * distanceToGlass).xy;
-      vec3 rain = rainLayer(glass, 18., .11) + rainLayer(glass + vec2(7.3,1.6), 31., .18) * .55;
+      vec3 rain = rainLayer(glass, 23., .18) + rainLayer(glass + vec2(7.3,1.6), 39., .28) * .55;
       rain += rainRuns(glass);
       vec2 refracted = clamp(uv + rain.xy*edgeFreedom, ${inspection?'0.,1.':'.002,.998'});
       vec3 plate = texture2D(map, refracted).rgb;
@@ -241,7 +243,9 @@ export function createWeather(cityMap: Texture) {
       plate += movingTrain(refracted, occlusion);
       // Rain also occupies the air beyond the glass. It is strongest against
       // street lights, while aerial haze softens only the distant skyline.
-      float airborne=fallingRain(photoUv,105.,7.2)+fallingRain(photoUv+vec2(.31,.17),173.,11.7)*.40;
+      // A downpour: roughly four times as many streaks and twice the fall
+      // speed, with fine distant rain behind the stronger foreground layer.
+      float airborne=fallingRain(photoUv,142.,21.5)+fallingRain(photoUv+vec2(.31,.17),219.,33.)*.40;
       float distanceHaze=(1.-depthValue)*.055;
       plate=mix(plate,vec3(.065,.083,.105),distanceHaze);
       plate+=airborne*vec3(.12,.15,.18)*(.25+clamp(dot(soft,vec3(.2126,.7152,.0722))*2.,0.,1.));
@@ -249,7 +253,7 @@ export function createWeather(cityMap: Texture) {
       diffuseColor *= vec4(max(plate + rain.z*vec3(.30,.35,.39), vec3(0.)),1.);
     `);
   };
-  material.customProgramCacheKey = () => inspection?'room-weather-v7-downward-inspection':'room-weather-v7-downward-room';
+  material.customProgramCacheKey = () => inspection?'room-weather-v8-downpour-inspection':'room-weather-v8-downpour-room';
   return material;
   }
   const material=makeMaterial(false),inspectionMaterial=makeMaterial(true);
