@@ -55,7 +55,8 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     Object.assign(room.dataset,{assetBuildId:lighting.buildId??'legacy',anisotropy:String(lighting.anisotropy),reflectionSize:String(lighting.reflectionSize),reflections:lighting.reflectionMode});
     let reduced=false,currentTime=0,environmentTime=0,previousTime=0;
     const cards=createCards(gltf.scene,camera,resources,()=>{cards.hide();callbacks.wake();});
-    let inspection:'window'|'calculator'|'tv'|'cd'|'clock'|'rolodex'|'walkman'|null=null,previousView:RoomView='home';
+    let inspection:'window'|'calculator'|'tv'|'cd'|'clock'|'rolodex'|'walkman'|'phone'|null=null,previousView:RoomView='home';
+    let phoneReturn:ReturnType<typeof navigation.captureInspectionReturn>=null;
     const windowTransition=document.querySelector<HTMLCanvasElement>('#window-transition')!;
     const transitionContext=windowTransition.getContext('2d');
     const previousCamera=camera.clone();
@@ -65,14 +66,17 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       if(!inspection)return;
       clearHover();
       const previous=inspection;inspection=null;delete room.dataset.inspection;
-      if(previous==='calculator')props.holdCalculator(false,performance.now()/1000,reduced,camera);
+      if(previous==='phone'&&phoneReturn&&!_immediate)navigation.restoreInspectionReturn(phoneReturn,performance.now(),reduced);
+      else if(previous==='calculator')props.holdCalculator(false,performance.now()/1000,reduced,camera);
       else{navigation.go(previousView,performance.now(),reduced);if(previousView==='work'&&!props.raised)navigation.paper(false,performance.now(),reduced);}
+      phoneReturn=null;
       callbacks.feedback(previousView==='work'?'选择录像带 · ESC 放下记事本':'已返回桌面');callbacks.wake();
     }
-    function inspect(kind:'window'|'calculator'|'tv'|'cd'|'clock'|'rolodex'|'walkman'){
+    function inspect(kind:'window'|'calculator'|'tv'|'cd'|'clock'|'rolodex'|'walkman'|'phone'){
       if(inspection===kind){closeInspection();return;}if(inspection)closeInspection(true);
       clearHover();
-      previousView=navigation.view;if(kind==='window')cards.hide();
+      previousView=navigation.view;if(kind==='window'||kind==='phone')cards.hide();
+      if(kind==='phone')phoneReturn=navigation.captureInspectionReturn();
       inspection=kind;room.dataset.inspection=kind;
       if(kind==='calculator')props.holdCalculator(true,performance.now()/1000,reduced,camera);
       else navigation.go(kind,performance.now(),reduced);callbacks.wake();
@@ -164,7 +168,9 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         case 'eject': ejectTape();break;
         case 'power': deck.power();syncTelevision();callbacks.feedback(deck.state.powered?'电视已打开':'电视已关闭');break;
         case 'coffee': if(details.sip(currentTime,camera,reduced))callbacks.feedback('休息一下，再继续。');else if(details.getstate().empty)callbacks.feedback('咖啡喝完了。');break;
-        case 'phone': callbacks.navigate('online');break;
+        case 'phone':
+          if(navigation.moving&&inspection!=='phone')break;
+          inspect('phone');callbacks.feedback(inspection==='phone'?'电话近景 · 再次点击或 ESC 返回':'已返回桌面');break;
         case 'cd':inspect('cd');callbacks.feedback('CD · M 返回 · 控件播放原创音乐');break;
         case 'music':props.nudge('Desk_CD',currentTime);musicOn=!musicOn;callbacks.music(musicOn);room.dataset.music=musicOn?'playing':'paused';callbacks.feedback(musicOn?'CD · 原创夜间钢琴循环（SOUND ON 可听）':'CD · 已暂停');break;
         case 'music-stop':props.nudge('Desk_CD_Button.001',currentTime);musicOn=false;callbacks.music(false,true);room.dataset.music='stopped';callbacks.feedback('CD · 已停止');break;
@@ -184,7 +190,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       ['Computer_Monitor','about','电脑 · 关于我'],['Computer_Keyboard','online','电脑 · 在线联系'],
       ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],
       ['Curtain_Left','curtain','窗帘 · 轻碰'],['Curtain_Right','curtain','窗帘 · 轻碰'],['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
-      ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 联系方式'],['Desk_CD','cd','CD · 近景'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
+      ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 近看 / 返回'],['Desk_CD','cd','CD · 近景'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
       ['Desk_Pager','pager','寻呼机 · 震动'],['Desk_Floppy','floppy','软盘 · 拨动防尘片'],['Desk_Pencil','pencil','铅笔 · 轻推'],['Desk_Clock','clock','时钟 · 查看表盘'],['Desk_Rolodex','rolodex','名片夹 · 近看'],['Desk_ReplyCard','rss','RSS 订阅卡'],['Desk_Walkman','walkman','随身听 · 近看'],
       ['VCR_Key','rewind','REW · 上一节目'],['VCR_Key.001','play','播放 / 暂停'],['VCR_Key.002','forward','FF · 下一节目'],['VCR_Key.003','stop','停止'],['VCR_Key.004','record','录制 / 写保护'],['VCR_TapeSlot','eject','退出录像带']] as const;
     objects.forEach(([name,id,label])=>addTarget(name,id,label));
@@ -354,7 +360,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       transitionAnimation?.cancel();hasPresented=false;
       lighting.film?.reset();
       homeRequested=null;homeAdvancing=false;
-      clearHover();cards.hide();details.reset();inspection=null;delete room.dataset.inspection;
+      clearHover();cards.hide();details.reset();inspection=null;phoneReturn=null;delete room.dataset.inspection;
 
       props.holdCalculator(false,0,true,camera);props.eject(0,true);props.finish();
       environmentTime=previousTime=0;deck.reset();home.reset();lighting.setPower(true);callbacks.homeAudio(false,0);surfaces?.selectTape(null);delete room.dataset.tape;delete room.dataset.tapeTime;musicOn=false;callbacks.music(false,true);room.dataset.music='stopped';
@@ -365,6 +371,6 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     function suspend(){lighting.film?.setPlaying(false);callbacks.homeAudio(false,homeTime());}
     async function prepareDetails(){try{const pending=lighting.prepareDetails();room.dataset.lightingDetails=lighting.detailState;await pending;if(room.dataset.capture)lighting.updateDetails(1,false);}finally{room.dataset.lightingDetails=lighting.detailState;}}
     return{resize,render,navigate,setPage,standby,settle,escape,action,chooseTape,suspend,prepareDetails,returnFromWindow:()=>{if(inspection==='window')closeInspection();},windowMode:(mode:'overview'|'detail')=>{if(navigation.view==='window'){navigation.windowMode(mode);callbacks.wake();}},get windowActive(){return inspection==='window';},nextTape:()=>chooseTape((deck.state.selected??-1)+1),computerPage:(delta:number)=>surfaces?.changeComputerPage(delta),calculatorKey:calculator.press,computerKey:(key:string)=>surfaces?.computerKey(key),
-      setProgram:lighting.setProgram,get calculatorActive(){return inspection==='calculator';},get mediaPlaying(){return homeAdvancing||deck.state.transport==='playing'||musicOn&&callbacks.musicRunning();},get moving(){return navigation.moving||props.moving||cards.moving||details.moving||lighting.detailsMoving||Math.abs(lampLevel-Number(lampOn))>.001;},dispose};
+      setProgram:lighting.setProgram,get calculatorActive(){return inspection==='calculator';},get inspectionActive(){return inspection!==null;},get cameraMoving(){return navigation.moving;},get mediaPlaying(){return homeAdvancing||deck.state.transport==='playing'||musicOn&&callbacks.musicRunning();},get moving(){return navigation.moving||props.moving||cards.moving||details.moving||lighting.detailsMoving||Math.abs(lampLevel-Number(lampOn))>.001;},dispose};
   }catch(error){for(const r of resources)r.dispose();dispose();throw error;}
 }

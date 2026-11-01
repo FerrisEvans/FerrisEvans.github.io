@@ -195,7 +195,7 @@ def refine_control_layout(scene, text):
     move('Desk_Rolodex', (-1.02, .35, .707))
     telephone = refine_telephone(scene, text)
     telephone.pop('root')
-    move('Retro_Phone', (-1.00, -.10, .685))
+    move('Retro_Phone', (-2.78, -.34, .685))
     move('Desk_Clock', (-1.44, .62, .815))
     monitor_lip = monitor_front_lip(scene.objects['Computer_Monitor'])
 

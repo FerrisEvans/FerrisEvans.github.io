@@ -279,8 +279,9 @@ export async function mountRoom() {
   standby.addEventListener('click', returnToStandby, { signal });
   document.addEventListener('keydown', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat) return;
+    const contentInteractive=state==='active'&&!viewer?.inspectionActive&&!viewer?.cameraMoving;
     if(state==='active'&&viewer?.windowActive){revealWindowControls();if(event.key==='0'){event.preventDefault();viewer.windowMode('overview');return;}}
-    if (state === 'active' && !viewer?.windowActive && view === 'posts' && ['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(event.key)) {
+    if (contentInteractive && view === 'posts' && ['ArrowLeft','ArrowRight','ArrowDown','ArrowUp'].includes(event.key)) {
       event.preventDefault();
       if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') changePage(page + (event.key === 'ArrowRight' ? 1 : -1));
       else {
@@ -293,8 +294,8 @@ export async function mountRoom() {
       return;
     }
     if(state==='active'&&viewer?.calculatorActive&&(/^[0-9.+*/%=-]$/.test(event.key)||['Enter','Backspace','Delete'].includes(event.key))){event.preventDefault();viewer?.calculatorKey(event.key==='Enter'?'=':event.key==='Delete'?'C':event.key);resumeLoop();return;}
-    if(state==='active'&&!viewer?.windowActive&&((view==='about'&&['ArrowDown','ArrowUp'].includes(event.key))||(['about','online'].includes(view)&&['q','Q','1','2'].includes(event.key)))){event.preventDefault();viewer?.computerKey(event.key);resumeLoop();return;}
-    if(state==='active' && !viewer?.windowActive && view==='about' && ['ArrowLeft','ArrowRight','PageDown','PageUp',' '].includes(event.key) && !(event.key===' ' && (event.target as HTMLElement).matches('button'))){event.preventDefault();viewer?.computerPage(['ArrowLeft','PageUp'].includes(event.key)?-1:1);resumeLoop();return;}
+    if(contentInteractive&&((view==='about'&&['ArrowDown','ArrowUp'].includes(event.key))||(['about','online'].includes(view)&&['q','Q','1','2'].includes(event.key)))){event.preventDefault();viewer?.computerKey(event.key);resumeLoop();return;}
+    if(contentInteractive && view==='about' && ['ArrowLeft','ArrowRight','PageDown','PageUp',' '].includes(event.key) && !(event.key===' ' && (event.target as HTMLElement).matches('button'))){event.preventDefault();viewer?.computerPage(['ArrowLeft','PageUp'].includes(event.key)?-1:1);resumeLoop();return;}
     if (state === 'active' && event.key.length === 1 && !['INPUT','TEXTAREA','SELECT'].includes((event.target as HTMLElement).tagName)) {
       const shortcut = ({c:'about',n:'work',z:'tv'} as const)[event.key.toLowerCase() as 'c'|'n'|'z'];
       if (shortcut) { event.preventDefault(); if(shortcut==='tv')viewer?.action('zoom');else if(shortcut==='work'&&view==='work')viewer?.action('work');else navigate(shortcut); resumeLoop();return; }

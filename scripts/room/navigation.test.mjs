@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-import {BoxGeometry,Mesh,MeshBasicMaterial,PerspectiveCamera,Scene,Vector3} from 'three';
+import {Box3,BoxGeometry,Mesh,MeshBasicMaterial,PerspectiveCamera,Scene,Vector3} from 'three';
 import ts from 'typescript';
 
 const require=createRequire(import.meta.url);
@@ -106,6 +106,116 @@ test('clock inspection follows the delivered face orientation without changing H
     clock.geometry.dispose();
   }
   material.dispose();
+});
+
+test('phone inspection faces the actual handset and dial, fits after resize, and stays inside the left wall',()=>{
+  const material=new MeshBasicMaterial();
+  for(const yaw of [0,Math.PI/18,-Math.PI/4]){
+    const room=new Scene(),body=new Mesh(new BoxGeometry(.487,.26,.383),material),cord=new Mesh(new BoxGeometry(.587,.02,.536),material);
+    body.name='Retro_Phone';body.position.set(-2.85,.815,.48);body.rotation.y=yaw;room.add(body);
+    cord.name='Retro_Phone_Cord';cord.position.set(-2.85,.70,.48);cord.rotation.y=yaw;room.add(cord);
+    const {camera,nav,resize}=setup(1440,900,room);nav.go('phone',0,true);
+    const bounds=new Box3().setFromObject(room),center=bounds.getCenter(new Vector3()),front=new Vector3(0,0,1).applyQuaternion(body.quaternion);
+    for(const [width,height]of viewports){
+      resize(width,height);nav.update(0,0,false);camera.updateMatrixWorld(true);
+      assert.ok(camera.position.x>=-3.60&&camera.position.y>bounds.max.y,'camera stays within the room and above the phone');
+      assert.ok(camera.position.clone().sub(center).dot(front)>.45,'view approaches the actual dial/front side');
+      for(const x of [bounds.min.x,bounds.max.x])for(const y of [bounds.min.y,bounds.max.y])for(const z of [bounds.min.z,bounds.max.z]){
+        const p=new Vector3(x,y,z).project(camera);assert.ok(Math.abs(p.x)<1&&Math.abs(p.y)<1,'handset, dial and cord remain in frame');
+      }
+    }
+    body.geometry.dispose();cord.geometry.dispose();
+  }
+  material.dispose();
+});
+
+test('phone returns to the exact Home observation and subsequent drag continues the saved orbit',()=>{
+  for(const reduced of [false,true]){
+    const reference=setup(),inspection=setup();
+    for(const {nav}of [reference,inspection]){
+      nav.drag(-145,33);nav.drag(65,-20,true);nav.zoom(170);nav.update(1000,0,false);
+      nav.drag(-14,7);nav.update(1016,1/60,true); // Also preserve an in-flight orbit ease and Home breathing phase.
+    }
+    const {camera,nav}=inspection,saved=nav.captureInspectionReturn(),position=camera.position.clone(),quaternion=camera.quaternion.clone();assert(saved);
+    nav.go('phone',1100,reduced);nav.update(2300,.1,true);
+    nav.restoreInspectionReturn(saved,4000,reduced);
+    if(!reduced){nav.update(5199.999,.1,true);const before=camera.position.clone();nav.update(5200,.001,true);assert.ok(before.distanceTo(camera.position)<1e-7);}
+    else nav.update(4000,0,false);
+    assert.ok(camera.position.distanceTo(position)<1e-7,'return first frame must use the captured camera');
+    assert.ok(camera.quaternion.angleTo(quaternion)<1e-7);assert.equal(nav.view,'home');
+    const arrived=reduced?4000:5200;
+    reference.nav.update(1032,1/60,true);nav.update(arrived+16,1/60,true);
+    assert.ok(camera.position.distanceTo(reference.camera.position)<1e-7,'next frame resumes the same orbit ease and breathing phase');
+    for(const entry of [reference,inspection])entry.nav.drag(24,-9);
+    reference.nav.update(1048,1/60,true);nav.update(arrived+32,1/60,true);
+    assert.ok(camera.position.distanceTo(reference.camera.position)<1e-7,'drag must keep the original pan, zoom and target');
+    assert.ok(camera.quaternion.angleTo(reference.camera.quaternion)<1e-7);
+  }
+});
+
+test('inspection return preserves current resize and TV/window state, and refuses unsettled snapshots',()=>{
+  for(const view of ['home','tv','window']){
+    const {camera,nav,resize}=setup();nav.go(view,0,true);
+    if(view==='window'){nav.windowMode('detail');nav.update(0,0,false);nav.drag(80,40);}
+    else{nav.drag(-35,20);nav.zoom(60);}
+    nav.update(1,0,false);const saved=nav.captureInspectionReturn();assert(saved);
+    const state=nav.windowState;nav.go('phone',10,false);assert.equal(nav.captureInspectionReturn(),null);
+    nav.update(1210,.1,true);resize(1920,1080);const fov=camera.fov;
+    nav.restoreInspectionReturn(saved,2000,true);nav.update(2000,0,false);
+    assert.equal(camera.aspect,1920/1080);assert.equal(camera.fov,fov);assert.equal(nav.view,view);
+    const arrival=camera.position.clone();nav.update(2001,0,false);assert.ok(camera.position.distanceTo(arrival)<1e-7,'responsive return must not snap again on its following frame');
+    if(view==='window'){assert.equal(nav.windowState.zoom,state.zoom);checkCoverage(camera);nav.resetWindow();nav.update(2001,0,false);assert.equal(nav.windowState.zoom,1);}
+    else{assert.equal(camera.zoom,1);assert.ok(!camera.view?.enabled);nav.drag(10,10);nav.update(2001,0,false);assert.ok(camera.position.toArray().every(Number.isFinite));}
+  }
+});
+
+test('route navigation cancels a pending phone return instead of later restoring its stale Home state',()=>{
+  const {camera,nav}=setup();nav.drag(-120,30);nav.update(1,0,false);const saved=nav.captureInspectionReturn();assert(saved);
+  nav.go('phone',10,true);nav.restoreInspectionReturn(saved,20,false);nav.update(420,.1,true);
+  nav.go('posts',500,true);nav.update(500,0,false);const posts=camera.position.clone();
+  nav.update(3000,.1,false);assert.equal(nav.view,'posts');assert.ok(camera.position.distanceTo(posts)<1e-7);
+  nav.reset();nav.update(3001,0,false);assert.equal(nav.view,'home');assert.ok(camera.position.distanceTo(new Vector3(.078,2.29,5.43))<1e-7);
+});
+
+test('lowering Work paper supersedes a phone return and leaves the down view draggable',()=>{
+  const reference=setup();reference.nav.go('work',0,true);reference.nav.paper(false,0,true);reference.nav.update(0,0,false);
+  for(const reducedReturn of [false,true]){
+    const {camera,nav}=setup();nav.go('work',0,true);nav.paper(true,0,true);nav.update(0,0,false);
+    const saved=nav.captureInspectionReturn();assert(saved);nav.go('phone',100,true);nav.update(100,0,false);
+    nav.restoreInspectionReturn(saved,2000,reducedReturn);
+    if(!reducedReturn)nav.update(2400,.1,true);
+    const before=camera.position.clone();nav.paper(false,2500,false);nav.update(3100,.1,true);
+    assert.ok(camera.position.distanceTo(before)>.05,'paper transition cannot be skipped by an old return arrival frame');
+    nav.update(3700,.1,false);assert.ok(camera.position.distanceTo(reference.camera.position)<1e-7);
+    const arrived=camera.position.clone();nav.update(3716,1/60,false);
+    assert.ok(camera.position.distanceTo(arrived)<1e-7,'old raised-paper snapshot cannot overwrite the completed paper-down transition');
+    nav.drag(25,-10);nav.update(3732,0,false);
+    assert.ok(camera.position.distanceTo(arrived)>.01,'paper-down orbit remains enabled');
+  }
+});
+
+test('window reset during an inspection return stays queued while drag and zoom are ignored',()=>{
+  const {camera,nav}=setup();nav.go('window',0,true);nav.windowMode('detail');nav.update(0,0,false);
+  const saved=nav.captureInspectionReturn();assert(saved);const state=nav.windowState;
+  nav.go('phone',100,true);nav.restoreInspectionReturn(saved,2000,false);nav.update(2300,.1,true);
+  nav.drag(1000,1000);nav.zoom(-999);nav.resetWindow();
+  assert.equal(nav.windowState.zoom,state.zoom);assert.deepEqual(nav.windowState.center,state.center);
+  nav.update(3200,.1,true);assert.equal(nav.windowState.zoom,state.zoom);
+  nav.update(3216,1/60,false);assert.equal(nav.windowState.zoom,1);assert.deepEqual(nav.windowState.center,[.5,.5]);checkCoverage(camera);
+});
+
+test('resizing during a phone-to-TV return updates the arrival pose before completing the return',()=>{
+  const room=new Scene(),material=new MeshBasicMaterial(),cabinet=new Mesh(new BoxGeometry(1.156,1.178,.826),material);
+  cabinet.name='CRT_Case';cabinet.position.set(0,1.538,-.098);room.add(cabinet);
+  const {camera,nav,resize}=setup(1440,900,room);nav.go('tv',0,true);nav.drag(12,-4);nav.zoom(70);nav.update(0,0,false);
+  const saved=nav.captureInspectionReturn();assert(saved);nav.go('phone',100,true);nav.restoreInspectionReturn(saved,2000,false);
+  nav.update(2600,.1,true);resize(1920,1080);nav.update(3199.999,.1,true);const approaching=camera.position.clone();
+  nav.update(3200,.001,true);const arrived=camera.position.clone();assert.ok(approaching.distanceTo(arrived)<1e-7);
+  nav.update(3216,1/60,false);assert.ok(camera.position.distanceTo(arrived)<1e-7,'responsive TV base must not replace a stale arrival pose one frame later');
+  const reference=setup(1920,1080,room);reference.nav.go('tv',0,true);reference.nav.drag(12,-4);reference.nav.zoom(70);reference.nav.update(0,0,false);
+  assert.ok(camera.position.distanceTo(reference.camera.position)<1e-7,'arrival uses the resized TV framing with the saved orbit and zoom');
+  assert.ok(camera.quaternion.angleTo(reference.camera.quaternion)<1e-7);
+  cabinet.geometry.dispose();material.dispose();
 });
 
 test('TV inspection keeps the whole cabinet and lowest physical slider visible at common sizes and after resize',()=>{

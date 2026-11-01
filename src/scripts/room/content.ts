@@ -1,4 +1,4 @@
-export type RoomView = 'home' | 'work' | 'posts' | 'about' | 'online' | 'window' | 'tv' | 'calculator' | 'cd' | 'clock' | 'rolodex' | 'walkman';
+export type RoomView = 'home' | 'work' | 'posts' | 'about' | 'online' | 'window' | 'tv' | 'calculator' | 'cd' | 'clock' | 'rolodex' | 'walkman' | 'phone';
 export type RoomPost = { title: string; href: string; date: string; category: string };
 export type RoomTopic = { title: string; description: string; href: string };
 export type RoomContent = { author: string; intro: string; github: string; email: string; posts: RoomPost[]; topics: RoomTopic[] };
@@ -8,7 +8,7 @@ export function pageInfo(total: number, requested: number) {
   const page = Math.max(0, Math.min(pages - 1, Number.isFinite(requested) ? Math.trunc(requested) : 0));
   return { page, pages, previous: page > 0, next: page < pages - 1 };
 }
-export const viewLabels: Record<RoomView, string> = { home: '首页', work: '研究与实践', posts: '文章', about: '关于 Ferris', online: '在线联系', window: '窗外', tv: '电视', calculator: '计算器', cd:'CD 播放器',clock:'时钟',rolodex:'名片夹',walkman:'随身听' };
+export const viewLabels: Record<RoomView, string> = { home: '首页', work: '研究与实践', posts: '文章', about: '关于 Ferris', online: '在线联系', window: '窗外', tv: '电视', calculator: '计算器', cd:'CD 播放器',clock:'时钟',rolodex:'名片夹',walkman:'随身听',phone:'电话' };
 export function parseView(value: string): RoomView {
   return ['home', 'work', 'posts', 'about', 'online', 'window', 'tv', 'calculator', 'cd'].includes(value) ? value as RoomView : 'home';
 }
