@@ -1,7 +1,7 @@
 import {
   CanvasTexture, Color, DoubleSide, HemisphereLight, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, MeshStandardMaterial,
   NoColorSpace, Object3D, RectAreaLight, ShaderChunk, SRGBColorSpace,
-  Texture, TextureLoader, Vector3, WebGLRenderer, type WebGLRenderTarget,
+  Texture, TextureLoader, Vector2, Vector3, WebGLRenderer, type WebGLRenderTarget,
 } from 'three';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
@@ -127,10 +127,11 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       normalMap, lightMap, lightMapIntensity: Math.PI,
       alphaMap,alphaTest:alphaMap||atlas.cutout ? atlas.alphaTest??.45 : 0,
     };
-    // Only fabric pays for fibre sheen. Keep the same RGBM light response and
-    // all other room materials, exposure and analytic lights unchanged.
+    // Cloth gets a broad grazing fibre response instead of a stronger GGX
+    // highlight. Soften atlas micro-normals while retaining the real folds.
+    // Keep the authored roughness/irradiance and other room finishes intact.
     const material = name === 'curtains'
-      ? new MeshPhysicalMaterial({...materialOptions, sheen:.32, sheenColor:0xd4c6ad, sheenRoughness:.75, specularIntensity:.35})
+      ? new MeshPhysicalMaterial({...materialOptions, normalScale:new Vector2(.25,.25), sheen:.72, sheenColor:0xf0e2c9, sheenRoughness:.55, specularIntensity:.18})
       : name==='foliage' ? new MeshPhysicalMaterial({...materialOptions,side:DoubleSide,sheen:.12,sheenColor:0x66743c,sheenRoughness:.7,specularIntensity:.4})
       : ['equipment','tape','paper'].includes(name) ? new MeshPhysicalMaterial({...materialOptions,specularIntensity:.5})
       : new MeshStandardMaterial(materialOptions);

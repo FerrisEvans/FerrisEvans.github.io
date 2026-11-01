@@ -166,32 +166,36 @@ def refine_curtains(scene):
 
 
 def linen_material():
-    """Low-contrast yarn variation; the runtime supplies the fibre sheen."""
+    """Soft, fine cloth variation; the runtime supplies the fibre sheen.
+
+    Individual threads are below the delivered atlas's useful resolution.
+    Keep their relief subtle instead of enlarging them into visible ridges.
+    """
     import bpy
     material=bpy.data.materials.new('Warm woven linen')
     material.use_nodes=True
     nodes,links=material.node_tree.nodes,material.node_tree.links
     shader=nodes.get('Principled BSDF')
-    shader.inputs['Roughness'].default_value=.88
+    shader.inputs['Roughness'].default_value=.73
     shader.inputs['Sheen Weight'].default_value=.32
     shader.inputs['Sheen Roughness'].default_value=.75
     geometry=nodes.new('ShaderNodeNewGeometry')
-    scale=nodes.new('ShaderNodeVectorMath');scale.operation='MULTIPLY'
-    scale.inputs[1].default_value=(95,95,3)
-    links.new(geometry.outputs['Position'],scale.inputs[0])
     yarn=nodes.new('ShaderNodeTexNoise')
-    yarn.inputs['Scale'].default_value=3;yarn.inputs['Detail'].default_value=2
-    links.new(scale.outputs[0],yarn.inputs['Vector'])
+    # World-space scale stays consistent across both curtains. The old 95:3
+    # axis ratio stretched the surface grain into coarse vertical streaks.
+    yarn.inputs['Scale'].default_value=140;yarn.inputs['Detail'].default_value=0
+    links.new(geometry.outputs['Position'],yarn.inputs['Vector'])
     pigment=nodes.new('ShaderNodeValToRGB')
-    pigment.color_ramp.elements[0].color=(.345,.299,.232,1)
-    pigment.color_ramp.elements[1].color=(.375,.326,.257,1)
+    # Retain the same warm beige midpoint with much less mottling.
+    pigment.color_ramp.elements[0].color=(.356,.309,.2415,1)
+    pigment.color_ramp.elements[1].color=(.364,.316,.2475,1)
     links.new(yarn.outputs['Fac'],pigment.inputs[0])
     links.new(pigment.outputs[0],shader.inputs['Base Color'])
     rough=nodes.new('ShaderNodeMapRange')
-    rough.inputs['To Min'].default_value=.84;rough.inputs['To Max'].default_value=.92
+    rough.inputs['To Min'].default_value=.70;rough.inputs['To Max'].default_value=.76
     links.new(yarn.outputs['Fac'],rough.inputs['Value'])
     links.new(rough.outputs['Result'],shader.inputs['Roughness'])
     bump=nodes.new('ShaderNodeBump')
-    bump.inputs['Strength'].default_value=.14;bump.inputs['Distance'].default_value=.00035
+    bump.inputs['Strength'].default_value=.04;bump.inputs['Distance'].default_value=.00005
     links.new(yarn.outputs['Fac'],bump.inputs['Height']);links.new(bump.outputs[0],shader.inputs['Normal'])
     return material

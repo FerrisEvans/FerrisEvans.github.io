@@ -21,7 +21,7 @@ function load(name){
   },module,module.exports);
   cache.set(name,module.exports);return module.exports;
 }
-const {createProps}=load('props'),{batchRoom}=load('batch'),{leafMotion}=load('leaf-motion');
+const {createProps}=load('props'),{batchRoom}=load('batch'),{leafMotion,nudgeLeaf,advanceLeaf}=load('leaf-motion');
 function fixture(interleaved=false,decorate=()=>{}){
   const root=new three.Group(),resources=new Set();
   const material=new three.MeshStandardMaterial();
@@ -93,6 +93,50 @@ test('ambient leaf motion remains bounded and differs in phase',()=>{
   for(let i=0;i<1200;i++){const a=leafMotion(i/24,0,true),b=leafMotion(i/24,2.4,true);max=Math.max(max,Math.abs(a.bend));difference+=Math.abs(a.bend-b.bend);}
   assert(max<.34);assert(difference>50);
   assert.deepEqual(leafMotion(10,1,false),{bend:0,twist:0});
+});
+
+test('rapid leaf touches preserve position, remain bounded, and settle at different natural periods',()=>{
+  const responses=[0,.8,2.4,4.8].map(phase=>({phase,state:{bend:0,velocity:0},samples:[]}));
+  for(let frame=0;frame<600;frame++)for(const {phase,state,samples}of responses){
+    const before=state.bend;nudgeLeaf(state,phase);assert.equal(state.bend,before,'touch adds momentum without snapping a blade');
+    advanceLeaf(state,phase,1/120);assert(Number.isFinite(state.bend)&&Math.abs(state.bend)<=1.2);samples.push(state.bend);
+  }
+  assert(responses[0].samples.some((value,i)=>Math.abs(value-responses[2].samples[i])>.05),'blades must not respond in lockstep');
+  for(let frame=0;frame<1200;frame++)for(const {phase,state}of responses)advanceLeaf(state,phase,1/120);
+  for(const {state}of responses)assert.deepEqual(state,{bend:0,velocity:0});
+});
+
+test('touching the plant bends leaves while the pot, soil and other click targets remain still and available',()=>{
+  const make=()=>fixture(false,(_root,mesh)=>{mesh('Plant_Pot',-2.2);mesh('Plant_Pot_Foot',-2.2);mesh('Plant_Pot_Soil',-2.2);});
+  const f=make(),reference=make(),parts=['Plant_Pot','Plant_Pot_Foot','Plant_Pot_Soil'].map(name=>f.root.getObjectByName(name));
+  const rest=parts.map(o=>({position:o.position.clone(),quaternion:o.quaternion.clone(),material:o.material,parent:o.parent}));
+  for(const entry of [f,reference])entry.props.update(1,true,1/60);
+  f.props.nudge('plant',1);
+  for(let frame=1;frame<=12;frame++)for(const entry of [f,reference])entry.props.update(1+frame/60,true,1/60);
+  const actual=f.leaf.geometry.attributes.position.array,base=reference.leaf.geometry.attributes.position.array;
+  assert(actual.some((v,i)=>Math.abs(v-base[i])>.001),'a deliberate touch must create a visible response beyond idle flex');
+  assert.equal(f.props.moving,false,'leaf response must not lock picking for other objects');
+  for(const [i,o]of parts.entries()){
+    assert(o.position.equals(rest[i].position)&&o.quaternion.equals(rest[i].quaternion));
+    assert.equal(o.material,rest[i].material);assert.equal(o.parent,rest[i].parent);
+  }
+  for(let frame=13;frame<=420;frame++)for(const entry of [f,reference])entry.props.update(1+frame/60,true,1/60);
+  assert.deepEqual(Array.from(actual),Array.from(base),'finished response returns to the unchanged idle animation');
+  f.dispose();reference.dispose();
+});
+
+test('reduced motion and finish discard leaf response so it cannot revive on resume',()=>{
+  for(const cancel of ['reduced','finish']){
+    const f=fixture(),reference=fixture();
+    for(const entry of [f,reference])entry.props.update(1,true,.1);
+    f.props.nudge('plant',1);f.props.update(1.1,true,.1);
+    if(cancel==='reduced')for(const entry of [f,reference])entry.props.update(1.2,false,.1);
+    else for(const entry of [f,reference])entry.props.finish();
+    f.props.nudge('plant',1.25); // Ignored while reduced or finished/standing by.
+    for(const entry of [f,reference])entry.props.update(1.3,true,.1);
+    assert.deepEqual(Array.from(f.leaf.geometry.attributes.position.array),Array.from(reference.leaf.geometry.attributes.position.array));
+    assert(f.leaf.parent.quaternion.equals(reference.leaf.parent.quaternion));f.dispose();reference.dispose();
+  }
 });
 
 test('insertion starts at the cached sleeve position after its geometry has been batched away',()=>{

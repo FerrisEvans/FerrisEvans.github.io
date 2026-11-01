@@ -412,7 +412,7 @@ export async function mountRoom() {
     setState('preparing', '正在下载资源并准备首帧…');
     osdTitle = 'TUNING IN';
     await yieldForLoading(signal);
-    viewer = await module.createExperience(host, assets, graphicsAborter.signal, () => fail('图形上下文已丢失。可重新加载，或进入 LO-FI。'), content, { navigate, page: changePage, wake:resumeLoop,homeAudio:(playing,time)=>audio.setHome(playing,time),music:(value,reset)=>{void Promise.resolve(audio.setMusic(value,reset)).then(resumeLoop);},musicTime:()=>audio.musicTime,musicRunning:()=>audio.musicRunning,soundEnabled:()=>audio.enabled,volume:(value)=>audio.setVolume(value), feedback:(message)=>{status.textContent=message;audio.tone();} }, { canvas, context, dprCap:quality.dprCap }, reportLoading);
+    viewer = await module.createExperience(host, assets, graphicsAborter.signal, () => fail('图形上下文已丢失。可重新加载，或进入 LO-FI。'), content, { navigate, page: changePage, wake:resumeLoop,homeAudio:(playing,time)=>audio.setHome(playing,time),music:(value,reset)=>{void Promise.resolve(audio.setMusic(value,reset)).then(resumeLoop);},musicTime:()=>audio.musicTime,musicRunning:()=>audio.musicRunning,soundEnabled:()=>audio.enabled,volume:(value)=>audio.setVolume(value), feedback:(message,tone=true)=>{status.textContent=message;if(tone)audio.tone();} }, { canvas, context, dprCap:quality.dprCap }, reportLoading);
     const downloaded=await downloads;
     if(downloaded.error)throw downloaded.error;
     if (signal.aborted||graphicsAborter.signal.aborted) { viewer.dispose(); return; }

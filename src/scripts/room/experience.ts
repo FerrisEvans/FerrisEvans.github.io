@@ -23,7 +23,7 @@ import type { RoomContent, RoomView } from './content';
 
 type Action={id:string;label:string;object:Object3D;mesh:Mesh;size:Vector3};
 export async function createExperience(host:HTMLElement,assets:RoomAssets,signal:AbortSignal,lost:()=>void,
-  content:RoomContent,callbacks:{navigate(view:RoomView):void;page(page:number):void;wake():void;feedback(message:string):void;music(value:boolean,reset?:boolean):void;musicTime():number;musicRunning():boolean;soundEnabled():boolean;volume(value:number):void;homeAudio(playing:boolean,time:number):void},
+  content:RoomContent,callbacks:{navigate(view:RoomView):void;page(page:number):void;wake():void;feedback(message:string,tone?:boolean):void;music(value:boolean,reset?:boolean):void;musicTime():number;musicRunning():boolean;soundEnabled():boolean;volume(value:number):void;homeAudio(playing:boolean,time:number):void},
   graphics:{canvas:HTMLCanvasElement;context:WebGL2RenderingContext;dprCap?:number}, progress:LoadingReporter=()=>{}) {
   const pixelRatioCap=graphics.dprCap??2;
   const{canvas,context}=graphics,renderer=new WebGLRenderer({canvas,context,antialias:true});
@@ -161,7 +161,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         case 'online': callbacks.navigate('online');break;
         case 'window': inspect('window');callbacks.feedback(inspection==='window'?'窗外夜景 · 拖动查看 / SCROLL 缩放 / ESC 返回':'已返回书桌');break;
         case 'lamp': void toggleLamp();break;
-        case 'curtain': props.nudge('curtain',currentTime);callbacks.feedback('窗边微风');break;
+        case 'plant': props.nudge('plant',currentTime);callbacks.feedback('盆栽 · 轻触叶片',false);break;
         case 'play': pauseTape();break;
         case 'next': chooseTape((deck.state.selected??-1)+1);break;
         case 'previous': chooseTape((deck.state.selected??1)-1);break;
@@ -188,12 +188,16 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     tapes.forEach((t,i)=>addTarget(t.object,`tape:${i}`,`播放 ${String(i+1).padStart(2,'0')} · ${t.title}`,.002));
     const objects=[['CRT_Screen','zoom','电视 · 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['Work_Notepad','work','记事本 · 录像带目录'],
       ['Computer_Monitor','about','电脑 · 关于我'],['Computer_Keyboard','online','电脑 · 在线联系'],
-      ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],
-      ['Curtain_Left','curtain','窗帘 · 轻碰'],['Curtain_Right','curtain','窗帘 · 轻碰'],['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
+      ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],['Lamp_Stem','lamp','台灯 · 开 / 关'],
+      ['Plant_Pot','plant','盆栽 · 轻触叶片'],['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
       ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 近看 / 返回'],['Desk_CD','cd','CD · 近景'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
       ['Desk_Pager','pager','寻呼机 · 震动'],['Desk_Floppy','floppy','软盘 · 拨动防尘片'],['Desk_Pencil','pencil','铅笔 · 轻推'],['Desk_Clock','clock','时钟 · 查看表盘'],['Desk_Rolodex','rolodex','名片夹 · 近看'],['Desk_ReplyCard','rss','RSS 订阅卡'],['Desk_Walkman','walkman','随身听 · 近看'],
       ['VCR_Key','rewind','REW · 上一节目'],['VCR_Key.001','play','播放 / 暂停'],['VCR_Key.002','forward','FF · 下一节目'],['VCR_Key.003','stop','停止'],['VCR_Key.004','record','录制 / 写保护'],['VCR_TapeSlot','eject','退出录像带']] as const;
     objects.forEach(([name,id,label])=>addTarget(name,id,label));
+    const shadeSurfaces=['Lamp_Shade','Lamp_Interior','Lamp_Bulb'].map(name=>gltf.scene.getObjectByName(name)).filter((object):object is Object3D=>Boolean(object));
+    const lampStem=gltf.scene.getObjectByName('Lamp_Stem');
+    // Keep the thin curved stem available for exact picking after batching.
+    if(lampStem)lampStem.userData.roomDynamic=true;
     calculatorKeys.forEach((key,i)=>addTarget('Desk_Calculator_Key'+(i?'.'+String(i).padStart(3,'0'):''),'calc:'+i,'计算器 '+key,.001));
     props.optimize();batchRoom(gltf.scene,resources);
     const glow=createRoomGlow(renderer,scene,camera);resources.add(glow);
@@ -215,11 +219,11 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       raycaster.setFromCamera(pointer,camera);raycaster.layers.set(1);
       const candidates=raycaster.intersectObjects(targets.map(t=>t.mesh),false).flatMap(hit=>{
         const target=targets.find(t=>t.mesh===hit.object)!;
-        if(target.id!=='curtain')return [{target,distance:hit.distance}];
-        // A pleated curtain's box contains empty air in front of the clock.
-        // Use its live cloth surface so that air cannot steal another click.
-        raycaster.layers.set(0);const cloth=raycaster.intersectObject(target.object,true)[0];raycaster.layers.set(1);
-        return cloth?[{target,distance:cloth.distance}]:[];
+        if(!['Lamp_Shade','Lamp_Stem'].includes(target.object.name))return [{target,distance:hit.distance}];
+        // The tilted cone's box includes visible scenery beside the shade.
+        // Only its live surface can take a click away from the window.
+        raycaster.layers.set(0);const shade=raycaster.intersectObjects(target.object===lampStem?[lampStem]:shadeSurfaces,true)[0];raycaster.layers.set(1);
+        return shade?[{target,distance:shade.distance}]:[];
       }).sort((a,b)=>a.distance-b.distance);
       const hit=candidates[0];if(!hit)return null;
       raycaster.layers.set(0);const obstruction=raycaster.intersectObject(gltf.scene,true)[0];

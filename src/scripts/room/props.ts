@@ -2,7 +2,7 @@ import { Box3, BoxGeometry, Color, CylinderGeometry, Group, Mesh, MeshStandardMa
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import type { Tape } from './tapes';
 import { batchRoom } from './batch';
-import { leafMotion } from './leaf-motion';
+import { advanceLeaf, leafMotion, nudgeLeaf, type LeafResponse } from './leaf-motion';
 import { createNormalUpdater } from './dynamic-normals';
 import { createPaperContact } from './paper-contact';
 import { createObjectContact } from './object-contact';
@@ -89,7 +89,7 @@ export function createProps(root: Object3D, resources: Resources) {
   // Small idle sways retain local occlusion and lamp irradiance. Replacing
   // them with unshadowed hemisphere fill made even the resting leaves flat.
   stems.forEach(o=>plant.attach(o)); live(plant,true);
-  const leaves:{pivot:Group;phase:number;blade?:{mesh:Mesh;rest:Float32Array;normal:Float32Array;weight:Float32Array;flex:number;updateNormals:()=>void}}[]=[];
+  const leaves:{pivot:Group;phase:number;response:LeafResponse;blade?:{mesh:Mesh;rest:Float32Array;normal:Float32Array;weight:Float32Array;flex:number;updateNormals:()=>void}}[]=[];
   for(const object of stems) {
     const base=object.userData.leaf_base;
     if(!/^Plant_Leaf/.test(object.name)||!Array.isArray(base)||base.length!==3)continue;
@@ -109,7 +109,7 @@ export function createProps(root: Object3D, resources: Resources) {
       geometry.computeBoundingSphere();if(geometry.boundingSphere)geometry.boundingSphere.radius+=.055;
       blade={mesh:object,rest,normal:coordinates(geometry.attributes.normal),weight,flex:Number(object.userData.leaf_flex??.014),updateNormals:createNormalUpdater(geometry)};
     }
-    leaves.push({pivot,phase,blade});
+    leaves.push({pivot,phase,blade,response:{bend:0,velocity:0}});
   }
   const curtains:{mesh:Mesh;original:Float32Array;normals:Float32Array;bounds:Box3;updateNormals:()=>void}[]=[];
   root.traverse(o=>{
@@ -125,7 +125,7 @@ export function createProps(root: Object3D, resources: Resources) {
   const shadeRest=shade?.quaternion.clone();
   if(shade)live(shade,true);
   const interior=root.getObjectByName('Lamp_Interior'); if(interior)live(interior,true);
-  let curtainKick=-100,lampKick=-100,lastCloth=-1,clothWasMoving=false,lastLeaf=-1,leavesWereMoving=false;
+  let lampKick=-100,lastCloth=-1,clothWasMoving=false,lastLeaf=-1,leavesWereMoving=false,leafMotionEnabled=false;
   const transient=new Map<Object3D,{start:number;position:Vector3;quaternion:Quaternion;kind:string}>();
   const tapeHomes=new Map<string,Vector3>();
   root.traverse(o=>{if(/^VHS_[AB]_\d+$/.test(o.name)){const bounds=new Box3().setFromObject(o);if(!bounds.isEmpty())tapeHomes.set(o.name,bounds.getCenter(new Vector3()));}});
@@ -192,7 +192,7 @@ export function createProps(root: Object3D, resources: Resources) {
     syncPaperContact();
   }
   function nudge(name:string,time:number) {
-    if(name==='curtain'){curtainKick=time;return;}
+    if(name==='plant'){if(leafMotionEnabled)for(const leaf of leaves)nudgeLeaf(leaf.response,leaf.phase);return;}
     if(name==='lamp'){lampKick=time;return;}
     // A mechanical play key moves into its case; the entire player has weight.
     if(name==='Desk_CD')name='Desk_CD_Button';
@@ -213,6 +213,7 @@ export function createProps(root: Object3D, resources: Resources) {
     syncCalculatorContact();
   }
   function update(time:number,motion:boolean,dt:number) {
+    leafMotionEnabled=motion;
     if(heldMotion){const t=Math.max(0,Math.min(1,(time-heldMotion.start)/.7)),s=t*t*(3-2*t);heldMotion.object.position.lerpVectors(heldMotion.from,heldMotion.to,s);heldMotion.object.quaternion.slerpQuaternions(heldMotion.fromQ,heldMotion.toQ,s);if(t===1)heldMotion=null;}
     if(paperMoving) {
       const t=Math.min(1,Math.max(0,(time-paperStart)/paperDuration)),split=raised?.18:.82;
@@ -232,8 +233,10 @@ export function createProps(root: Object3D, resources: Resources) {
     plant.rotation.z=motion?Math.sin(time*.65)*.004:0;
     const updateLeaves=motion?(time-lastLeaf>=1/30||!leavesWereMoving):leavesWereMoving||lastLeaf<0;
     if(updateLeaves){lastLeaf=time;leavesWereMoving=motion;}
-    for(const {pivot,phase,blade} of leaves) {
+    for(const {pivot,phase,blade,response} of leaves) {
+      if(motion)advanceLeaf(response,phase,dt);else response.bend=response.velocity=0;
       const flex=leafMotion(time,phase,motion);
+      flex.bend+=response.bend;flex.twist+=response.bend*(.008+.002*Math.cos(phase));
       pivot.rotation.x=flex.twist; pivot.rotation.z=flex.twist*Math.cos(phase)*.6;
       if(!blade||!updateLeaves)continue;
       const attr=blade.mesh.geometry.attributes.position;
@@ -255,7 +258,7 @@ export function createProps(root: Object3D, resources: Resources) {
       const extent=bounds.max.y-bounds.min.y;
       for(let i=0;i<attr.count;i++) {
         const x=original[i*3],y=original[i*3+1],z=original[i*3+2],weight=Math.pow(1-(y-bounds.min.y)/Math.max(.001,extent),1.7);
-        const wave=motion?weight*(Math.sin(time*1.2+x*2.8)*.012+Math.sin((time-curtainKick)*5+x*3)*Math.exp(-(time-curtainKick)*1.4)*.06):0;
+        const wave=motion?weight*Math.sin(time*1.2+x*2.8)*.012:0;
         attr.setXYZ(i,x+wave*.25,y,z+wave);
       }
       attr.needsUpdate=true;
@@ -330,6 +333,8 @@ export function createProps(root: Object3D, resources: Resources) {
     for(const group of movable.values()){group.traverse(o=>{if(!o.userData.keepIndependent)delete o.userData.roomDynamic;});batchRoom(group,resources);group.traverse(o=>o.userData.roomDynamic=true);}
   }
   function finish(){
+    for(const leaf of leaves)leaf.response.bend=leaf.response.velocity=0;
+    leafMotionEnabled=false;lastLeaf=-1;
     paperMoving=false;const pose=raised?lifted:rest;paper.position.copy(pose.position);paper.quaternion.copy(pose.quaternion);
     syncPaperContact();
     flex=flexVelocity=0;flexPaper(0);
