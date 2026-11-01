@@ -22,7 +22,7 @@ function load(name){
   cache.set(name,module.exports);return module.exports;
 }
 const {createProps}=load('props'),{batchRoom}=load('batch'),{leafMotion}=load('leaf-motion');
-function fixture(interleaved=false){
+function fixture(interleaved=false,decorate=()=>{}){
   const root=new three.Group(),resources=new Set();
   const material=new three.MeshStandardMaterial();
   function mesh(name,x=0){const o=new three.Mesh(new three.BoxGeometry(.2,.03,.1),material);o.name=name;o.position.x=x;root.add(o);return o;}
@@ -37,6 +37,7 @@ function fixture(interleaved=false){
     const buffer=new three.InterleavedBuffer(new Float32Array(values),6);
     leaf.geometry.setAttribute('position',new three.InterleavedBufferAttribute(buffer,3,0));leaf.geometry.setAttribute('normal',new three.InterleavedBufferAttribute(buffer,3,3));
   }
+  decorate(root,mesh);
   const props=createProps(root,resources);
   return {root,resources,props,leaf,dispose(){for(const r of resources)r.dispose();material.dispose();}};
 }
@@ -108,4 +109,32 @@ test('ejection clears the recorder horizontally before lifting over the desk',()
   const position=f.root.getObjectByName('Moving_Cassette').position;
   assert.equal(position.x,-.22);assert.equal(position.y,.85);assert(position.z>.32&&position.z<.88);
   f.props.update(3.5,true,.1);assert(position.y>.85);f.dispose();
+});
+
+test('clock hands retain a rotated dial plane and show time without the authored static hand offsets',()=>{
+  for(const yaw of [0,-Math.PI/2]){
+    const frame=new three.Quaternion().setFromAxisAngle(new three.Vector3(0,1,0),yaw);
+    const f=fixture(false,(_root,mesh)=>{
+      const clock=mesh('Desk_Clock');clock.position.set(3.66,.815,.37);clock.quaternion.copy(frame);clock.userData.atlas='props';
+      for(const [name,angle]of [['Hour',.70],['Minute',-1.05]]){
+        const hand=mesh('Desk_Clock_Hand_'+name);hand.position.copy(clock.position).add(new three.Vector3(0,.013,.078).applyQuaternion(frame));
+        hand.quaternion.copy(frame).multiply(new three.Quaternion().setFromAxisAngle(new three.Vector3(0,0,1),angle));hand.userData.atlas='props';
+      }
+    });
+    f.props.optimize();batchRoom(f.root,f.resources);
+    for(const [hour,minute,second]of [[0,0,0],[3,15,0],[9,45,30]]){
+      f.props.updateClock(new Date(2026,10,1,hour,minute,second));f.root.updateMatrixWorld(true);
+      const seconds=hour*3600+minute*60+second;
+      for(const [name,period]of [['Hour',43200],['Minute',3600]]){
+        const hand=f.root.getObjectByName('Desk_Clock_Hand_'+name),world=hand.getWorldQuaternion(new three.Quaternion());
+        const normal=new three.Vector3(0,0,1).applyQuaternion(world),dialNormal=new three.Vector3(0,0,1).applyQuaternion(frame);
+        assert.ok(normal.distanceTo(dialNormal)<1e-7,'the moving hand must remain in the relocated dial plane');
+        const angle=-(seconds%period)/period*Math.PI*2;
+        const expected=new three.Vector3(-Math.sin(angle),Math.cos(angle),0).applyQuaternion(frame);
+        const actual=new three.Vector3(0,1,0).applyQuaternion(world);
+        assert.ok(actual.distanceTo(expected)<1e-7,`${name} must display actual time, without its baked display-time angle`);
+      }
+    }
+    f.dispose();
+  }
 });

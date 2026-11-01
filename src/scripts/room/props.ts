@@ -279,7 +279,7 @@ export function createProps(root: Object3D, resources: Resources) {
     hubs.forEach(h=>h.rotation.y=motion?time*2:0);
     for(const [object,value] of transient){const t=time-value.start;object.position.copy(value.position);object.quaternion.copy(value.quaternion);
       if(t>1.6||!motion){transient.delete(object);continue;}
-      if(value.kind.startsWith('Desk_CD_Button')||value.kind.startsWith('Remote_Key')){
+      if(value.kind.startsWith('Desk_CD_Button')){
         object.position.y-=Math.sin(Math.min(1,t/.18)*Math.PI)*.0028;
         if(t>=.18)transient.delete(object);continue;
       }
@@ -305,10 +305,23 @@ export function createProps(root: Object3D, resources: Resources) {
   const syncCalculatorContact=calculator?createObjectContact(root,calculator,root.getObjectByName('Desk_Book'),resources):()=>{};
   if(pencil){pencil.position.x=-.16;pencil.position.z=.86;pencil.rotation.y=.95;}
   root.traverse(o=>{if(/^(Mug_|Desk_Book)/.test(o.name))o.traverse(c=>c.userData.roomDynamic=true);});
-  const hands:{object:Object3D;period:number}[]=[];
-  root.traverse(o=>{if(/Desk_Floppy_Shutter|Desk_Clock_Hand_(Hour|Minute|Second)/.test(o.name)){o.userData.keepIndependent=true;o.userData.roomDynamic=true;}if(/Desk_Clock_Hand_(Hour|Minute|Second)$/.test(o.name))hands.push({object:o,period:o.name.endsWith('Hour')?43200:o.name.endsWith('Minute')?3600:60});});
-  root.traverse(o=>{if(o.name.startsWith('Remote_Key')){o.userData.keepIndependent=true;o.userData.roomDynamic=true;}});
-  function updateClock(){const now=new Date(),seconds=now.getHours()*3600+now.getMinutes()*60+now.getSeconds()+now.getMilliseconds()/1000;for(const h of hands)h.object.quaternion.setFromAxisAngle(new Vector3(0,0,1),-(seconds%h.period)/h.period*Math.PI*2);}
+  const hands:{object:Object3D;period:number;basis:Quaternion}[]=[];
+  // Hand meshes have their own authored display-time rotations. Use the
+  // case's zero-angle frame so turning the complete clock preserves its dial
+  // plane without retaining those old hour/minute offsets.
+  const clockFrame=root.getObjectByName('Desk_Clock')?.getWorldQuaternion(new Quaternion())??new Quaternion();
+  root.traverse(o=>{
+    if(/Desk_Floppy_Shutter|Desk_Clock_Hand_(Hour|Minute|Second)/.test(o.name)){o.userData.keepIndependent=true;o.userData.roomDynamic=true;}
+    if(/Desk_Clock_Hand_(Hour|Minute|Second)$/.test(o.name)){
+      const basis=o.parent?.getWorldQuaternion(new Quaternion()).invert()??new Quaternion();basis.multiply(clockFrame);
+      hands.push({object:o,period:o.name.endsWith('Hour')?43200:o.name.endsWith('Minute')?3600:60,basis});
+    }
+  });
+  const handAxis=new Vector3(0,0,1),handRotation=new Quaternion();
+  function updateClock(now=new Date()){
+    const seconds=now.getHours()*3600+now.getMinutes()*60+now.getSeconds()+now.getMilliseconds()/1000;
+    for(const h of hands)h.object.quaternion.copy(h.basis).multiply(handRotation.setFromAxisAngle(handAxis,-(seconds%h.period)/h.period*Math.PI*2));
+  }
   function optimize(){
     // Branches share the root sway, so retain one draw for them. Blades keep
     // individual pivots without making every small petiole a separate draw.

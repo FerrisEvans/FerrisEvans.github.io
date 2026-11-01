@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-import {PerspectiveCamera,Vector3} from 'three';
+import {BoxGeometry,Mesh,MeshBasicMaterial,PerspectiveCamera,Scene,Vector3} from 'three';
 import ts from 'typescript';
 
 const require=createRequire(import.meta.url);
@@ -16,10 +16,10 @@ const source=readFileSync(new URL('../../src/scripts/room/navigation.ts',import.
   .replace("import anchors from './anchors.json';",`const anchors=${JSON.stringify(anchors)};`)
   .replace("from './window-navigation'",`from '${mathUrl}'`);
 const {createNavigation}=await import(compile(source));
-const viewports=[[1440,900],[1920,1080],[1024,768]];
-function setup(width=1440,height=900){
+const viewports=[[1440,900],[1920,1080],[1024,768],[1201,1000]];
+function setup(width=1440,height=900,room){
   const camera=new PerspectiveCamera(42,1.6,.01,100);camera.position.set(.078,2.29,5.43);camera.lookAt(0,1.5,0);
-  const nav=createNavigation(camera);
+  const nav=createNavigation(camera,undefined,room);
   function resize(w,h){camera.aspect=w/h;camera.fov=2*Math.atan(Math.tan(42*Math.PI/360)*1.6/camera.aspect)*180/Math.PI;camera.updateProjectionMatrix();nav.resize(w,h);}
   resize(width,height);return{camera,nav,resize};
 }
@@ -76,6 +76,35 @@ test('the 486 camera faces the rotated glass and keeps native screen corners ord
   assert(points[0].y>points[3].y&&points[1].y>points[2].y,'screen must stay upright');
 });
 
+test('relocated clock and Rolodex inspection poses follow the delivered prop families',()=>{
+  const room=new Scene(),material=new MeshBasicMaterial();
+  function part(name,center,size){const mesh=new Mesh(new BoxGeometry(...size),material);mesh.name=name;mesh.position.fromArray(center);room.add(mesh);return mesh;}
+  const clock=part('Desk_Clock',[3.649,.815,.37],[.142,.260,.220]);
+  part('Desk_Rolodex',[-1.02,.735,-.35],[.400,.100,.300]);
+  part('Desk_Rolodex_Cards',[-1.02,.90078,-.35],[.350,.23156,.220]);
+  const {camera,nav}=setup(1440,900,room);
+  for(const [name,target,front]of [['clock',new Vector3(3.649,.815,.37),new Vector3(-1,0,0)],['rolodex',new Vector3(-1.02,.85078,-.35),new Vector3(0,0,1)]]){
+    nav.go(name,0,true);nav.update(0,0,false);camera.updateMatrixWorld(true);
+    const p=target.clone().project(camera);assert.ok(Math.abs(p.x)<1e-6&&Math.abs(p.y)<1e-6,'family bounds centre stays at the visual focus');
+    assert.ok(camera.position.clone().sub(target).dot(front)>.5,'view approaches the physical front');
+  }
+  clock.geometry.dispose();room.traverse(object=>object.geometry?.dispose());material.dispose();
+});
+
+test('TV inspection keeps the whole cabinet and lowest physical slider visible at common sizes and after resize',()=>{
+  const room=new Scene(),material=new MeshBasicMaterial(),min=new Vector3(-.578,.949,-.511),max=new Vector3(.578,2.127,.315);
+  const cabinet=new Mesh(new BoxGeometry(max.x-min.x,max.y-min.y,max.z-min.z),material);cabinet.name='CRT_Case';cabinet.position.copy(min).add(max).multiplyScalar(.5);room.add(cabinet);
+  const {camera,nav,resize}=setup(1440,900,room);nav.go('tv',0,true);
+  for(const [width,height]of viewports){
+    resize(width,height);nav.update(0,0,false);camera.updateMatrixWorld(true);
+    for(const x of [min.x,max.x])for(const y of [min.y,max.y])for(const z of [min.z,max.z]){
+      const p=new Vector3(x,y,z).project(camera);assert.ok(Math.abs(p.x)<=.841&&Math.abs(p.y)<=.841,`${width}x${height}: cabinet/control edge lost`);
+    }
+    const lowest=new Vector3(.35,1.053,.315).project(camera);assert.ok(lowest.y>-.84,'chroma slider remains above the viewport edge');
+  }
+  cabinet.geometry.dispose();material.dispose();
+});
+
 test('detail and maximum zoom can reach every original image edge with bounded eye movement',()=>{
   for(const [width,height] of viewports)for(const maximum of [false,true]){
     const {camera,nav}=setup(width,height);nav.go('window',0,true);nav.windowMode('detail');nav.update(1,0,false);
@@ -124,10 +153,33 @@ test('resize preserves safe photo coverage during every frame of zoom and pan',(
   }
 });
 
-test('the room approach keeps its regular lens until the independent panorama scene is ready',()=>{
-  const {camera,nav}=setup();nav.go('window',0,false);
-  for(let frame=1;frame<72;frame++){nav.update(frame*1000/60,1/60,true);assert.equal(nav.moving,true);assert.equal(camera.zoom,1);assert.ok(!camera.view?.enabled);}
-  nav.update(1200,1/60,true);assert.equal(nav.moving,false);assert.ok(camera.zoom>0);assert.equal(camera.view.enabled,true);checkCoverage(camera);
+test('the approach arrives with its final lens and photo composition instead of changing them at the scene handoff',()=>{
+  for(const [width,height] of viewports){
+    const {camera,nav}=setup(width,height),initial=camera.projectionMatrix.clone(),position=camera.position.clone();
+    nav.go('window',0,false);nav.update(0,0,true);
+    assert.ok(camera.projectionMatrix.equals(initial));assert.ok(camera.position.equals(position));
+    nav.update(600,.1,true);assert.equal(nav.moving,true);assert.notEqual(camera.zoom,1);
+    nav.update(1199.999,.1,true);camera.updateMatrixWorld(true);
+    const before=[photoPoint(.3,.3),photoPoint(.5,.4),photoPoint(.7,.6)].map(p=>p.project(camera));
+    nav.update(1200,.001,true);camera.updateMatrixWorld(true);assert.equal(nav.moving,false);
+    const after=[photoPoint(.3,.3),photoPoint(.5,.4),photoPoint(.7,.6)].map(p=>p.project(camera));
+    before.forEach((p,i)=>assert.ok(Math.hypot((p.x-after[i].x)*width/2,(p.y-after[i].y)*height/2)<.001,'scene handoff cannot move a photo landmark by a pixel'));
+    const top=screenUV(camera,-1,1),bottom=screenUV(camera,1,-1);
+    assert.ok(top[1]>=0&&bottom[1]<.811375,'initial frame must contain photo pixels already present on the physical room card');
+    checkCoverage(camera);
+    const arrived=camera.projectionMatrix.clone();nav.go('home',2000,false);nav.update(2000,0,true);
+    assert.ok(camera.projectionMatrix.equals(arrived),'return must start from the outgoing lens');
+    nav.update(3200,.1,false);assert.equal(camera.zoom,1);assert.ok(!camera.view?.enabled);
+  }
+});
+
+test('resize keeps a matched entry frame and a reset during the approach follows after arrival',()=>{
+  const {camera,nav,resize}=setup();nav.go('window',0,false);nav.update(600,.1,true);resize(1024,768);nav.resetWindow();
+  nav.update(1199.999,.1,true);camera.updateMatrixWorld(true);const before=photoPoint(.5,.5).project(camera);
+  nav.update(1200,.001,true);camera.updateMatrixWorld(true);const after=photoPoint(.5,.5).project(camera);
+  assert.ok(before.distanceTo(after)<1e-7);assert.equal(nav.windowState.mode,'detail');checkCoverage(camera);
+  const bottom=screenUV(camera,1,-1);assert.ok(bottom[1]<.811375,'resized entry remains within the physical room card');
+  nav.update(1201,.001,false);assert.equal(nav.windowState.zoom,1);checkCoverage(camera);
 });
 
 test('returning Home clears the inspection frustum and does not alter the original Home pose',()=>{

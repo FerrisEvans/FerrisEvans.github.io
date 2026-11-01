@@ -115,12 +115,15 @@ export function createWeather(cityMap: Texture) {
       float fallingRain(vec2 uv,float density,float speed) {
         vec2 q=uv*vec2(density,density*.31);
         q.x+=q.y*.07;
-        q.y+=weatherTime*speed;
+        // Photo v grows down the screen. Advect the sampling field upward so
+        // the rain itself travels downward (world-space glass uses +time).
+        q.y-=weatherTime*speed;
         vec2 id=floor(q),p=fract(q);
         float seed=rainHash(id),x=.12+.76*rainHash(id+3.1);
         float aa=max(fwidth(p.x),.001);
-        float streak=1.-smoothstep(.002,.006+aa,abs(p.x-x));
-        float segment=smoothstep(.08,.14,p.y)*(1.-smoothstep(.28,.48,p.y));
+        float streak=1.-smoothstep(.0015,.004+aa,abs(p.x-x));
+        // Longer, fine trails read as falling rain instead of bright dust.
+        float segment=smoothstep(.02,.07,p.y)*(1.-smoothstep(.58,.82,p.y));
         return streak*segment*step(.73,seed);
       }
       vec3 rainLayer(vec2 p, float density, float speed) {
@@ -246,7 +249,7 @@ export function createWeather(cityMap: Texture) {
       diffuseColor *= vec4(max(plate + rain.z*vec3(.30,.35,.39), vec3(0.)),1.);
     `);
   };
-  material.customProgramCacheKey = () => inspection?'room-weather-v6-full-inspection':'room-weather-v5-panoramic-depth';
+  material.customProgramCacheKey = () => inspection?'room-weather-v7-downward-inspection':'room-weather-v7-downward-room';
   return material;
   }
   const material=makeMaterial(false),inspectionMaterial=makeMaterial(true);

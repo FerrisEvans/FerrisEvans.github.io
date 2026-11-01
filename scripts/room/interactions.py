@@ -34,7 +34,7 @@ data = {
     'surfaces': {'posts': surface('CRT_Screen'), 'work': surface('Work_Notepad', True), 'about': surface('Computer_Screen')},
     'targets': [dict(name=name, view=view, **bounds(name)) for name, view in [
         ('CRT_Case', 'posts'), ('Work_Notepad', 'work'), ('Computer_Monitor', 'about'),
-        ('Desk_Book', 'work'), ('Desk_Remote', 'posts'), ('VHS_A_5', 'posts'), ('VHS_B_7', 'posts'),
+        ('Desk_Book', 'work'), ('VHS_A_5', 'posts'), ('VHS_B_7', 'posts'),
         ('Retro_Phone', 'online'), ('Desk_CD', 'cd'), ('Desk_Calculator', 'calculator')]],
 }
 (root / 'src/scripts/room/anchors.json').write_text(json.dumps(data, indent=2)+'\n')

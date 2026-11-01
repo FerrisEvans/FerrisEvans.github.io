@@ -60,3 +60,24 @@ test('panoramic projection maps both authored card edges once and keeps the phot
   assert(u(.25)<u(.5)&&u(.5)<u(.75));
   assert(Math.abs(14.56/cityProjection.scale[0]/(8.19/cityProjection.scale[1])-3)<1e-12);
 });
+
+test('airborne rain and glass water both move down screen in their respective coordinate systems',()=>{
+  const weather=module.exports.createWeather(new three.Texture()),shader={uniforms:{},vertexShader:three.ShaderLib.basic.vertexShader,fragmentShader:three.ShaderLib.basic.fragmentShader};
+  weather.material.onBeforeCompile(shader,{});
+  const airborne=shader.fragmentShader.match(/float fallingRain\([\s\S]*?\n      }/)[0];
+  const glass=shader.fragmentShader.match(/vec3 rainLayer\([\s\S]*?\n      }/)[0];
+  const runs=shader.fragmentShader.match(/vec3 rainRuns\([\s\S]*?\n      }/)[0];
+  const sign=block=>{const op=block.match(/(?:q|grid)\.y\s*([+-])=\s*weatherTime\s*\*\s*speed/);assert.ok(op,'shader must expose its advection coordinate');return op[1]==='+'?1:-1;};
+  const camera=new three.PerspectiveCamera(42,1.6,.01,100);camera.position.set(-1.15,2.4,.9);camera.lookAt(-1.15,2.4,-12.068);camera.updateMatrixWorld(true);
+  const before=new three.Vector3(0,1.5,-12.068),beforeY=before.clone().project(camera).y;
+  // Holding a rain cell fixed requires d(coordinate)/dt = -advection.
+  // Photo-v increases downward, while glass-world-y increases upward.
+  const photoVDelta=-sign(airborne)*7.2/(105*.31)*.05;
+  const airAfter=before.clone().add(new three.Vector3(0,-photoVDelta*(29.12/3),0));
+  assert.ok(airAfter.project(camera).y<beforeY,'airborne streak must travel toward the screen bottom');
+  for(const block of [glass,runs]){
+    const after=before.clone().add(new three.Vector3(0,-sign(block)*.01,0));
+    assert.ok(after.project(camera).y<beforeY,'glass beads and rivulets retain downward world motion');
+  }
+  weather.material.map.dispose();weather.material.dispose();weather.inspectionMaterial.dispose();weather.depth.dispose();
+});

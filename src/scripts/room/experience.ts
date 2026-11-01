@@ -17,6 +17,7 @@ import { yieldForLoading, type LoadingReporter } from './loading';
 import { createRoomGlow } from './glow';
 import { hasVisibleTransmission, warmScene } from './warmup';
 import { createWindowScene } from './window-scene';
+import { createTVControls, clampTVValue, tvValueText, type TVSetting } from './tv-controls';
 import { textureBytes } from './texture-budget';
 import type { RoomContent, RoomView } from './content';
 
@@ -44,8 +45,9 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     scene.add(gltf.scene);scene.updateMatrixWorld(true);
     const worldPosition=camera.getWorldPosition(new Vector3()),worldQuaternion=camera.getWorldQuaternion(camera.quaternion.clone());
     camera.removeFromParent();camera.position.copy(worldPosition);camera.quaternion.copy(worldQuaternion);scene.add(camera);
-    const navigation=createNavigation(camera),props=createProps(gltf.scene,resources);
+    const props=createProps(gltf.scene,resources);
     const windowScene=createWindowScene(lighting.inspectionMaterial,lighting.environment,resources,gltf.scene);
+    const navigation=createNavigation(camera,windowScene.windowProjection,gltf.scene);
     const details=createDeskDetails(gltf.scene,resources);
     const calculator=createCalculator(gltf.scene,resources,callbacks.wake);
     const cd=createCD(gltf.scene,resources);
@@ -103,12 +105,17 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         lampWanted=lampOn;delete room.dataset.lampLoading;callbacks.feedback('台灯资源暂未就绪，请再次点击重试');callbacks.wake();
       }
     }
-    function adjust(id:string,amount:number){
-      if(id==='volume'){volume=Math.max(0,Math.min(1,volume+amount));callbacks.volume(volume);callbacks.feedback(`音量 ${Math.round(volume*100)}%`);}
-      if(id==='tracking'){tracking=Math.max(0,Math.min(1,tracking+amount));lighting.effect('tracking',tracking);callbacks.feedback(`TRACKING ${Math.round(tracking*100)}%`);}
-      if(id==='chroma'){chroma=Math.max(0,Math.min(1.6,chroma+amount));lighting.effect('chroma',chroma);callbacks.feedback(`CHROMA ${Math.round(chroma*100)}%`);}
+    const tvControls=createTVControls(gltf.scene,document.querySelector<HTMLElement>('#surface-layer')!,(id,value,commit)=>tune(id,value,commit));resources.add(tvControls);
+    Object.assign(room.dataset,{tvVolume:String(volume),tvTracking:String(tracking),tvChroma:String(chroma)});
+    function tune(id:TVSetting,value:number,announce=true){
+      value=clampTVValue(id,value);
+      if(id==='volume'){volume=value;callbacks.volume(volume);room.dataset.tvVolume=String(value);}
+      if(id==='tracking'){tracking=value;lighting.effect('tracking',tracking);room.dataset.tvTracking=String(value);}
+      if(id==='chroma'){chroma=value;lighting.effect('chroma',chroma);room.dataset.tvChroma=String(value);}
+      tvControls.set(id,value);if(announce)callbacks.feedback(tvValueText(id,value));
       callbacks.wake();
     }
+    function adjust(id:TVSetting,amount:number){tune(id,({volume,tracking,chroma})[id]+amount);}
     function setPaper(raised:boolean){paperHidden=!raised;props.setPaper(raised,performance.now()/1000,reduced,navigation.workPose);navigation.paper(raised,performance.now(),reduced);room.dataset.paper=raised?'up':'down';callbacks.wake();}
     function beginTape(index:number){deck.select(index);const selected=deck.state.selected!;
       props.selectTape(tapes[selected],performance.now()/1000,reduced);surfaces?.selectTape(selected);
@@ -140,7 +147,6 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         case 'blue':blue=!blue;lighting.effect('blue',Number(blue));callbacks.feedback(blue?'BLUE ONLY ON':'BLUE ONLY OFF');break;
         case 'rewind':chooseTape((deck.state.selected??1)-1);break;
         case 'forward':chooseTape((deck.state.selected??-1)+1);break;
-        case 'remote':props.nudge('Remote_Key',currentTime);deck.power();syncTelevision();callbacks.feedback(deck.state.powered?'电视已打开':'电视已关闭');break;
         case 'stop':deck.stop();syncTelevision();callbacks.feedback(deck.state.selected===null?'未插入录像带':'STOP · 录像停止并回到起点');break;
         case 'record':callbacks.feedback('WRITE PROTECTED · 录像带已写保护');break;
         case 'home': callbacks.navigate('home');break;
@@ -174,8 +180,8 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       const geometry=new BoxGeometry(size.x,size.y,size.z);resources.add(geometry);
       const mesh=new Mesh(geometry,hitMaterial);mesh.position.copy(center);mesh.layers.set(1);mesh.userData.action=id;scene.add(mesh);targets.push({id,label,object,mesh,size});}
     tapes.forEach((t,i)=>addTarget(t.object,`tape:${i}`,`播放 ${String(i+1).padStart(2,'0')} · ${t.title}`,.002));
-    const objects=[['CRT_Screen','zoom','电视 · 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['CRT_Knob','volume','音量'],['CRT_Knob.001','tracking','TRACKING'],['CRT_Knob.002','chroma','CHROMA'],['Work_Notepad','work','记事本 · 录像带目录'],
-      ['Desk_Remote','remote','遥控器 · 电视电源'],['Computer_Monitor','about','电脑 · 关于我'],['Computer_Keyboard','online','电脑 · 在线联系'],
+    const objects=[['CRT_Screen','zoom','电视 · 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['Work_Notepad','work','记事本 · 录像带目录'],
+      ['Computer_Monitor','about','电脑 · 关于我'],['Computer_Keyboard','online','电脑 · 在线联系'],
       ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],
       ['Curtain_Left','curtain','窗帘 · 轻碰'],['Curtain_Right','curtain','窗帘 · 轻碰'],['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
       ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 联系方式'],['Desk_CD','cd','CD · 近景'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
@@ -215,12 +221,12 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       return hit.target;
     }
     function clearHover(){host.style.cursor='';tooltip.hidden=true;delete room.dataset.hover;}
-    const down=new Vector2(),last=new Vector2();let pressedPointer:number|undefined,dragged=false,knob:string|null=null,panDrag=false;
-    host.addEventListener('pointerdown',event=>{if(![0,2].includes(event.button)||!event.isPrimary)return;panDrag=event.button===2;pressedPointer=event.pointerId;dragged=false;const target=pick(event);knob=target&&['volume','tracking','chroma'].includes(target.id)?target.id:null;down.set(event.clientX,event.clientY);last.copy(down);host.setPointerCapture(event.pointerId);},{signal});
+    const down=new Vector2(),last=new Vector2();let pressedPointer:number|undefined,dragged=false,panDrag=false;
+    host.addEventListener('pointerdown',event=>{if(![0,2].includes(event.button)||!event.isPrimary)return;panDrag=event.button===2;pressedPointer=event.pointerId;dragged=false;down.set(event.clientX,event.clientY);last.copy(down);host.setPointerCapture(event.pointerId);},{signal});
     host.addEventListener('pointermove',event=>{
 
       if(event.pointerId===pressedPointer){if(down.distanceTo(new Vector2(event.clientX,event.clientY))>6)dragged=true;
-        if(dragged){if(knob)adjust(knob,(event.clientX-last.x-event.clientY+last.y)*.004);else navigation.drag(event.clientX-last.x,event.clientY-last.y,panDrag);clearHover();host.style.cursor='grabbing';callbacks.wake();}last.set(event.clientX,event.clientY);if(dragged)return;}
+        if(dragged){navigation.drag(event.clientX-last.x,event.clientY-last.y,panDrag);clearHover();host.style.cursor='grabbing';callbacks.wake();}last.set(event.clientX,event.clientY);if(dragged)return;}
       const target=pick(event);if(!target){clearHover();if(navigation.view==='window')host.style.cursor='grab';return;}host.style.cursor='pointer';tooltip.hidden=false;tooltip.textContent=target.label;
       tooltip.style.left=`${Math.min(event.clientX+16,room.clientWidth-250)}px`;tooltip.style.top=`${Math.min(event.clientY+16,room.clientHeight-55)}px`;room.dataset.hover=target.id;
     },{signal});
@@ -288,6 +294,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       if(windowShown){const w=navigation.windowState;Object.assign(room.dataset,{windowMode:w.mode,windowZoom:w.zoom.toFixed(4),windowCenter:w.center.map(v=>v.toFixed(6)).join(','),windowBounds:JSON.stringify(w.bounds)});document.querySelectorAll<HTMLElement>('#window-controls button[data-window-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.windowMode===w.mode)));}
       if(!budgetAt||time-budgetAt>2){measureBudget();budgetAt=time;}
       const{width,height}=host.getBoundingClientRect();surfaces?.project(camera,navigation.view,width,height,active&&!(navigation.view==='posts'&&!powered)&&!navigation.moving&&!props.paperMoving,props.raised);
+      tvControls.project(camera,width,height,active&&!navigation.moving&&!props.moving&&!props.raised&&!cards.shown&&(!inspection||inspection==='tv')&&['home','posts','work','tv'].includes(navigation.view));
       cards.update(time,width,height);
       calculator.project(camera,width,height,active&&inspection==='calculator'&&!props.moving);
       const detailState=details.getstate();Object.assign(room.dataset,{coffeeSips:String(detailState.sips),coffeeLevel:detailState.level.toFixed(3),coffeeSteam:String(detailState.steam>0),pager:String(detailState.pages),pagerLight:detailState.pagerLit.toFixed(3)});

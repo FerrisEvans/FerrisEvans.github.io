@@ -319,8 +319,12 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     }else if(material instanceof MeshPhysicalMaterial){
       // ORM already contains the authored finish. Another roughness factor
       // would turn satin ABS and enamel into much glossier surfaces.
-      if(profile==='abs'||profile==='tape-shell'){material.specularIntensity=profile==='abs'?.85:.45;material.ior=1.48;}
+      if(profile==='abs'||profile==='tape-shell'){material.specularIntensity=profile==='abs'?1:.45;material.ior=1.48;}
       if(profile==='satin-metal')material.specularIntensity=.75;
+      // Painted steel reflects through its dielectric enamel coating. Keep
+      // the baked ORM (including metallic=0) and add only the coating's lobe.
+      if(profile==='painted-metal'){material.ior=1.5;material.specularIntensity=1;material.clearcoat=.2;material.clearcoatRoughness=.24;}
+      if(profile==='pbt'){material.ior=1.5;material.specularIntensity=.8;}
       if(profile==='paper'){material.specularIntensity=.2;material.sheen=.08;material.sheenRoughness=.85;}
     }
     material.name=key;resources.add(material);profiles.set(key,material);return material;
@@ -457,7 +461,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   loading.progress?.({stage:'reflection',completed:1,total:1});await yieldForLoading(loading.signal);
   for (const material of [...materials.values(), ...profiles.values(), ...printedMaterials, screen]) {
     material.envMap = reflection;
-    material.envMapIntensity = material === computerSeal ? .35 : material === screen ? 1.1 : /\/(abs|satin-metal)$/.test(material.name) ? .9 : material.name === 'Baked props' ? .85 : .65;
+    material.envMapIntensity = material === computerSeal ? .35 : material === screen ? 1.1 : /\/(abs|satin-metal|painted-metal|pbt)$/.test(material.name) ? .9 : material.name === 'Baked props' ? .85 : .65;
     material.needsUpdate = true;
   }
   setChannel('blue');

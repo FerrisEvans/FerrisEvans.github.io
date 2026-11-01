@@ -185,6 +185,12 @@ const content = {
   #surface-layer :global(a:hover), #surface-layer :global(button:not(:disabled):hover) { background: #ffffff14; outline: 2px solid #ffffff40; }
   #surface-layer :global(:focus-visible) { outline: 3px solid #f5d696; outline-offset: -2px; background: #ffffff18; }
   #surface-layer :global(button:disabled) { pointer-events: none; }
+  #surface-layer :global(.tv-slider) {position:absolute;left:0;top:0;width:300px;height:44px;margin:0;padding:0;border:0;transform-origin:0 0;appearance:none;background:transparent;pointer-events:auto;cursor:ew-resize;touch-action:none;}
+  #surface-layer :global(.tv-slider::-webkit-slider-runnable-track) {height:44px;background:transparent;}
+  #surface-layer :global(.tv-slider::-webkit-slider-thumb) {appearance:none;width:var(--tv-thumb-size);height:44px;background:transparent;border:0;}
+  #surface-layer :global(.tv-slider::-moz-range-track) {background:transparent;border:0;}
+  #surface-layer :global(.tv-slider::-moz-range-thumb) {width:var(--tv-thumb-size);height:44px;background:transparent;border:0;}
+  #surface-layer :global(.tv-tuning-hint) {position:absolute;z-index:3;padding:5px 9px;border:1px solid #e2dbc544;border-radius:3px;background:#172019ed;color:#fff;font:13px/1.5 system-ui,sans-serif;pointer-events:none;white-space:nowrap;}
   #object-hint { position: absolute; padding: 7px 12px; background: #172019e8; color: #fff; border: 1px solid #ffffff40; border-radius: 4px; font-size: 13px; pointer-events: none; }
   #poster { position: absolute; left: 0; top: 50%; width: 100%; transform: translateY(-50%); pointer-events: none; opacity: 1; }
   #poster img { display: block; width: 100%; height: auto; }

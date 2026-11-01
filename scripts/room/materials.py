@@ -35,6 +35,7 @@ from refine_paper import refine_paper
 from refine_tapes import refine_tapes
 from refine_accessories import refine_accessories
 from refine_physical import refine_physical
+from refine_control_layout import refine_control_layout
 
 ROOT = Path(__file__).resolve().parents[2]
 args = argparse.ArgumentParser()
@@ -616,6 +617,7 @@ geometry_report['paperHQ'] = refine_paper(scene)
 geometry_report['tapeHQ'] = refine_tapes(scene)
 geometry_report['accessoriesHQ'] = refine_accessories(scene)
 geometry_report['physicalDesktop'] = refine_physical(scene, text_object)
+geometry_report['controlLayout'] = refine_control_layout(scene, text_object)
 (BUILD / 'round3-geometry.json').write_text(json.dumps({'objects':geometry_report,'curtains':curtain_report}, indent=2)+'\n')
 
 # A static photographic backdrop will be supplied independently; a camera-only
@@ -780,8 +782,10 @@ for group, objects in groups.items():
         unique = obj.data.materials[0].copy()
         unique.name = "Source_" + obj.name
         unique["source_object"] = obj.name
-        for key in ('leaf_base','leaf_tip','leaf_phase','leaf_flex','paper_bend','tape_master_part','tape_reel_origin'):
-            if key in obj: unique[key] = list(obj[key]) if key in ('leaf_base','leaf_tip','paper_bend','tape_reel_origin') else obj[key]
+        for key in ('leaf_base','leaf_tip','leaf_phase','leaf_flex','paper_bend','tape_master_part','tape_reel_origin',
+                    'roomDynamic','keepIndependent','slider_id','slider_coordinate_space','slider_min_x','slider_max_x',
+                    'slider_value_min','slider_value_max','slider_default','slider_origin_x','slider_surface'):
+            if key in obj: unique[key] = list(obj[key]) if key in ('leaf_base','leaf_tip','paper_bend','tape_reel_origin','slider_surface') else obj[key]
         if 'surface_profile' in obj:
             unique['surface_profile'] = obj['surface_profile']
         assign(obj, unique)
@@ -935,7 +939,8 @@ def emission_channel(obj, packed=False, opacity=False):
 def restore_surface(obj):
     for m in obj.data.materials:
         n, l = m.node_tree.nodes, m.node_tree.links
-        l.new(n.get("Principled BSDF").outputs[0], n.get("Material Output").inputs["Surface"])
+        shader = n.get('BakeShadowlessSurface') or n.get("Principled BSDF")
+        l.new(shader.outputs[0], n.get("Material Output").inputs["Surface"])
         for name in ("BakeEmission", "BakePack"):
             if name in n:
                 n.remove(n[name])
@@ -1043,8 +1048,10 @@ for group, obj in joined_groups.items():
         part.name = original_name
         part["atlas"] = group
         if group == 'ceramic':part['ceramicInterior']=True
-        for key in ('leaf_base','leaf_tip','leaf_phase','leaf_flex','paper_bend','tape_master_part','tape_reel_origin'):
-            if key in source: part[key] = list(source[key]) if key in ('leaf_base','leaf_tip','paper_bend','tape_reel_origin') else source[key]
+        for key in ('leaf_base','leaf_tip','leaf_phase','leaf_flex','paper_bend','tape_master_part','tape_reel_origin',
+                    'roomDynamic','keepIndependent','slider_id','slider_coordinate_space','slider_min_x','slider_max_x',
+                    'slider_value_min','slider_value_max','slider_default','slider_origin_x','slider_surface'):
+            if key in source: part[key] = list(source[key]) if key in ('leaf_base','leaf_tip','paper_bend','tape_reel_origin','slider_surface') else source[key]
         if 'surface_profile' in source:
             part['surface_profile'] = source['surface_profile']
         m = mat("Baked " + group, (1, 1, 1), 1, 1)
