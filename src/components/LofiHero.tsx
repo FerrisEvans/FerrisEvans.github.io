@@ -1,6 +1,7 @@
 import { MotionConfig } from 'motion/react';
 import RainGlassBackground from '@/components/kokonutui/rain-glass-background';
 import { TextEffect } from '@/components/motion-primitives/text-effect';
+import { SITE } from '@/data/site';
 import { buildId } from '../../public/room/materials/manifest.json';
 
 interface LofiHeroProps {
@@ -15,7 +16,7 @@ export default function LofiHero({ tagline, intro }: LofiHeroProps) {
         src={`/room/reading.jpg?v=${buildId}`}
         title={
           <TextEffect as="span" initial={false} per="char" preset="fade-in-blur" speedReveal={0.65} speedSegment={1.4}>
-            Mainloop
+            {SITE.title}
           </TextEffect>
         }
         rain={0.35}
@@ -41,7 +42,7 @@ export default function LofiHero({ tagline, intro }: LofiHeroProps) {
             </a>
           </div>
           <p className="mt-2 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-[#a99b85]">
-            MAINLOOP / PERSONAL NOTES
+            {SITE.title.toUpperCase()} / 实践志
           </p>
         </div>
       </RainGlassBackground>

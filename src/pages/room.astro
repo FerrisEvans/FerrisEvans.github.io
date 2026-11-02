@@ -36,7 +36,7 @@ const assetVersion = assetDigest.digest('hex').slice(0, 20);
 const hasPoster = existsSync(resolve(assetRoot, 'room/loading.jpg'));
 const posts = await getPosts();
 const canonical = new URL('/', Astro.site);
-const description = 'Mainloop：Ferris 的编程语言、游戏开发与 AI 笔记。';
+const description = `${SITE.title}：Ferris 的编程语言、游戏开发与 AI 笔记。`;
 const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
 const content = {
   author: SITE.author, intro: ABOUT.intro, github: SITE.github, email: SITE.email,
@@ -55,7 +55,7 @@ const content = {
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.title} />
-    <meta property="og:title" content="Mainloop" />
+    <meta property="og:title" content={SITE.title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={shareImage} />
@@ -63,12 +63,12 @@ const content = {
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={shareImage} />
-    <link rel="alternate" type="application/rss+xml" title="Mainloop RSS" href="/rss.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.title} RSS`} href="/rss.xml" />
     <title>{SITE.title}</title>
     <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=praxis-1" />
   </head>
   <body>
-    <main id="room" data-state="loading" data-asset-version={assetVersion} aria-label="Mainloop" style={`--room-reading-image: url('/room/reading.jpg?v=${posterVersion}')`}>
+    <main id="room" data-state="loading" data-asset-version={assetVersion} aria-label={SITE.title} style={`--room-reading-image: url('/room/reading.jpg?v=${posterVersion}')`}>
       <div id="scene" role="img" aria-label="城市夜景前的木质书桌、CRT 电视、暖色台灯和录像带"></div>
       {hasPoster && <picture id="poster" aria-hidden="true">
         <source media="(min-width: 701px) and (min-aspect-ratio: 6/5)" srcset={`/room/loading.jpg?v=${posterVersion}`} />
@@ -80,8 +80,8 @@ const content = {
         <p id="sound-note" class="sr-only">声音由独立开关控制，初次访问默认关闭。</p>
       </div>
       <header>
-        <a href="/" class="name" aria-label="Mainloop 首页"><Brand variant="room" width={158} /></a>
-        <span class="stage">MAINLOOP</span>
+        <a href="/" class="name" aria-label={`${SITE.title} 首页`}><Brand variant="room" width={158} /></a>
+        <span class="stage">{SITE.title.toUpperCase()}</span>
         <nav id="room-navigation" aria-label="网站导航">
           <a href="#home" data-room-view="home">HOME</a>
           <a href="#work" data-room-view="work">WORK</a>
@@ -108,8 +108,8 @@ const content = {
         <div class="guide desk"><span>桌沿</span></div>
       </div>
       <section class="caption" aria-label="场景状态">
-        <p class="eyebrow"><span class="scene-label">Mainloop</span><span class="fallback-label">MAINLOOP / READING</span></p>
-        <h1 class="fallback-title">Mainloop</h1>
+        <p class="eyebrow"><span class="scene-label">{SITE.title}</span><span class="fallback-label">{SITE.title.toUpperCase()} / READING</span></p>
+        <h1 class="fallback-title">{SITE.title}</h1>
         <p id="status" role="status" aria-live="polite">准备加载场景…</p>
         <noscript><p id="room-no-script">当前未启用 JavaScript。进入 LO-FI 阅读版，继续浏览文章、分类与搜索。</p></noscript>
         <p id="progress" role="progressbar" aria-label="场景资源加载进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" class="sr-only"></p>
