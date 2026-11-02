@@ -1,8 +1,8 @@
 export const SITE = {
-  title: 'Mainloop',
-  tagline: 'All problems are ultimately mathematical problems.',
+  title: 'Praxis',
+  tagline: '写给自己的实践志',
   description:
-    'From Web2 to Web3; From algorithms to artificial intelligence; From engine to game; From theory to practice.',
+    'AI 工程实践笔记：读、试、记。从问题到动手，把学到的炼成可用的笔记。',
   intro: '记录编程语言、游戏开发与人工智能的学习、实践和思考。',
   author: 'Ferris',
   email: 'ferris.evans@outlook.com',

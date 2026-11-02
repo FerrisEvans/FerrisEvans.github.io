@@ -1,12 +1,12 @@
 {
-  "name": "Mainloop",
-  "concept": "a-loop",
-  "approvedChoice": "A 循环光点",
-  "color": "Ink inherits currentColor; steady amber active-state pixel",
+  "name": "Praxis",
+  "concept": "geometric-p",
+  "approvedChoice": "Praxis — 写给自己的实践志",
+  "color": "Ink inherits currentColor; amber accent craft-node on geometric P",
   "wordmarkViewBox": [
     0,
     0,
-    119,
+    95,
     16
   ],
   "faviconGrid": [
@@ -16,5 +16,15 @@
   "source": "Independently drawn SVG paths and pixel letterforms; no external fonts or source-site assets.",
   "component": "src/components/Brand.astro",
   "faviconRoot": "/assets/img/favicons/",
-  "cacheVersion": "loop-1"
+  "cacheVersion": "praxis-1",
+  "palette": {
+    "paper": "#f1ebdf",
+    "ink": "#2d2923",
+    "accent": "#966325",
+    "dark": {
+      "night": "#11181f",
+      "snow": "#ece3d2",
+      "accent": "#d6a45f"
+    }
+  }
 }
