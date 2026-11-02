@@ -1,4 +1,4 @@
-# Mainloop
+# Praxis
 
 Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 GitHub Pages：<https://ferrisevans.github.io>
 
