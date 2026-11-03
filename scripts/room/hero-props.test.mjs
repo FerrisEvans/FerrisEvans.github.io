@@ -21,7 +21,7 @@ function load(name){
   },module,module.exports);
   cache.set(name,module.exports);return module.exports;
 }
-const {createProps}=load('props'),{batchRoom}=load('batch'),{leafMotion,nudgeLeaf,advanceLeaf}=load('leaf-motion');
+const {createProps}=load('props'),{batchRoom}=load('batch'),{createSurfacePicker}=load('picking'),{leafMotion,nudgeLeaf,advanceLeaf}=load('leaf-motion');
 function fixture(interleaved=false,decorate=()=>{}){
   const root=new three.Group(),resources=new Set();
   const material=new three.MeshStandardMaterial();
@@ -123,6 +123,24 @@ test('touching the plant bends leaves while the pot, soil and other click target
   for(let frame=13;frame<=420;frame++)for(const entry of [f,reference])entry.props.update(1+frame/60,true,1/60);
   assert.deepEqual(Array.from(actual),Array.from(base),'finished response returns to the unchanged idle animation');
   f.dispose();reference.dispose();
+});
+
+test('plant interaction follows the real moving leaves and never activates from the ceramic pot',()=>{
+  const f=fixture(false,(_root,mesh)=>{mesh('Plant_Pot',-2.2);mesh('Plant_Pot_Foot',-2.2);mesh('Plant_Pot_Soil',-2.2);});
+  const leaves=f.props.plantLeaves;
+  assert.equal(leaves.length,1);assert.equal(leaves[0].children[0],f.leaf);
+  leaves[0].position.x+=4;
+  const picker=createSurfacePicker(f.root,[{id:'plant',label:'leaves',roots:leaves}],f.resources);picker.bind();
+  const rayAt=object=>{
+    f.root.updateWorldMatrix(true,true);
+    const center=new three.Box3().setFromObject(object).getCenter(new three.Vector3());
+    return new three.Raycaster(center.add(new three.Vector3(0,0,2)),new three.Vector3(0,0,-1));
+  };
+  assert.equal(picker.pick(rayAt(f.leaf)).id,'plant');
+  assert.equal(picker.pick(rayAt(f.root.getObjectByName('Plant_Pot'))),null);
+  leaves[0].position.x+=.4;f.props.update(1,true,1/60);
+  assert.equal(picker.pick(rayAt(f.leaf)).id,'plant','picking follows the same leaf frame used by its animation');
+  f.dispose();
 });
 
 test('reduced motion and finish discard leaf response so it cannot revive on resume',()=>{

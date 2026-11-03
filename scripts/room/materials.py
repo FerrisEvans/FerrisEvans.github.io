@@ -47,6 +47,7 @@ args.add_argument("--render-only", action="store_true")
 args.add_argument("--skip-render", action="store_true")
 args.add_argument('--geometry-only', action='store_true')
 args.add_argument('--light-only-atlases', help='Comma-separated receiver atlases; keeps geometry and material channels unchanged')
+args.add_argument('--full-atlases', help='Comma-separated atlases to bake completely; still exports the complete model')
 args.add_argument('--output', type=Path, default=ROOT / 'public/room/materials')
 args.add_argument('--build-dir', type=Path, default=ROOT / '.room-build')
 args.add_argument('--base', type=Path, default=ROOT / '.room-build/study-greybox.blend')
@@ -738,8 +739,13 @@ room_lights = [
     area("Desk reflection", (-.3, -1.45, .78), (.25, -.05, 1.65), 12, (1.0, .79, .59), 2.4, .55),
     area("Curtain bounce", (1.3, 0, 2.1), (2.2, .7, 2.7), 8, (1.0, .82, .65), .5, 1.0),
     area("Overhead reflection", (-.89, -.35, 3.67), (-1.40, -.17, 1.96), 4, (1.0, .86, .73), .35, 1.0),
-    area("Computer phosphor", computer_center+computer_forward*.038,
-         computer_center+computer_forward*.40+Vector((0,0,-.623)), 3, (.30,.75,.42), .58, .44),
+    # A screen emitter must stay parallel to the glass. Tilting this large
+    # rectangle down put its upper half behind the monitor and cut a hard
+    # green lighting boundary through the moulded reveal. The glass centre
+    # bulges 19.5 mm ahead of the backing object's centre; this plane is just
+    # beyond it and inset from all four visible screen edges.
+    area("Computer phosphor", computer_center+computer_forward*.023,
+         computer_center+computer_forward*.42, 1.25, (.30,.75,.42), .55, .40),
 ]
 bulb_data = bpy.data.lights.new("Lamp interior", "POINT")
 bulb_data.energy = 1.2
@@ -850,6 +856,27 @@ for group, objects in groups.items():
         island_margin = .003 if group == 'equipment' else .012
         bpy.ops.uv.smart_project(angle_limit=1.1, island_margin=island_margin, area_weight=0.5)
         bpy.ops.object.mode_set(mode="OBJECT")
+        if group=='equipment':
+            # The shallow CRT reveal is one moulded surface. Independent
+            # smart-projected strips gave it visibly different denoising and
+            # padding at each edge. Give it one continuous front projection
+            # and a modest close-view texel allowance inside the same atlas.
+            slots={i for i,m in enumerate(joined.data.materials) if m.get('source_object')=='Computer_Recess'}
+            loops=[loop for face in joined.data.polygons if face.material_index in slots for loop in face.loop_indices]
+            uv=joined.data.uv_layers.active.data
+            inverse=originals['Computer_Recess'].inverted()@joined.matrix_world
+            for loop in loops:
+                p=inverse@joined.data.vertices[joined.data.loops[loop].vertex_index].co
+                uv[loop].uv=(p.x,p.z)
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.uv.average_islands_scale()
+            bpy.ops.object.mode_set(mode='OBJECT')
+            uv=joined.data.uv_layers.active.data
+            center=sum((uv[loop].uv.copy() for loop in loops),Vector((0,0)))/len(loops)
+            for loop in loops:uv[loop].uv=center+(uv[loop].uv-center)*1.75
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.uv.pack_islands(rotate=True,margin=.003)
+            bpy.ops.object.mode_set(mode='OBJECT')
     joined.data.uv_layers.active.name = "MaterialUV"
     while len(joined.data.uv_layers) > 1:
         joined.data.uv_layers.remove(joined.data.uv_layers[-1])
@@ -913,7 +940,7 @@ def bake_image(obj, name, resolution, kind, filters=None, uv="MaterialUV", data=
     kwargs = {"type": kind, "uv_layer": uv, "margin": margin}
     if filters:
         kwargs["pass_filter"] = filters
-    scene.cycles.samples = (48 if options.draft else 128) if kind == "DIFFUSE" else 12
+    scene.cycles.samples = (48 if options.draft else 256 if name.startswith('equipment_') else 128) if kind == "DIFFUSE" else 12
     print("BAKE_START", name, resolution, flush=True)
     bpy.ops.object.bake(**kwargs)
     for m in obj.data.materials:
@@ -1027,6 +1054,7 @@ def receiver_shadow_policy(group):
 
 for group, obj in joined_groups.items():
     if options.light_only_atlases and group not in options.light_only_atlases.split(','):continue
+    if options.full_atlases and group not in options.full_atlases.split(','):continue
     # Very high bulb irradiance must not quantize every dark plastic surface.
     # A separate small lamp atlas keeps RGBM precision local to each range.
     resolution = 512 if options.draft or group == "lamp" else 4096 if group in ("desk", "equipment") else 1024 if group in ("architecture", "curtains", "ceramic", "paper") else 2048

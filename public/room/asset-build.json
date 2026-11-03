@@ -1,9 +1,17 @@
 {
-  "buildId": "bb9b4de91395842e",
-  "bakeBuildId": "04414c91e8d8de84",
+  "buildId": "d852fbcd47a5d5a8",
+  "bakeBuildId": "4a1a7ea4ef9c914f",
   "assets": {
-    "study-meshopt.glb.bin": "16f86ae0cfdff8689409647bcb4d59ee8be829fb64bfe944f664babf4ee20867",
-    "reflection-cubeuv.bin": "e2042d301d8be320fc93845ca0e9b1093c145115a60eccebed2072a8168a8a80",
+    "study-meshopt.glb.bin": "2d14a809f1e517f034c592b02464e70d0ddf2962bdcd5e36a8f78bd4bec81be7",
+    "reflection-cubeuv.bin": "b847173e96920e5f7e2ec00d87a5d2505362e63871f4f7ed51ac88b964eb6a46",
+    "equipment-albedo.webp": "4a65898a0a99cf33ee8275a72a6d5cd318bf80c2c7d96e45fb94184e739b6fe0",
+    "equipment-normal.webp": "ccfad9746ec2b0233ad156a7347ca792590a947865bf49e150f5a14d4683d009",
+    "equipment-orm.webp": "f4a31682fe4004f64bc16dfbde472781bc8ae44cc1b334054eba8f727b496ed5",
+    "equipment-room.webp": "622d4332d310d5f4380594d9cac19b95191c9c66c8fb773771fc32977a737430",
+    "equipment-room-entry.webp": "0cd06ca0b767be2ed39643b862bc709768190fe7f25de85bc578e83b05674413",
+    "equipment-tv.webp": "8253af9a466677d7489a8631d6dcf3b893d90853e7b4ef488d98daf47f093caf",
+    "equipment-tv-entry.webp": "7251e6f2bfc90021ce582ff3236543c0f142ab13683d67d3486828c5340ec340",
+    "equipment-lamp-off.webp": "6dacde7b2fe47361ba7eb82e4f463cb948f197461695dd3f56a440bce9d28c3e",
     "architecture-albedo.webp": "92da7a6eeae5b8e97f2b55697711b1be38b082fe606f17e96cfbb2a215a59a09",
     "architecture-normal.webp": "04390b767ba1ba3e616f246f3035002d40be19aea2efee0c96083dbf844749df",
     "architecture-orm.webp": "d5d11c86a8d17f5a9084d120d55ed9d02c5cf820464082381dc5dba62ae34552",
@@ -68,14 +76,6 @@
     "ceramic-tv.webp": "e282fdf2ba813e7427f71cd12e25a69141d5cfe33de24d645e7109928046c14f",
     "ceramic-tv-entry.webp": "750678828af77e592fe8cba6198edd3d4e26112f8d9e616c16523644ff614959",
     "ceramic-lamp-off.webp": "199f81c8d6b60d44dd9e47d44a00276b84adb4d24242b731d33a32dd603261c8",
-    "equipment-albedo.webp": "13c84b7613d32e41bf82a202a54ac2d83c049bc4e9325a6223cd263b347fbea2",
-    "equipment-normal.webp": "71d36db8d2745f802786928d52b5303f42ee3749c2abae19a8ecd6df076fb6e2",
-    "equipment-orm.webp": "b6dceed8afbe2be8c9c431fb6e6380e20c58d2f8d33c167868175dda03df475e",
-    "equipment-room.webp": "3aa00637b2931fb3e89d31663b34fa6c161523801377fadacd62fda85264380b",
-    "equipment-room-entry.webp": "bce892b9f28ffdebbfcfcfc690e56dffad1117dc29a9b3f53313c4d37f8fef28",
-    "equipment-tv.webp": "0d0333964ac71c5aeda3959dfa5432ce7d1a6cbdd940c57f6397b9f87be9facd",
-    "equipment-tv-entry.webp": "7eaf4818c4aaac87ea121912b5a62092feedfba9619eabc3eba1c23358977321",
-    "equipment-lamp-off.webp": "1cdebe177928aa7f87075a0716f9d150c0a6fc9dd3f4ecebe8be80e8e409abc2",
     "foliage-albedo.webp": "a2cc5a239b9204111a1a96c633a257d382e5a1ed30fa0cf05338b74ecdcc360c",
     "foliage-normal.webp": "2a4ca5000addb5679f9d034fc345065318d329ffe61339011ed2f91408124004",
     "foliage-orm.webp": "0f71f39768f4ea458214246fcce0e49c7071973106a1e7b9686b620ca9ff4a2e",
@@ -101,30 +101,30 @@
     "tape-lamp-off.webp": "95161d50d20bebda1424672dfc3743cb4de9650dc7f977fc38719fab9b79520d"
   },
   "posters": {
-    "loading.jpg": "182b515e3e6dbefac1f4d295b5a7b971013295b76008294c472ecd0932895344",
-    "reading.jpg": "d21da19bb8cfdd0e1e6c346f551c79121878158b795b1018c62809fd9c64b3c8",
-    "share.jpg": "9ac6fc5a8277252a5b3344adfdab0bf19e7b2d640137512b58d289fd777ce12b"
+    "loading.jpg": "02aead22466e1ea168ff6c10e908f30369c917d60cfd69a119a8ea86e7416103",
+    "reading.jpg": "d0879e5cd09b04ae97805a0269f074de1b6d4da4f65c7303b2c87a46258a4266",
+    "share.jpg": "aca4f1d07c0e45f3f87971a6dc5cf6bf2152333a4e8239946dbf87aa66d4679f"
   },
   "capture": {
-    "browser": "156.0.8078.74",
+    "browser": "156.0.8078.80",
     "captures": [
       {
         "file": "loading.jpg",
         "width": 1920,
         "height": 1920,
-        "buildId": "bb9b4de91395842e"
+        "buildId": "d852fbcd47a5d5a8"
       },
       {
         "file": "reading.jpg",
         "width": 1440,
         "height": 900,
-        "buildId": "bb9b4de91395842e"
+        "buildId": "d852fbcd47a5d5a8"
       },
       {
         "file": "share.jpg",
         "width": 1200,
         "height": 630,
-        "buildId": "bb9b4de91395842e"
+        "buildId": "d852fbcd47a5d5a8"
       }
     ]
   }

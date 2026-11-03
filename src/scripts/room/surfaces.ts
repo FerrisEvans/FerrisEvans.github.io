@@ -132,7 +132,7 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
         const next=button(section,'下一页个人介绍',[580,510,140,50],()=>changeComputerPage(1));next.disabled=computerPage===pages.length-1;
       }
     }
-    document.querySelector<HTMLElement>('#room')!.dataset.computerPage=`${computerPage+1}/${pages.length}`;
+    Object.assign(document.querySelector<HTMLElement>('#room')!.dataset,{computerPage:`${computerPage+1}/${pages.length}`,computerMode,computerScreen:terminal?'terminal':computerMode});
   }
   function updateComputer(time:number,motion:boolean){if(!dialing)return;const elapsed=time-dialStart;if(!motion||elapsed>1.8){dialing=false;paintPC();return;}const step=Math.floor(elapsed/.45);if(step===dialStep)return;dialStep=step;const c=computer.ctx;c.fillStyle='#09170f';c.fillRect(0,0,768,576);c.fillStyle='#b9d2a6';c.font='36px RoomPixel,monospace';c.fillText('MODEM / 14400',48,70);c.font='32px RoomPixel,monospace';['ATZ','OK','ATDT 5550144','CONNECT 14400'].slice(0,step+1).forEach((line,i)=>c.fillText(line,48,160+i*65));computer.map.needsUpdate=true;}
   function changeComputerPage(delta:number){terminal=false;lineOffset=0;computerPage=Math.max(0,Math.min(pages.length-1,computerPage+delta));paintPC();callbacks.wake();}
@@ -189,5 +189,15 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
       const points=corners.map(p=>{p.project(camera);return[(p.x+1)*w/2,(1-p.y)*h/2];});mapPlane(el,width,height,points);
     }
   }
-  return{project,setPage,updateComputer,changeComputerPage,computerKey,selectTape:(index:number|null)=>{selected=index;paintWork();},setMode:(mode:RoomView)=>{if(mode==='about'||mode==='online'){terminal=false;if(mode==='online'&&computerMode!=='online'){dialing=true;dialStart=performance.now()/1000;dialStep=-1;}else if(mode==='about')dialing=false;computerMode=mode;paintPC();}},dispose:()=>layer.replaceChildren()};
+  function setMode(mode:RoomView,resume=false){
+    if(mode!=='about'&&mode!=='online')return;
+    // Looking at the monitor resumes the exact document/terminal on the tube.
+    // Floppy, pager and navigation links explicitly open their own document.
+    if(resume&&mode===computerMode)return;
+    terminal=false;
+    if(mode==='online'&&computerMode!=='online'){dialing=true;dialStart=performance.now()/1000;dialStep=-1;}
+    else if(mode==='about')dialing=false;
+    computerMode=mode;paintPC();
+  }
+  return{project,setPage,updateComputer,changeComputerPage,computerKey,setMode,get computerView(){return computerMode;},selectTape:(index:number|null)=>{selected=index;paintWork();},dispose:()=>layer.replaceChildren()};
 }

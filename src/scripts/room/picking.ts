@@ -78,6 +78,21 @@ export function createSurfacePicker(root:Object3D,targets:SurfaceTarget[],resour
   });
   const byMesh=new Map(proxies.map(proxy=>[proxy.mesh,proxy]));
   const meshes=proxies.map(proxy=>proxy.mesh);
+  async function prepare(step:()=>Promise<void>){
+    const textures=new Set<Texture>();
+    for(const {mesh}of proxies){
+      if(!mesh.geometry.boundingSphere)mesh.geometry.computeBoundingSphere();
+      for(const material of Array.isArray(mesh.material)?mesh.material:[mesh.material]){
+        const cutout=material as Material&{map?:Texture|null;alphaMap?:Texture|null};
+        if(!solid(cutout)||cutout.alphaTest<=0)continue;
+        if(cutout.map)textures.add(cutout.map);
+        if(cutout.alphaMap)textures.add(cutout.alphaMap);
+      }
+    }
+    // Image readback can take a frame even though the texture is already on
+    // the GPU. Cache every cutout while loading, before the first leaf hit.
+    for(const texture of textures){pixels(texture);await step();}
+  }
   function bind(){
     for(const proxy of proxies){
       let frame:Object3D|undefined=root;
@@ -98,5 +113,5 @@ export function createSurfacePicker(root:Object3D,targets:SurfaceTarget[],resour
     const hit=ray.intersectObjects(meshes,false).find(visibleSurface);
     return hit?byMesh.get(hit.object as Mesh)!.target??null:null;
   }
-  return{bind,pick};
+  return{bind,pick,prepare};
 }

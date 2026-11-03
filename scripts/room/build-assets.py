@@ -23,6 +23,7 @@ parser.add_argument('stage',choices=['geometry','bake','pack','audit','site','se
 parser.add_argument('--candidate',type=Path,default=DEFAULT)
 parser.add_argument('--blender',type=Path,default=Path('/Applications/Blender.app/Contents/MacOS/Blender'))
 parser.add_argument('--draft',action='store_true')
+parser.add_argument('--atlases',help='Bake only these complete atlases; retain other accepted atlas bytes')
 parser.add_argument('--city',type=Path,default=ROOT/'public/room/city-night-v3.png')
 parser.add_argument('--poster-dir',type=Path,help='Actual WebGL captures named loading.png, reading.png, share.png')
 parser.add_argument('--capture-build-id',help='buildId read from the rendered page, required to seal captures')
@@ -39,6 +40,10 @@ def blender(script,flags):run([args.blender,'--background','--factory-startup','
 def source_receipt():
     paths=sorted((ROOT/'scripts/room').glob('*.py'))+sorted(p for p in (ROOT/'scripts/room/sources').rglob('*')if p.is_file())+[ROOT/'scripts/room/architecture-uv.glb',ROOT/'scripts/room/desktop-layout.json',ROOT/'src/data/room-tapes.json',ROOT/'src/scripts/room/anchors.json',ROOT/'public/room/walnut-grain-v1.png',args.city.resolve()]
     sources={str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p):digest(p)for p in paths}
+    if args.atlases:
+        sources['reused-material-manifest']=digest(ROOT/'public/room/materials/manifest.json')
+        sources['partial-atlases']=','.join(sorted(args.atlases.split(',')))
+        sources['scripts/room/retain-atlas-meshes.mjs']=digest(ROOT/'scripts/room/retain-atlas-meshes.mjs')
     build_id=hashlib.sha256(json.dumps(sources,sort_keys=True).encode()).hexdigest()[:16]
     return {'buildId':build_id,'sources':sources,'draft':args.draft,'blender':str(args.blender),'python':sys.version.split()[0]}
 
@@ -91,12 +96,17 @@ if args.stage in ('geometry','bake'):
     flags=['--output',raw,'--build-dir',build,'--base',build/'study-greybox.blend','--city',args.city,'--build-id',receipt['buildId'],'--skip-render']
     if args.stage=='geometry':flags.append('--geometry-only')
     if args.draft:flags.append('--draft')
+    if args.atlases:flags.extend(['--full-atlases',args.atlases])
     blender('materials.py',flags)
     if args.stage=='bake':
-        run([sys.executable,ROOT/'scripts/room/optimize.py','--source',raw,'--output',packed,'--no-city'])
+        if args.atlases:run(['node',ROOT/'scripts/room/retain-atlas-meshes.mjs',raw/'study.glb',ROOT/'public/room/materials',args.atlases,candidate/'retained-atlases.json'])
+        pack_flags=['--reuse-atlases',ROOT/'public/room/materials'] if args.atlases else []
+        run([sys.executable,ROOT/'scripts/room/optimize.py','--source',raw,'--output',packed,'--no-city',*pack_flags])
         audit()
 elif args.stage=='pack':
-    run([sys.executable,ROOT/'scripts/room/optimize.py','--source',raw,'--output',packed,'--no-city']);audit()
+    if args.atlases:run(['node',ROOT/'scripts/room/retain-atlas-meshes.mjs',raw/'study.glb',ROOT/'public/room/materials',args.atlases,candidate/'retained-atlases.json'])
+    pack_flags=['--reuse-atlases',ROOT/'public/room/materials'] if args.atlases else []
+    run([sys.executable,ROOT/'scripts/room/optimize.py','--source',raw,'--output',packed,'--no-city',*pack_flags]);audit()
 elif args.stage=='audit':audit()
 elif args.stage=='site':
     m,report=audit();site=candidate/'site';site.mkdir(exist_ok=True)

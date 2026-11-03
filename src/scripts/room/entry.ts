@@ -195,12 +195,12 @@ export async function mountRoom() {
     draw(performance.now());
     if (!document.hidden && (state === 'entering' || (state === 'active' && (!isReduced() || viewer?.moving || viewer?.mediaPlaying)))) frame = requestAnimationFrame(tick);
   }
-  function navigate(target: RoomView, push = true, animateLoop = true) {
+  function navigate(target: RoomView, push = true, animateLoop = true, resumeComputer = false) {
     if (state !== 'active' || !viewer) return;
     inspectionFocus=returnFocus=null;restoreFocus=false;
     selectView(target);
     if (push && location.hash !== `#${view}`) history.pushState({ ...history.state, roomPage: page }, '', `#${view}`);
-    viewer.navigate(view, page, isReduced());
+    viewer.navigate(view, page, isReduced(), resumeComputer);
     staticUntil = performance.now() + 150;
     status.textContent=caption();
     audio.tone();
@@ -258,7 +258,7 @@ export async function mountRoom() {
     requestedView = parseView(location.hash.slice(1));
     const restoredPage = pageInfo(content.posts.length, Number(history.state?.roomPage)).page;
     const changedPage = restoredPage !== page; page = restoredPage;
-    if (state === 'active' && (requestedView !== view||viewer?.inspectionActive)) navigate(requestedView, false);
+    if (state === 'active' && (requestedView !== view||viewer?.inspectionActive)) navigate(requestedView, false, true, true);
     else if (changedPage && view === 'posts') changePage(page);
     else if(state==='active'&&cancelled)status.textContent=caption();
   }
@@ -322,8 +322,8 @@ export async function mountRoom() {
     if(contentInteractive&&((view==='about'&&['ArrowDown','ArrowUp'].includes(event.key))||(['about','online'].includes(view)&&['q','Q','1','2'].includes(event.key)))){event.preventDefault();viewer?.computerKey(event.key);resumeLoop();return;}
     if(contentInteractive && view==='about' && ['ArrowLeft','ArrowRight','PageDown','PageUp',' '].includes(event.key) && !(event.key===' ' && (event.target as HTMLElement).matches('button'))){event.preventDefault();viewer?.computerPage(['ArrowLeft','PageUp'].includes(event.key)?-1:1);resumeLoop();return;}
     if (state === 'active' && event.key.length === 1 && !['INPUT','TEXTAREA','SELECT'].includes((event.target as HTMLElement).tagName)) {
-      const shortcut = ({c:'about',n:'work',z:'tv'} as const)[event.key.toLowerCase() as 'c'|'n'|'z'];
-      if (shortcut) { event.preventDefault(); if(shortcut==='tv')viewer?.action('zoom');else if(shortcut==='work'&&view==='work'&&!viewer?.inspectionActive)viewer?.action('work');else navigate(shortcut); resumeLoop();return; }
+      const shortcut = ({c:'computer',n:'work',z:'tv'} as const)[event.key.toLowerCase() as 'c'|'n'|'z'];
+      if (shortcut) { event.preventDefault(); if(shortcut==='computer')viewer?.action('computer');else if(shortcut==='tv')viewer?.action('zoom');else if(shortcut==='work'&&view==='work'&&!viewer?.inspectionActive)viewer?.action('work');else navigate(shortcut); resumeLoop();return; }
       const object=({l:'lamp',w:'window',m:'cd',' ':'play'} as Record<string,string>)[event.key.toLowerCase()];
       if(object&&!((event.target as HTMLElement).matches('button,a')&&event.key===' ')){event.preventDefault();viewer?.action(object);resumeLoop();return;}
     }
@@ -411,12 +411,15 @@ export async function mountRoom() {
       if(signal.aborted||graphicsAborter.signal.aborted)return;
     }
     const files: (AssetFile & {deferred?:boolean})[] = JSON.parse(document.querySelector('#room-assets')!.textContent!);
-    assets = new RoomAssets(files.filter(file=>!file.deferred), (loaded, total) => {
+    // Include the full lighting and lamp-off textures in the loading gate.
+    // Their decode/upload order remains staged, but no visual interaction
+    // starts a new asset download after the visitor enters the room.
+    assets = new RoomAssets(files, (loaded, total) => {
       if (state !== 'loading' && state !== 'preparing') return;
       room.dataset.loadedBytes = String(loaded);
       room.dataset.totalBytes = String(total);
       reportLoading({stage:'download',completed:loaded,total,detail:`${(loaded / 1e6).toFixed(1)} / ${(total / 1e6).toFixed(1)} MB`});
-    }, {deferred:files.filter(file=>file.deferred),timing,version:room.dataset.assetVersion});
+    }, {timing,version:room.dataset.assetVersion});
     drawOSD();
     const fontReady = Promise.all([['RoomPixel','/room/fonts/VT323-Regular.ttf'],['RoomPixelZH','/fonts/room-pixel-zh.woff2']].map(async ([family,url]) => {
       const buffer=await assets!.read(url,'high');
@@ -437,7 +440,7 @@ export async function mountRoom() {
     setState('preparing', '正在下载资源并准备首帧…');
     osdTitle = 'TUNING IN';
     await yieldForLoading(signal);
-    viewer = await module.createExperience(host, assets, graphicsAborter.signal, () => fail('图形上下文已丢失。可重新加载，或进入 LO-FI。'), content, { navigate, inspection, page: changePage, wake:resumeLoop,homeAudio:(playing,time)=>audio.setHome(playing,time),music:(value,reset)=>{void Promise.resolve(audio.setMusic(value,reset)).then(resumeLoop);},musicTime:()=>audio.musicTime,musicRunning:()=>audio.musicRunning,soundEnabled:()=>audio.enabled,volume:(value)=>audio.setVolume(value), feedback:(message,tone=true)=>{status.textContent=message;if(tone)audio.tone();} }, { canvas, context, dprCap:quality.dprCap }, reportLoading);
+    viewer = await module.createExperience(host, assets, graphicsAborter.signal, () => fail('图形上下文已丢失。可重新加载，或进入 LO-FI。'), content, { navigate:(view,resumeComputer=false)=>navigate(view,true,true,resumeComputer), inspection, page: changePage, wake:resumeLoop,homeAudio:(playing,time)=>audio.setHome(playing,time),music:(value,reset)=>{void Promise.resolve(audio.setMusic(value,reset)).then(resumeLoop);},musicTime:()=>audio.musicTime,musicRunning:()=>audio.musicRunning,soundEnabled:()=>audio.enabled,volume:(value)=>audio.setVolume(value), feedback:(message,tone=true)=>{status.textContent=message;if(tone)audio.tone();} }, { canvas, context, dprCap:quality.dprCap }, reportLoading);
     const downloaded=await downloads;
     if(downloaded.error)throw downloaded.error;
     if (signal.aborted||graphicsAborter.signal.aborted) { viewer.dispose(); return; }
@@ -452,13 +455,6 @@ export async function mountRoom() {
     setState('ready', '画面已就绪 · 点击电视或按 Tab 选择后进入');
     drawOSD();
     resize();
-    // Fine irradiance is optional for entry. Stream it after the first frame,
-    // then blend it only while the visitor is inside the room.
-    const detailTimer=setTimeout(()=>{
-      if(graphicsAborter.signal.aborted)return;
-      void viewer?.prepareDetails().then(resumeLoop,()=>{});
-    },600);
-    graphicsAborter.signal.addEventListener('abort',()=>clearTimeout(detailTimer),{once:true});
     // Asset capture uses the same entry path, with static Home and sound off.
     if (captureMode === 'reading') enter.click();
   } catch (error) {

@@ -135,3 +135,37 @@ test('computer headings have no hidden tab targets while paging, real links and 
     assert.deepEqual(f.navigations,['about','online']);
   }finally{f.dispose();}
 });
+
+test('returning to the computer preserves the pager document without redialing',()=>{
+  const f=fixture();
+  try{
+    f.surfaces.setMode('online');f.surfaces.updateComputer(performance.now()/1000+2,true);
+    f.project('online');const links=f.section('online').children;
+    f.surfaces.setMode('home');f.project('home');
+    f.surfaces.setMode('work');f.project('work');
+    assert.equal(f.surfaces.computerView,'online');
+    f.surfaces.setMode(f.surfaces.computerView,true);f.project('online');
+    assert.equal(f.section('online').hidden,false,'resuming cannot start another modem delay');
+    assert.equal(f.section('online').children,links,'the current screen and its controls remain intact');
+  }finally{f.dispose();}
+});
+
+test('computer resume retains the about page, scroll position and terminal while explicit routes open documents',()=>{
+  const f=fixture();
+  try{
+    f.surfaces.setMode('about');f.surfaces.changeComputerPage(1);f.surfaces.computerKey('ArrowDown');
+    const controls=f.section('about').children,reading=controls[0].textContent;
+    f.surfaces.setMode('home');f.project('home');
+    assert.equal(f.surfaces.computerView,'about');
+    f.surfaces.setMode(f.surfaces.computerView,true);f.project('about');
+    assert.equal(f.section('about').children,controls);assert.equal(f.section('about').children[0].textContent,reading);
+    assert.equal(f.section('about').children.at(-1).disabled,true,'last page is retained');
+    f.surfaces.computerKey('q');const terminal=f.section('about').children;
+    f.surfaces.setMode('home');f.surfaces.setMode(f.surfaces.computerView,true);
+    assert.equal(f.section('about').children,terminal,'resume must not close the terminal menu');
+    f.surfaces.setMode('about');
+    assert.deepEqual(f.section('about').children.filter(el=>el.tag==='button').map(el=>el.attributes['aria-label']),['上一页个人介绍','下一页个人介绍'],'an explicit floppy/about action opens the document');
+    f.surfaces.setMode('online');f.surfaces.setMode('about');
+    assert.equal(f.surfaces.computerView,'about');assert.equal(f.section('about').children.at(-1).disabled,true,'opening other computer content retains the about reading position');
+  }finally{f.dispose();}
+});

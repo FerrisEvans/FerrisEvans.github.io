@@ -12,6 +12,7 @@ const requiredFiles = [
   'lofi/index.html',
   'room/index.html',
   'release.json',
+  'sw.min.js',
 ];
 
 for (const rel of requiredFiles) {

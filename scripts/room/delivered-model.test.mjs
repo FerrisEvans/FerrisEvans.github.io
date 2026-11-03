@@ -234,6 +234,51 @@ test('delivered flat monitor bezels do not interpolate aperture normals across t
   } finally { dispose(); }
 });
 
+test('delivered computer reveal stays behind the fascia without a floating outer ring', async () => {
+  const {scene,Box3,Vector3,dispose}=await decodeDelivered();
+  const {Raycaster}=await import('three');
+  const anchors=JSON.parse(readFileSync(process.env.ROOM_ANCHORS_FILE
+    ? resolve(process.env.ROOM_ANCHORS_FILE)
+    : new URL('../../src/scripts/room/anchors.json',import.meta.url)));
+  try{
+    const shell=scene.getObjectByName('Computer_Monitor'),reveal=scene.getObjectByName('Computer_Recess');
+    const screen=scene.getObjectByName('Computer_Screen'),seal=scene.getObjectByName('Computer_GlassSeal');
+    assert(shell?.isMesh&&reveal?.isMesh&&screen?.isMesh&&seal?.isMesh,'layered manufactured monitor');
+    const localBounds=object=>{
+      const bounds=new Box3(),point=new Vector3(),positions=object.geometry.getAttribute('position');
+      for(let i=0;i<positions.count;i++)bounds.expandByPoint(shell.worldToLocal(point.fromBufferAttribute(positions,i).applyMatrix4(object.matrixWorld)));
+      return bounds;
+    };
+    const body=localBounds(shell),rim=localBounds(reveal),display=localBounds(screen);
+    const center=display.getCenter(new Vector3()),forward=new Vector3(0,0,1).transformDirection(shell.matrixWorld);
+    const ray=new Raycaster();
+    const hit=(x,y)=>{
+      ray.set(shell.localToWorld(new Vector3(x,y,body.max.z+.1)),forward.clone().negate());
+      return ray.intersectObjects([shell,reveal],false)[0];
+    };
+    // Sample the overlap land, where the former flange alternated in front
+    // of and behind the fascia. This catches a real exported intersection,
+    // including vertex reorder and Meshopt, without inspecting source text.
+    for(const ratio of [-.5,0,.5]){
+      const x=center.x+ratio*(rim.max.x-rim.min.x)*.5;
+      const y=center.y+ratio*(rim.max.y-rim.min.y)*.5;
+      for(const [u,v]of [[x,rim.max.y-.001],[x,rim.min.y+.001],[rim.max.x-.001,y],[rim.min.x+.001,y]]){
+        assert.equal(hit(u,v)?.object.name,shell.name,'the outer flange must never stand in front of the flat cover');
+      }
+    }
+    for(const [x,y]of [[(display.max.x+rim.max.x)/2,center.y],[(display.min.x+rim.min.x)/2,center.y],
+      [center.x,(display.max.y+rim.max.y)/2],[center.x,(display.min.y+rim.min.y)/2]]){
+      assert.equal(hit(x,y)?.object.name,reveal.name,'the inner opening must expose the recessed ABS reveal');
+    }
+    const glassCenter=anchors.surfaces.about.map(p=>new Vector3(...p)).reduce((a,p)=>a.add(p),new Vector3()).multiplyScalar(.25);
+    const cover=shell.localToWorld(new Vector3(center.x,center.y,body.max.z));
+    // The live optical layer has a 12 mm central bow beyond its anchored rim.
+    assert(cover.clone().sub(glassCenter.addScaledVector(forward,.012)).dot(forward)>.01,
+      'the bowed glass retains real depth behind the manufactured front cover');
+    assert(localBounds(seal).max.z<body.max.z-.01,'the narrow glass seal sits inside the opening');
+  }finally{dispose();}
+});
+
 test('delivered telephone finger holes reveal an unobstructed number plate with no coplanar bezel', async () => {
   const {scene, Box3, Vector3, dispose} = await decodeDelivered();
   const {Raycaster, DoubleSide} = await import('three');

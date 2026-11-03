@@ -23,7 +23,7 @@ import { createSurfacePicker, type SurfaceTarget } from './picking';
 import type { RoomContent, RoomView } from './content';
 
 export async function createExperience(host:HTMLElement,assets:RoomAssets,signal:AbortSignal,lost:()=>void,
-  content:RoomContent,callbacks:{navigate(view:RoomView):void;inspection(state:'open'|'return'|'cancel',view:RoomView):void;page(page:number):void;wake():void;feedback(message:string,tone?:boolean):void;music(value:boolean,reset?:boolean):void;musicTime():number;musicRunning():boolean;soundEnabled():boolean;volume(value:number):void;homeAudio(playing:boolean,time:number):void},
+  content:RoomContent,callbacks:{navigate(view:RoomView,resumeComputer?:boolean):void;inspection(state:'open'|'return'|'cancel',view:RoomView):void;page(page:number):void;wake():void;feedback(message:string,tone?:boolean):void;music(value:boolean,reset?:boolean):void;musicTime():number;musicRunning():boolean;soundEnabled():boolean;volume(value:number):void;homeAudio(playing:boolean,time:number):void},
   graphics:{canvas:HTMLCanvasElement;context:WebGL2RenderingContext;dprCap?:number}, progress:LoadingReporter=()=>{}) {
   const pixelRatioCap=graphics.dprCap??2;
   const{canvas,context}=graphics,renderer=new WebGLRenderer({canvas,context,antialias:true});
@@ -91,7 +91,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       inspection=kind;room.dataset.inspection=kind;
       if(kind==='calculator')props.holdCalculator(true,performance.now()/1000,reduced,camera);
       else navigation.go(kind,performance.now(),reduced);
-      const captions={window:'窗外夜景 · 拖动查看 / SCROLL 缩放 / ESC 返回',calculator:'计算器 · 点击按键或使用数字键 · ESC 返回',tv:'电视近景 · Z 或 ESC 返回',cd:'CD · M 或 ESC 返回 · 控件播放原创音乐',clock:'查看表盘 · ESC 返回',rolodex:'名片夹 · ESC 返回',walkman:'随身听 · ESC 返回',phone:'电话近景 · 再次点击或 ESC 返回'};
+      const captions={window:'窗外夜景 · 拖动查看 / SCROLL 缩放 / ESC 返回',calculator:'计算器 · 点击按键或使用数字键 · ESC 返回',tv:'电视 · Z 或 ESC 返回',cd:'CD · M 或 ESC 返回 · 控件播放原创音乐',clock:'查看表盘 · ESC 返回',rolodex:'名片夹 · ESC 返回',walkman:'随身听 · ESC 返回',phone:'电话 · 再次点击或 ESC 返回'};
       callbacks.feedback(captions[kind]);callbacks.wake();
     }
     let paperHidden=false,choosingTape=false;
@@ -108,19 +108,10 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       else lighting.setHome(homeTime(),reduced&&homeRequested===null);
       room.dataset.channel=powered?source:'off';room.dataset.television=powered?'on':'off';room.dataset.tvSource=source;
     }
-    let lampWanted=true,lampRequest=0;
     let lampOn=true,lampLevel=1,musicOn=false,volume=.6,tracking=0,chroma=1,underscan=false,delay=false,blue=false;
-    async function toggleLamp(){
-      const wanted=lampWanted=!lampWanted,request=++lampRequest;
-      try{
-        if(!wanted){room.dataset.lampLoading='true';callbacks.feedback('台灯准备中…');await lighting.prepareLampOff();}
-        if(disposed||request!==lampRequest)return;
-        lampOn=wanted;delete room.dataset.lampLoading;props.nudge('lamp',currentTime);
-        room.dataset.lamp=lampOn?'on':'off';callbacks.feedback(lampOn?'台灯已打开':'台灯已关闭');callbacks.wake();
-      }catch{
-        if(disposed||request!==lampRequest)return;
-        lampWanted=lampOn;delete room.dataset.lampLoading;callbacks.feedback('台灯资源暂未就绪，请再次点击重试');callbacks.wake();
-      }
+    function toggleLamp(){
+      lampOn=!lampOn;props.nudge('lamp',currentTime);
+      room.dataset.lamp=lampOn?'on':'off';callbacks.feedback(lampOn?'台灯已打开':'台灯已关闭');callbacks.wake();
     }
     const tvControls=createTVControls(gltf.scene,document.querySelector<HTMLElement>('#surface-layer')!,(id,value,commit)=>tune(id,value,commit));resources.add(tvControls);
     Object.assign(room.dataset,{tvVolume:String(volume),tvTracking:String(tracking),tvChroma:String(chroma)});
@@ -148,7 +139,6 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       delete room.dataset.tape;delete room.dataset.tapeTime;syncTelevision();callbacks.feedback('录像已退出');callbacks.wake();}
     function action(id:string){
       cancelPendingAction();clearHover();
-      if(lighting.detailState==='failed')void prepareDetails().then(callbacks.wake,()=>{});
       if(id.startsWith('calc:')){calculator.press(calculatorKeys[Number(id.split(':')[1])]);callbacks.wake();return;}
       if(id.startsWith('tape:')){chooseTape(Number(id.split(':')[1]));return;}
       switch(id){
@@ -172,6 +162,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         case 'zoom': inspect('tv');break;
         case 'work': if(navigation.view==='work')setPaper(!props.raised);else callbacks.navigate('work');break;
         case 'posts': callbacks.navigate('posts');break;
+        case 'computer': callbacks.navigate(surfaces?.computerView??'about',true);break;
         case 'about': callbacks.navigate('about');break;
         case 'online': callbacks.navigate('online');break;
         case 'window': inspect('window');break;
@@ -201,26 +192,28 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     }
     tapes.forEach((t,i)=>addTarget(t.object,`tape:${i}`,`播放 ${String(i+1).padStart(2,'0')} · ${t.title}`,['Label_'+t.object]));
     const objects=[['CRT_Screen','zoom','电视 · 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['Work_Notepad','work','记事本 · 录像带目录'],
-      ['Computer_Monitor','about','电脑 · 关于我'],['Computer_Keyboard','about','键盘 · 打开电脑'],
+      ['Computer_Monitor','computer','电脑 · 查看屏幕'],['Computer_Keyboard','computer','键盘 · 打开电脑'],
       ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],['Lamp_Stem','lamp','台灯 · 开 / 关'],
-      ['Plant_Pot','plant','盆栽 · 轻触叶片'],['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
-      ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 近看 / 返回'],['Desk_CD','cd','CD · 近景'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
-      ['Desk_Pager','pager','在线联系 · 查看寻呼消息'],['Desk_Floppy','floppy','关于我 · 读取软盘'],['Desk_Pencil','pencil','铅笔 · 轻推'],['Desk_Clock','clock','时钟 · 查看表盘'],['Desk_Rolodex','rolodex','名片夹 · 近看'],['Desk_ReplyCard','rss','RSS 订阅卡'],['Desk_Walkman','walkman','随身听 · 近看'],
+      ['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
+      ['Mug_Body','coffee','休息一下'],['Retro_Phone','phone','电话 · 查看 / 返回'],['Desk_CD','cd','CD · 查看'],['Desk_CD_Button','music','CD 播放 / 暂停'],['Desk_CD_Button.001','music-stop','CD 停止'],['Desk_CD_Button.002','music-volume','CD 音量'],['Desk_Calculator','calculator','计算器'],
+      ['Desk_Pager','pager','在线联系 · 查看寻呼消息'],['Desk_Floppy','floppy','关于我 · 读取软盘'],['Desk_Pencil','pencil','铅笔 · 轻推'],['Desk_Clock','clock','时钟 · 查看表盘'],['Desk_Rolodex','rolodex','名片夹 · 查看'],['Desk_ReplyCard','rss','RSS 订阅卡'],['Desk_Walkman','walkman','随身听 · 查看'],
       ['VCR_Key','rewind','REW · 上一节目'],['VCR_Key.001','play','播放 / 暂停'],['VCR_Key.002','forward','FF · 下一节目'],['VCR_Key.003','stop','停止'],['VCR_Key.004','record','录制 / 写保护'],['VCR_TapeSlot','eject','退出录像带']] as const;
     const aliases:Record<string,string[]>={
-      Computer_Monitor:['Computer_Screen','Computer_Recess','Computer_MonitorButton','Computer_MonitorButton.001','Computer_MonitorButton.002','Interface_about'],
+      Computer_Monitor:['Computer_Screen','Computer_Recess','Computer_GlassSeal','Computer_MonitorButton','Computer_MonitorButton.001','Computer_MonitorButton.002','Interface_about'],
       Lamp_Shade:['Lamp_Interior','Lamp_Bulb','Lamp_Socket'],
       Lamp_Base:['Lamp_Base_Collar','Lamp_Base_Felt','Lamp_FootCollar'],
       Mug_Body:['Mug_Handle','Coffee_Liquid'],
     };
     const keyboard:string[]=[],paper:string[]=[];gltf.scene.traverse(object=>{
       if(/^Computer_(?:Key(?:[_.]|$)|Keyboard(?:_|$))/.test(object.name))keyboard.push(object.name);
+      if(/^Computer_(?:Monitor|Stand|Base|Drive|Power|StatusLED|ChassisSeam|FrontVent|CaseJoint|VentBacking|Print_(?:Monitor|BRIGHT|CONTRAST|Power|CPU))/.test(object.name))aliases.Computer_Monitor.push(object.name);
       if(object.name.startsWith('Work_Notepad_'))paper.push(object.name);
     });
     aliases.Computer_Keyboard=keyboard;aliases.Work_Notepad=paper;
     objects.forEach(([name,id,label])=>addTarget(name,id,label,aliases[name]));
     calculatorKeys.forEach((key,i)=>{const suffix=i?'.'+String(i).padStart(3,'0'):'';
       addTarget('Desk_Calculator_Key'+suffix,'calc:'+i,'计算器 '+key,['Desk_Calculator_Print_Key'+suffix]);});
+    targets.push({id:'plant',label:'盆栽 · 轻触叶片',roots:props.plantLeaves});
     const picker=createSurfacePicker(gltf.scene,targets,resources);
     props.optimize();batchRoom(gltf.scene,resources);picker.bind();
     const glow=createRoomGlow(renderer,scene,camera);resources.add(glow);
@@ -334,6 +327,14 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     }
     lighting.setProgram('blank');resize();
     progress({stage:'model',completed:2,total:2});await yieldForLoading(signal);
+    room.dataset.interactionsReady='false';
+    const endInteractions=assets.timing?.start('interactions.prepare');
+    // Every visual interaction is ready before the entry gate opens. A failed
+    // required texture follows the existing loading fallback, never a delayed
+    // first click or a background swap in the middle of an object animation.
+    await Promise.all([lighting.prepareLampOff(),lighting.prepareDetails()]);
+    lighting.updateDetails(1,false);room.dataset.lightingDetails=lighting.detailState;
+    await picker.prepare(()=>yieldForLoading(signal));
     const endShaders=assets.timing?.start('shaders.total');
     const compile=async(name:string,operation:()=>Promise<unknown>)=>{const end=assets.timing?.start('shaders.'+name);try{await operation();end?.();}catch(error){end?.('error');throw error;}};
     const shaderVariants=lighting.film?4:3;
@@ -367,6 +368,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       progress({stage:'frame',completed:1+completed/total,total:4});
       await yieldForLoading(signal);
     });
+    room.dataset.interactionsReady='true';endInteractions?.();
     endWarmup?.();
     const endFirstFrame=assets.timing?.start('frame.first-submit');
     host.append(canvas);render();endFirstFrame?.();
@@ -374,8 +376,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     progress({stage:'frame',completed:3,total:4});await yieldForLoading(signal);
     const endSecondFrame=assets.timing?.start('frame.second-submit');
     render();endSecondFrame?.();progress({stage:'frame',completed:4,total:4});await yieldForLoading(signal);
-    function navigate(view:RoomView,page:number,isReduced:boolean){reduced=isReduced;cancelPendingAction();cards.hide();if(inspection)closeInspection(false);clearHover();navigation.go(view,performance.now(),reduced);surfaces?.setMode(view);
-      if(lighting.detailState==='failed')void prepareDetails().then(callbacks.wake,()=>{});
+    function navigate(view:RoomView,page:number,isReduced:boolean,resumeComputer=false){reduced=isReduced;cancelPendingAction();cards.hide();if(inspection)closeInspection(false);clearHover();navigation.go(view,performance.now(),reduced);surfaces?.setMode(view,resumeComputer);
       const raised=view==='work'&&!(choosingTape&&paperHidden);if(view==='work'&&!choosingTape)paperHidden=false;
       props.setPaper(raised,performance.now()/1000,reduced,navigation.workPose);room.dataset.paper=raised?'up':'down';if(view==='work')navigation.paper(raised,performance.now(),reduced);
       deck.navigate(view,page);if(view==='posts')surfaces?.setPage(page);syncTelevision();
@@ -395,8 +396,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     }
     function escape(){if(cancelPendingAction()){callbacks.feedback('已取消打开页面',false);callbacks.wake();return true;}if(cards.shown){cards.hide();callbacks.wake();return true;}if(inspection){closeInspection();return true;}if(navigation.view==='work'&&props.raised){setPaper(false);return true;}return false;}
     function suspend(){cancelPendingAction();lighting.film?.setPlaying(false);callbacks.homeAudio(false,homeTime());}
-    async function prepareDetails(){try{const pending=lighting.prepareDetails();room.dataset.lightingDetails=lighting.detailState;await pending;if(room.dataset.capture)lighting.updateDetails(1,false);}finally{room.dataset.lightingDetails=lighting.detailState;}}
-    return{resize,render,navigate,setPage,standby,settle,escape,action,chooseTape,suspend,prepareDetails,cancelPendingNavigation:cancelPendingAction,returnFromWindow:()=>{if(inspection==='window')closeInspection();},windowMode:(mode:'overview'|'detail')=>{if(navigation.view==='window'){navigation.windowMode(mode);callbacks.wake();}},get windowActive(){return inspection==='window';},nextTape:()=>chooseTape((deck.state.selected??-1)+1),computerPage:(delta:number)=>surfaces?.changeComputerPage(delta),calculatorKey:calculator.press,computerKey:(key:string)=>surfaces?.computerKey(key),
+    return{resize,render,navigate,setPage,standby,settle,escape,action,chooseTape,suspend,cancelPendingNavigation:cancelPendingAction,returnFromWindow:()=>{if(inspection==='window')closeInspection();},windowMode:(mode:'overview'|'detail')=>{if(navigation.view==='window'){navigation.windowMode(mode);callbacks.wake();}},get windowActive(){return inspection==='window';},nextTape:()=>chooseTape((deck.state.selected??-1)+1),computerPage:(delta:number)=>surfaces?.changeComputerPage(delta),calculatorKey:calculator.press,computerKey:(key:string)=>surfaces?.computerKey(key),
       setProgram:lighting.setProgram,get calculatorActive(){return inspection==='calculator';},get inspectionActive(){return inspection!==null;},get cameraMoving(){return navigation.moving;},get mediaPlaying(){return homeAdvancing||deck.state.transport==='playing'||musicOn&&callbacks.musicRunning();},get moving(){return navigation.moving||props.moving||cards.moving||details.moving||lighting.detailsMoving||Math.abs(lampLevel-Number(lampOn))>.001;},dispose};
   }catch(error){for(const r of resources)r.dispose();dispose();throw error;}
 }

@@ -356,5 +356,5 @@ export function createProps(root: Object3D, resources: Resources) {
     for(const[object,value]of transient){object.position.copy(value.position);object.quaternion.copy(value.quaternion);}transient.clear();
     root.updateMatrixWorld(true);syncFloppyContact();syncCDContact();
   }
-  return {paper,resize,optimize,finish,updateClock,setPaper,holdCalculator,selectTape,eject,nudge,update,get raised(){return raised;},get moving(){return paperMoving||!!heldMotion||tapePhase!=='idle'||transient.size>0;},get paperMoving(){return paperMoving;},get loading(){return tapePhase!=='idle';},get tapeState(){return{tapePhase,physicalTape:physicalTape?.id??'',pendingTape:pendingTape?.id??''};}};
+  return {paper,plantLeaves:leaves.map(leaf=>leaf.pivot),resize,optimize,finish,updateClock,setPaper,holdCalculator,selectTape,eject,nudge,update,get raised(){return raised;},get moving(){return paperMoving||!!heldMotion||tapePhase!=='idle'||transient.size>0;},get paperMoving(){return paperMoving;},get loading(){return tapePhase!=='idle';},get tapeState(){return{tapePhase,physicalTape:physicalTape?.id??'',pendingTape:pendingTape?.id??''};}};
 }

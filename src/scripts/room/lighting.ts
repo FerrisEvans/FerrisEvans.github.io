@@ -259,7 +259,9 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       const fetchFailure=fetched.find(result=>result.status==='rejected');
       if(fetchFailure?.status==='rejected')throw fetchFailure.reason;
       const loaded=await Promise.allSettled(entries.map(async({item,path})=>({item,path,map:await texture(path,false,item.channel)})));
-      for(const {path}of entries)assets!.release(path);
+      // Entry now preloads the complete visual bundle. Keep these responses
+      // until its shared loading gate releases them; evicting here would let
+      // a later preload worker fetch the same full-resolution texture again.
       const decodeFailure=loaded.find(result=>result.status==='rejected');
       if(decodeFailure?.status==='rejected'){
         for(const result of loaded)if(result.status==='fulfilled'){
@@ -421,7 +423,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
           if(['CRT_Case','CRT_ControlPanel','VCR_Front'].includes(object.name))profile='abs-graphite';
           else if(/^(CRT_(Button|Power$|Slider_)|VCR_Key|Desk_Calculator_Key|Remote_Key)/.test(object.name))profile='abs-controls';
           else if(/^Computer_Key(?:[.]|$)/.test(object.name))profile='pbt';
-          else if(['Computer_Base','Computer_Base_Fascia','Computer_Monitor','Computer_Keyboard','Computer_Mouse'].includes(object.name))profile='abs-ivory';
+          else if(['Computer_Base','Computer_Base_Fascia','Computer_Monitor','Computer_Recess','Computer_Keyboard','Computer_Mouse'].includes(object.name))profile='abs-ivory';
         }
         object.material=surfaceProfile(material,profile);
       }
@@ -440,8 +442,8 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       separateTubeLayers(object,crt.glass,resources,.006);
     }
     if (object.name === 'VCR_Display') { object.material = readout; frontUv(object); }
-    if (object.name === 'Computer_Recess'||object.name==='Computer_Screen') object.material=computerSeal;
-    if (object.userData.surface_role === 'led') object.material = object.name==='CRT_PowerLED'?tvLed:led;
+    if (object.name === 'Computer_GlassSeal'||object.name==='Computer_Screen') object.material=computerSeal;
+    if (object.userData.surface_role === 'led'||object.name==='Computer_MonitorLED') object.material = object.name==='CRT_PowerLED'?tvLed:led;
     if (object.userData.surface_role === 'lamp-bulb') object.material = lampBulb;
     if (object.userData.surface_role === 'print' && object.material instanceof MeshStandardMaterial) {
       printedMaterials.add(object.material);

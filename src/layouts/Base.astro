@@ -4,6 +4,7 @@ import { SITE } from '../data/site';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
+import LegacyWorkerRecovery from '../components/LegacyWorkerRecovery.astro';
 
 interface Props {
   title?: string;
@@ -40,6 +41,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=praxis-1" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=praxis-1" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <LegacyWorkerRecovery />
     <slot name="head" />
     <script is:inline>
       (function () {

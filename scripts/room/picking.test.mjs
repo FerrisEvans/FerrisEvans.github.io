@@ -124,12 +124,15 @@ test('alphaMap uses green, map uses alpha, and material opacity multiplies the t
   f.leaf.material.opacity=.5;assert.equal(f.picker.pick(f.ray()).id,'device');f.dispose();
 });
 
-test('image alpha pixels are read once on an independent canvas and unreadable images stay solid',()=>{
+test('image alpha pixels are prepared before the first pointer hit and unreadable images stay solid',async()=>{
   const previous=globalThis.document;let reads=0,draws=0,created=0;
   const pixels=new Uint8ClampedArray([255,255,255,0]);
   globalThis.document={createElement(name){assert.equal(name,'canvas');created++;return{width:0,height:0,getContext(kind,options){assert.equal(kind,'2d');assert.equal(options.willReadFrequently,true);return{drawImage(){draws++;},getImageData(){reads++;return{data:pixels};}};}};}};
   try{
     const map=new three.Texture({width:1,height:1}),f=cutoutFixture(map);
+    let yielded=0;await f.picker.prepare(async()=>{yielded++;});
+    assert.equal(reads,1,'the potentially expensive image readback belongs to loading');
+    assert.equal(yielded,1,'loading can paint between cutout reads');
     for(let i=0;i<4;i++)assert.equal(f.picker.pick(f.ray()).id,'device');
     assert.equal(reads,1);assert.equal(draws,1);assert.equal(created,1);f.dispose();
     globalThis.document.createElement=()=>({width:0,height:0,getContext(){return{drawImage(){},getImageData(){throw new Error('unreadable');}};}});

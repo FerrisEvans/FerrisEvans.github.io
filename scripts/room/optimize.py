@@ -17,6 +17,7 @@ args.add_argument('--source', type=Path, default=root/'public/room/materials')
 args.add_argument('--output', type=Path, default=root/'.room-build/web-assets')
 args.add_argument('--city', type=Path, default=root/'public/room/city-night-v3.png')
 args.add_argument('--no-city', action='store_true', help='Leave the separately owned city plate untouched')
+args.add_argument('--reuse-atlases', type=Path, help='Copy missing atlas payloads byte-for-byte from an accepted material package')
 options = args.parse_args()
 source, out = options.source.resolve(), options.output.resolve()
 out.mkdir(parents=True, exist_ok=True)
@@ -34,6 +35,29 @@ def record(path, result, note):
 
 def resize_float(array, size):
     return np.stack([np.asarray(Image.fromarray(array[:,:,i], mode='F').resize((size,size), Image.Resampling.LANCZOS)) for i in range(array.shape[2])], axis=2)
+
+if options.reuse_atlases:
+    previous_root=options.reuse_atlases.resolve()
+    previous=json.loads((previous_root/'manifest.json').read_text())
+    retained=json.loads((source.parent/'retained-atlases.json').read_text())
+    assert retained['acceptedBuildId']==previous['buildId'],'Atlas/model reuse gate belongs to another accepted build'
+    assert sorted(retained['selectedAtlases'])==sorted(manifest['atlases']),'Atlas/model reuse selection differs from the bake'
+    reused={}
+    for group,atlas in previous['atlases'].items():
+        if group in manifest['atlases']:continue
+        # Entry textures are regenerated together after packing. Keep the six
+        # accepted material/light maps exact, including their RGBM ranges.
+        atlas=json.loads(json.dumps(atlas));atlas.pop('entry',None)
+        for kind in ('albedo','normal','orm','room','tv','lampOff'):
+            channel=atlas[kind]
+            if isinstance(channel,dict):channel.pop('preview',None)
+            name=channel['file'] if isinstance(channel,dict) else channel
+            shutil.copy2(previous_root/name,out/name)
+            record(previous_root/name,out/name,'byte-identical accepted atlas reuse')
+        reused[group]=atlas
+    manifest['atlasReuse']={'buildId':previous['buildId'],'atlases':list(reused),'modelVerification':retained}
+else:
+    reused={}
 
 for group, atlas in manifest['atlases'].items():
     opacity_path=source/atlas['opacity'] if atlas.get('opacity') else None
@@ -118,6 +142,7 @@ for group, atlas in manifest['atlases'].items():
         if light: atlas[kind]['file']=target.name
         else: atlas[kind]=target.name
         record(path,target,note)
+manifest['atlases'].update(reused)
 model = source/'study.glb'
 packed = out/'study.glb.bin'
 with packed.open('wb') as dest:
