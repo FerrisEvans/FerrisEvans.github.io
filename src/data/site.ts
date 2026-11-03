@@ -6,7 +6,7 @@ export const SITE = {
   intro: '记录编程语言、游戏开发与人工智能的学习、实践和思考。',
   author: 'Ferris',
   email: 'ferris.evans@outlook.com',
-  avatar: '/avatar.png',
+  avatar: '/avatar.png?v=praxis-1',
   github: 'https://github.com/FerrisEvans',
   twitter: 'https://twitter.com/ferrisgeek',
   postsPerPage: 9,
