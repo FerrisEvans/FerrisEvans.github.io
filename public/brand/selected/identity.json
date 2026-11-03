@@ -1,22 +1,24 @@
 {
   "name": "Praxis",
-  "concept": "geometric-p",
-  "approvedChoice": "Praxis — 写给自己的实践志",
-  "color": "Ink inherits currentColor; amber accent craft-node on geometric P",
+  "concept": "magazine-lofi",
+  "approvedChoice": "v5 D Magazine Lo-fi",
+  "color": "Letters inherit currentColor; accent craft trailer. No left seal.",
   "wordmarkViewBox": [
     0,
     0,
-    95,
-    16
+    117,
+    24
   ],
   "faviconGrid": [
     16,
     16
   ],
-  "source": "Independently drawn SVG paths and pixel letterforms; no external fonts or source-site assets.",
+  "source": "praxis-system-v5-lock Magazine Lo-fi Pixel. Runtime wordmark is src/components/Brand.astro; selected/wordmark-*.svg are static refs.",
   "component": "src/components/Brand.astro",
   "faviconRoot": "/assets/img/favicons/",
-  "cacheVersion": "praxis-3",
+  "cacheVersion": "praxis-5",
+  "dataBrand": "magazine-lofi",
+  "dataBrandVersion": "praxis-5",
   "palette": {
     "paper": "#f1ebdf",
     "ink": "#2d2923",

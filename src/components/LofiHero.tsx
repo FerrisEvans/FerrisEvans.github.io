@@ -1,24 +1,22 @@
+import type { ReactNode } from 'react';
 import { MotionConfig } from 'motion/react';
 import RainGlassBackground from '@/components/kokonutui/rain-glass-background';
-import { TextEffect } from '@/components/motion-primitives/text-effect';
 import { SITE } from '@/data/site';
 import { buildId } from '../../public/room/materials/manifest.json';
 
 interface LofiHeroProps {
   tagline: string;
   intro: string;
+  /** Magazine Lo-fi wordmark. Passed from Astro as `<Brand size="hero" />`. */
+  title?: ReactNode;
 }
 
-export default function LofiHero({ tagline, intro }: LofiHeroProps) {
+export default function LofiHero({ tagline, intro, title }: LofiHeroProps) {
   return (
     <MotionConfig reducedMotion="user">
       <RainGlassBackground
         src={`/room/reading.jpg?v=${buildId}`}
-        title={
-          <TextEffect as="span" initial={false} per="char" preset="fade-in-blur" speedReveal={0.65} speedSegment={1.4}>
-            {SITE.title}
-          </TextEffect>
-        }
+        title={title}
         rain={0.35}
         className="rounded-2xl border border-[#6b543b]/50 text-[#f3ead8] shadow-[0_28px_80px_-42px_rgba(0,0,0,0.8)]"
       >
