@@ -16,7 +16,7 @@
   "source": "Independently drawn SVG paths and pixel letterforms; no external fonts or source-site assets.",
   "component": "src/components/Brand.astro",
   "faviconRoot": "/assets/img/favicons/",
-  "cacheVersion": "praxis-1",
+  "cacheVersion": "praxis-3",
   "palette": {
     "paper": "#f1ebdf",
     "ink": "#2d2923",
