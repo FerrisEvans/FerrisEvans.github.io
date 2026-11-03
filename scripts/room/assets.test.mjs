@@ -1,14 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import ts from 'typescript';
 
 const source = readFileSync(new URL('../../src/scripts/room/assets.ts', import.meta.url), 'utf8');
-const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 } }).outputText;
+const compilerOptions = { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 };
+const cacheSource = readFileSync(new URL('../../src/scripts/room/asset-cache.ts', import.meta.url), 'utf8');
+const cacheModule = 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(cacheSource, { compilerOptions }).outputText).toString('base64');
+const js = ts.transpileModule(source, { compilerOptions }).outputText.replace("'./asset-cache'", JSON.stringify(cacheModule));
 const { RoomAssets } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));
 const flush = () => new Promise(resolve => setImmediate(resolve));
 
-test('build-versioned assets reuse browser cache and invalidate together, including deferred maps',async t=>{
+test('legacy callers keep bundle versioning while streams keep their independent version',async t=>{
   const clock=fakeClock(),previousWindow=globalThis.window;globalThis.window=clock.window;t.after(()=>{globalThis.window=previousWindow;});
   const requests=[];t.mock.method(globalThis,'fetch',async(url,options)=>{requests.push([url,options.cache]);return new Response(new Uint8Array([1]));});
   const files=[{url:'/model?format=glb',bytes:1},{url:'/film.mp4',bytes:1,stream:true}];
@@ -171,3 +175,64 @@ test('background detail reads stay low priority and release buffers without abor
  assets.release('/detail');assert.equal(assets.read('/base'),base);assert.equal(assets.read('/lamp'),lamp);
  await assets.read('/detail','low');assert.deepEqual(requests,[['/base','auto'],['/detail','low'],['/lamp','auto'],['/detail','low']]);assets.dispose();
 });
+
+function cacheGlobals(t,cache,clock){
+ const values={window:clock.window,location:{href:'https://room.test/'},caches:{open:async()=>cache}};
+ for(const [name,value]of Object.entries(values)){
+  const descriptor=Object.getOwnPropertyDescriptor(globalThis,name);
+  Object.defineProperty(globalThis,name,{value,writable:true,configurable:true});
+  t.after(()=>{if(descriptor)Object.defineProperty(globalThis,name,descriptor);else delete globalThis[name];});
+ }
+}
+
+test('disposing while a persistent cache write is pending still rejects the asset read',
+ {concurrency:false,timeout:5000},async t=>{
+  const clock=fakeClock(),bytes=new Uint8Array([1,2,3]);
+  const file={url:'/room/model.bin',bytes:bytes.length,sha256:createHash('sha256').update(bytes).digest('hex')};
+  let releasePut,notifyPut;
+  const putStarted=new Promise(resolve=>{notifyPut=resolve;});
+  cacheGlobals(t,{match:async()=>undefined,put:async()=>{
+   notifyPut();await new Promise(resolve=>{releasePut=resolve;});
+  }},clock);
+  t.mock.method(globalThis,'fetch',async()=>new Response(bytes));
+  const assets=new RoomAssets([file],()=>{});
+  try{
+   const cancelled=assert.rejects(assets.read(file.url),{name:'AbortError'});
+   await putStarted;
+   assert.equal(assets.activeRequests,1,'the verified response is still waiting for its disk write');
+   assets.dispose();releasePut();
+   await cancelled;
+   assert.equal(assets.activeRequests,0);
+   assert.equal(clock.count(),0);
+   await assert.rejects(assets.read(file.url),{name:'AbortError'});
+  }finally{releasePut?.();assets.dispose();}
+ });
+
+test('an older manifest cannot prune persistent paths introduced by a newer open page',
+ {concurrency:false,timeout:5000},async t=>{
+  const clock=fakeClock(),bytes=new Uint8Array([7,8,9]);
+  const sha256=createHash('sha256').update(bytes).digest('hex'),entries=new Map();
+  const keyOf=key=>typeof key==='string'?key:key.url;
+  cacheGlobals(t,{
+   match:async key=>entries.get(keyOf(key))?.clone(),
+   put:async(key,response)=>{entries.set(keyOf(key),response.clone());},
+   keys:async()=>[...entries.keys()].map(key=>new Request(key)),
+   delete:async key=>entries.delete(keyOf(key)),
+  },clock);
+  const requests=[];
+  t.mock.method(globalThis,'fetch',async url=>{requests.push(url);return new Response(bytes);});
+  const existing={url:'/room/existing.webp',bytes:bytes.length,sha256};
+  const added={url:'/room/new-detail.webp',bytes:bytes.length,sha256};
+  const newer=new RoomAssets([existing,added],()=>{});
+  const older=new RoomAssets([existing],()=>{});
+  const reopened=new RoomAssets([existing,added],()=>{});
+  try{
+   await newer.preload();
+   assert.equal(requests.length,2);
+   await older.preload(); // Its prune runs after the newer page has populated both paths.
+   assert(entries.has(`https://room.test${added.url}?v=${sha256}`),'the new-only asset must survive the older manifest');
+   assert.deepEqual([...new Uint8Array(await reopened.read(added.url))],[...bytes]);
+   assert.equal(requests.length,2,'a fresh loader must read the new path from persistent storage');
+   assert.equal(reopened.cacheStats.cacheHits,1);
+  }finally{newer.dispose();older.dispose();reopened.dispose();}
+ });

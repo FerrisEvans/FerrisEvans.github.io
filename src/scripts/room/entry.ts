@@ -107,12 +107,14 @@ export async function mountRoom() {
   const reportLoading:LoadingReporter=update=>{
     if(signal.aborted || (state!=='loading'&&state!=='preparing'))return;
     displayedPercent=loadingProgress.report(update);
-    const labels={download:'下载资源',model:'建立场景',textures:'准备纹理与影片',reflection:'准备反射',shaders:'编译画面',frame:'确认首帧'};
-    const osdLabels={download:'DOWNLOAD',model:'BUILD SCENE',textures:'TEXTURES',reflection:'REFLECTIONS',shaders:'SHADERS',frame:'FIRST FRAME'};
-    const loaded=Number(room.dataset.loadedBytes??0),total=Number(room.dataset.totalBytes??0),downloading=loaded<total;
-    const stage=downloading?'download':update.stage;
-    const label=downloading&&state==='preparing'?'下载资源并准备画面':labels[stage];
-    const detail=downloading?`${(loaded/1e6).toFixed(1)} / ${(total/1e6).toFixed(1)} MB`:update.detail;
+    const labels={download:'读取资源',model:'建立场景',textures:'准备纹理与影片',reflection:'准备反射',shaders:'编译画面',frame:'确认首帧'};
+    const osdLabels={download:'LOAD ASSETS',model:'BUILD SCENE',textures:'TEXTURES',reflection:'REFLECTIONS',shaders:'SHADERS',frame:'FIRST FRAME'};
+    const loaded=Number(room.dataset.loadedBytes??0),total=Number(room.dataset.totalBytes??0),readingAssets=loaded<total;
+    const cacheBytes=Number(room.dataset.cacheBytes??0);
+    const stage=readingAssets?'download':update.stage;
+    const label=readingAssets&&state==='preparing'?'读取资源并准备画面':labels[stage];
+    const detail=[readingAssets?`${(loaded/1e6).toFixed(1)} / ${(total/1e6).toFixed(1)} MB`:update.detail,
+      cacheBytes>0?`本地缓存 ${(cacheBytes/1e6).toFixed(1)} MB`:''].filter(Boolean).join(' · ');
     room.dataset.loadingStage=stage;room.dataset.loadingPercent=String(displayedPercent);
     progress.setAttribute('aria-valuenow',String(displayedPercent));
     progress.setAttribute('aria-valuetext',`${displayedPercent}% · ${label}`);
@@ -414,10 +416,14 @@ export async function mountRoom() {
     // Include the full lighting and lamp-off textures in the loading gate.
     // Their decode/upload order remains staged, but no visual interaction
     // starts a new asset download after the visitor enters the room.
-    assets = new RoomAssets(files, (loaded, total) => {
+    assets = new RoomAssets(files, (loaded, total, stats) => {
       if (state !== 'loading' && state !== 'preparing') return;
       room.dataset.loadedBytes = String(loaded);
       room.dataset.totalBytes = String(total);
+      room.dataset.cacheBytes = String(stats.cacheBytes);
+      room.dataset.cacheHits = String(stats.cacheHits);
+      room.dataset.httpBytes = String(stats.httpBytes);
+      room.dataset.httpRequests = String(stats.httpRequests);
       reportLoading({stage:'download',completed:loaded,total,detail:`${(loaded / 1e6).toFixed(1)} / ${(total / 1e6).toFixed(1)} MB`});
     }, {timing,version:room.dataset.assetVersion});
     drawOSD();
@@ -437,7 +443,7 @@ export async function mountRoom() {
     const downloads=assets.preload().then(()=>{endDownloads();return {error:undefined};},error=>{endDownloads('error');return {error};});
     const [, module] = await Promise.all([fontReady, experienceModule]);
     if (signal.aborted||graphicsAborter.signal.aborted) return;
-    setState('preparing', '正在下载资源并准备首帧…');
+    setState('preparing', '正在读取资源并准备首帧…');
     osdTitle = 'TUNING IN';
     await yieldForLoading(signal);
     viewer = await module.createExperience(host, assets, graphicsAborter.signal, () => fail('图形上下文已丢失。可重新加载，或进入 LO-FI。'), content, { navigate:(view,resumeComputer=false)=>navigate(view,true,true,resumeComputer), inspection, page: changePage, wake:resumeLoop,homeAudio:(playing,time)=>audio.setHome(playing,time),music:(value,reset)=>{void Promise.resolve(audio.setMusic(value,reset)).then(resumeLoop);},musicTime:()=>audio.musicTime,musicRunning:()=>audio.musicRunning,soundEnabled:()=>audio.enabled,volume:(value)=>audio.setVolume(value), feedback:(message,tone=true)=>{status.textContent=message;if(tone)audio.tone();} }, { canvas, context, dprCap:quality.dprCap }, reportLoading);

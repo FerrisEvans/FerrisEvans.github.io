@@ -5,7 +5,7 @@ import { ABOUT } from '../data/room-about';
 import '../styles/room-fallback.css';
 import { SITE, categoryOf } from '../data/site';
 import { getPosts, postUrl } from '../utils/posts';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
 const assetRoot = resolve('public');
@@ -26,12 +26,15 @@ const deferredUrls = new Set(Object.values(manifest.atlases).flatMap(atlas => [
   ...(atlas.entry?.normal ? ['/room/materials/' + atlas.normal] : []),
   ...(atlas.entry?.orm ? ['/room/materials/' + atlas.orm] : []),
 ]));
-const files = urls.map(url => ({ url, bytes: statSync(resolve(assetRoot, '.' + url)).size, deferred: deferredUrls.has(url), stream:streamUrls.has(url), priority:url===urls[0]?'high':undefined }));
-// A font, film or texture can change independently of the model build. Version
-// the complete delivery set so repeat visits can reuse fresh HTTP cache entries.
+// Each file owns its cache identity: a new font or post must not invalidate
+// unchanged models and textures. The aggregate identifies the page for diagnostics.
+const files = [...new Set(urls)].map(url => {
+  const bytes = readFileSync(resolve(assetRoot, '.' + url));
+  return { url, bytes:bytes.length, sha256:createHash('sha256').update(bytes).digest('hex'), deferred:deferredUrls.has(url), stream:streamUrls.has(url), priority:url===urls[0]?'high':undefined };
+});
 const assetDigest = createHash('sha256');
-for (const url of [...new Set(urls)].sort()) {
-  assetDigest.update(url).update('\0').update(readFileSync(resolve(assetRoot, '.' + url))).update('\0');
+for (const file of [...files].sort((a,b)=>a.url.localeCompare(b.url))) {
+  assetDigest.update(file.url).update('\0').update(file.sha256).update('\0');
 }
 const assetVersion = assetDigest.digest('hex').slice(0, 20);
 const hasPoster = existsSync(resolve(assetRoot, 'room/loading.jpg'));
