@@ -8,6 +8,7 @@ import { getPosts, postUrl } from '../utils/posts';
 import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { resolve } from 'node:path';
+import { roomMediaChunks } from '../utils/room-media';
 const assetRoot = resolve('public');
 type AtlasFiles = { albedo: string; orm: string; normal: string; entry?:{orm?:string;normal?:string}; opacity?:string; cutout?:boolean; alphaTest?:number; room: { file: string; preview?:string }; tv: { file: string;preview?:string }; lampOff?: {file:string} };
 const manifest: { buildId?:string; model?: string; reflection?:{file:string}; city?: string; homeFilm?:string; atlases: Record<string, AtlasFiles> } = JSON.parse(readFileSync(resolve(assetRoot, 'room/materials/manifest.json'), 'utf8'));
@@ -30,7 +31,8 @@ const deferredUrls = new Set(Object.values(manifest.atlases).flatMap(atlas => [
 // unchanged models and textures. The aggregate identifies the page for diagnostics.
 const files = [...new Set(urls)].map(url => {
   const bytes = readFileSync(resolve(assetRoot, '.' + url));
-  return { url, bytes:bytes.length, sha256:createHash('sha256').update(bytes).digest('hex'), deferred:deferredUrls.has(url), stream:streamUrls.has(url), priority:url===urls[0]?'high':undefined };
+  const stream=streamUrls.has(url);
+  return { url, bytes:bytes.length, sha256:createHash('sha256').update(bytes).digest('hex'), ...(stream?roomMediaChunks(bytes):{}), deferred:deferredUrls.has(url), stream, priority:url===urls[0]?'high':undefined };
 });
 const assetDigest = createHash('sha256');
 for (const file of [...files].sort((a,b)=>a.url.localeCompare(b.url))) {

@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { verifyLegacyWorkerRetirement } from './legacy-worker-browser.mjs';
 import { verifyRoomAssetCache } from './room/asset-cache-browser.mjs';
+import { verifyVideoCache } from './room/video-cache-browser.mjs';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshots = process.env.SMOKE_SCREENSHOT_DIR;
@@ -30,6 +31,7 @@ async function assertVisibleTitle(page) {
 
 try {
   await verifyRoomAssetCache();
+  await verifyVideoCache();
   await verifyLegacyWorkerRetirement(browser);
   const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const noJsPage = await noJs.newPage();

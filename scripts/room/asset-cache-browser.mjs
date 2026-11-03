@@ -111,13 +111,19 @@ export async function verifyRoomAssetCache(){
     },cacheName);
   }
   async function waitCached(page){
-    await page.waitForFunction(async({name,files})=>{
-      if(!(await caches.keys()).includes(name))return false;
-      const keys=await(await caches.open(name)).keys();
-      return files.every(file=>keys.some(key=>{
-        const url=new URL(key.url);return url.pathname===file.url&&[...url.searchParams.values()].includes(file.sha256);
-      }));
-    },{name:cacheName,files:files()});
+    const deadline=Date.now()+30000;
+    for(;;){
+      const cached=await page.evaluate(async({name,files})=>{
+        if(!(await caches.keys()).includes(name))return false;
+        const keys=await(await caches.open(name)).keys();
+        return files.every(file=>keys.some(key=>{
+          const url=new URL(key.url);return url.pathname===file.url&&[...url.searchParams.values()].includes(file.sha256);
+        }));
+      },{name:cacheName,files:files()});
+      if(cached===true)return;
+      if(Date.now()>=deadline)throw new Error('Room asset cache did not contain the expected hashes within 30 seconds');
+      await new Promise(resolve=>setTimeout(resolve,100));
+    }
   }
   async function clearHttpCache(page){
     const cdp=await context.newCDPSession(page);
@@ -126,7 +132,12 @@ export async function verifyRoomAssetCache(){
   try{
     await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
     const base=`http://127.0.0.1:${server.address().port}`;
-    let page=await launch();await ready(page,base);await load(page);await waitCached(page);
+    let page=await launch();await ready(page,base);
+    let cacheReady=false;
+    const firstCache=waitCached(page).then(()=>{cacheReady=true;});
+    await new Promise(resolve=>setTimeout(resolve,150));
+    assert.equal(cacheReady,false,'an asynchronous false cache result must keep polling');
+    await load(page);await firstCache;
     assert.deepEqual(requests.map(request=>request.path),[model,atlas,lampOff]);
     for(const request of requests)assert(request.version.includes(hash(bodies.get(request.path))),'each network URL must use that file’s SHA-256');
     assert((await cachedKeys(page)).every(key=>bodies.has(new URL(key).pathname)),'only declared static assets belong in the room cache');

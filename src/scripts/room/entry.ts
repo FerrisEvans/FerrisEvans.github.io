@@ -1,4 +1,5 @@
 import { RoomAssets, type AssetFile } from './assets';
+import { prepareMediaCache } from './media-cache';
 import { createLoadTimings } from './load-timings';
 import { RoomAudio } from './audio';
 import { selectQuality, createQualityMonitor, type QualitySelection } from './quality';
@@ -413,6 +414,7 @@ export async function mountRoom() {
       if(signal.aborted||graphicsAborter.signal.aborted)return;
     }
     const files: (AssetFile & {deferred?:boolean})[] = JSON.parse(document.querySelector('#room-assets')!.textContent!);
+    const mediaReady=capture?Promise.resolve(false):prepareMediaCache(files,graphicsAborter.signal);
     // Include the full lighting and lamp-off textures in the loading gate.
     // Their decode/upload order remains staged, but no visual interaction
     // starts a new asset download after the visitor enters the room.
@@ -441,7 +443,8 @@ export async function mountRoom() {
     // Parse the model and prepare each arriving texture while the remaining
     // files are downloading. Keep every preload rejection observed immediately.
     const downloads=assets.preload().then(()=>{endDownloads();return {error:undefined};},error=>{endDownloads('error');return {error};});
-    const [, module] = await Promise.all([fontReady, experienceModule]);
+    const [, module, mediaCached] = await Promise.all([fontReady, experienceModule, mediaReady]);
+    room.dataset.videoCache=mediaCached?'persistent-ranges':'native-http';
     if (signal.aborted||graphicsAborter.signal.aborted) return;
     setState('preparing', '正在读取资源并准备首帧…');
     osdTitle = 'TUNING IN';

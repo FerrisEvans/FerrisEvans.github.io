@@ -1,6 +1,7 @@
 /** New Astro pages can be reached through a cache miss while the former root
  * Chirpy worker still controls later navigation. Ask only that registration to
- * download its retirement script; clean visits never install a worker.
+ * download the video-only replacement, which does not intercept HTML. This
+ * recovery hook never registers a worker on clean non-video page visits.
  */
 export async function retireLegacyWorker() {
   if (!('serviceWorker' in navigator)) return;

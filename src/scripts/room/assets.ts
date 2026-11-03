@@ -122,10 +122,14 @@ export class RoomAssets {
   /** Keep native media requests out of the JS full-response buffer and byte gate. */
   mediaUrl(url: string, version?: string) {
     if (this.disposed) throw new DOMException('Aborted', 'AbortError');
-    if (!this.files.some(file => file.url === url && file.stream)) throw new Error(`Unlisted streamed room asset: ${url}`);
+    const file=this.files.find(file => file.url === url && file.stream);
+    if (!file) throw new Error(`Unlisted streamed room asset: ${url}`);
     const parsed = new URL(url, 'https://room.invalid');
     if (!url.startsWith('/') || parsed.origin !== 'https://room.invalid') throw new Error(`Room media must be local: ${url}`);
-    if (version) parsed.searchParams.set('v', version);
+    // The build hashes the delivered bytes. Prefer that identity over a film
+    // manifest's older encoding receipt when the file is replaced in place.
+    const revision=file.sha256??version;
+    if (revision) parsed.searchParams.set('v', revision);
     return parsed.pathname + parsed.search + parsed.hash;
   }
   async preload() {

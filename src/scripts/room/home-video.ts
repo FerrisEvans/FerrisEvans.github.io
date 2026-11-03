@@ -64,7 +64,7 @@ export async function createHomeVideo(manifest:HomeFilmManifest,assets:RoomAsset
   const filename=manifest.video.split('/').pop()!.split('?')[0];
   const url=assets.mediaUrl(manifest.video,manifest.files?.[filename]?.sha256);
   const video=document.createElement('video');
-  video.muted=true;video.defaultMuted=true;video.playsInline=true;video.loop=true;video.preload='auto';
+  video.muted=true;video.defaultMuted=true;video.playsInline=true;video.loop=true;video.preload='auto';video.crossOrigin='anonymous';
   const aborter=new AbortController();
   let texture:VideoTexture|undefined,transport:ReturnType<typeof createVideoTransport>|undefined,disposed=false;
   const release=()=>{

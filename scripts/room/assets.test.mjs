@@ -25,6 +25,11 @@ test('legacy callers keep bundle versioning while streams keep their independent
   assert.deepEqual(requests,[['/model?format=glb&v=build+one','default'],['/lamp?v=build+one','default'],['/model?format=glb&v=build-two','default'],['/legacy','no-cache']]);
 });
 
+test('native media uses its delivered file hash even when an encoding receipt is older',()=>{
+  const sha256='a'.repeat(64),assets=new RoomAssets([{url:'/room/film/movie.mp4',bytes:5,stream:true,sha256}],()=>{});
+  assert.equal(assets.mediaUrl('/room/film/movie.mp4','old-encoding-receipt'),'/room/film/movie.mp4?v='+sha256);
+});
+
 test('model priority unlocks preparation before bulk downloads and reserves module connection slots',async t=>{
   const clock=fakeClock(),previousWindow=globalThis.window;globalThis.window=clock.window;t.after(()=>{globalThis.window=previousWindow;});
   const requests=[];let releaseModel;
