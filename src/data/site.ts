@@ -25,7 +25,27 @@ export interface CategoryDef {
   accent: string;
   mark: string;
   subcategories: Record<string, string>;
+  /**
+   * Magazine wall slot. When true, a category with zero posts still renders
+   * an empty state ("尚无文章"). Otherwise count 0 stays hidden.
+   */
+  wall?: boolean;
+  /**
+   * False for slugs discovered from posts and missing from CATEGORIES.
+   * Generated labels are placeholders, not the final display name.
+   */
+  configured?: boolean;
 }
+
+/**
+ * Categories are config-first. `CATEGORIES` owns display names, accents, and
+ * wall slots. `categoriesFor()` appends slugs found on posts that are not
+ * configured. Templates must not hard-code the category list or a 4-column
+ * grid. A generated label is a placeholder: show 「未配置」 until the slug is
+ * added here. Title Case from `labelFromSlug` is not a brand name.
+ * Wall slots (`wall: true`) may render at count 0. Every other category is
+ * hidden until it has at least one post.
+ */
 
 export const CATEGORIES: CategoryDef[] = [
   {
@@ -35,6 +55,7 @@ export const CATEGORIES: CategoryDef[] = [
     accent: '#7161c5',
     mark: '</>',
     subcategories: { cpp: 'C/C++', java: 'Java' },
+    wall: true,
   },
   {
     slug: 'data-structures',
@@ -43,6 +64,7 @@ export const CATEGORIES: CategoryDef[] = [
     accent: '#168ba0',
     mark: '∑',
     subcategories: {},
+    wall: true,
   },
   {
     slug: 'game-dev',
@@ -51,6 +73,7 @@ export const CATEGORIES: CategoryDef[] = [
     accent: '#c66a24',
     mark: '◇',
     subcategories: { godot: 'Godot', 'game-design': '游戏设计' },
+    wall: true,
   },
   {
     slug: 'ai',
@@ -59,6 +82,7 @@ export const CATEGORIES: CategoryDef[] = [
     accent: '#31856b',
     mark: 'AI',
     subcategories: { agent: 'Agent' },
+    wall: true,
   },
 ];
 
@@ -103,6 +127,7 @@ export function categoryOf(slug: string): CategoryDef {
     accent: accentFromSlug(slug),
     mark: markFromSlug(slug),
     subcategories: {},
+    configured: false,
   };
   generatedCategories.set(slug, generated);
   console.warn(`[category] "${slug}" is using generated metadata. Customize it in src/data/site.ts (CATEGORIES).`);
@@ -116,4 +141,25 @@ export function categoriesFor(slugs: Iterable<string>): CategoryDef[] {
     .sort()
     .map(categoryOf);
   return [...CATEGORIES, ...discovered];
+}
+
+export function categoryCounts(slugs: Iterable<string>, categories: CategoryDef[] = CATEGORIES): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const category of categories) counts[category.slug] = 0;
+  for (const slug of slugs) counts[slug] = (counts[slug] ?? 0) + 1;
+  return counts;
+}
+
+/** count > 0, plus wall slots when emptySlots is set. Never a fixed column count. */
+export function categoriesForWall(
+  categories: CategoryDef[],
+  counts: Record<string, number>,
+  options?: { emptySlots?: boolean },
+): CategoryDef[] {
+  const emptySlots = options?.emptySlots ?? false;
+  return categories.filter((category) => {
+    const count = counts[category.slug] ?? 0;
+    if (count > 0) return true;
+    return emptySlots && category.wall === true;
+  });
 }

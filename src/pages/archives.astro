@@ -34,7 +34,7 @@ const years = [...byYear.entries()]
 
     {
       years.map(({ year, months }) => (
-        <section class="mb-14">
+        <section id={`year-${year}`} class="mb-14 scroll-mt-24">
           <h2 class="mb-8 font-mono text-5xl font-medium tracking-tight text-ink/20 dark:text-snow/20">{year}</h2>
           {months.map(({ month, posts: list }) => (
             <div class="mb-9">

@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import CategoryWall from '../components/CategoryWall.astro';
+import { categoriesFor, categoriesForWall, categoryCounts } from '../data/site';
+import { getPosts, postUrl, type Post } from '../utils/posts';
+
+const posts = await getPosts();
+const allCategories = categoriesFor(posts.map((post) => post.data.category));
+const counts = categoryCounts(posts.map((post) => post.data.category), allCategories);
+const categories = categoriesForWall(allCategories, counts);
+
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+const byYear = new Map<number, Post[]>();
+for (const post of posts) {
+  const year = post.data.pubDate.getUTCFullYear();
+  const list = byYear.get(year) ?? [];
+  list.push(post);
+  byYear.set(year, list);
+}
+const years = [...byYear.entries()].sort((a, b) => b[0] - a[0]);
+---
+
+<Base title="索引" description="实践志的分类、标签与归档。">
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
+    <header class="page-header mb-12 p-7 sm:p-9">
+      <p class="eyebrow">Index / 索引</p>
+      <h1 class="page-title">索引</h1>
+      <p class="mt-3 max-w-2xl text-ink-soft dark:text-snow-soft">
+        分类、标签和归档还在。从这里进入，或打开原来的列表页。
+      </p>
+      <nav aria-label="索引分区" class="mt-5 flex flex-wrap gap-2 text-sm">
+        <a href="#explore-categories" class="rounded-full border border-line px-3 py-1 text-ink-soft hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:text-snow">分类</a>
+        <a href="#explore-tags" class="rounded-full border border-line px-3 py-1 text-ink-soft hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:text-snow">标签</a>
+        <a href="#explore-archives" class="rounded-full border border-line px-3 py-1 text-ink-soft hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:text-snow">归档</a>
+      </nav>
+    </header>
+
+    <section id="explore-categories" aria-labelledby="explore-categories-heading" class="scroll-mt-24">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <h2 id="explore-categories-heading" class="font-serif text-2xl font-bold tracking-tight">分类</h2>
+        <a href="/categories/" class="text-sm text-ink-soft hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark">全部分类</a>
+      </div>
+      <CategoryWall categories={categories} counts={counts} label="分类" />
+    </section>
+
+    <section id="explore-tags" aria-labelledby="explore-tags-heading" class="mt-14 scroll-mt-24">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <h2 id="explore-tags-heading" class="font-serif text-2xl font-bold tracking-tight">标签</h2>
+        <a href="/tags/" class="text-sm text-ink-soft hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark">全部标签</a>
+      </div>
+      {
+        tags.length > 0 ? (
+          <div class="flex flex-wrap gap-2.5">
+            {tags.map(([tag, count]) => (
+              <a
+                href={`/tags/${encodeURIComponent(tag)}/`}
+                class="inline-flex min-h-10 items-center gap-2 rounded-full border border-line bg-paper-elev px-3.5 py-2 text-sm transition-colors hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-soft/40 dark:hover:text-accent-soft"
+              >
+                <span>#{tag}</span>
+                <span class="rounded-full bg-ink/[0.05] px-1.5 py-0.5 font-mono text-[0.625rem] leading-none text-ink-faint dark:bg-white/[0.07] dark:text-snow-faint">{count}</span>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="text-sm text-ink-faint dark:text-snow-faint">还没有标签。</p>
+        )
+      }
+    </section>
+
+    <section id="explore-archives" aria-labelledby="explore-archives-heading" class="mt-14 scroll-mt-24">
+      <div class="mb-5 flex items-end justify-between gap-4">
+        <h2 id="explore-archives-heading" class="font-serif text-2xl font-bold tracking-tight">归档</h2>
+        <a href="/archives/" class="text-sm text-ink-soft hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark">完整归档</a>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        {
+          years.map(([year, list]) => (
+            <article class="rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+              <div class="flex items-baseline justify-between gap-3">
+                <a href={`/archives/#year-${year}`} class="font-mono text-3xl text-ink/70 hover:text-accent dark:text-snow/70 dark:hover:text-accent-soft">{year}</a>
+                <span class="text-xs text-ink-faint dark:text-snow-faint">{list.length} 篇</span>
+              </div>
+              <ul class="mt-4 space-y-2">
+                {list.slice(0, 4).map((post) => (
+                  <li>
+                    <a href={postUrl(post)} class="text-sm text-ink-soft hover:text-accent dark:text-snow-soft dark:hover:text-accent-soft">{post.data.title}</a>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Base>

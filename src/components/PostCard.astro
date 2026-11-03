@@ -6,33 +6,44 @@ import TagChip from './TagChip.astro';
 
 interface Props {
   post: Post;
+  /** @deprecated Use variant="featured". */
   featured?: boolean;
+  variant?: 'default' | 'featured' | 'compact';
 }
 
-const { post, featured = false } = Astro.props;
+const { post, featured = false, variant: variantProp } = Astro.props;
+const variant = variantProp ?? (featured ? 'featured' : 'default');
 const minutes = readingTime(post);
+const coverClass =
+  variant === 'featured'
+    ? 'aspect-[16/8] md:aspect-auto md:h-full md:min-h-80'
+    : variant === 'compact'
+      ? 'aspect-[16/10]'
+      : 'aspect-[16/9]';
 ---
 
 <article
   class:list={[
     'post-card group relative overflow-hidden rounded-xl border border-line bg-paper-elev dark:border-line-dark dark:bg-night-elev',
-    featured ? 'grid md:grid-cols-[1.05fr_1fr]' : 'flex flex-col',
+    variant === 'featured' ? 'grid md:grid-cols-[1.05fr_1fr]' : 'flex flex-col',
+    variant === 'compact' && 'post-card--compact',
   ]}
 >
-  <CardCover
-    category={post.data.category}
-    class={featured ? 'aspect-[16/8] md:aspect-auto md:h-full md:min-h-80' : 'aspect-[16/9]'}
-  />
-  <div class:list={['flex flex-1 flex-col', featured ? 'gap-4 p-6 sm:p-8' : 'gap-3 p-5']}>
-    <div class="flex flex-wrap items-center gap-3">
+  <CardCover category={post.data.category} class={coverClass} />
+  <div class:list={['flex flex-1 flex-col', variant === 'featured' ? 'gap-4 p-6 sm:p-8' : variant === 'compact' ? 'gap-2 p-4' : 'gap-3 p-5']}>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
       <CategoryBadge category={post.data.category} />
       <time datetime={post.data.pubDate.toISOString()} class="text-xs text-ink-faint dark:text-snow-faint">
         {formatDate(post.data.pubDate)}
       </time>
-      <span aria-hidden="true" class="text-xs text-ink-faint dark:text-snow-faint">·</span>
-      <span class="text-xs text-ink-faint dark:text-snow-faint">{minutes} 分钟</span>
+      {variant !== 'compact' && (
+        <>
+          <span aria-hidden="true" class="text-xs text-ink-faint dark:text-snow-faint">·</span>
+          <span class="text-xs text-ink-faint dark:text-snow-faint">{minutes} 分钟</span>
+        </>
+      )}
     </div>
-    <h2 class:list={['font-serif font-bold leading-snug tracking-tight', featured ? 'text-2xl sm:text-3xl' : 'text-xl']}>
+    <h2 class:list={['font-serif font-bold leading-snug tracking-tight', variant === 'featured' ? 'text-2xl sm:text-3xl' : variant === 'compact' ? 'text-base' : 'text-xl']}>
       <a
         href={postUrl(post)}
         class="post-card-title text-ink transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark"
@@ -40,26 +51,28 @@ const minutes = readingTime(post);
         {post.data.title}
       </a>
     </h2>
-    {post.data.description && (
-      <p class:list={['text-ink-soft dark:text-snow-soft', featured ? 'text-[0.9375rem] leading-7' : 'line-clamp-2 text-sm leading-6']}>
+    {variant !== 'compact' && post.data.description && (
+      <p class:list={['text-ink-soft dark:text-snow-soft', variant === 'featured' ? 'text-[0.9375rem] leading-7' : 'line-clamp-2 text-sm leading-6']}>
         {post.data.description}
       </p>
     )}
-    <div class="mt-auto flex flex-wrap items-end justify-between gap-3 pt-3">
-      {post.data.tags.length > 0 ? (
-        <div class="flex flex-wrap gap-1.5">
-          {post.data.tags.slice(0, featured ? 4 : 3).map((tag) => <TagChip tag={tag} />)}
-        </div>
-      ) : <span />}
-      {featured && (
-        <span class="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent dark:text-accent-dark">
-          阅读全文
-          <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14m-5-5 5 5-5 5" />
-          </svg>
-        </span>
-      )}
-    </div>
+    {variant !== 'compact' && (
+      <div class="mt-auto flex flex-wrap items-end justify-between gap-3 pt-3">
+        {post.data.tags.length > 0 ? (
+          <div class="flex flex-wrap gap-1.5">
+            {post.data.tags.slice(0, variant === 'featured' ? 4 : 3).map((tag) => <TagChip tag={tag} />)}
+          </div>
+        ) : <span />}
+        {variant === 'featured' && (
+          <span class="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent dark:text-accent-dark">
+            阅读全文
+            <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14m-5-5 5 5-5 5" />
+            </svg>
+          </span>
+        )}
+      </div>
+    )}
   </div>
 </article>
 

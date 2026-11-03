@@ -4,8 +4,10 @@ import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Pagination from '../components/Pagination.astro';
 import Brand from '../components/Brand.astro';
+import CategoryWall from '../components/CategoryWall.astro';
 import LofiHero from '../components/LofiHero';
-import { categoriesFor, SITE, type CategoryDef } from '../data/site';
+import MagazineToolbar from '../components/MagazineToolbar.astro';
+import { categoriesFor, categoriesForWall, SITE, type CategoryDef } from '../data/site';
 import { getPosts, type Post } from '../utils/posts';
 
 export const getStaticPaths = (async () => {
@@ -49,54 +51,59 @@ const { page, featured, categories, categoryCounts } = Astro.props as {
 };
 const posts = page.data;
 const isFirst = page.currentPage === 1;
-const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
+const spreadAsides = isFirst ? posts.filter((post) => post.id !== featured?.id).slice(0, 2) : [];
+const asideIds = new Set(spreadAsides.map((post) => post.id));
+const grid = isFirst ? posts.filter((post) => post.id !== featured?.id && !asideIds.has(post.id)) : posts;
+const wallCategories = isFirst ? categoriesForWall(categories, categoryCounts, { emptySlots: true }) : [];
 ---
 
 <Base>
-  <div class="mx-auto max-w-7xl px-4 sm:px-6">
-    {
-      isFirst && (
-        <>
-          <header class="mt-6 sm:mt-10">
-            <LofiHero client:load tagline={SITE.tagline} intro={SITE.intro}>
-              <span slot="title" class="inline-flex justify-center text-[#ece3d2]" style="--brand-accent: #d6a45f">
-                <Brand size="hero" />
-              </span>
-            </LofiHero>
-          </header>
-          <nav aria-label="按分类浏览" class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-            {categories.map((cat, index) => (
-              <a
-                href={`/categories/${cat.slug}/`}
-                class="tape-link group relative overflow-hidden rounded-lg border border-[#3a352d] bg-[#1a222a] p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d6a45f]/50 sm:p-5"
-              >
-                <span class="absolute inset-y-0 left-0 w-1" style={`background: ${cat.accent};`} aria-hidden="true"></span>
-                <span class="flex items-center justify-between gap-2">
-                  <span class="font-mono text-sm font-semibold" style={`color: color-mix(in srgb, ${cat.accent} 55%, white)`}>{cat.mark}</span>
-                  <span class="font-mono text-[0.625rem] text-[#b8ab96]">{String(index + 1).padStart(2, '0')}</span>
-                </span>
-                <span class="mt-4 block font-serif text-lg font-medium text-[#ece3d2] transition-colors group-hover:text-[#e5b978]">{cat.label}</span>
-                <span class="mt-1 block text-xs text-[#b8ab96]">{categoryCounts[cat.slug]} 篇文章</span>
-              </a>
-            ))}
-          </nav>
-        </>
-      )
-    }
+  {
+    isFirst && (
+      <header>
+        <LofiHero client:load tagline={SITE.tagline} intro={SITE.intro}>
+          <span slot="title" class="inline-flex justify-center text-hero-fg" style="--brand-accent: #d6a45f">
+            <Brand size="hero" />
+          </span>
+        </LofiHero>
+      </header>
+    )
+  }
+  <div class="mx-auto max-w-7xl px-4 pb-4 sm:px-6">
+    <MagazineToolbar primary={isFirst} />
 
     {
       isFirst && featured && (
-        <section aria-labelledby="featured-heading" class="mt-10 sm:mt-12">
+        <section aria-labelledby="featured-heading" class="mt-8 sm:mt-10">
           <div class="mb-5 flex items-center gap-4">
-            <h2 id="featured-heading" class="eyebrow shrink-0">Featured / 精选文章</h2>
+            <h2 id="featured-heading" class="eyebrow shrink-0">Featured / 封面</h2>
             <span class="h-px flex-1 bg-line dark:bg-line-dark"></span>
           </div>
-          <PostCard post={featured} featured />
+          <div class:list={['grid gap-4', spreadAsides.length > 0 && 'md:grid-cols-[minmax(0,1.45fr)_minmax(220px,0.8fr)]']}>
+            <PostCard post={featured} variant="featured" />
+            {spreadAsides.length > 0 && (
+              <div class="grid content-start gap-4">
+                {spreadAsides.map((post) => <PostCard post={post} variant="compact" />)}
+              </div>
+            )}
+          </div>
         </section>
       )
     }
 
-    <section aria-labelledby="latest-heading" class={isFirst ? 'mt-12 sm:mt-16' : 'pt-12'}>
+    {
+      isFirst && wallCategories.length > 0 && (
+        <section aria-labelledby="wall-heading" class="mt-10 sm:mt-12">
+          <div class="mb-5 flex items-center gap-4">
+            <h2 id="wall-heading" class="eyebrow shrink-0">Sections / 栏目</h2>
+            <span class="h-px flex-1 bg-line dark:bg-line-dark"></span>
+          </div>
+          <CategoryWall categories={wallCategories} counts={categoryCounts} />
+        </section>
+      )
+    }
+
+    <section aria-labelledby="latest-heading" class={isFirst ? 'mt-12 sm:mt-16' : 'mt-10'}>
       <div class="mb-6 flex items-end justify-between gap-4">
         <div>
           <p class="eyebrow">{isFirst ? 'Latest notes' : 'All notes'}</p>
@@ -104,13 +111,13 @@ const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
             {isFirst ? '最近更新' : `文章列表 · 第 ${page.currentPage} 页`}
           </h2>
         </div>
-        <a href="/archives/" class="hidden items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark sm:inline-flex">
-          查看归档
+        <a href="/explore/" class="hidden items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-accent dark:text-snow-soft dark:hover:text-accent-dark sm:inline-flex">
+          索引
           <span aria-hidden="true">→</span>
         </a>
       </div>
       <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-        {grid.map((post) => <PostCard post={post} />)}
+        {grid.map((post) => <PostCard post={post} variant="default" />)}
       </div>
     </section>
 

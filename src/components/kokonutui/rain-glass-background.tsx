@@ -25,6 +25,9 @@ export interface RainGlassBackgroundProps {
   /** Set false for a window you can't wipe. */
   interactive?: boolean;
   className?: string;
+  /** Outer layout only. Does not change the rain simulation. */
+  contentClassName?: string;
+  titleClassName?: string;
 }
 
 const DEFAULT_SRC =
@@ -37,6 +40,8 @@ export default function RainGlassBackground({
   rain = 0.6,
   interactive = true,
   className,
+  contentClassName,
+  titleClassName,
 }: RainGlassBackgroundProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -73,8 +78,8 @@ export default function RainGlassBackground({
           ref={canvasRef}
         />
       </div>
-      <div className="relative flex min-h-[560px] flex-col items-center justify-center gap-6 px-6 py-16 text-center">
-        <h1 className="max-w-3xl text-balance font-serif text-5xl font-semibold tracking-[-0.045em] sm:text-7xl">
+      <div className={cn("relative flex min-h-[560px] flex-col items-center justify-center gap-6 px-6 py-16 text-center", contentClassName)}>
+        <h1 className={cn("max-w-3xl text-balance font-serif text-5xl font-semibold tracking-[-0.045em] sm:text-7xl", titleClassName)}>
           {title}
         </h1>
         {children === undefined ? <DefaultContent /> : children}
