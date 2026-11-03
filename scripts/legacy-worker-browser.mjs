@@ -121,6 +121,9 @@ export async function verifyLegacyWorkerRetirement(browser) {
     assert.equal(await current.getByLabel('Draft').inputValue(),'preserve this draft');
     console.log('PASS: a current page reached through a legacy cache miss upgrades to the video worker without reloading or losing input');
 
+    // Their background update checks share this server counter. End both
+    // migrated contexts before attributing requests to the clean visitor.
+    await Promise.all([first.close(),second.close()]);contexts.splice(0,2);
     const third=await context(),clean=await third.newPage();const beforeClean=workerUpdates;
     await clean.goto(base+'/lofi/');await clean.waitForTimeout(250);
     assert.equal((await clean.evaluate(()=>navigator.serviceWorker.getRegistrations())).length,0);
