@@ -6,8 +6,9 @@ clusters share one scale, instead of filling a rectangle with arbitrary keys.
 """
 import math
 from mathutils import Vector
-from refine_geometry import _box, _mesh, _tube
-from refine_equipment import rounded_rect
+from mathutils.bvhtree import BVHTree
+from refine_geometry import _box, _mesh
+from refine_equipment import rounded_rect, cable
 
 
 def refine_input_devices(scene, ivory, keys, dark, ink, text):
@@ -20,8 +21,7 @@ def refine_input_devices(scene, ivory, keys, dark, ink, text):
         return mark(_box(name, p, size, material, scene, bevel=radius, segments=4))
 
     def wire(name, points, radius):
-        vertices, faces = _tube([Vector(p) for p in points], radius, 10)
-        return mark(_mesh(name, vertices, faces, dark, scene, smooth=True))
+        return cable(name,points,radius,dark,scene)
 
     pitch = .038
     left = -23.25 * pitch / 2
@@ -79,7 +79,15 @@ def refine_input_devices(scene, ivory, keys, dark, ink, text):
         cap.location=(x,y,deck(y));cap.rotation_euler.x=math.atan(slope)
         if legend:
             size=.007 if small or len(legend)>3 else .009 if len(legend)>1 else .012
-            text('Computer_Key_Print',legend,(-width*.31,-depth*.16,.0242),size,ink,cap,(0,0,0))
+            lettering=text('Computer_Key_Print',legend,(-width*.31,-depth*.16,.0253),size,ink,cap,(0,0,0))
+            # Follow the actual dished top with a thin ink film. A flat label
+            # above the highest shoulder floats over the centre of the cap.
+            top=BVHTree.FromPolygons(vertices,faces)
+            for vertex in lettering.data.vertices:
+                p=lettering.location+vertex.co
+                hit,normal,index,distance=top.ray_cast(Vector((p.x,p.y,.04)),Vector((0,0,-1)))
+                assert hit is not None,('Keyboard legend outside cap',legend,p[:])
+                vertex.co.z=hit.z-lettering.location.z+.000065+max(-.00015,min(.00015,vertex.co.z))*.12
         count += 1
         return cap
 
@@ -119,6 +127,7 @@ def refine_input_devices(scene, ivory, keys, dark, ink, text):
     for i in range(3):
         box('Computer_Keyboard_LED', (left+(19.9+i*1.05)*pitch,-.439,deck(-.439)+.002),(.009,.004,.002),dark,.001)
     wire('Computer_KeyboardCable',[(.22,-.398,.731),(.23,-.382,.722),(.34,-.382,.708),(.47,-.375,.700),(.49,-.15,.700),(.49,.23,.710),(.45,.405,.725),(.26,.405,.760),(.26,.376,.760)],.003)
+    box('Computer_KeyboardCableBoot',(.22,-.398,.731),(.014,.027,.014),dark,.005)
 
     # Rounded palm shell with a low nose, curved flanks and flat underside.
     # Mouse front is +Y (toward the display), so the cable exits that end.
@@ -177,6 +186,7 @@ def refine_input_devices(scene, ivory, keys, dark, ink, text):
     wire('Computer_Mouse_ButtonSplit',[(mx,my+y,upper(y,0)+.001)for y in (.017,.033,.050,.067,.084,.099)],.00065)
     wire('Computer_Mouse_ButtonHinge',[(mx+x,my+.017,upper(.017,x)+.0005)for x in (-.044,-.033,-.022,-.011,0,.011,.022,.033,.044)],.0006)
     wire('Computer_MouseCable',[(mx,my+.109,.710),(mx,my+.135,.705),(.57,-.35,.696),(.54,-.12,.696),(.54,.23,.710),(.51,.435,.730),(.34,.435,.760),(.34,.376,.760)],.0024)
+    box('Computer_MouseCableBoot',(mx,my+.111,.710),(.011,.023,.011),dark,.004)
     # Rear connectors terminate the cords outside the steel chassis.
     for x in (.26,.34):
         box('Computer_RearPort',(x,.373,.760),(.031,.008,.028),dark,.004)

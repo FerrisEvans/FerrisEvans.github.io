@@ -7,6 +7,7 @@ import { createNormalUpdater } from './dynamic-normals';
 import { createPaperContact } from './paper-contact';
 import { createObjectContact } from './object-contact';
 import { paperFlex } from './paper-shape';
+import { inheritMicroSurface } from './micro-surfaces';
 import anchors from './anchors.json';
 
 type Resources = Set<{dispose():void}>;
@@ -48,9 +49,14 @@ export function createProps(root: Object3D, resources: Resources) {
       child.userData.roomDynamic=true;
       if(!preserveBake && child instanceof Mesh && child.material instanceof MeshStandardMaterial) {
         const old=child.material;
-        const material=liveCache.get(old)??old.clone();
-        material.lightMap=null;material.envMapIntensity=.8;
-        liveCache.set(old,material);resources.add(material); child.material=material;
+        let material=liveCache.get(old);
+        if(!material){
+          material=old.clone();material.lightMap=null;material.envMapIntensity=.8;
+          if(old.userData.thinGlass){material.onBeforeCompile=old.onBeforeCompile;material.customProgramCacheKey=old.customProgramCacheKey;}
+          inheritMicroSurface(old,material);
+          liveCache.set(old,material);resources.add(material);
+        }
+        child.material=material;
       }
     });
   }
@@ -294,6 +300,7 @@ export function createProps(root: Object3D, resources: Resources) {
     }
     root.updateMatrixWorld(true);
     syncCalculatorContact();
+    syncFloppyContact();syncCDContact();
   }
   const movable=new Map<string,Group>();
   for(const name of ['Retro_Phone','Desk_CD','Desk_Calculator','Desk_Pager','Desk_Floppy','Desk_Pencil','Desk_Rolodex','Desk_Walkman','Desk_Clock','Desk_ReplyCard']) {
@@ -306,6 +313,9 @@ export function createProps(root: Object3D, resources: Resources) {
   const pencil=movable.get('Desk_Pencil');
   const calculator=movable.get('Desk_Calculator');
   const syncCalculatorContact=calculator?createObjectContact(root,calculator,root.getObjectByName('Desk_Book'),resources):()=>{};
+  const floppy=movable.get('Desk_Floppy'),cd=movable.get('Desk_CD'),desktop=root.getObjectByName('Desk_Top');
+  const syncFloppyContact=floppy?createObjectContact(root,floppy,desktop,resources):()=>{};
+  const syncCDContact=cd?createObjectContact(root,cd,desktop,resources,true):()=>{};
   if(pencil){pencil.position.x=-.16;pencil.position.z=.86;pencil.rotation.y=.95;}
   root.traverse(o=>{if(/^(Mug_|Desk_Book)/.test(o.name))o.traverse(c=>c.userData.roomDynamic=true);});
   const hands:{object:Object3D;period:number;basis:Quaternion}[]=[];
@@ -344,6 +354,7 @@ export function createProps(root: Object3D, resources: Resources) {
     pendingTape=null;tapePhase='idle';tapeGroup.visible=false;
     syncRestingTape();
     for(const[object,value]of transient){object.position.copy(value.position);object.quaternion.copy(value.quaternion);}transient.clear();
+    root.updateMatrixWorld(true);syncFloppyContact();syncCDContact();
   }
   return {paper,resize,optimize,finish,updateClock,setPaper,holdCalculator,selectTape,eject,nudge,update,get raised(){return raised;},get moving(){return paperMoving||!!heldMotion||tapePhase!=='idle'||transient.size>0;},get paperMoving(){return paperMoving;},get loading(){return tapePhase!=='idle';},get tapeState(){return{tapePhase,physicalTape:physicalTape?.id??'',pendingTape:pendingTape?.id??''};}};
 }

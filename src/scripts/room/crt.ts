@@ -2,11 +2,13 @@ import { CanvasTexture, Color, MeshPhysicalMaterial, SRGBColorSpace, type Textur
 import { pageInfo, pageSize, wrapText, type RoomContent } from './content';
 import { paintTape, type Tape } from './tapes';
 import { paintHome } from './home-program';
+import { phosphorShader } from './phosphor';
+import { createThinGlass } from './thin-glass';
 
 export type Program = 'home' | 'notes' | 'night' | 'off';
 const background = '#1753bd';
 
-/** Canvas UI and screen-only effects. The existing convex glass still reflects the room. */
+/** Canvas emission on the inner coating; the separate convex envelope reflects the room. */
 export function createCRT() {
   const canvas = document.createElement('canvas');
   canvas.width = 768;
@@ -20,10 +22,14 @@ export function createCRT() {
   map.flipY = false;
   map.colorSpace = SRGBColorSpace;
   const material = new MeshPhysicalMaterial({
-    color: 0x000000, emissive: 0xffffff, emissiveMap: map,
-    roughness: .14, clearcoat: .2, clearcoatRoughness: .085,
-    specularIntensity: .7, ior: 1.52, toneMapped: false,
+    // The unlit phosphor behind the faceplate is a very dark grey-green,
+    // rather than a perfectly absorbing hole in the room.
+    color: 0x080d0b, emissive: 0xffffff, emissiveMap: map,
+    roughness: .9, clearcoat: 0,
+    specularIntensity: 0, ior: 1.52, toneMapped: false,
   });
+  const glass=createThinGlass({roughness:.065,ior:1.52,absorption:.018});
+  glass.name='CRT faceplate';
   const uniforms = {
     crtTime: { value: 0 }, crtMotion: { value: 0 }, crtStatic: { value: 0 },
     crtReveal: { value: 1 }, crtEnabled: { value: 0 },
@@ -38,48 +44,55 @@ export function createCRT() {
       uniform float crtChroma,crtTracking,crtUnderscan,crtDelay,crtBlue;
       float crtHash(vec2 p) { return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
       \n` + shader.fragmentShader;
+    // Insert after Three's emissive-map sampler and colour-space helpers.
+    shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_pars_fragment>',
+      '#include <emissivemap_pars_fragment>\n'+phosphorShader);
     shader.fragmentShader = shader.fragmentShader.replace('#include <emissivemap_fragment>', `
       vec2 p = vEmissiveMapUv * 2.0 - 1.0;
-      vec2 uv = vEmissiveMapUv + p * dot(p,p) * .0035 * crtEnabled;
+      vec2 uv = vEmissiveMapUv + p * dot(p,p) * .008;
       uv = (uv-.5)*(1.+crtUnderscan*.12)+.5;
-      float border = step(0.,uv.x)*step(uv.x,1.)*step(0.,uv.y)*step(uv.y,1.);
+      // The phosphor aperture is inside the glass, so framebuffer MSAA cannot
+      // smooth this shader edge. Integrate its narrow cutoff per pixel.
+      vec2 apertureAA=max(fwidth(uv)*.8,vec2(.0005));
+      vec2 apertureEdge=smoothstep(-apertureAA,apertureAA,uv)
+        *(1.-smoothstep(vec2(1.)-apertureAA,vec2(1.)+apertureAA,uv));
+      float border=apertureEdge.x*apertureEdge.y;
       uv = fract(uv+vec2(.07,.05)*crtDelay);
       uv.x += sin(uv.y*70.+crtTime*9.)*crtTracking*.012*crtMotion;
       uv = clamp(uv, vec2(.002), vec2(.998));
-      float shift = .0009 * crtEnabled;
-      vec3 signal = vec3(texture2D(emissiveMap, uv + vec2(shift,0.)).r,
-                         texture2D(emissiveMap, uv).g,
-                         texture2D(emissiveMap, uv - vec2(shift,0.)).b);
-      vec3 halo = vec3(0.);
-      vec2 spread = vec2(2.5/768.,2.5/576.);
-      halo += max(texture2D(emissiveMap,uv+vec2(spread.x,0.)).rgb-vec3(.6),vec3(0.));
-      halo += max(texture2D(emissiveMap,uv-vec2(spread.x,0.)).rgb-vec3(.6),vec3(0.));
-      halo += max(texture2D(emissiveMap,uv+vec2(0.,spread.y)).rgb-vec3(.6),vec3(0.));
-      halo += max(texture2D(emissiveMap,uv-vec2(0.,spread.y)).rgb-vec3(.6),vec3(0.));
-      signal += halo * .045 * crtEnabled;
-      #ifdef DECODE_VIDEO_TEXTURE_EMISSIVE
-        signal = sRGBTransferEOTF(vec4(signal,1.)).rgb;
-      #endif
-      // Screen derivatives suppress subpixel scanlines instead of allowing moire.
-      float scanAA = 1. - smoothstep(.35, .9, fwidth(uv.y) * 144.);
-      float scan = .97 + .03 * cos(uv.y * 904.7787) * scanAA;
-      float vignette = 1. - .11 * dot(p,p);
-      float band = .012 * sin(uv.y * 11. - crtTime * .65) * crtMotion;
-      float grain = (crtHash(floor(uv * vec2(768.,576.)) + floor(crtTime*24.)) - .5) * mix(.009,.0015,crtFilm) * crtMotion;
+      vec2 tubeRaster=vec2(640.,480.);
+      vec3 signal=phosphorSignal(uv,tubeRaster,mix(.60,1.15,crtFilm),.085);
+      // Resolve a stable 240-line interlaced field on the actual curved UV
+      // surface. Signal bandwidth stays 480 lines; no full-screen overlay.
+      float scan=phosphorRaster(uv,vec2(640.,240.),.20);
+      float beamFalloff = 1. - .075 * dot(p,p);
+      float breath=1.+(.0022*sin(crtTime*1.4)+.0012*sin(crtTime*.37))*crtMotion;
+      float grain = (crtHash(floor(uv * tubeRaster) + floor(crtTime*24.)) - .5) * mix(.003,.0006,crtFilm) * crtMotion;
       signal = mix(vec3(dot(signal,vec3(.2126,.7152,.0722))),signal,crtChroma);
-      signal = mix(signal,vec3(signal.b*.18,signal.b*.35,signal.b),crtBlue)*border;
-      signal *= mix(1., scan * vignette + band, crtEnabled);
+      signal = mix(signal,vec3(signal.b*.18,signal.b*.35,signal.b),crtBlue);
       signal += grain * crtEnabled;
       float snow = crtHash(floor(uv * vec2(380.,280.)) + floor(crtTime*60.));
       signal = mix(signal, vec3(snow * .25), crtStatic * .5);
-      totalEmissiveRadiance *= mix(crtBlank, max(signal, vec3(0.)), crtReveal);
+      // Standby and video pass through the same tube optics. Previously the
+      // reveal mix bypassed every raster/edge cue on the blank blue screen.
+      // Glass attenuation belongs to the outer mesh, not this inner coating.
+      vec3 displayed=mix(crtBlank,max(signal,vec3(0.)),crtReveal);
+      totalEmissiveRadiance *= displayed*scan*beamFalloff*breath*border;
     `);
+    // Bounce cards are diffuse-light proxies, not luminous objects floating
+    // in front of the glass. The captured room already contains their lit
+    // surfaces; reflecting both produced a broad grey oval over dark frames.
+    shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_end>',
+      '#include <lights_fragment_end>\nreflectedLight.directSpecular=vec3(0.);');
   };
-  material.customProgramCacheKey = () => 'room-crt-v2';
+  material.customProgramCacheKey = () => 'room-crt-phosphor-v10-inner-coating';
+  material.userData.roomGlow=false;
   function signalMap(texture:Texture){
     if(material.emissiveMap===texture)return;
     const video=(value:Texture|null)=>value!==null&&'isVideoTexture' in value;
-    uniforms.crtFilm.value=Number(video(texture));
+    // A reduced-motion film poster goes through the same tube optics as
+    // the moving film. Native canvas pages retain their text-friendly beam.
+    uniforms.crtFilm.value=Number(texture!==map);
     if(video(material.emissiveMap)!==video(texture))material.needsUpdate=true;
     material.emissiveMap=texture;
   }
@@ -180,5 +193,5 @@ export function createCRT() {
     if(paused){ctx!.fillStyle='#081311dd';ctx!.fillRect(286,240,196,72);ctx!.fillStyle='#efeadc';ctx!.font='38px RoomPixel,monospace';ctx!.textAlign='center';ctx!.fillText('PAUSED',384,287);ctx!.textAlign='left';}
     map.needsUpdate=true;return average();
   }
-  return { canvas, map, material, uniforms, paint, study, posts, tape, home, signalMap };
+  return { canvas, map, material, glass, uniforms, paint, study, posts, tape, home, signalMap };
 }

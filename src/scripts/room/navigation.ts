@@ -27,7 +27,7 @@ export function createNavigation(camera:PerspectiveCamera,windowProjection:Windo
     room?.traverse(object=>{if(matches(object.name))bounds.union(new Box3().setFromObject(object));});
     return bounds.isEmpty()?undefined:bounds;
   }
-  function inspectFamily(name:'clock'|'rolodex',prefix:string,offset:Vector3){
+  function inspectFamily(name:'clock'|'rolodex'|'cd',prefix:string,offset:Vector3){
     const bounds=familyBounds(n=>n===prefix||n.startsWith(prefix+'_'));if(!bounds)return;
     const target=bounds.getCenter(new Vector3());poses[name]=pose(target.clone().add(offset).toArray(),target.toArray());
   }
@@ -35,6 +35,11 @@ export function createNavigation(camera:PerspectiveCamera,windowProjection:Windo
   if(clock)clockOffset.applyQuaternion(clock.getWorldQuaternion(new Quaternion()));
   inspectFamily('clock','Desk_Clock',clockOffset);
   inspectFamily('rolodex','Desk_Rolodex',new Vector3(-.14,.30,.70));
+  // Keep each authored approach direction and distance while following the
+  // delivered prop family when the desktop layout changes.
+  inspectFamily('cd','Desk_CD',poses.cd.position.clone().sub(poses.cd.target));
+  // The Walkman has not moved. Its socket/cable can extend below or beyond
+  // the player, so keep the established body view instead of framing them.
   const tvBounds=familyBounds(n=>n==='CRT_Case'||n==='CRT_ControlPanel'||n.startsWith('CRT_Slider'));
   function frameTV(){
     if(!tvBounds)return;

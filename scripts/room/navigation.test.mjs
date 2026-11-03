@@ -92,6 +92,32 @@ test('relocated clock and Rolodex inspection poses follow the delivered prop fam
   clock.geometry.dispose();room.traverse(object=>object.geometry?.dispose());material.dispose();
 });
 
+test('CD inspection follows a relocated player without changing approach direction or distance',()=>{
+  const room=new Scene(),material=new MeshBasicMaterial();
+  for(const [name,center,size]of [['Desk_CD',[3.2,.8,-.1],[.32,.08,.32]]]){
+    const mesh=new Mesh(new BoxGeometry(...size),material);mesh.name=name;mesh.position.fromArray(center);room.add(mesh);
+  }
+  const {camera,nav}=setup(1920,1080,room);
+  for(const [view,name,offset]of [['cd','Desk_CD',new Vector3(0,.91,.52)]]){
+    nav.go(view,0,true);nav.update(0,0,false);camera.updateMatrixWorld(true);
+    const center=new Box3().setFromObject(room.getObjectByName(name)).getCenter(new Vector3());
+    assert.ok(camera.position.distanceTo(center.clone().add(offset))<1e-7);
+    const screen=center.project(camera);assert.ok(Math.abs(screen.x)<1e-7&&Math.abs(screen.y)<1e-7,'new physical location remains the focus');
+  }
+  room.traverse(object=>object.geometry?.dispose());material.dispose();
+});
+
+test('Walkman keeps its established body view when a socket or cable extends outside the player',()=>{
+  const room=new Scene(),material=new MeshBasicMaterial();
+  for(const [name,center,size]of [['Desk_Walkman',[2.34,.719,-.13],[.25,.064,.32]],['Desk_Walkman_HeadphoneSocket',[2.34,.002,-.13],[.01,.004,.01]],['Desk_Walkman_Cord',[2.75,.7,.3],[.8,.006,.9]]]){
+    const mesh=new Mesh(new BoxGeometry(...size),material);mesh.name=name;mesh.position.fromArray(center);room.add(mesh);
+  }
+  const {camera,nav}=setup(1920,1080,room);nav.go('walkman',0,true);nav.update(0,0,false);camera.updateMatrixWorld(true);
+  assert.ok(camera.position.distanceTo(new Vector3(2.34,1.32,.42))<1e-7,'unmoved player retains the accepted camera');
+  const focus=new Vector3(2.34,.74,-.13).project(camera);assert.ok(Math.abs(focus.x)<1e-7&&Math.abs(focus.y)<1e-7,'body stays in the centre, not the family bounds');
+  room.traverse(object=>object.geometry?.dispose());material.dispose();
+});
+
 test('clock inspection follows the delivered face orientation without changing Home limits or pose',()=>{
   const material=new MeshBasicMaterial();
   for(const yaw of [0,-Math.PI/2,.36]){

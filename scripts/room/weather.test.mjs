@@ -14,16 +14,46 @@ const pixels = cityDepthPixels();
 const sample = (u, v, channel) => pixels[(Math.min(height-1,Math.floor(v*height))*width+Math.min(width-1,Math.floor(u*width)))*4+channel];
 
 test('full inspection and Home materials share city pixels, depth and the same paused or advancing clock', () => {
-  const map=new three.Texture(),weather=module.exports.createWeather(map);
+  const room=new three.Group(),lamp=new three.Mesh(new three.BoxGeometry(.5,.4,.5));
+  room.position.set(.2,.1,-.3);room.rotation.y=.12;
+  lamp.name='Lamp_Shade';lamp.position.set(-1.4,1.8,-.4);lamp.rotation.z=.24;room.add(lamp);
+  const television=new three.Mesh(new three.BoxGeometry(.9,.7,.55));
+  television.name='CRT_Case';television.position.set(.1,1.5,0);room.add(television);
+  const map=new three.Texture(),weather=module.exports.createWeather(map,room);
   assert.notEqual(weather.material,weather.inspectionMaterial);
   assert.equal(weather.material.map,map);assert.equal(weather.inspectionMaterial.map,map);
   const compile=material=>{const shader={uniforms:{},vertexShader:three.ShaderLib.basic.vertexShader,fragmentShader:three.ShaderLib.basic.fragmentShader};material.onBeforeCompile(shader,{});return shader;};
   const home=compile(weather.material),inspection=compile(weather.inspectionMaterial);
   assert.equal(home.uniforms.cityDepth.value,weather.depth);assert.equal(inspection.uniforms.cityDepth.value,weather.depth);
   assert.equal(home.uniforms.weatherTime,inspection.uniforms.weatherTime);
+  assert(home.uniforms.weatherLampCenter.value.distanceTo(lamp.getWorldPosition(new three.Vector3()))<1e-10,'glass reflection follows the authored lamp position');
+  for(const [object,key] of [[lamp,'weatherShadeInverse'],[television,'weatherTVInverse']]){
+    const local=new three.Vector3(.11,-.07,.09),world=object.localToWorld(local.clone());
+    assert(world.applyMatrix4(home.uniforms[key].value).distanceTo(local)<1e-10,'reflection proxy includes the complete parent transform and object tilt');
+    assert.equal(home.uniforms[key],inspection.uniforms[key],'window inspection uses the same physical reflection transform');
+  }
+  assert.equal(home.uniforms.weatherLampLevel,inspection.uniforms.weatherLampLevel);
+  assert.equal(home.uniforms.weatherPixelScale,inspection.uniforms.weatherPixelScale);
+  const renderer={getCurrentViewport:target=>target.set(0,0,3840,2160),getSize:target=>target.set(1920,1080),getRenderTarget:()=>null};
+  weather.material.onBeforeRender(renderer);
+  assert.equal(home.uniforms.weatherPixelScale.value,2,'beauty sampling accounts for device pixel ratio');
+  renderer.getCurrentViewport=target=>target.set(0,0,1920,1080);
+  weather.inspectionMaterial.onBeforeRender(renderer);
+  assert.equal(home.uniforms.weatherPixelScale.value,1,'half-resolution glow keeps the same visual kernel instead of doubling its radius');
+  renderer.getCurrentViewport=target=>target.set(0,0,128,128);
+  for(const mapping of [three.CubeUVReflectionMapping,three.CubeReflectionMapping])for(const height of [64,150,1080]){
+    renderer.getRenderTarget=()=>({texture:{mapping}});renderer.getSize=target=>target.set(height,height);
+    weather.material.onBeforeRender(renderer);
+    assert.equal(home.uniforms.weatherPixelScale.value,0,'cube and PMREM captures retain the source kernel regardless of the offline canvas size');
+  }
+  renderer.getRenderTarget=()=>null;renderer.getSize=target=>target.set(1920,1080);renderer.getCurrentViewport=target=>target.set(0,0,3840,2160);
+  weather.material.onBeforeRender(renderer);
+  assert.equal(home.uniforms.weatherPixelScale.value,2,'the first beauty draw restores its floor after probe capture');
+  weather.setLamp(0);assert.equal(home.uniforms.weatherLampLevel.value,0);assert.equal(inspection.uniforms.weatherLampLevel.value,0);
+  weather.setLamp(1);assert.equal(home.uniforms.weatherLampLevel.value,1);
   weather.update(17.25,0,0);assert.equal(home.uniforms.weatherTime.value,17.25);assert.equal(inspection.uniforms.weatherTime.value,17.25);
   assert.notEqual(weather.material.customProgramCacheKey(),weather.inspectionMaterial.customProgramCacheKey());
-  weather.material.dispose();weather.inspectionMaterial.dispose();weather.depth.dispose();map.dispose();
+  weather.material.dispose();weather.inspectionMaterial.dispose();weather.depth.dispose();map.dispose();lamp.geometry.dispose();lamp.material.dispose();television.geometry.dispose();television.material.dispose();
 });
 
 test('the train is masked by the foreground roof, trees and gantry, but remains visible on the open rail', () => {
@@ -65,8 +95,8 @@ test('airborne rain and glass water both move down screen in their respective co
   const weather=module.exports.createWeather(new three.Texture()),shader={uniforms:{},vertexShader:three.ShaderLib.basic.vertexShader,fragmentShader:three.ShaderLib.basic.fragmentShader};
   weather.material.onBeforeCompile(shader,{});
   const airborne=shader.fragmentShader.match(/float fallingRain\([\s\S]*?\n      }/)[0];
-  const glass=shader.fragmentShader.match(/vec3 rainLayer\([\s\S]*?\n      }/)[0];
-  const runs=shader.fragmentShader.match(/vec3 rainRuns\([\s\S]*?\n      }/)[0];
+  const glass=shader.fragmentShader.match(/vec4 rainLayer\([\s\S]*?\n      }/)[0];
+  const runs=shader.fragmentShader.match(/vec4 rainRuns\([\s\S]*?\n      }/)[0];
   const sign=block=>{const op=block.match(/(?:q|grid)\.y\s*([+-])=\s*weatherTime\s*\*\s*speed/);assert.ok(op,'shader must expose its advection coordinate');return op[1]==='+'?1:-1;};
   const camera=new three.PerspectiveCamera(42,1.6,.01,100);camera.position.set(-1.15,2.4,.9);camera.lookAt(-1.15,2.4,-12.068);camera.updateMatrixWorld(true);
   const before=new three.Vector3(0,1.5,-12.068),beforeY=before.clone().project(camera).y;

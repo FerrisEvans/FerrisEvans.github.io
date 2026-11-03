@@ -13,7 +13,7 @@ import {resolve} from 'node:path';
 const root=fileURLToPath(new URL('../../',import.meta.url));
 const require=createRequire(import.meta.url),args=process.argv.slice(2),moduleAt=args.indexOf('--playwright');
 const {chromium}=moduleAt>=0?await import(pathToFileURL(resolve(args[moduleAt+1],'index.mjs')).href):require('playwright');
-const server=await createServer({root,configFile:false,publicDir:resolve(root,'public'),server:{host:'127.0.0.1',port:0},logLevel:'warn'});
+const server=await createServer({root,configFile:false,cacheDir:resolve(root,'.astro/vite-reflection'),publicDir:resolve(root,'public'),server:{host:'127.0.0.1',port:0},logLevel:'warn'});
 let browser;
 try{
   await server.listen();const port=server.httpServer.address().port;
@@ -26,7 +26,7 @@ try{
   const packed=gzipSync(Buffer.from(result.bytes),{level:9});
   const manifestPath=resolve(root,'public/room/materials/manifest.json');
   const manifest=JSON.parse(await readFile(manifestPath,'utf8'));
-  const inputs=['src/scripts/room/lighting.ts','src/scripts/room/reflection.ts','src/scripts/room/weather.ts','src/scripts/room/crt.ts','src/scripts/room/model.ts','scripts/room/capture-reflection.ts','scripts/room/build-reflection.mjs',`public/room/materials/${manifest.model}`,'node_modules/three/package.json'];
+  const inputs=['src/scripts/room/lighting.ts','src/scripts/room/reflection.ts','src/scripts/room/weather.ts','src/scripts/room/crt.ts','src/scripts/room/phosphor.ts','src/scripts/room/vfd.ts','src/scripts/room/micro-surfaces.ts','src/scripts/room/thin-glass.ts','src/scripts/room/model.ts','scripts/room/capture-reflection.ts','scripts/room/build-reflection.mjs',`public/room/materials/${manifest.model}`,'node_modules/three/package.json'];
   inputs.push('public'+manifest.city);
   for(const atlas of Object.values(manifest.atlases))for(const value of Object.values(atlas)){
     const file=typeof value==='object'?value.file:typeof value==='string'?value:null;

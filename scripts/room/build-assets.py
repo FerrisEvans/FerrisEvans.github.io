@@ -37,7 +37,7 @@ def write(path,data):path.write_text(json.dumps(data,indent=2,ensure_ascii=False
 def run(command):subprocess.run([str(x)for x in command],cwd=ROOT,check=True)
 def blender(script,flags):run([args.blender,'--background','--factory-startup','--python-exit-code','1','--python',ROOT/'scripts/room'/script,'--',*flags])
 def source_receipt():
-    paths=sorted((ROOT/'scripts/room').glob('*.py'))+sorted(p for p in (ROOT/'scripts/room/sources').rglob('*')if p.is_file())+[ROOT/'scripts/room/architecture-uv.glb',ROOT/'src/data/room-tapes.json',ROOT/'src/scripts/room/anchors.json',ROOT/'public/room/walnut-grain-v1.png',args.city.resolve()]
+    paths=sorted((ROOT/'scripts/room').glob('*.py'))+sorted(p for p in (ROOT/'scripts/room/sources').rglob('*')if p.is_file())+[ROOT/'scripts/room/architecture-uv.glb',ROOT/'scripts/room/desktop-layout.json',ROOT/'src/data/room-tapes.json',ROOT/'src/scripts/room/anchors.json',ROOT/'public/room/walnut-grain-v1.png',args.city.resolve()]
     sources={str(p.relative_to(ROOT)) if p.is_relative_to(ROOT) else str(p):digest(p)for p in paths}
     build_id=hashlib.sha256(json.dumps(sources,sort_keys=True).encode()).hexdigest()[:16]
     return {'buildId':build_id,'sources':sources,'draft':args.draft,'blender':str(args.blender),'python':sys.version.split()[0]}

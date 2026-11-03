@@ -83,10 +83,6 @@ function rectangle(ctx: Context, x: number, y: number, width: number, height: nu
   ctx.fillStyle = fill; ctx.fillRect(x, y, width, height);
   ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.strokeRect(x, y, width, height);
 }
-function tab(ctx: Context, label: string, x: number, width: number, active: boolean) {
-  rectangle(ctx, x, 18, width, 54, active ? '#b5c69d' : '#243528');
-  text(ctx, label, x + width / 2, 55, active ? '#17251a' : dim, true, 'center');
-}
 function navigation(ctx: Context, index: number, count: number, online: boolean) {
   const current = online ? 1 : Math.max(1, Math.min(index + 1, count)), total = online ? 1 : Math.max(1, count);
   rectangle(ctx, 48, 510, 140, 50, '#243528');
@@ -103,8 +99,8 @@ export function paintComputer(ctx: Context, page: ComputerPage, index: number, c
   ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; ctx.imageSmoothingEnabled = false;
   ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'miter'; ctx.lineCap = 'butt'; ctx.setLineDash([]);
   ctx.fillStyle = '#17251a'; ctx.fillRect(0, 0, 768, 576);
-  tab(ctx, 'ABOUT', 48, 220, mode === 'about');
-  tab(ctx, 'ONLINE', 470, 250, mode === 'online');
+  text(ctx, mode === 'online' ? 'INBOX / ONLINE' : 'README / ABOUT', 48, 53, dim);
+  ctx.strokeStyle = border; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(48, 72); ctx.lineTo(720, 72); ctx.stroke();
   rectangle(ctx, 36, 88, 696, 404, '#0a160e');
   text(ctx, mode === 'online' ? `联系 ${content.author}` : page.title, 60, 121, foreground, true);
   ctx.strokeStyle = border; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(48, 136); ctx.lineTo(720, 136); ctx.stroke();

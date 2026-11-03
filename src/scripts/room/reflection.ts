@@ -21,6 +21,8 @@ export async function loadRoomReflection(asset:ReflectionAsset,read:(url:string)
 export function captureRoomReflection(room:Object3D,renderer:WebGLRenderer) {
   const scene=new Scene();scene.background=new Color(.025,.02,.015);scene.add(room.clone(true));
   const pmrem=new PMREMGenerator(renderer);
-  try{return pmrem.fromScene(scene,.04,.05,40,{size:128,position:new Vector3(-.6,1.5,.9)});}
+  // Let each material's roughness choose its PMREM mip. A second broad blur
+  // here erased window/lamp structure even on water and polished CRT glass.
+  try{return pmrem.fromScene(scene,.008,.05,40,{size:128,position:new Vector3(-.6,1.5,.9)});}
   finally{pmrem.dispose();}
 }

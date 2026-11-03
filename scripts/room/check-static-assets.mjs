@@ -5,6 +5,17 @@ import {createHash} from 'node:crypto';
 const root=new URL('../../',import.meta.url),sha=data=>createHash('sha256').update(data).digest('hex');
 const read=path=>readFile(new URL(path,root));
 const manifest=JSON.parse(await read('public/room/materials/manifest.json'));
+if(manifest.desktopLayout){
+  const layout=manifest.desktopLayout;
+  if(sha(await read(layout.recipe))!==layout.recipeSha256||sha(await read('scripts/room/patch-desktop-layout.mjs'))!==layout.scriptSha256)throw new Error('Desktop placement recipe changed; rebuild the desktop model patch');
+}
+if(manifest.receiverLighting){
+  const receiver=manifest.receiverLighting;
+  if(receiver.buildId!==manifest.bakeBuildId)throw new Error('Receiver lighting belongs to a different bake');
+  if(sha(await read('scripts/room/pack-receiver-lighting.py'))!==receiver.packingScriptSha256)throw new Error('Receiver packing script changed; repack the receiver lighting');
+  for(const [path,hash]of Object.entries(receiver.sources))if(sha(await read(path))!==hash)throw new Error(`Receiver lighting source changed: ${path}; refresh its targeted bake`);
+  for(const [file,hash]of Object.entries(receiver.files))if(sha(await read('public/room/materials/'+file))!==hash)throw new Error(`Receiver lighting differs: ${file}`);
+}
 const geometry=manifest.geometryTransport;
 if(geometry){
   for(const [path,hash] of [[`public/room/materials/${geometry.source}`,geometry.sourceSha256],[`public/room/materials/${manifest.model}`,geometry.sha256],['scripts/room/build-model.mjs',geometry.scriptSha256]]){

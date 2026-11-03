@@ -78,16 +78,24 @@ def refine_lamp(scene,materials):
              (.094,.175),(.085,.187),(.068,.194),(.035,.198),(0,.199)]
     v,f=_lathe(profile);shade=_part(scene,'Lamp_Shade',v,f,materials['shade'],center,rotation)
     inside=[(max(0,r-.0025),z+.0025 if z<-.16 else z-.0025) for r,z in profile]
-    v,f=_lathe(inside);_part(scene,'Lamp_Interior',v,[tuple(reversed(face)) for face in f],materials['lining'],center,rotation)
+    v,f=_lathe(inside);lining=_part(scene,'Lamp_Interior',v,[tuple(reversed(face)) for face in f],materials['lining'],center,rotation)
+    lining['surface_profile']='painted-metal'
     bpy.context.view_layer.update()
     bottom=shade.matrix_world@Vector((0,0,-.166))
-    bulb_position=shade.matrix_world@Vector((0,0,-.075))
-    # The small frosted bulb sits above the lip, partly occluded by the shade.
+    bulb_position=shade.matrix_world@Vector((0,0,-.130))
+    # The globe's low point meets the mouth plane. It is still shielded from
+    # above, but reads as a separate bulb instead of hiding behind the stem.
     v,f=_lathe([(0,-.036),(.021,-.033),(.037,-.019),(.042,0),(.036,.021),(.022,.034),(0,.039)],48)
-    bulb=_part(scene,'Lamp_Bulb',v,f,materials['bulb'],bulb_position)
+    bulb=_part(scene,'Lamp_Bulb',v,f,materials['bulb'],bulb_position,rotation)
     bulb['surface_role']='lamp-bulb';bulb.visible_shadow=False
-    # Compact socket at the end of the curved stem, hidden behind the bulb.
-    v,f=_lathe([(0,0),(.026,0),(.026,.045),(.022,.050),(0,.050)],32)
-    _part(scene,'Lamp_Socket',v,f,materials['socket'],p3-Vector((0,0,.025)))
+    # Bulb neck and socket share the shade's axis. The previous vertical
+    # socket stopped above the globe, leaving no continuous lamp assembly.
+    v,f=_lathe([(0,-.092),(.022,-.092),(.025,-.086),(.025,-.053),
+                (.029,-.049),(.029,-.013),(.021,-.004),(.021,.042),(.023,.052),(0,.052)],48)
+    _part(scene,'Lamp_Socket',v,f,materials['socket'],center,rotation)
+    for i in range(4):
+        z=-.085+i*.007
+        v,f=_lathe([(.024,z),(.026,z+.001),(.026,z+.0025),(.024,z+.004)],48)
+        _part(scene,'Lamp_SocketThread_%d'%i,v,f,materials['socket'],center,rotation)
     bpy.context.view_layer.update()
     return shade,bottom,bulb_position,screen_bounds(shade,scene)

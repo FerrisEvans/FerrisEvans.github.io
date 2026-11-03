@@ -5,6 +5,8 @@ import { pageInfo, pageSize, wrapText, type RoomContent, type RoomView } from '.
 import { tapes } from './tapes';
 import { computerPages, paintComputer } from './computer';
 import { paperLift, paperFlex } from './paper-shape';
+import { phosphorShader, separateTubeLayers } from './phosphor';
+import { createThinGlass } from './thin-glass';
 
 type SurfaceView = 'posts'|'work'|'about'|'online';
 const width=768,height=576;
@@ -45,7 +47,7 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
       for(let y=0;y<=rows;y++)for(let x=0;x<=columns;x++){
         const u=x/columns,v=y/rows;
         const point=corners[0].clone().lerp(corners[1],u).lerp(corners[3].clone().lerp(corners[2],u),v);
-        point.addScaledVector(normal,.004*(1-(u*2-1)**2)*(1-(v*2-1)**2));
+        point.addScaledVector(normal,.012*(1-(u*2-1)**2)*(1-(v*2-1)**2));
         positions.push(...point.toArray());uv.push(u,v);
       }
       for(let y=0;y<rows;y++)for(let x=0;x<columns;x++){const a=y*(columns+1)+x;indices.push(a,a+columns+2,a+1,a,a+columns+1,a+columns+2);}
@@ -56,8 +58,41 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
     const material=view==='work'
       ? new MeshStandardMaterial({map,transparent:true,depthWrite:false,side:DoubleSide,roughness:.94,metalness:0})
       : new MeshPhysicalMaterial({color:0x050907,emissive:0xffffff,emissiveMap:map,emissiveIntensity:.82,
-          roughness:.19,clearcoat:.28,clearcoatRoughness:.12,envMap:environment,envMapIntensity:.22,side:DoubleSide});
-    const mesh=new Mesh(geometry,material);mesh.name=`Interface_${view}`;mesh.renderOrder=2;(view==='work'?paper:scene).add(mesh);
+          roughness:.9,specularIntensity:0,ior:1.52,side:DoubleSide});
+    if(view==='about'){
+      material.onBeforeCompile=shader=>{
+        shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_pars_fragment>',
+          '#include <emissivemap_pars_fragment>\n'+phosphorShader);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`
+          vec2 pc=vEmissiveMapUv*2.-1.;
+          vec2 tubeUV=vEmissiveMapUv+pc*dot(pc,pc)*.002;
+          vec3 signal=phosphorSignal(tubeUV,vec2(720.,540.),.52,.048);
+          totalEmissiveRadiance*=signal*phosphorRaster(tubeUV,vec2(720.,350.),.105)
+            *(1.-.055*dot(pc,pc));`);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_end>',
+          '#include <lights_fragment_end>\nreflectedLight.directSpecular=vec3(0.);');
+      };
+      material.customProgramCacheKey=()=> 'computer-convex-phosphor-v5-inner-coating';
+      material.userData.roomGlow=false;
+    }
+    const mesh=new Mesh(geometry,material);mesh.name=`Interface_${view}`;
+    // Paper ink needs its overlay order; glass must sort with other transparent
+    // surfaces so foreground steam or a moving tape window stays in front.
+    mesh.renderOrder=view==='work'?2:0;(view==='work'?paper:scene).add(mesh);
+    if(view==='about'){
+      const glass=createThinGlass({roughness:.075,ior:1.52,absorption:.014,envMap:environment,envMapIntensity:.7});
+      glass.name='Computer faceplate';
+      separateTubeLayers(mesh,glass,resources,.0045);
+      // The original opaque support sat only 2.5 mm below the interface.
+      // Recess it behind the new coating so it cannot slice through its rim.
+      const backing=scene.getObjectByName('Computer_Screen');
+      if(backing){
+        const corners=anchors.surfaces.about.map(p=>new Vector3(...p as [number,number,number]));
+        const normal=corners[3].clone().sub(corners[0]).cross(corners[1].clone().sub(corners[0])).normalize();
+        const position=backing.getWorldPosition(new Vector3()).addScaledVector(normal,-.006);
+        backing.position.copy(backing.parent?backing.parent.worldToLocal(position):position);
+      }
+    }
     resources.add(geometry);resources.add(map);resources.add(material);return{ctx,map,mesh};
   }
   const work=textureSurface('work'), computer=textureSurface('about');
@@ -90,8 +125,6 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
     for(const key of ['about','online'] as const){const section=controls.get(key)!;section.replaceChildren();
       if(terminal){button(section,'打开 ABOUT.TXT',[40,165,680,75],()=>{terminal=false;callbacks.navigate('about');});button(section,'打开 ONLINE.BBS',[40,255,680,75],()=>{terminal=false;callbacks.navigate('online');});continue;}
       const text=document.createElement('p');text.className='sr-only';text.textContent=key==='about'?source.title.replace(/[。.!！?？]+$/u,'')+'。'+visible.join(' '):`GitHub ${content.github}。Email ${content.email}`;section.append(text);
-      button(section,'在电脑中阅读关于',[48,18,220,54],()=>callbacks.navigate('about'));
-      button(section,'在电脑中查看在线联系',[470,18,250,54],()=>callbacks.navigate('online'));
       if(key==='online'){
         link(section,'访问 GitHub',content.github,[48,185,672,72],true);link(section,'发送电子邮件',`mailto:${content.email}`,[48,285,672,72]);
       }else{

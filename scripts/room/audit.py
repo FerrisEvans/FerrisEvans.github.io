@@ -45,7 +45,7 @@ if report['remotePresent']:
 report['legacyReferenceBounds']={'CRT_Case':[516,388,877,744],'Lamp_Shade':[180,392,336,516]}
 report['legacyProjectionDeltaPixels']={name:[round(v-r,2) for v,r in zip(report['objects'][name]['pixels1440x960'],reference)] for name,reference in report['legacyReferenceBounds'].items()}
 assert report['finiteVertices']
-assert abs(report['crt']['bulgeMeters']-.037)<.0001
+assert abs(report['crt']['bulgeMeters']-.052)<.0001
 assert .012<report['padThicknessMeters']<.016
 args.output.write_text(json.dumps(report,indent=2)+'\n')
 print('MODEL_AUDIT',json.dumps(report))

@@ -14,21 +14,21 @@ from pathlib import Path
 
 import bpy
 import numpy as np
-from mathutils import Vector
+from mathutils import Vector, Euler
 
 sys.path.insert(0, str(Path(__file__).parent))
 from surfaces import curve_crt_screen
 from refine_lamp import refine_lamp
-from aging import age_wood, age_plastic, age_paper
+from aging import age_wood, age_plastic, age_paper, Surface
 from refine_geometry import refine_geometry
 from refine_curtains import refine_curtains, linen_material
 from refine_plant import refine_plant
 from refine_room import refine_room
 from refine_window import refine_window
 from preserve_architecture_uv import preserve_architecture_uv
-from refine_desk import refine_desk, repair_back_wall
+from refine_desk import refine_desk, repair_back_wall, unwrap_desk
 from preserve_props_uv import preserve_props_uv
-from refine_ceramic import refine_ceramic
+from refine_ceramic import refine_ceramic, unwrap_ceramic
 from refine_equipment import refine_equipment
 from refine_foliage import refine_foliage
 from refine_paper import refine_paper
@@ -36,6 +36,9 @@ from refine_tapes import refine_tapes
 from refine_accessories import refine_accessories
 from refine_physical import refine_physical
 from refine_control_layout import refine_control_layout
+from refine_cd import refine_cd
+from refine_clock import refine_clock
+from refine_desktop_layout import make_floppy_label, apply_desktop_layout
 
 ROOT = Path(__file__).resolve().parents[2]
 args = argparse.ArgumentParser()
@@ -72,7 +75,7 @@ scene.render.bake.margin = 12
 scene.world.use_nodes = True
 world = scene.world.node_tree.nodes.get("Background")
 world.inputs["Color"].default_value = (0.19, 0.25, 0.38, 1)
-world.inputs["Strength"].default_value = 0.18
+world.inputs["Strength"].default_value = 0.10
 scene.view_settings.view_transform = "AgX"
 scene.view_settings.look = "AgX - Medium High Contrast"
 scene.view_settings.exposure = 0
@@ -239,10 +242,20 @@ for obj in list(scene.objects):
         m = screen_mat
     assign(obj, m)
 
-lamp_copper = textured("Lamp satin spun bronze", (.23,.075,.035), (.30,.115,.058), (140,140,16), .30, .002, .85)
+lamp_copper = textured("Lamp satin spun bronze", (.25,.090,.045), (.28,.108,.057), (140,140,16), .23, .001, .92)
+# Circumferential tool marks on the spun shade, measured in world metres so
+# their scale survives atlas joining. They change gloss, not the clean colour.
+spun=Surface(lamp_copper)
+axis=Vector((0,0,1));axis.rotate(Euler((math.radians(-21),math.radians(13),0)))
+height_node=spun.n.new('ShaderNodeVectorMath');height_node.operation='DOT_PRODUCT'
+spun.l.new(spun.vector('SUBTRACT',spun.position,(-1.475,.486,1.867)),height_node.inputs[0]);height_node.inputs[1].default_value=axis
+turning=spun.math('SINE',spun.math('MULTIPLY',height_node.outputs['Value'],math.tau/.0007))
+spun.roughness(spun.math('MULTIPLY',turning,.009))
 lamp_base = textured("Lamp satin enamel base", (.18,.055,.034), (.21,.075,.046), (110,110,110), .48, .002, .18)
 lamp_brass = mat("Lamp satin brass tube", (.24,.16,.080), .31, .85)
-lining = mat("Lamp warm ivory lining", (.72,.61,.45), .64)
+lining = textured("Lamp ivory enamel lining", (.48,.44,.36), (.51,.47,.39), (260,260,260), .32, .002)
+lining.node_tree.nodes.get('Principled BSDF').inputs['Coat Weight'].default_value=.2
+lining.node_tree.nodes.get('Principled BSDF').inputs['Coat Roughness'].default_value=.24
 lamp_bulb_material = mat("Lamp frosted glass", (.85,.78,.61), .48)
 lamp_socket = mat("Lamp socket aged brass", (.09,.063,.028), .42, .65)
 shade, lamp_bottom, lamp_bulb, shade_bounds = refine_lamp(scene, {
@@ -394,7 +407,7 @@ detail_box("Desk_Pager_Clip", (0, .070, -.005), (.14, .022, .060), abs_plastic, 
 
 floppy = bpy.data.objects["Desk_Floppy"]
 detail_box("Desk_Floppy_Label", (0, -.040, .0067), (.180, .133, .001), label_paper, floppy)
-text_object("Desk_Floppy_Print", "FIELD NOTES", (-.077, -.025, .0077), .014, ink, floppy, (0, 0, 0))
+make_floppy_label(scene, ink, floppy)
 for y in (-.05, -.075):
     detail_box("Desk_Floppy_LabelRule", (0, y, .0076), (.145, .0015, .0006), ink, floppy)
 detail_box("Desk_Floppy_ReadSlot", (.026, .076, .0067), (.045, .065, .001), black, floppy)
@@ -513,7 +526,9 @@ for stack, thickness in [('A', [.82,1.10,.94,1.12,1.02]), ('B', [.90,1.17,.84,1.
         low = min(v.co.z for v in obj.data.vertices)
         high = max(v.co.z for v in obj.data.vertices)
         obj.location.z = floor-low
-        floor += high-low+.007
+        # The paper jackets sit on one another. A fixed air gap made every
+        # sleeve float; their small bevels already leave a readable edge seam.
+        floor += high-low
         obj.location.x += [0,.022,-.015,.032,-.012,.014,-.020][j]
         obj.location.y += [.005,-.018,.028,-.010,.020,-.025,.014][j]
         obj.rotation_euler.z += [.012,-.024,.031,-.018,.025,-.016,.010][j]
@@ -618,6 +633,13 @@ geometry_report['tapeHQ'] = refine_tapes(scene)
 geometry_report['accessoriesHQ'] = refine_accessories(scene)
 geometry_report['physicalDesktop'] = refine_physical(scene, text_object)
 geometry_report['controlLayout'] = refine_control_layout(scene, text_object)
+geometry_report['cdHousing'] = refine_cd(scene)
+geometry_report['clockHousing'] = refine_clock(scene)
+if not options.light_only_atlases:
+    geometry_report['desktopLayout'] = apply_desktop_layout(scene)
+# Receiver-only refreshes retain the accepted atlas projection. These two
+# movable families are removed while baking, so their staging pose cannot
+# affect receiver lighting; the delivered model uses the new layout recipe.
 (BUILD / 'round3-geometry.json').write_text(json.dumps({'objects':geometry_report,'curtains':curtain_report}, indent=2)+'\n')
 
 # A static photographic backdrop will be supplied independently; a camera-only
@@ -703,17 +725,25 @@ computer_screen = scene.objects['Computer_Screen']
 computer_center = computer_screen.matrix_world.translation.copy()
 computer_forward = (computer_screen.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
 room_lights = [
-    area("Lamp", lamp_bottom.lerp(lamp_bulb, .65), (-1.65, -0.30, 0.65), 160, (1.0, 0.69, 0.43), 0.20),
-    area("Window", (-0.3, 1.08, 2.6), (0, -0.5, 0.7), 50, (0.58, 0.68, 0.82), 3.6, 2.1),
-    area("Room bounce", (-2.3, -3.0, 2.8), (0, 0, 1.2), 60, (1.0, 0.75, 0.51), 3.0, 2.0),
-    area("Curtain bounce", (1.3, 0, 2.1), (2.2, .7, 2.7), 18, (1.0, .78, .57), .5, 1.0),
-    area("Overhead reflection", (-.89, -.35, 3.67), (-1.40, -.17, 1.96), 24, (1.0, .83, .67), .35, 1.0),
+    # The downward emitter represents light leaving the shade. Keep it just
+    # outside the lip; the bulb point lights the cavity independently, instead
+    # of a high-power desk proxy washing the enamel into a uniform disk.
+    area("Lamp", lamp_bottom + (lamp_bottom-lamp_bulb).normalized()*.05, (-1.65, -0.30, 0.65), 100, (1.0, 0.62, 0.34), 0.14),
+    # Keep the whole emitter beyond the joinery. The old tilted plane cut
+    # through the mullion and baked a hard triangular front/back light seam.
+    area("Window", (-0.3, 1.25, 2.6), (-0.3, -0.5, 2.6), 28, (0.58, 0.68, 0.82), 3.6, 2.1),
+    area("Room bounce", (-2.3, -3.0, 2.8), (0, 0, 1.2), 30, (1.0, 0.82, 0.64), 3.0, 2.0),
+    # A low broad return from the lit wood opens the equipment faces without
+    # increasing their albedo or erasing the close contact shadows.
+    area("Desk reflection", (-.3, -1.45, .78), (.25, -.05, 1.65), 12, (1.0, .79, .59), 2.4, .55),
+    area("Curtain bounce", (1.3, 0, 2.1), (2.2, .7, 2.7), 8, (1.0, .82, .65), .5, 1.0),
+    area("Overhead reflection", (-.89, -.35, 3.67), (-1.40, -.17, 1.96), 4, (1.0, .86, .73), .35, 1.0),
     area("Computer phosphor", computer_center+computer_forward*.038,
          computer_center+computer_forward*.40+Vector((0,0,-.623)), 3, (.30,.75,.42), .58, .44),
 ]
 bulb_data = bpy.data.lights.new("Lamp interior", "POINT")
-bulb_data.energy = .8
-bulb_data.color = (1, .66, .40)
+bulb_data.energy = 1.2
+bulb_data.color = (1, .62, .34)
 bulb_data.shadow_soft_size = .045
 bulb = bpy.data.objects.new("Lamp interior", bulb_data)
 scene.collection.objects.link(bulb)
@@ -765,10 +795,10 @@ for obj in scene.objects:
 manifest = {"version": 18, "buildId": options.build_id, "quality": "draft" if options.draft else "final", "encoding": "RGBM8",
             "city": '/room/' + city_path.with_suffix('.webp').name,
             "refinement": "high-quality-hero-assets", "shadeBounds": list(shade_bounds),
-            "camera": "HomeCamera", "atlases": {}, "lighting": {"lampWatts": 160, "lampSpreadDegrees": 100, "windowWatts": 50, "tvWhiteWatts": 18,
+            "camera": "HomeCamera", "atlases": {}, "lighting": {"lampWatts": scene.objects['Lamp'].data.energy, "lampSpreadDegrees": 100, "windowWatts": scene.objects['Window'].data.energy, "tvWhiteWatts": 18,
             "lampControlledSources": [light.name for light in lamp_controlled], "lampOffPreserves": ["Window", "Computer phosphor", "World"],
-            "deskShadowExclusions": [o.name for o in scene.objects if o.name.startswith(("Work_Notepad", "Mug_", "Desk_Calculator"))]},
-            "geometry": {"curtainRows": 41, "curtainThickness": .0014, "curtainHem": .048, "tapes": len(tapes), "interactiveProps": ["Retro_Phone", "Desk_CD", "Desk_Calculator",
+            "deskShadowExclusions": [o.name for o in scene.objects if o.name.startswith(("Work_Notepad", "Mug_", "Desk_Calculator", "Desk_Floppy", "Desk_CD"))]},
+            "geometry": {"curtainRows": 57, "curtainThickness": .0014, "curtainHem": .048, "tapes": len(tapes), "interactiveProps": ["Retro_Phone", "Desk_CD", "Desk_Calculator",
             "Desk_Pager", "Desk_Floppy", "Desk_Pencil", "Desk_Rolodex", "Desk_Walkman", "Desk_Clock", "Desk_ReplyCard"]}}
 originals = {}
 joined_groups = {}
@@ -807,10 +837,18 @@ for group, objects in groups.items():
     # Join keeps the active object's world transform; preserve it explicitly.
     joined.matrix_world = active_world
     bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-    if group not in ('curtains', 'architecture', 'props'):
+    if group=='desk':
+        geometry_report['deskAtlas']=unwrap_desk(joined)
+    elif group=='ceramic':
+        geometry_report['ceramicAtlas']=unwrap_ceramic(joined)
+    elif group not in ('curtains', 'architecture', 'props', 'ceramic'):
         bpy.ops.object.mode_set(mode="EDIT")
         bpy.ops.mesh.select_all(action="SELECT")
-        bpy.ops.uv.smart_project(angle_limit=1.1, island_margin=0.012, area_weight=0.5)
+        # Equipment contains many small manufactured parts. A 1.2% gap let
+        # padding dominate its atlas and reduced cord/metal-strip charts below
+        # one texel. The 4K source keeps a 12px gap with this tighter layout.
+        island_margin = .003 if group == 'equipment' else .012
+        bpy.ops.uv.smart_project(angle_limit=1.1, island_margin=island_margin, area_weight=0.5)
         bpy.ops.object.mode_set(mode="OBJECT")
     joined.data.uv_layers.active.name = "MaterialUV"
     while len(joined.data.uv_layers) > 1:
@@ -960,11 +998,16 @@ def receiver_shadow_policy(group):
     with height. Delete occluder faces temporarily, keeping every remaining UV
     coordinate intact; transparent materials can still exhaust ray bounces.
     """
-    if group not in ('desk', 'props'):
+    if group not in ('desk', 'props', 'paper', 'equipment'):
         yield
         return
     import bmesh
-    prefixes=('Work_Notepad', 'Mug_', 'Desk_Calculator')
+    if group == 'paper':
+        prefixes = ('Desk_Calculator',)
+    elif group == 'equipment':
+        prefixes = ('Desk_Floppy', 'Desk_CD')
+    else:
+        prefixes = ('Work_Notepad', 'Mug_', 'Desk_Calculator', 'Desk_Floppy', 'Desk_CD')
     replaced=[];hidden=[]
     for obj in joined_groups.values():
         excluded={i for i,m in enumerate(obj.data.materials) if m.get('source_object','').startswith(prefixes)}
@@ -975,7 +1018,7 @@ def receiver_shadow_policy(group):
         bm.to_mesh(mesh);bm.free();mesh.update()
     for obj in scene.objects:
         if obj.name.startswith(prefixes):hidden.append((obj,obj.hide_render));obj.hide_render=True
-    print('RECEIVER_SHADOW_POLICY',group,'paper, cup and calculator excluded',flush=True)
+    print('RECEIVER_SHADOW_POLICY',group,','.join(prefixes),'excluded',flush=True)
     try:yield
     finally:
         for obj,previous in hidden:obj.hide_render=previous
@@ -986,7 +1029,7 @@ for group, obj in joined_groups.items():
     if options.light_only_atlases and group not in options.light_only_atlases.split(','):continue
     # Very high bulb irradiance must not quantize every dark plastic surface.
     # A separate small lamp atlas keeps RGBM precision local to each range.
-    resolution = 512 if options.draft or group == "lamp" else 4096 if group == "desk" else 1024 if group in ("architecture", "curtains", "ceramic", "paper") else 2048
+    resolution = 512 if options.draft or group == "lamp" else 4096 if group in ("desk", "equipment") else 1024 if group in ("architecture", "curtains", "ceramic", "paper") else 2048
     light_resolution = min(resolution, 2048)
     scene.cycles.samples = 12 if options.draft else 96 if group in ('desk','walls') else 48
     atlas = {"size": resolution}
@@ -999,6 +1042,26 @@ for group, obj in joined_groups.items():
             atlas["opacity"] = save_png(bake_image(obj, group + "_opacity", resolution, "EMIT", data=True), group + "-opacity")
             restore_surface(obj)
         emission_channel(obj, packed=True)
+        if group == 'foliage':
+            # ORM's unused occlusion channel carries a bounded optical-density
+            # proxy from the scanned vein relief. Both raised veins and their
+            # recessed shoulders are denser than the thin lamina; this is not
+            # a measured thickness map, and does not alter the colour scan.
+            for material in obj.data.materials:
+                nodes, links = material.node_tree.nodes, material.node_tree.links
+                bump = next(node for node in nodes if node.type == 'BUMP')
+                relief = nodes.new('ShaderNodeMath'); relief.operation = 'SUBTRACT'
+                relief.inputs[1].default_value = .5
+                links.new(bump.inputs['Height'].links[0].from_socket, relief.inputs[0])
+                magnitude = nodes.new('ShaderNodeMath'); magnitude.operation = 'ABSOLUTE'
+                links.new(relief.outputs[0], magnitude.inputs[0])
+                density = nodes.new('ShaderNodeMapRange'); density.clamp = True
+                density.interpolation_type = 'SMOOTHSTEP'
+                for key, value in (('From Min', .025), ('From Max', .20), ('To Min', .28), ('To Max', .85)):
+                    density.inputs[key].default_value = value
+                links.new(magnitude.outputs[0], density.inputs['Value'])
+                links.new(density.outputs['Result'], nodes['BakePack'].inputs[0])
+            atlas['leafDensity'] = 'orm-r'
         atlas["orm"] = save_png(bake_image(obj, group + "_orm", resolution, "EMIT", data=True), group + "-orm")
         restore_surface(obj)
         atlas["normal"] = save_png(bake_image(obj, group + "_normal", resolution, "NORMAL", data=True), group + "-normal")
@@ -1019,7 +1082,7 @@ for group, obj in joined_groups.items():
         atlas["tv"] = save_png(bake_image(obj, group + "_tv", light_resolution, "DIFFUSE", {"DIRECT", "INDIRECT"}, "LightUV", True), group + "-tv", True)
         for light, power in zip(room_lights, saved_powers):
             light.data.energy = power
-        world.inputs["Strength"].default_value = 0.18
+        world.inputs["Strength"].default_value = 0.10
     manifest["atlases"][group] = atlas
 
 if options.light_only_atlases:

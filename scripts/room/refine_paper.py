@@ -14,7 +14,7 @@ from refine_geometry import _mesh, _activate, _box
 BEND=(.006,.014)
 
 
-def paper_finish(name,color,edges=False):
+def paper_finish(name,color,edges=False,cloth=False):
     mat=bpy.data.materials.new(name);mat.use_nodes=True;s=Surface(mat)
     s.p.inputs['Base Color'].default_value=(*color,1)
     s.p.inputs['Roughness'].default_value=.91
@@ -26,7 +26,28 @@ def paper_finish(name,color,edges=False):
     if edges:
         xyz=s.n.new('ShaderNodeSeparateXYZ');s.l.new(s.position,xyz.inputs[0])
         lines=s.math('SINE',s.math('MULTIPLY',xyz.outputs['Z'],math.tau/.00027))
-        s.mix_color(s.math('MULTIPLY',s.math('MAXIMUM',lines,0),.12),(.48,.43,.34))
+        s.mix_color(s.math('MULTIPLY',s.math('MAXIMUM',lines,0),.035),(.48,.43,.34))
+        # Individual sheets are finer than the web atlas. Small groups have
+        # slightly different edge compression, leaving readable but subdued
+        # structure after filtering, without widening every sheet into card.
+        drift=s.math('MULTIPLY',s.noise(24),.6)
+        bands=s.math('SINE',s.math('ADD',s.math('MULTIPLY',xyz.outputs['Z'],math.tau/.0036),drift))
+        compression=s.math('MULTIPLY',s.math('MAXIMUM',bands,0),.10)
+        s.mix_color(compression,(.46,.42,.34))
+        s.roughness(s.math('MULTIPLY',compression,.25))
+    if cloth:
+        # Book cloth has longer bound yarns and a softer grazing response than
+        # cut paper. It keeps the same pigment and clean printed cover palette.
+        yarn=s.noise(1,s.vector('MULTIPLY',s.position,(520,68,360)))
+        s.mix_color(s.math('MULTIPLY',yarn,.055),(.42,.40,.33))
+        s.p.inputs['Sheen Weight'].default_value=.24
+        s.p.inputs['Sheen Roughness'].default_value=.82
+        s.p.inputs['Specular IOR Level'].default_value=.12
+        s.p.inputs['Roughness'].default_value=.84
+        s.roughness(s.math('MULTIPLY',yarn,.035))
+        bump.inputs['Distance'].default_value=.00007
+        bump.inputs['Strength'].default_value=.16
+        s.l.new(yarn,bump.inputs['Height'])
     return mat
 
 

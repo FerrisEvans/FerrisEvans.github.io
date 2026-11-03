@@ -6,6 +6,10 @@ import {
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 
 import { createCRT, type Program } from './crt';
+import { separateTubeLayers } from './phosphor';
+import { createVFD } from './vfd';
+import { applyMicroSurface, type MicroSurface } from './micro-surfaces';
+import { createThinGlass } from './thin-glass';
 import type { RoomAssets } from './assets';
 import type { RoomContent } from './content';
 import type { Tape } from './tapes';
@@ -19,7 +23,7 @@ import {captureRoomReflection, loadRoomReflection, type ReflectionAsset} from '.
 
 type Resource = { dispose(): void };
 type LightMap = { file: string; preview?:string; range: number; peak: number };
-type Atlas = { albedo: string; orm: string; normal: string; entry?:{orm?:string;normal?:string}; opacity?:string; cutout?:boolean; alphaTest?:number; room: LightMap; tv: LightMap; lampOff?: LightMap };
+type Atlas = { albedo: string; orm: string; normal: string; entry?:{orm?:string;normal?:string}; opacity?:string; cutout?:boolean; alphaTest?:number; leafDensity?:'orm-r'; room: LightMap; tv: LightMap; lampOff?: LightMap };
 type Manifest = { reflection?:ReflectionAsset; buildId?:string; city?: string; homeFilm?:string; quality: string; atlases: Record<string, Atlas> };
 export type Channel = 'blue' | 'white' | 'amber' | 'off';
 const root = '/room/materials/';
@@ -87,6 +91,8 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   }
   const tvColor = { value: new Color() };
   const lampLevel = {value:1};
+  scene.updateMatrixWorld(true);
+  const lampPosition={value:scene.getObjectByName('Lamp_Bulb')?.getWorldPosition(new Vector3())??new Vector3(-1.475,1.8,-.486)};
   const materials = new Map<string, MeshStandardMaterial>();
   let lampReady=!assets;
   const lampMaps:{atlas:Atlas;map:{value:Texture};range:{value:number}}[]=[];
@@ -131,9 +137,10 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     // highlight. Soften atlas micro-normals while retaining the real folds.
     // Keep the authored roughness/irradiance and other room finishes intact.
     const material = name === 'curtains'
-      ? new MeshPhysicalMaterial({...materialOptions, normalScale:new Vector2(.25,.25), sheen:.72, sheenColor:0xf0e2c9, sheenRoughness:.55, specularIntensity:.18})
-      : name==='foliage' ? new MeshPhysicalMaterial({...materialOptions,side:DoubleSide,sheen:.12,sheenColor:0x66743c,sheenRoughness:.7,specularIntensity:.4})
-      : ['equipment','tape','paper'].includes(name) ? new MeshPhysicalMaterial({...materialOptions,specularIntensity:.5})
+      ? new MeshPhysicalMaterial({...materialOptions, normalScale:new Vector2(.55,.55), sheen:.34, sheenColor:0xf0e2c9, sheenRoughness:.75, specularIntensity:.18})
+      : name==='foliage' ? new MeshPhysicalMaterial({...materialOptions,side:DoubleSide,roughness:.90,normalScale:new Vector2(.85,.85),ior:1.46,sheen:.025,sheenColor:0x66743c,sheenRoughness:.7,specularIntensity:.75})
+      : name==='ceramic' ? new MeshPhysicalMaterial({...materialOptions,ior:1.5,specularIntensity:.85})
+      : ['equipment','tape','paper','lamp','desk'].includes(name) ? new MeshPhysicalMaterial({...materialOptions,specularIntensity:.5})
       : new MeshStandardMaterial(materialOptions);
     const offUniform={value:offMap??lightMap},offRange={value:offMap?(atlas.lampOff?.range??atlas.room.range):atlas.room.range};
     lampMaps.push({atlas,map:offUniform,range:offRange});
@@ -152,6 +159,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       shader.uniforms.roomDetailMap=roomDetail;shader.uniforms.roomDetailMix=detailMix;
       shader.uniforms.tvColor = tvColor;
       shader.uniforms.lampLevel = lampLevel;
+      shader.uniforms.lampPosition = lampPosition;
       shader.uniforms.lampOffMap = offUniform;
       shader.uniforms.lampOffRange = offRange;
       shader.uniforms.roomRange = { value: atlas.room.range };
@@ -159,7 +167,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       shader.fragmentShader = `uniform sampler2D tvIrradiance, tvDetailMap, lampOffMap, roomDetailMap;
         uniform float roomDetailMix;
         uniform float lampLevel, lampOffRange;
-        uniform vec3 tvColor;
+        uniform vec3 tvColor, lampPosition;
         uniform float roomRange;
         uniform float tvRange;\n` + shader.fragmentShader;
       shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_begin>',ShaderChunk.lights_fragment_begin.replace('getHemisphereLightIrradiance( hemisphereLights[ i ], geometryNormal )','vec3(0.0)'));
@@ -172,7 +180,11 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
            if(roomDetailMix>0.){vec4 detailTexel=texture2D(roomDetailMap,vLightMapUv);baseLight=mix(baseLight,detailTexel.rgb*detailTexel.a,roomDetailMix);}
            baseLight *= roomRange;
            vec3 roomLight = mix(offTexel.rgb * offTexel.a * lampOffRange, baseLight, lampLevel);
-           ${name==='foliage'?'roomLight /= 1. + max(roomLight.r,max(roomLight.g,roomLight.b))/10.;':''}
+           ${name==='foliage'?`float leafPeak=max(roomLight.r,max(roomLight.g,roomLight.b));
+           // Preserve the dim foliage response. A logarithmic shoulder keeps
+           // the small leaf under the bulb coloured, with no flat bright cap.
+           float leafResponse=leafPeak<=.75?leafPeak/(1.+leafPeak/3.):.6+.28*log(1.+(leafPeak-.75)/.4375);
+           roomLight*=leafResponse/max(leafPeak,.0001)*mix(1.,.82,leafBack);`:''}
            vec3 tvLight = tvTexel.rgb * tvTexel.a;
            if(roomDetailMix>0.){vec4 tvDetail=texture2D(tvDetailMap,vLightMapUv);tvLight=mix(tvLight,tvDetail.rgb*tvDetail.a,roomDetailMix);}
            tvLight *= tvRange;
@@ -182,11 +194,53 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       // component is already present in the bake and must not be counted twice.
       shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_end>',
         '#include <lights_fragment_end>\nreflectedLight.directDiffuse = vec3(0.0);');
-      if(name==='foliage')shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`float throughLeaf=pow(max(0.0,dot(-geometryNormal,normalize((viewMatrix*vec4(-.4,.7,.3,0.0)).xyz))),2.0);
-        outgoingLight+=diffuseColor.rgb*vec3(.12,.15,.045)*throughLeaf;
-        #include <opaque_fragment>`);
+      if(name==='ceramic'||name==='equipment'){
+        // Bright and dim objects share an RGBM range. Filtering the encoded
+        // multiplier first draws contour lines across smooth glaze and ABS.
+        // Decode neighbouring texels before filtering their irradiance.
+        shader.fragmentShader=`vec3 sampleSmoothRGBM(sampler2D map,vec2 uv){
+          ivec2 size=textureSize(map,0);vec2 xy=uv*vec2(size)-.5;
+          ivec2 p=ivec2(floor(xy));vec2 f=fract(xy);
+          vec4 a=texelFetch(map,clamp(p,ivec2(0),size-1),0);
+          vec4 b=texelFetch(map,clamp(p+ivec2(1,0),ivec2(0),size-1),0);
+          vec4 c=texelFetch(map,clamp(p+ivec2(0,1),ivec2(0),size-1),0);
+          vec4 d=texelFetch(map,clamp(p+ivec2(1,1),ivec2(0),size-1),0);
+          return mix(mix(a.rgb*a.a,b.rgb*b.a,f.x),mix(c.rgb*c.a,d.rgb*d.a,f.x),f.y);
+        }\n`+shader.fragmentShader;
+        for(const [encoded,map]of [
+          ['lightMapTexel.rgb * lightMapTexel.a','lightMap'],
+          ['detailTexel.rgb*detailTexel.a','roomDetailMap'],
+          ['offTexel.rgb * offTexel.a','lampOffMap'],
+          ['tvTexel.rgb * tvTexel.a','tvIrradiance'],
+          ['tvDetail.rgb*tvDetail.a','tvDetailMap'],
+        ])shader.fragmentShader=shader.fragmentShader.replace(encoded,`sampleSmoothRGBM(${map},vLightMapUv)`);
+      }
+      if(name==='foliage'){
+        shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+          float leafBack=gl_FrontFacing?0.:1.;
+          // Pale scanned veins remain visible, but should not read as opaque
+          // yellow paint under the nearby warm bulb. Preserve their hue.
+          float leafReflectance=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+          diffuseColor.rgb*=mix(1.02,.91,smoothstep(.06,.22,leafReflectance));
+          diffuseColor.rgb*=mix(vec3(1.),vec3(.94,.97,.92),leafBack);`);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+          float leafDensity=${atlas.leafDensity==='orm-r'?'texelRoughness.r':'.55'};
+          roughnessFactor=clamp(roughnessFactor+leafBack*(.10+.04*leafDensity),.0,1.);`);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <lights_physical_fragment>',`#include <lights_physical_fragment>
+          material.specularColor*=mix(1.,.55,leafBack);
+          material.specularColorBlended*=mix(1.,.55,leafBack);
+          material.specularF90*=mix(1.,.55,leafBack);`);
+        shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`vec3 leafToLamp=(viewMatrix*vec4(lampPosition,1.)).xyz+vViewPosition;
+          float lampThrough=pow(max(0.,dot(-nonPerturbedNormal,normalize(leafToLamp))),2.)/(1.+dot(leafToLamp,leafToLamp));
+          float windowThrough=pow(max(0.,dot(-nonPerturbedNormal,normalize((viewMatrix*vec4(0.,.3,-1.,0.)).xyz))),2.);
+          // Scanned vein relief supplies an optical-density proxy in ORM.R.
+          // Veins transmit less than the lamina without recolouring variegation.
+          float leafTransmittance=exp(-3.2*leafDensity);
+          outgoingLight+=diffuseColor.rgb*leafTransmittance*(vec3(.16,.14,.045)*lampThrough*lampLevel+vec3(.016,.023,.012)*windowThrough);
+          #include <opaque_fragment>`);
+      }
     };
-    material.customProgramCacheKey = () => name==='foliage'?'room-rgbm-foliage-v4':'room-rgbm-v2';
+    material.customProgramCacheKey = () => name==='foliage'?`room-rgbm-foliage-v8-${atlas.leafDensity??'legacy'}`:name==='curtains'?'room-rgbm-linen-v2':['ceramic','equipment'].includes(name)?'room-rgbm-decode-first-v1':'room-rgbm-v2';
     resources.add(material);
     materials.set(name, material);
   }));
@@ -239,7 +293,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   }
 
   const endWeather=assets?.timing?.start('weather.prepare');
-  const weather = createWeather(await texture(manifest.city ?? '/room/city-night-v1.png', true));
+  const weather = createWeather(await texture(manifest.city ?? '/room/city-night-v1.png', true),scene);
   endWeather?.();
   const city = weather.material;
   resources.add(city); resources.add(weather.inspectionMaterial); resources.add(weather.depth);
@@ -252,38 +306,9 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   const screen = crt.material;
   resources.add(crt.map);
   resources.add(screen);
-  const readoutCanvas = document.createElement('canvas');
-  readoutCanvas.width = 512;
-  readoutCanvas.height = 128;
-  const displayContext = readoutCanvas.getContext('2d')!;
-  function paintReadout(seconds: number, blink: boolean, media=false) {
-    displayContext.shadowBlur = 0;
-    displayContext.fillStyle = '#061511'; displayContext.fillRect(0, 0, 512, 128);
-    displayContext.fillStyle = '#c6f4e0';
-    displayContext.shadowColor = '#4cbd9d'; displayContext.shadowBlur = 7;
-    const segments = [[0,1,2,3,4,5], [1,2], [0,1,6,4,3], [0,1,6,2,3], [5,6,1,2],
-      [0,5,6,2,3], [0,5,6,4,2,3], [0,1,2], [0,1,2,3,4,5,6], [0,1,2,3,5,6]];
-    const elapsed = seconds + (media?0:23*60+5);
-    const stamp = [Math.floor(elapsed/3600)%24, Math.floor(elapsed/60)%60, elapsed%60].map(n => String(n).padStart(2,'0')).join(':');
-    let digitX = 36;
-    for (const digit of stamp) {
-      if (digit === ':') {
-        if (!blink || seconds % 2 === 0) { displayContext.fillRect(digitX+5,44,6,6); displayContext.fillRect(digitX+5,73,6,6); }
-        digitX += 22; continue;
-      }
-      const rectangles = [[8,0,34,7],[44,7,7,33],[44,47,7,33],[8,81,34,7],[0,47,7,33],[0,7,7,33],[8,40,34,7]];
-      for (const segment of segments[Number(digit)]) {
-        const [x,y,width,height] = rectangles[segment]; displayContext.fillRect(digitX+x,17+y,width,height);
-      }
-      digitX += 62;
-    }
-  }
-  paintReadout(0, false);
-  const readoutMap = new CanvasTexture(readoutCanvas);
-  readoutMap.flipY = false;
-  readoutMap.colorSpace = SRGBColorSpace;
+  resources.add(crt.glass);materials.set('crt-faceplate',crt.glass);
+  const {material:readout,map:readoutMap,paint:paintReadout}=createVFD();
   resources.add(readoutMap);
-  const readout = new MeshBasicMaterial({ map: readoutMap, toneMapped: false });
   const led = new MeshBasicMaterial({ color: 0x7ccf66, toneMapped: false });
   const tvLed=led.clone();resources.add(tvLed);
   let tvPowered=true,lastHomeFrame=-1;
@@ -315,26 +340,59 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     if(profiles.has(key))return profiles.get(key)!;
     let material=base.clone();
     material.onBeforeCompile=base.onBeforeCompile;material.customProgramCacheKey=base.customProgramCacheKey;
-    if(profile==='tape-window'){
-      material=new MeshPhysicalMaterial({color:0x63706e,roughness:.13,metalness:0,transparent:true,opacity:.24,depthWrite:false,ior:1.46,specularIntensity:.65,side:DoubleSide});
+    if(profile==='instrument-glass'){
+      material=createThinGlass({roughness:.08,ior:1.48,absorption:.008});
+    }else if(profile==='tape-window'){
+      material=createThinGlass({roughness:.10,ior:1.49,absorption:.025});
     }else if(material instanceof MeshPhysicalMaterial){
       // ORM already contains the authored finish. Another roughness factor
       // would turn satin ABS and enamel into much glossier surfaces.
-      if(profile==='abs'||profile==='tape-shell'){material.specularIntensity=profile==='abs'?1:.45;material.ior=1.48;}
+      if(profile.startsWith('abs')||profile==='tape-shell'){
+        const abs=profile.startsWith('abs');
+        material.specularIntensity=abs?1:.45;material.ior=abs?1.53:1.48;
+        // Submillimetre injection grain cannot survive a shared atlas at the
+        // housing's texel density: its undersampled normals became centimetre
+        // blotches. Keep a trace of the baked relief; the filtered, physical
+        // scale micro-surface below supplies the fine mould texture.
+        if(abs)material.normalScale.set(.16,.16);
+        // Keep each authored grain/ORM, but distinguish graphite moulding,
+        // fine control keys and the coarser ivory computer housing.
+        if(profile==='abs-graphite')material.roughness=.91;
+        if(profile==='abs-controls'){material.roughness=.86;material.normalScale.set(.10,.10);}
+        if(profile==='abs-ivory'){material.roughness=1.05;material.normalScale.set(.12,.12);material.specularIntensity=.85;material.ior=1.49;}
+      }
       if(profile==='satin-metal')material.specularIntensity=.75;
       // Painted steel reflects through its dielectric enamel coating. Keep
       // the baked ORM (including metallic=0) and add only the coating's lobe.
       if(profile==='painted-metal'){material.ior=1.5;material.specularIntensity=1;material.clearcoat=.2;material.clearcoatRoughness=.24;}
-      if(profile==='pbt'){material.ior=1.5;material.specularIntensity=.8;}
+      if(profile==='pbt'){material.ior=1.5;material.specularIntensity=.72;material.roughness=1.12;material.normalScale.set(.12,.12);}
       if(profile==='paper'){material.specularIntensity=.2;material.sheen=.08;material.sheenRoughness=.85;}
+      if(profile==='glazed-ceramic'){material.ior=1.5;material.clearcoat=.32;material.clearcoatRoughness=.14;}
+      if(profile==='walnut-worktop'){
+        material.normalScale.set(.45,.45);
+        material.clearcoat=.16;material.clearcoatRoughness=.29;
+        const bakedCompile=base.onBeforeCompile,bakedKey=base.customProgramCacheKey();
+        // The source's dark, hairline pores overpower its broader walnut
+        // figure. Compress only local luminance contrast; retain the source
+        // colour, knots and joinery instead of blurring the whole surface.
+        material.onBeforeCompile=(shader,webgl)=>{
+          bakedCompile(shader,webgl);
+          shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+            vec3 woodBroad=texture2D(map,vMapUv,2.).rgb;
+            float woodLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+            float woodMean=dot(woodBroad,vec3(.2126,.7152,.0722));
+            diffuseColor.rgb*=mix(1.,clamp(woodMean/max(woodLuma,.0001),.65,1.55),.60);`);
+        };
+        material.customProgramCacheKey=()=>bakedKey+'-walnut-worktop-v1';
+      }
     }
     material.name=key;resources.add(material);profiles.set(key,material);return material;
   }
-  // The bulb is the only emissive lamp surface; its shell and lining retain
-  // the baked illumination. Start dark while the reflection probe is captured.
-  const lampBulb=new MeshStandardMaterial({color:0xe7ddc5,roughness:.48,emissive:0xffbd75,emissiveIntensity:0});
+  // Capture the same luminous bulb seen in the room. A dark probe-only bulb
+  // left glass and liquid without the real emitter in their reflected scene.
+  const lampBulb=new MeshStandardMaterial({color:0xe7ddc5,roughness:.48,emissive:new Color(1,.62,.34),emissiveIntensity:1.65});
   resources.add(lampBulb);materials.set('lamp-bulb',lampBulb);
-  for(const material of [city,screen,readout,led,tvLed,lampBulb])material.userData.roomGlow=true;
+  for(const material of [city,led,tvLed,lampBulb])material.userData.roomGlow=true;
   function frontUv(object: Mesh) {
     const positions = object.geometry.attributes.position;
     const uv = object.geometry.attributes.uv;
@@ -357,7 +415,19 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     if (material) {
       if (!object.geometry.attributes.uv1) throw new Error(`Missing LightUV: ${object.name}`);
       object.material = material;
-      if(typeof object.userData.surface_profile==='string')object.material=surfaceProfile(material,object.userData.surface_profile);
+      if(typeof object.userData.surface_profile==='string'){
+        let profile=object.userData.surface_profile;
+        if(profile==='abs'){
+          if(['CRT_Case','CRT_ControlPanel','VCR_Front'].includes(object.name))profile='abs-graphite';
+          else if(/^(CRT_(Button|Power$|Slider_)|VCR_Key|Desk_Calculator_Key|Remote_Key)/.test(object.name))profile='abs-controls';
+          else if(/^Computer_Key(?:[.]|$)/.test(object.name))profile='pbt';
+          else if(['Computer_Base','Computer_Base_Fascia','Computer_Monitor','Computer_Keyboard','Computer_Mouse'].includes(object.name))profile='abs-ivory';
+        }
+        object.material=surfaceProfile(material,profile);
+      }
+      if(object.name==='Mug_Body'||object.name==='Mug_Handle')object.material=surfaceProfile(material,'glazed-ceramic');
+      if(object.name==='Desk_Top'||object.name==='Desk_Return')object.material=surfaceProfile(material,'walnut-worktop');
+      if(object.name==='Window_WallBelow'||/^Room_(LeftWall|RightWall|Ceiling)$/.test(object.name))object.material=surfaceProfile(material,'plaster');
     }
     if(object.userData.atlas==='props'&&object.name.startsWith('Label_VHS_'))object.material=sleeveFinish;
     if(object.userData.atlas==='props'&&['CRT_Case','CRT_ControlPanel','VCR_Body'].includes(object.name))object.material=caseFinish;
@@ -367,6 +437,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       // Refined glass carries its own regular ScreenUV; retain compatibility
       // with the first box-based study until a new bake finishes loading.
       if (!object.userData.screen_bulge_m) frontUv(object);
+      separateTubeLayers(object,crt.glass,resources,.006);
     }
     if (object.name === 'VCR_Display') { object.material = readout; frontUv(object); }
     if (object.name === 'Computer_Recess'||object.name==='Computer_Screen') object.material=computerSeal;
@@ -377,9 +448,69 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     }
   });
 
-  const movingFill=new HemisphereLight(0xd9dfd3,0x685241,.85);scene.add(movingFill);
+  // Choose a finish on the final material, after all profile clones exist.
+  // The delivered geometry and its baked illumination stay unchanged.
+  const paperEdges=new Map<MeshStandardMaterial,Object3D>();
+  for(const name of ['Desk_Book','Work_Notepad_Block']){
+    const object=scene.getObjectByName(name);
+    if(!(object instanceof Mesh)||!(object.material instanceof MeshStandardMaterial))continue;
+    const source=object.material,edge=source.clone();
+    edge.onBeforeCompile=source.onBeforeCompile;edge.customProgramCacheKey=source.customProgramCacheKey;
+    edge.name='Paper edges '+name;object.material=edge;
+    resources.add(edge);materials.set('paper-edge-'+name,edge);paperEdges.set(edge,object);
+  }
+  const finished=new Set<MeshStandardMaterial>();
+  const detailFinishes=new Map<string,MeshStandardMaterial>();
+  scene.traverse(object=>{
+    if(!(object instanceof Mesh)||!(object.material instanceof MeshStandardMaterial))return;
+    const atlas=object.userData.atlas,profile=object.userData.surface_profile??'';
+    let material=object.material,kind:MicroSurface|undefined;
+    if(paperEdges.has(material)){applyMicroSurface(material,'paper-edge',paperEdges.get(material));finished.add(material);return;}
+    if(object.name==='Lamp_Shade'){
+      const shade=material.clone();shade.onBeforeCompile=material.onBeforeCompile;
+      shade.customProgramCacheKey=material.customProgramCacheKey;shade.name='Spun lamp shade';
+      resources.add(shade);materials.set('spun-shade',shade);object.material=material=shade;
+      applyMicroSurface(material,'spun-metal',object);finished.add(material);return;
+    }
+    if(object.name==='Desk_CD_Lid'||object.name==='Desk_Walkman_Door'){
+      // These two aluminium skins have their own machining direction. Do not
+      // turn every satin screw, VCR panel and phone part into brushed metal.
+      const skin=material.clone();skin.onBeforeCompile=material.onBeforeCompile;
+      skin.customProgramCacheKey=material.customProgramCacheKey;skin.name='Machined '+object.name+'/satin-metal';
+      resources.add(skin);materials.set('machined-'+object.name,skin);object.material=skin;
+      applyMicroSurface(skin,object.name==='Desk_CD_Lid'?'satin-turned':'satin-brushed',object);
+      finished.add(skin);return;
+    }
+    const gasket=/^(Desk_CD_(Seam|DisplaySeat)|Desk_Walkman_(Seam|WindowBezel))$/.test(object.name);
+    const smallControl=/^(Desk_CD_Button|Desk_Walkman_(Key|Stop))(?:[.]|$)/.test(object.name);
+    if(gasket||smallControl){
+      const key=material.uuid+(gasket?'/gasket':'/control');
+      let detail=detailFinishes.get(key);
+      if(!detail){
+        detail=material.clone();detail.onBeforeCompile=material.onBeforeCompile;detail.customProgramCacheKey=material.customProgramCacheKey;
+        detail.name=material.name+(gasket?'/gasket':'/control');detail.roughness=gasket?1.15:.86;
+        if(detail instanceof MeshPhysicalMaterial){detail.ior=gasket?1.46:1.51;detail.specularIntensity=gasket?.38:.85;}
+        resources.add(detail);materials.set('detail-'+key,detail);detailFinishes.set(key,detail);
+        applyMicroSurface(detail,gasket?'rubber':'abs-controls');finished.add(detail);
+      }
+      object.material=detail;return;
+    }
+    if(atlas==='curtains')kind='linen';
+    else if(atlas==='desk')kind='varnished-wood';
+    // The pot's unglazed foot shares this atlas, but must keep its dry clay
+    // response instead of inheriting the wall's transparent glaze.
+    else if(atlas==='ceramic'&&object.name!=='Plant_Pot_Foot')kind='glaze';
+    else if(material.name.endsWith('/plaster'))kind='plaster';
+    else if(profile.startsWith('abs'))kind=/\/(abs-controls|pbt)$/.test(material.name)?'abs-controls':'abs';
+    else if(profile==='pbt')kind='abs-controls';
+    else if(profile==='painted-metal')kind='painted-metal';
+    else if(atlas==='paper'||profile==='paper')kind='paper';
+    if(kind&&!finished.has(material)){applyMicroSurface(material,kind);finished.add(material);}
+  });
+
+  const movingFill=new HemisphereLight(0xc8d4df,0x685241,.52);scene.add(movingFill);
   RectAreaLightUniformsLib.init();
-  function area(position: number[], target: number[], color: number, intensity: number, width: number, height: number) {
+  function area(position: number[], target: number[], color: number|Color, intensity: number, width: number, height: number) {
     const light = new RectAreaLight(color, intensity, width, height);
     // Blender Z-up -> glTF Y-up.
     light.position.set(position[0], position[2], -position[1]);
@@ -390,10 +521,11 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   // The bulb is enclosed by the shade. An unshadowed analytic source there
   // leaks through its shell; its static contribution is handled by the bake.
   // Cover the right side of the desk with the existing window reflection.
-  // Keep the analytic light count and the diffuse bake unchanged.
-  area([.2, 1.08, 2.6], [0, -.5, .7], 0xc7d9ed, .9, 4.4, 2.1);
-  const warmBounce = area([-2.3, -3, 2.8], [0, 0, 1.2], 0xffdcb4, 2.3, 3, 2);
-  const warmReflection = area([-1.3, .35, 3.8], [-1.475, .486, 1.867], 0xffe7cf, 36, .35, 1.0);
+  // Match the vertical baked source outside the window. A tilted rectangle
+  // intersects the joinery and draws a false triangular highlight on it.
+  area([-.3, 1.25, 2.6], [-.3, -.5, 2.6], 0xc7d9ed, .65, 3.6, 2.1);
+  const warmBounce = area([-2.3, -3, 2.8], [0, 0, 1.2], new Color(1,.82,.64), .92, 3, 2);
+  const warmReflection = area([-.89, -.35, 3.67], [-1.40, -.17, 1.96], new Color(1,.86,.73), 10.3, .16, .60);
   const tvSpecular = area([0, -.37, 1.67], [0, -1.2, 1.2], 0xffffff, 9, .86, .63);
 
   let programAverage = new Color();
@@ -418,7 +550,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     lastHomeFrame=-1;
     crt.uniforms.crtEnabled.value=1;programAverage.copy(crt.tape(tape,time,paused));
   }
-  function setLamp(level:number) {if(!lampReady)level=1;lampLevel.value=level;lampBulb.emissiveIntensity=1.5*level;movingFill.intensity=.22+.63*level;warmBounce.intensity=2.3*level;warmReflection.intensity=36*level;}
+  function setLamp(level:number) {if(!lampReady)level=1;lampLevel.value=level;lampBulb.emissiveIntensity=1.65*level;movingFill.intensity=.16+.36*level;warmBounce.intensity=.92*level;warmReflection.intensity=10.3*level;weather.setLamp(level);}
   function setHome(time:number,reduced:boolean) {
     if(film){crt.uniforms.crtEnabled.value=1;crt.signalMap(reduced?film.poster:film.texture);programAverage.copy(film.color(reduced));return;}
     const frame=reduced?-2:Math.floor(time*homeFrameRate);
@@ -427,13 +559,20 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     programAverage.copy(crt.home(frame/homeFrameRate,reduced));
   }
   function setPower(powered:boolean) {tvPowered=powered;tvLed.color.setHex(powered?0x7ccf66:0x10150f);}
+  const screenLightTarget=new Color();let lastScreenLightTime=0;
   function updateCRT(time: number, motion: boolean, snow: number, reveal: number) {
     crt.uniforms.crtTime.value = time;
     crt.uniforms.crtMotion.value = Number(motion&&tvPowered);
     crt.uniforms.crtStatic.value = motion&&tvPowered ? snow : 0;
     crt.uniforms.crtReveal.value = reveal;
-    tvColor.value.copy(crt.uniforms.crtBlank.value).lerp(programAverage, reveal);
-    if(!tvPowered)tvColor.value.setRGB(0,0,0);
+    screenLightTarget.copy(crt.uniforms.crtBlank.value).lerp(programAverage, reveal);
+    if(!tvPowered)screenLightTarget.setRGB(0,0,0);
+    const lightStep=time-lastScreenLightTime;lastScreenLightTime=time;
+    // Retain the baked near-field bounce and its matching specular source.
+    // A short exposure response prevents cuts in a film from flashing the
+    // neighbouring plastic; pauses, standby and power changes remain exact.
+    if(!motion||!tvPowered||lightStep<=0||lightStep>.5)tvColor.value.copy(screenLightTarget);
+    else tvColor.value.lerp(screenLightTarget,1-Math.exp(-lightStep/.18));
     tvSpecular.color.copy(tvColor.value);
     return tvColor.value.toArray();
   }
@@ -460,9 +599,9 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
   }
   endProbe?.();
   loading.progress?.({stage:'reflection',completed:1,total:1});await yieldForLoading(loading.signal);
-  for (const material of [...materials.values(), ...profiles.values(), ...printedMaterials, screen]) {
+  for (const material of [...materials.values(), ...profiles.values(), ...printedMaterials, screen, readout]) {
     material.envMap = reflection;
-    material.envMapIntensity = material === computerSeal ? .35 : material === screen ? 1.1 : /\/(abs|satin-metal|painted-metal|pbt)$/.test(material.name) ? .9 : material.name === 'Baked props' ? .85 : .65;
+    material.envMapIntensity = material === computerSeal ? .35 : material === crt.glass ? 1 : material === screen ? 1 : material === readout ? .24 : /\/abs-(graphite|controls)$/.test(material.name) ? 1 : /\/satin-metal$/.test(material.name) ? .95 : /\/(abs(?:-ivory)?|painted-metal|pbt)$/.test(material.name) ? .8 : ['Spun lamp shade','Baked lamp'].includes(material.name) ? .88 : material.name === 'Baked props' ? .75 : .65;
     material.needsUpdate = true;
   }
   setChannel('blue');

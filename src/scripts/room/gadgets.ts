@@ -1,5 +1,6 @@
 import { Box3, CanvasTexture, LatheGeometry, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, MeshStandardMaterial, Object3D, PerspectiveCamera, PlaneGeometry, RingGeometry, SRGBColorSpace, Vector2, Vector3 } from 'three';
 import { mapPlane } from './osd';
+import { createThinGlass } from './thin-glass';
 
 export const calculatorKeys=['MC','MR','C','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','%','='];
 /** Four-function calculator; arithmetic is explicit and never evaluates input as code. */
@@ -7,8 +8,11 @@ export function createCalculator(root:Object3D,resources:Set<{dispose():void}>,w
   let display='0',stored:number|null=null,operator='',fresh=true,memory=0,lastOperand=0;
   const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const ctx=canvas.getContext('2d')!;
   const map=new CanvasTexture(canvas);map.flipY=false;map.colorSpace=SRGBColorSpace;resources.add(map);
-  const material=new MeshBasicMaterial({map,toneMapped:false});resources.add(material);
   const lcd=root.getObjectByName('Desk_Calculator_Display');
+  const source=lcd instanceof Mesh&&lcd.material instanceof MeshStandardMaterial?lcd.material:undefined;
+  // A passive LCD is a printed/polarized plane under glass. Keep its digits
+  // responsive, while its reflection and lighting belong to the same room.
+  const material=new MeshPhysicalMaterial({map,roughness:.14,ior:1.48,specularIntensity:.65,envMap:source?.envMap,envMapIntensity:.5});resources.add(material);
   if(lcd instanceof Mesh){const geometry=lcd.geometry.clone();resources.add(geometry);lcd.geometry=geometry;geometry.computeBoundingBox();const b=geometry.boundingBox!,p=geometry.attributes.position,uv=geometry.attributes.uv;
     for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)-b.min.x)/(b.max.x-b.min.x),(p.getZ(i)-b.min.z)/(b.max.z-b.min.z));uv.needsUpdate=true;lcd.material=material;delete lcd.userData.atlas;lcd.userData.surface_role='screen';}
   const print=root.getObjectByName('Desk_Calculator_Print_Digits');if(print)print.visible=false;
@@ -51,6 +55,8 @@ export function createCD(root:Object3D,resources:Set<{dispose():void}>) {
   const rubber=own(new MeshStandardMaterial({color:'#282c29',roughness:.62,envMap,envMapIntensity:.55}));
   function roundedDisc(name:string,material:MeshStandardMaterial){
     const object=root.getObjectByName(name);if(!(object instanceof Mesh))return;
+    // Authored housings keep their baked light, atlas UVs and assembly detail.
+    if(object.userData.atlas==='equipment')return;
     object.geometry.computeBoundingBox();const b=object.geometry.boundingBox!,size=b.getSize(new Vector3()),center=b.getCenter(new Vector3());
     const radius=Math.max(size.x,size.z)/2,half=size.y/2,bevel=Math.min(.0023,half*.45);
     const profile=[[0,-half],[radius-bevel,-half],[radius-bevel*.28,-half+bevel*.28],[radius,-half+bevel],[radius,half-bevel],[radius-bevel*.28,half-bevel*.28],[radius-bevel,half],[0,half]].map(([x,y])=>new Vector2(x,y));
@@ -74,11 +80,11 @@ export function createCD(root:Object3D,resources:Set<{dispose():void}>) {
   }
   const window=root.getObjectByName('Desk_CD_Window');
   if(window instanceof Mesh){
-    window.material=rubber;
+    if(window.userData.atlas!=='equipment')window.material=rubber;
     window.geometry.computeBoundingBox();const b=window.geometry.boundingBox!,center=b.getCenter(new Vector3()),radius=Math.min(b.max.x-b.min.x,b.max.z-b.min.z)/2;
     const profile=Array.from({length:13},(_,i)=>{const r=1-i/12;return new Vector2(radius*.94*r,.0025*(1-r*r));});
-    const glass=new Mesh(own(new LatheGeometry(profile,96)),own(new MeshPhysicalMaterial({color:'#f3f5f3',metalness:0,roughness:.045,clearcoat:1,clearcoatRoughness:.08,transparent:true,opacity:.12,depthWrite:false,envMap,envMapIntensity:1.1})));
-    glass.name='Desk_CD_Glass';glass.position.set(center.x,b.max.y+.0038,center.z);glass.userData.roomDynamic=true;window.add(glass);
+    const glass=new Mesh(own(new LatheGeometry(profile,96)),own(createThinGlass({roughness:.065,ior:1.49,absorption:.012,envMap,envMapIntensity:1})));
+    glass.name='Desk_CD_Glass';glass.position.set(center.x,b.max.y+(window.userData.atlas==='equipment'?.0002:.0038),center.z);glass.userData.roomDynamic=true;window.add(glass);
   }
   for(let i=0;i<3;i++){
     const name='Desk_CD_Button'+(i?'.'+String(i).padStart(3,'0'):'');roundedDisc(name,rubber);
@@ -100,7 +106,8 @@ export function createCD(root:Object3D,resources:Set<{dispose():void}>) {
   if(lcd instanceof Mesh){
     const geometry=own(lcd.geometry.clone());lcd.geometry=geometry;geometry.computeBoundingBox();const b=geometry.boundingBox!,p=geometry.attributes.position,uv=geometry.attributes.uv;
     for(let i=0;i<p.count;i++)uv.setXY(i,(p.getX(i)-b.min.x)/(b.max.x-b.min.x),(p.getZ(i)-b.min.z)/(b.max.z-b.min.z));uv.needsUpdate=true;
-    lcd.material=own(new MeshBasicMaterial({map,toneMapped:false}));lcd.userData.keepIndependent=true;
+    lcd.material=own(new MeshPhysicalMaterial({map,roughness:.16,ior:1.48,specularIntensity:.62,envMap,envMapIntensity:.45}));
+    lcd.userData.keepIndependent=true;delete lcd.userData.atlas;lcd.userData.surface_role='screen';
   }
   let previous='';
   function update(transport:'playing'|'paused'|'stopped'|'muted'|'loading',time:number,volume:number){

@@ -49,6 +49,44 @@ async function decodeDelivered() {
   }};
 }
 
+test('desktop layout keeps both families on the desk and exposes the ABOUT floppy in the default frame', async () => {
+  if(!manifest.desktopLayout)return; // Archived deliveries keep their own placement contract.
+  const {scene,Box3,Vector3,dispose}=await decodeDelivered();
+  const {Raycaster}=await import('three');
+  try{
+    const recipe=manifest.desktopLayout.objects;
+    for(const name of ['Desk_Floppy','Desk_CD']){
+      const object=scene.getObjectByName(name),spec=recipe[name];
+      assert(object?.isMesh,name+' root must remain authored geometry');
+      object.getWorldPosition(new Vector3()).toArray().forEach((value,i)=>close(value,spec.position[i],name+' position'));
+      object.getWorldScale(new Vector3()).toArray().forEach(value=>close(value,spec.scale,name+' scale'));
+      const bounds=new Box3();scene.traverse(part=>{if(part.name===name||part.name.startsWith(name+'_'))bounds.union(new Box3().setFromObject(part,true));});
+      close(bounds.min.y,new Box3().setFromObject(scene.getObjectByName('Desk_Top'),true).max.y,name+' floor contact');
+    }
+    const floppy=scene.getObjectByName('Desk_Floppy'),label=scene.getObjectByName('Desk_Floppy_Print');
+    assert.equal(label.userData.print_text,'ABOUT');
+    assert.equal(label.parent,floppy,'printed ink follows the authored disk');
+    const camera=scene.getObjectByName('HomeCamera');
+    const horizontal=Math.tan(camera.fov*Math.PI/360)*camera.aspect;
+    camera.aspect=1920/1080;camera.fov=2*Math.atan(horizontal/camera.aspect)*180/Math.PI;
+    camera.updateProjectionMatrix();scene.updateMatrixWorld(true);
+    floppy.geometry.computeBoundingBox();const b=floppy.geometry.boundingBox;
+    const eye=camera.getWorldPosition(new Vector3()),ray=new Raycaster();
+    // Sample every corner and edge on the top face: a clear footprint alone
+    // did not catch the higher paper/keyboard hiding the old disk from camera.
+    for(const [u,v]of [[0,0],[.5,0],[1,0],[1,.5],[1,1],[.5,1],[0,1],[0,.5]]){
+      const inset=.0045; // Inside the authored 4 mm corner fillet.
+      const point=new Vector3(b.min.x+inset+(b.max.x-b.min.x-2*inset)*u,b.max.y-.0001,b.min.z+inset+(b.max.z-b.min.z-2*inset)*v).applyMatrix4(floppy.matrixWorld);
+      const screen=point.clone().project(camera);
+      assert(screen.x>-1&&screen.x<1&&screen.y>-1&&screen.y<1,'floppy outline stays inside the 1920×1080 default frame');
+      assert((1-screen.y)*540<1029,'floppy clears the bottom controls');
+      ray.set(eye,point.clone().sub(eye).normalize());
+      const hit=ray.intersectObject(scene,true)[0];
+      assert(hit?.object.name.startsWith('Desk_Floppy'),'paper or keyboard must not cover the disk outline: '+hit?.object.name);
+    }
+  }finally{dispose();}
+});
+
 test('delivered scene has no removed remote or rotary TV control geometry', () => {
   assert.deepEqual([...byName.keys()].filter(name => /^(Desk_Remote|Remote_Key|CRT_Knob)(?:[_.]|$)/.test(name)), []);
 });
@@ -104,6 +142,28 @@ test('delivered hardware preserves 101 PBT keycaps and distinct equipment finish
   assert.equal(mesh('VCR_Body').extras.surface_profile, 'painted-metal');
 });
 
+test('delivered soil stays inside its pot and exposes front-facing earth below the rim', async () => {
+  const {scene, Box3, Vector3, dispose} = await decodeDelivered();
+  const {Raycaster, FrontSide} = await import('three');
+  try {
+    const pot = scene.getObjectByName('Plant_Pot'), soil = scene.getObjectByName('Plant_Pot_Soil');
+    assert(pot?.isMesh && soil?.isMesh, 'pot and soil must both survive atlas separation');
+    const potBounds = new Box3().setFromObject(pot), soilBounds = new Box3().setFromObject(soil);
+    assert(potBounds.clone().expandByScalar(.001).containsBox(soilBounds),
+      'soil world bounds must remain inside the pot after separate atlas joins');
+    const center = potBounds.getCenter(new Vector3()), size = potBounds.getSize(new Vector3());
+    assert(soilBounds.min.y > potBounds.min.y + size.y*.7 && soilBounds.max.y < potBounds.max.y-.005,
+      'earth must fill the upper pot while leaving a real recessed ceramic rim');
+    soil.material.side = FrontSide;
+    for (const [x,z] of [[.25,0],[-.25,0],[0,.25],[0,-.25]]) {
+      const origin = new Vector3(center.x+x*size.x,potBounds.max.y+.05,center.z+z*size.z);
+      const ray = new Raycaster(origin,new Vector3(0,-1,0),0,size.y+.1);
+      const hit = ray.intersectObjects([soil,pot],false)[0];
+      assert.equal(hit?.object,soil,'looking into the pot must reveal front-facing soil before white ceramic');
+    }
+  } finally { dispose(); }
+});
+
 test('delivered hardware corner normals never point through their own triangles', async () => {
   const {scene, Vector3, dispose} = await decodeDelivered();
   const a = new Vector3(), b = new Vector3(), c = new Vector3(), faceNormal = new Vector3(), cornerNormal = new Vector3();
@@ -134,6 +194,76 @@ test('delivered hardware corner normals never point through their own triangles'
   } finally {
     dispose();
   }
+});
+
+test('delivered flat monitor bezels do not interpolate aperture normals across their front panels', async () => {
+  const {scene, Vector3, dispose} = await decodeDelivered();
+  const failures = [];
+  try {
+    for (const name of ['CRT_Case', 'Computer_Monitor']) {
+      const object = scene.getObjectByName(name);
+      assert(object?.isMesh, `${name}: decoded housing`);
+      const {geometry} = object, positions = geometry.getAttribute('position'), normals = geometry.getAttribute('normal');
+      assert(normals, `${name}: delivered corner normals`);
+      geometry.computeBoundingBox();
+      const front = geometry.boundingBox.max.z;
+      const a = new Vector3(), b = new Vector3(), c = new Vector3(), faceNormal = new Vector3(), cornerNormal = new Vector3();
+      let tested = 0, minimumDot = 1;
+      for (let offset = 0; offset < (geometry.index?.count ?? positions.count); offset += 3) {
+        const indices = [0,1,2].map(i => geometry.index?.getX(offset+i) ?? offset+i);
+        a.fromBufferAttribute(positions,indices[0]); b.fromBufferAttribute(positions,indices[1]); c.fromBufferAttribute(positions,indices[2]);
+        if ([a,b,c].some(point => Math.abs(point.z-front) > .00001)) continue;
+        faceNormal.crossVectors(b.sub(a),c.sub(a));
+        // Inspect visible broad panels, excluding the small rounded edge strips.
+        if (faceNormal.length()*.5 < .0001) continue;
+        faceNormal.normalize();
+        if (faceNormal.z < .9999) continue;
+        for (const index of indices) {
+          cornerNormal.fromBufferAttribute(normals,index).normalize();
+          minimumDot = Math.min(minimumDot,cornerNormal.dot(faceNormal));
+        }
+        tested++;
+      }
+      assert(tested >= 2, `${name}: broad coplanar front panel must remain present`);
+      // The observed regression tilted corners 32–51 degrees into the recess,
+      // creating diagonal highlights on a flat shell. Allow <6 degrees for
+      // exported normal quantization without accepting that geometry defect.
+      if (minimumDot < .995) failures.push(`${name}: front normal dot ${minimumDot.toFixed(6)} < 0.995`);
+    }
+    assert.deepEqual(failures, [], 'flat bezel panels must retain planar shading');
+  } finally { dispose(); }
+});
+
+test('delivered telephone finger holes reveal an unobstructed number plate with no coplanar bezel', async () => {
+  const {scene, Box3, Vector3, dispose} = await decodeDelivered();
+  const {Raycaster, DoubleSide} = await import('three');
+  try {
+    const plate = scene.getObjectByName('Retro_Phone_DialNumberPlate');
+    const bezel = scene.getObjectByName('Retro_Phone_DialBezel');
+    const wheel = scene.getObjectByName('Retro_Phone_DialWheel');
+    assert(plate?.isMesh && bezel?.isMesh && wheel?.isMesh, 'physical rotary dial assembly');
+    const digits = Array.from({length:10}, (_,i) => scene.getObjectByName(`Retro_Phone_DialNumber_${i}`));
+    assert(digits.every(digit => digit?.isMesh), 'all ten printed digits');
+    const centers = digits.map(digit => new Box3().setFromObject(digit).getCenter(new Vector3()));
+    const {geometry} = plate, positions = geometry.getAttribute('position');
+    const normal = new Vector3(), a = new Vector3(), b = new Vector3(), c = new Vector3();
+    for (let offset = 0; offset < (geometry.index?.count ?? positions.count); offset += 3) {
+      const vertices = [a,b,c].map((point,i) => point.fromBufferAttribute(positions, geometry.index?.getX(offset+i) ?? offset+i).applyMatrix4(plate.matrixWorld));
+      const candidate = vertices[1].clone().sub(vertices[0]).cross(vertices[2].clone().sub(vertices[0]));
+      if (candidate.lengthSq() > normal.lengthSq()) normal.copy(candidate);
+    }
+    normal.normalize();
+    const mean = centers.reduce((sum,center) => sum.add(center), new Vector3()).multiplyScalar(.1);
+    if (normal.dot(mean.sub(new Box3().setFromObject(plate).getCenter(new Vector3()))) < 0) normal.negate();
+    for (const object of [plate,bezel,wheel]) object.material.side = DoubleSide;
+    for (let i = 0; i < centers.length; i++) {
+      const ray = new Raycaster(centers[i].clone().addScaledVector(normal,.03),normal.clone().negate(),0,.06);
+      const plateHit = ray.intersectObject(plate,false)[0], bezelHit = ray.intersectObject(bezel,false)[0];
+      assert(plateHit && bezelHit, `digit ${i}: solid card and recessed support`);
+      assert.equal(ray.intersectObject(wheel,false).length,0, `digit ${i}: finger hole remains open`);
+      assert(bezelHit.distance-plateHit.distance > .001, `digit ${i}: number plate must clear the bezel rather than z-fight`);
+    }
+  } finally { dispose(); }
 });
 
 test('delivered computer glass and shared native/Canvas anchors describe the same upright 4:3 screen', async () => {

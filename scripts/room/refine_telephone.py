@@ -105,6 +105,7 @@ def refine_telephone(scene, text):
     bump.inputs['Strength'].default_value=.16
     cord_surface.l.new(fine,bump.inputs['Height'])
     cord_surface.l.new(bump.outputs[0],cord_surface.p.inputs['Normal'])
+    handset_cord=finish('Telephone flexible charcoal handset cord',(.017,.015,.013),.48,grain=.010)
 
     def tag(obj, profile='abs', parent=None):
         obj['hero_atlas']='equipment'
@@ -125,28 +126,37 @@ def refine_telephone(scene, text):
     for y, lower, upper, height in _smooth_path(stations):
         # A single closed cross-section, with several shoulder samples rather
         # than a beveled rectangular block with a tilted top face.
-        shoulder_low=min(.024,height-.008)
-        side_a=.008+.45*(shoulder_low-.008)
-        side_b=.008+.80*(shoulder_low-.008)
-        shoulder_x=min(lower,max(lower*.97,upper+.003))
-        side_x=min(lower,max(lower*.995,shoulder_x))
-        cross = [(-lower,.008),(lower,.008),(lower,side_a),
-                 (side_x,side_b),(shoulder_x,shoulder_low),
-                 (upper+.003,height-.005),(upper+.001,height-.002),
-                 (upper*.97,height-.0005),(upper*.88,height),
-                 (upper*.65,height),(0,height),(-upper*.65,height),
-                 (-upper*.88,height),(-upper*.97,height-.0005),
-                 (-upper-.001,height-.002),(-upper-.003,height-.005),
-                 (-shoulder_x,shoulder_low),(-side_x,side_b),(-lower,side_a)]
+        # A convex cubic section joins the upright skirt to the dial shelf.
+        # The previous clamped shoulder collapsed abruptly on the low front
+        # stations, leaving a concave pinch that looked like crumpled foil.
+        right=[(lower-.002,.008)]
+        for i in range(1,5):
+            a=math.pi*.5*i/4
+            right.append((lower-.002+.002*math.sin(a),.010-.002*math.cos(a)))
+        control=((lower,.010),(lower,.010+.45*(height-.010)),
+                 (upper,height),(upper-.004,height))
+        for i in range(1,13):
+            t=i/12;s=1-t
+            right.append(tuple(s**3*control[0][axis]+3*s*s*t*control[1][axis]
+                         +3*s*t*t*control[2][axis]+t**3*control[3][axis]for axis in (0,1)))
+        cross = [(-right[0][0],right[0][1]),*right,(upper*.55,height),(0,height),
+                 (-upper*.55,height),*[(-x,z)for x,z in reversed(right[1:])]]
         rings.append([(x,y,z) for x,z in cross])
     vertices, faces = _closed_loft(rings)
     root = tag(_mesh('Retro_Phone',vertices,faces,bakelite,scene,smooth=True))
     root.location=(0,0,BASE_Z)
     _outward(root)
+    _activate(root)
+    rounded=root.modifiers.new('Continuous phenolic shell rollovers','SUBSURF')
+    rounded.levels=1
+    bpy.ops.object.modifier_apply(modifier=rounded.name)
     for polygon in root.data.polygons:
         if len(polygon.vertices)>4:
             polygon.use_smooth=False
-    _panel_normals(root)
+    # The loft already contains the curved shoulder and skirt. Face-area
+    # weighting pulled its narrow rollover normals towards the broad shelf,
+    # producing pinched, foil-like highlights at the front corners.
+    root.data.set_sharp_from_angle(angle=math.radians(60))
 
     def mesh(name, vertices, faces, material, profile='abs', smooth=True):
         obj=tag(_mesh('Retro_Phone_'+name,vertices,faces,material,scene,smooth=smooth),profile,root)
@@ -177,14 +187,18 @@ def refine_telephone(scene, text):
         if rotation is not None:obj.rotation_euler=rotation
         obj.data.materials.append(material)
         return tag(obj,profile)
-    def wire(name, points, radius, material, profile='abs'):
-        # One smooth cable, constant diameter and resting on the desk. The
-        # original pre-1961 332 used woven flex, not a spring wrapped in space.
+    def wire(name, points, radius, material, profile='abs', poly=False):
+        # Keep the flex gauge constant, including a sampled helical lead.
         curve=bpy.data.curves.new('Retro_Phone_'+name,'CURVE')
-        curve.dimensions='3D';curve.resolution_u=12;curve.bevel_depth=radius;curve.bevel_resolution=3
-        spline=curve.splines.new('BEZIER');spline.bezier_points.add(len(points)-1)
-        for point,position in zip(spline.bezier_points,points):
-            point.co=position;point.handle_left_type=point.handle_right_type='AUTO'
+        curve.dimensions='3D';curve.resolution_u=12;curve.bevel_depth=radius;curve.bevel_resolution=2;curve.use_fill_caps=True
+        spline=curve.splines.new('POLY' if poly else 'BEZIER')
+        if poly:
+            spline.points.add(len(points)-1)
+            for point,position in zip(spline.points,points):point.co=(*position,1)
+        else:
+            spline.bezier_points.add(len(points)-1)
+            for point,position in zip(spline.bezier_points,points):
+                point.co=position;point.handle_left_type=point.handle_right_type='AUTO'
         obj=bpy.data.objects.new('Retro_Phone_'+name,curve);scene.collection.objects.link(obj)
         obj.parent=root;obj.data.materials.append(material);_activate(obj)
         bpy.ops.object.convert(target='MESH')
@@ -243,8 +257,11 @@ def refine_telephone(scene, text):
     rotation=Matrix.Rotation(tilt,3,'X')
     center=Vector((0,-.018,.051))
     def dial_point(x,y,z):return center+rotation@Vector((x,y,z))
+    # The ivory number plate sits in a real recess. A full bezel cap at .006
+    # occupied exactly the same plane as the paper and caused torn black/ivory
+    # stripes inside every finger hole in both Cycles and the delivered GLB.
     lathe('DialBezel',center,[(0,.0005),(.042,.0005),(.046,.002),(.046,.004),
-          (.044,.006),(.041,.006),(0,.006)],bakelite,transform=rotation,segments=96)
+          (.044,.006),(.0435,.006),(.0435,.0045),(0,.0045)],bakelite,transform=rotation,segments=96)
     lathe('DialNumberPlate',center,[(0,.005),(.043,.005),(.043,.006),(0,.006)],paper,'paper',rotation,96)
     wheel=lathe('DialWheel',center,[(.018,.008),(.0425,.008),(.044,.0087),(.044,.010),
           (.0425,.011),(.018,.011)],nickel,'satin-metal',rotation,128)
@@ -281,12 +298,30 @@ def refine_telephone(scene, text):
     stop_points=[dial_point(r*math.cos(stop_angle),r*math.sin(stop_angle),h) for r,h in [(.047,.002),(.047,.014),(.042,.017),(.035,.017)]]
     wire('FingerStop',stop_points,.0021,nickel,'satin-metal')
 
-    # The handset cord leaves the right housing, rests in a loose loop, then
-    # terminates at the rear of the base. The separate line flex stays short.
-    wire('HandsetCord',[(.117,.055,.105),(.133,.052,.098),(.145,.033,.055),
-         (.145,-.005,.009),(.142,-.065,.003),(.112,-.116,.003),(.067,-.115,.003),
-         (.055,-.086,.003),(.096,-.074,.003),(.133,-.045,.003),(.131,.036,.004),
-         (.103,.100,.012),(.060,.094,.030)],.0026,cord_material)
+    # A replacement coiled handset flex follows a relaxed, supported loop.
+    # Sample the centreline by arc length: uniform parameter steps on the
+    # curved path would bunch the turns at corners and stretch them elsewhere.
+    path=_smooth_path([(.145,.033,.055),(.153,-.006,.018),(.147,-.063,.009),
+          (.117,-.108,.009),(.070,-.116,.009),(.057,-.092,.009),
+          (.099,-.077,.009),(.134,-.044,.009),(.132,.035,.010),(.103,.100,.018)],10)
+    distances=[0.]
+    for a,b in zip(path,path[1:]):distances.append(distances[-1]+(b-a).length)
+    coil=[];index=0;turns=32;samples=turns*16
+    for i in range(samples+1):
+        t=i/samples;distance=t*distances[-1]
+        while index<len(path)-2 and distances[index+1]<distance:index+=1
+        f=(distance-distances[index])/(distances[index+1]-distances[index])
+        center=path[index].lerp(path[index+1],f)
+        tangent=(path[min(index+2,len(path)-1)]-path[max(index-1,0)]).normalized()
+        side=tangent.cross(Vector((0,0,1))).normalized();up=side.cross(tangent).normalized()
+        envelope=min(1,t/.055,(1-t)/.055)
+        envelope=envelope*envelope*(3-2*envelope)
+        angle=math.tau*(turns*t+.10*math.sin(t*math.tau))
+        coil.append(center+.0052*envelope*(side*math.cos(angle)+up*math.sin(angle)))
+    lead=_smooth_path([(.117,.055,.105),(.133,.052,.098),tuple(path[0])],10)[:-1]
+    tail=_smooth_path([tuple(path[-1]),(.081,.102,.023),(.060,.094,.030)],8)[1:]
+    wire('HandsetCord',[*lead,*coil,*tail],.00135,handset_cord,poly=True)
+    box('HandsetCordBoot',(.119,.055,.104),(.011,.008,.009),handset_cord,.003)
     wire('LineCord',[(-.035,.091,.021),(-.039,.113,.010),(-.060,.134,.0027),
          (-.112,.137,.0027),(-.143,.115,.0027)],.0024,cord_material)
     for x in (-.035,.060):

@@ -82,7 +82,7 @@ def curve_crt_screen(scene):
     screen = bpy.data.objects['CRT_Screen']
     material = screen.data.materials[0]
     nx = 64
-    hw, hh, corner, bulge = .45, .3325, .035, .037
+    hw, hh, corner, bulge = .45, .3325, .035, .052
     vertices, faces, texcoords = [], [], []
     # Concentrate rows at the curved corners; a uniform grid leaves only two
     # segments there and makes the silhouette look like a cut-off octagon.
@@ -104,7 +104,7 @@ def curve_crt_screen(scene):
         for i in range(nx):
             a = j * (nx + 1) + i
             faces.append((a, a + 1, a + nx + 2, a + nx + 1))
-    mesh = bpy.data.meshes.new('CRT convex glass 37mm')
+    mesh = bpy.data.meshes.new('CRT convex glass 52mm')
     mesh.from_pydata(vertices, [], faces)
     uv = mesh.uv_layers.new(name='ScreenUV')
     for polygon in mesh.polygons:

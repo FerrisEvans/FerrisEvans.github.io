@@ -24,9 +24,11 @@ export function createRoomGlow(renderer:WebGLRenderer,scene:Scene,camera:Camera)
   });
   const quad=new FullScreenQuad(composite);
   let width=1,height=1;
-  const emitter=(mesh:Mesh)=>mesh.name==='CRT_Screen'||mesh.name==='City_Backdrop'||mesh.name==='VCR_Display'
-    ||mesh.userData.surface_role==='led'||mesh.userData.surface_role==='lamp-bulb'
-    ||(Array.isArray(mesh.material)?mesh.material:[mesh.material]).some(m=>m.userData.roomGlow);
+  // Tubes and the VFD soften inside their own phosphor layer. Sending them
+  // through the wide lens halo as well made every display share a bulb glow.
+  const emitter=(mesh:Mesh)=>!['CRT_Screen','VCR_Display','Interface_about'].includes(mesh.name)
+    &&(mesh.name==='City_Backdrop'||mesh.userData.surface_role==='led'||mesh.userData.surface_role==='lamp-bulb'
+    ||(Array.isArray(mesh.material)?mesh.material:[mesh.material]).some(m=>m.userData.roomGlow));
   function occluder(source:Material) {
     const alpha=source as MeshBasicMaterial;
     if(!alpha.alphaTest)return black;

@@ -21,7 +21,7 @@ try{
   const port=server.httpServer.address().port;
   browser=await chromium.launch({channel:'chrome',headless:true});
   const posters={},captures=[];
-  for(const [name,width,height,mode]of [['loading',1440,1440,'poster'],['reading',1440,900,'reading'],['share',1200,630,'reading']]){
+  for(const [name,width,height,mode]of [['loading',1920,1920,'poster'],['reading',1440,900,'reading'],['share',1200,630,'reading']]){
     const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
     page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});

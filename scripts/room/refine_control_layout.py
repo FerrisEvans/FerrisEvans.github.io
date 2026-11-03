@@ -8,7 +8,7 @@ import bpy
 import bmesh
 from mathutils import Matrix, Vector
 from refine_geometry import _box, _activate
-from refine_equipment import finish, bounds, subtract, loft
+from refine_equipment import finish, bounds, subtract, loft, planar_front_normals
 from refine_telephone import refine_telephone
 
 
@@ -33,8 +33,8 @@ def monitor_front_lip(obj):
     stop = math.atan(1/slope)
     setback = radius*(math.sqrt(1+slope*slope)-slope)
     layers = []
-    for i in range(9):
-        angle = stop*i/8
+    for i in range(17):
+        angle = stop*i/16
         depth = radius*(1-math.cos(angle))
         inset = -setback+radius*math.sin(angle)
         # Preserve the existing rounded-rectangle corner centre as the lip
@@ -57,15 +57,57 @@ def monitor_front_lip(obj):
     cutter.matrix_world = obj.matrix_world @ cutter.matrix_world
     bpy.context.view_layer.update()
     subtract(obj, cutter)
+    # Pierce the final shell, after its front-lip replacement. Recessed dark
+    # inserts provide depth behind the wall, instead of painted-on vent bars.
+    dark=finish('Computer internal vent darkness',(.008,.010,.010),.83,grain=.008)
+    def local_box(name,position,size,mat,bevel=.001):
+        part=_box(name,position,size,mat,bpy.context.scene,bevel=bevel,segments=4)
+        part.matrix_world=obj.matrix_world@part.matrix_world
+        part['hero_atlas']='equipment';part['surface_profile']='abs'
+        return part
+    for side in (-1,1):
+        # Hollow the vent bank parallel to the tapered shell, leaving a 3 mm
+        # wall. The previous 30 mm blind bore hid its backing behind a pale
+        # return wall from every ordinary side/front viewing angle.
+        cavity=local_box('Computer vent air cavity',(0,.0735,1.36),(.057,.265,.110),dark,.001)
+        for vertex in cavity.data.vertices:
+            y=.0735+vertex.co.y
+            half_width=(.658+(.49-.658)*(y+.12)/.35)/2
+            vertex.co.x+=side*(half_width-.0315)
+        subtract(obj,cavity)
+        for i in range(8):
+            y=-.035+i*.031
+            half_width=(.658+(.49-.658)*(y+.12)/.35)/2
+            subtract(obj,local_box('Computer vent cutter',(side*half_width,y,1.36),(.060,.014,.076),dark,.002))
+            local_box('Computer_VentBacking',(side*(half_width-.026),y,1.36),(.002,.019,.082),dark)
+        subtract(obj,local_box('Computer parting groove',(side*.329,-.118,1.228),(.014,.0020,.435),dark,.0005))
+        local_box('Computer_CaseJoint',(side*.323,-.118,1.228),(.002,.0016,.433),dark,.0004)
+    subtract(obj,local_box('Computer upper parting groove',(0,-.118,1.4935),(.59,.002,.012),dark,.0005))
+    local_box('Computer_CaseJoint_Top',(0,-.118,1.488),(.59,.0016,.002),dark,.0004)
+    # Boolean cutters carry their own custom corner normals. Discard those
+    # transferred values before rebuilding the shell's sharp edges; otherwise
+    # the broad side-panel normal leaks across the narrow vent return lips.
+    _activate(obj)
+    if obj.data.has_custom_normals:
+        bpy.ops.mesh.customdata_custom_splitnormals_clear()
     bm = bmesh.new()
     try:
         bm.from_mesh(obj.data)
+        # Intersecting rounded vent cutters can leave a sub-micron triangular
+        # sliver at the final slot. Its winding becomes unstable after the
+        # float32 world/local export round trip. Dissolve only vent-bank
+        # degeneracies below 0.5 micrometres (the smallest lip is 2 mm), before
+        # assigning corner normals; keep every visible opening and bevel.
+        vent_edges = [edge for edge in bm.edges if all(
+            .22 < abs(vertex.co.x) < .34 and -.065 < vertex.co.y < .215
+            and 1.300 < vertex.co.z < 1.420 for vertex in edge.verts)]
+        bmesh.ops.dissolve_degenerate(bm, dist=.0000005, edges=vent_edges)
         bmesh.ops.recalc_face_normals(bm, faces=list(bm.faces))
         bm.to_mesh(obj.data)
     finally:
         bm.free()
-    return {'localRadiusMeters':radius, 'segments':8, 'sideTangentSlope':slope,
-            'screenApertureChanged':False}
+    return {'localRadiusMeters':radius, 'segments':16, 'sideTangentSlope':slope,
+            'screenApertureChanged':False,'recessedSideVents':16}
 
 
 def manufactured_normals(obj):
@@ -83,6 +125,8 @@ def manufactured_normals(obj):
     modifier.keep_sharp = True
     modifier.weight = 50
     bpy.ops.object.modifier_apply(modifier=modifier.name)
+    if obj.name in ('CRT_Case','Computer_Monitor'):
+        planar_front_normals(obj)
 
 
 def shadowless_surface(material):
@@ -204,8 +248,22 @@ def refine_control_layout(scene, text):
     # its underlying metal must not leak into the baked metallic channel.
     shell = surface('CRT satin graphite ABS', (.042, .047, .048), .34)
     fascia = surface('Equipment fine matte fascia', (.026, .031, .032), .43)
-    enamel = surface('VCR graphite enamel coating', (.055, .063, .067), .29, grain=.008)
+    enamel = surface('VCR graphite enamel coating', (.036, .038, .039), .29, grain=.012)
     ivory = surface('Computer satin warm grey ABS', (.57, .55, .49), .36)
+    # Moulded ABS and enamel vary gently in gloss across a panel. This is a
+    # finish change, not a dirt mask: colour stays clean and the pores remain
+    # finer than the close-up silhouette detail.
+    from aging import Surface
+    for material,variation in ((shell,.025),(fascia,.020),(enamel,.035),(ivory,.025)):
+        surface_nodes=Surface(material)
+        broad=surface_nodes.math('SUBTRACT',surface_nodes.noise(24),.5)
+        surface_nodes.roughness(surface_nodes.math('MULTIPLY',broad,variation))
+    for material in (shell,ivory):
+        surface_nodes=Surface(material)
+        # Small mould-flow pigment variation over centimetres; preserve the
+        # established colours and leave metal/enamel/paper on their own finish.
+        pigment=surface_nodes.noise(32)
+        surface_nodes.mix_color(surface_nodes.math('MULTIPLY',pigment,.06),(.92,.92,.92),'MULTIPLY')
     keyboard = surface('Keyboard fine texture ABS', (.57, .55, .49), .42, grain=.018)
     mouse = surface('Mouse smooth warm grey ABS', (.57, .55, .49), .32, grain=.010)
     assignments = {'CRT_Case':(shell,'abs'), 'CRT_ControlPanel':(fascia,'abs'),

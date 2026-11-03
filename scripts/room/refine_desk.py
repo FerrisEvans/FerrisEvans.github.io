@@ -41,7 +41,8 @@ def walnut(image, axis='X'):
     s=Surface(m)
     xyz=s.n.new('ShaderNodeSeparateXYZ');s.l.new(s.position,xyz.inputs[0])
     normal=s.n.new('ShaderNodeSeparateXYZ');s.l.new(s.geometry.outputs['Normal'],normal.inputs[0])
-    # One texture width = 3.8 scene units, rather than stretching it over 6.4.
+    # Keep the source grain at furniture scale rather than enlarging its
+    # cathedral figure into wide, cloudy bands in the phone close-up.
     # Side grain follows thickness; short ends use a separate end-grain signal.
     across='Y' if axis=='X' else 'X'
     length=xyz.outputs[axis]
@@ -50,18 +51,18 @@ def walnut(image, axis='X'):
     cross=s.math('ADD',s.math('MULTIPLY',xyz.outputs[across],s.math('SUBTRACT',1,side)),
                  s.math('MULTIPLY',xyz.outputs['Z' if axis!='Z' else 'Y'],side))
     uv=s.n.new('ShaderNodeCombineXYZ')
-    s.l.new(s.math('ADD',s.math('MULTIPLY',length,1/3.8),.43),uv.inputs['X'])
-    s.l.new(s.math('ADD',s.math('MULTIPLY',cross,1/1.7),.56),uv.inputs['Y'])
+    s.l.new(s.math('ADD',s.math('MULTIPLY',length,1/2.8),.43),uv.inputs['X'])
+    s.l.new(s.math('ADD',s.math('MULTIPLY',cross,1/.95),.56),uv.inputs['Y'])
     tex=s.n.new('ShaderNodeTexImage');tex.image=image;tex.extension='REPEAT'
     s.l.new(uv.outputs[0],tex.inputs['Vector']);s.l.new(tex.outputs['Color'],s.p.inputs['Base Color'])
     # Independently sampled fine fibres provide real detail in the 4K bake.
     fibrecoords=s.n.new('ShaderNodeCombineXYZ')
     s.l.new(length,fibrecoords.inputs['X']);s.l.new(cross,fibrecoords.inputs['Y'])
-    fine=s.noise(1,s.vector('MULTIPLY',fibrecoords.outputs[0],(5,520,1)))
+    fine=s.noise(1,s.vector('MULTIPLY',fibrecoords.outputs[0],(4,310,1)))
     pore=s.ramp(fine,.55,.79)
-    s.mix_color(s.math('MULTIPLY',pore,.11),(.30,.22,.14),'MULTIPLY')
-    s.l.new(s.math('ADD',.34,s.math('MULTIPLY',fine,.14)),s.p.inputs['Roughness'])
-    bump=s.n.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.14;bump.inputs['Distance'].default_value=.00055
+    s.mix_color(s.math('MULTIPLY',pore,.13),(.30,.22,.14),'MULTIPLY')
+    s.l.new(s.math('ADD',.38,s.math('MULTIPLY',fine,.10)),s.p.inputs['Roughness'])
+    bump=s.n.new('ShaderNodeBump');bump.inputs['Strength'].default_value=.12;bump.inputs['Distance'].default_value=.00035
     s.l.new(fine,bump.inputs['Height']);s.l.new(bump.outputs[0],s.p.inputs['Normal'])
     # Saw-cut ends are slightly more porous and darker than longitudinal faces.
     end=s.math('ABSOLUTE',normal.outputs[axis])
@@ -87,6 +88,76 @@ def walnut(image, axis='X'):
         s.mix_color(s.math('MULTIPLY',wear,.10),(.31,.19,.09))
         s.roughness(s.math('MULTIPLY',wear,-.07))
     return m
+
+
+def unwrap_desk(joined):
+    """Give the visible worktops most of the existing 4K atlas.
+
+    A box projection is continuous over each planar face and its bevels.
+    The previous automatic pack put the top in a thin strip, despite leaving
+    most of the atlas empty. More pixels across the grain preserve fibres
+    without enlarging them or increasing the delivered texture dimensions.
+    LightUV is copied from this layout by the shared baking pipeline.
+    """
+    mesh=joined.data
+    points=[joined.matrix_world@v.co for v in mesh.vertices]
+    normal_matrix=joined.matrix_world.to_3x3().inverted().transposed()
+    charts={}
+    for face in mesh.polygons:
+        source=mesh.materials[face.material_index]['source_object']
+        normal=normal_matrix@face.normal
+        axis=max(range(3),key=lambda i:abs(normal[i]))
+        key=(source,axis,1 if normal[axis]>0 else -1)
+        chart=charts.setdefault(key,{'faces':[],'axes':[i for i in range(3) if i!=axis]})
+        chart['faces'].append(face)
+    for key,chart in charts.items():
+        vertices={index for face in chart['faces'] for index in face.vertices}
+        axes=chart['axes']
+        low=[min(points[i][a] for i in vertices) for a in axes]
+        high=[max(points[i][a] for i in vertices) for a in axes]
+        size=[b-a for a,b in zip(low,high)]
+        if size[1]>size[0]:
+            axes.reverse();low.reverse();size.reverse()
+        chart.update(low=low,size=size)
+    # Wide allocations keep the critical across-grain texel density high.
+    slots={('Desk_Top',2,1):(.008,.532,.984,.460),
+           ('Desk_Return',2,1):(.008,.272,.604,.244),
+           ('Desk_Top',2,-1):(.624,.392,.368,.117),
+           ('Desk_Return',2,-1):(.624,.272,.230,.104)}
+    remaining=sorted((key for key in charts if key not in slots),
+                     key=lambda key:(-charts[key]['size'][1],-charts[key]['size'][0],key))
+    # Smaller support and edge charts occupy a separate lower band. Each
+    # chart has a 14 px gutter on all sides, wider than the 12 px bake margin.
+    padding=14/4096
+    scale=.30
+    while True:
+        rows=[];packed={}
+        for key in remaining:
+            width,height=[max(4/4096,value*scale)+2*padding for value in charts[key]['size']]
+            row=next((row for row in rows if height<=row['height'] and row['x']+width<=.984),None)
+            if row is None:
+                y=sum(row['height'] for row in rows)
+                if width>.984 or y+height>.244:
+                    break
+                row={'x':0.,'y':y,'height':height};rows.append(row)
+            packed[key]=(.008+row['x']+padding,.008+row['y']+padding,
+                         width-2*padding,height-2*padding)
+            row['x']+=width
+        else:
+            slots.update(packed);break
+        scale*=.94
+        if scale<.002:
+            raise ValueError('Desk face charts cannot fit their reserved atlas band')
+    uv=mesh.uv_layers.active or mesh.uv_layers.new(name='MaterialUV')
+    for key,chart in charts.items():
+        x,y,width,height=slots[key]
+        for face in chart['faces']:
+            for loop in face.loop_indices:
+                p=points[mesh.loops[loop].vertex_index]
+                u,v=[(p[a]-low)/size for a,low,size in zip(chart['axes'],chart['low'],chart['size'])]
+                uv.data[loop].uv=(x+u*width,y+v*height)
+    return {'charts':len(charts),'topPixels':[4030,1884],
+            'returnPixels':[2474,999],'textureSize':4096,'gutterPixels':14}
 
 
 def refine_desk(scene, image):
@@ -137,7 +208,7 @@ def refine_desk(scene, image):
         p=pot.matrix_world@v.co
         if p.z<.691:p.z=.685;v.co=inv@p
     return {'top':.685,'underside':.620,'thickness':.065,'floor':-.265,
-            'height':.950,'grainWidth':3.8,'supports':len(feet),'aprons':len(rails),'potFootGap':0,
+            'height':.950,'grainWidth':2.8,'grainDepth':.95,'supports':len(feet),'aprons':len(rails),'potFootGap':0,
             'returnBounds':[[2.70,-2.00,.620],[4.02,.925,.685]],'rightWallGap':.105,
             'returnKneeSpaceClear':True,
             'propTransformsChanged':False,'cameraChanged':False}

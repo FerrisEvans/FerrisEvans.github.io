@@ -44,6 +44,9 @@ for group, atlas in manifest['atlases'].items():
         # 4K desk colour retains fibre detail; data maps use 2K to bound GPU and
         # transfer cost. Irradiance is baked independently at 2K, never upscaled.
         size = 1024 if group != 'desk' and kind in ('normal','orm') else image.width
+        # Thin cord and rolled-metal charts need their 2K data grid; reducing
+        # them to 1K recreates the discontinuities fixed by the denser 4K bake.
+        if group == 'equipment' and kind in ('normal','orm'): size=min(image.width,2048)
         if group == 'desk' and kind in ('normal','orm'): size=min(size,2048)
         if group == 'desk' and kind == 'orm': size=min(size,1024)
         if group == 'desk' and kind in ('tv','lampOff'):
@@ -53,7 +56,11 @@ for group, atlas in manifest['atlases'].items():
         # Cloth and window charts retain their broad lighting at 512px;
         # their very soft, weak TV contribution needs still less resolution.
         # Keep the colour/yarn map at source size. RGBM is resized in linear light.
-        if group in ('curtains','window','ceramic','paper') and kind != 'albedo':
+        if group == 'curtains' and kind in ('normal','orm'):
+            # Four continuous cloth charts share the atlas. Preserve their
+            # turned hems and shallow creases without enlarging the yarn.
+            size = min(image.width, 1024)
+        elif group in ('curtains','window','ceramic','paper') and kind != 'albedo':
             size = min(image.width, 256 if kind == 'tv' else 512)
         # The memo's glyphs are a separate live CanvasTexture. Its subtle stock
         # colour/fibres showed no discernible loss in the 1440×900 A/B at these
@@ -63,7 +70,9 @@ for group, atlas in manifest['atlases'].items():
         # Large hero colour/normal maps carry the visible finish. Their baked
         # illumination changes over centimetres, not individual plastic grains.
         # Re-encode RGBM in linear light rather than resampling encoded bytes.
-        if group in ('equipment','props','foliage','tape') and light:
+        if group == 'equipment' and light:
+            size=min(image.width,2048 if kind=='room' else 1024)
+        if group in ('props','foliage','tape') and light:
             size=min(image.width,1024 if kind=='room' else 512)
         if group=='architecture' and light:
             size=min(image.width,256 if kind=='tv' else 512)

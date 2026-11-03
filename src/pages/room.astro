@@ -93,7 +93,7 @@ const content = {
       <div id="surface-layer"></div>
       <details id="object-menu"><summary>物件 / 操作</summary><div>
         <p>拖动鼠标环顾。N 拿起笔记；ESC 先放下，再返回。</p>
-        {[['lamp','台灯 L'],['window','窗外 W'],['plant','盆栽'],['work','记事本 N'],['play','播放 / 暂停'],['previous','上一盒'],['next','下一盒'],['stop','停止录像'],['eject','退出录像带'],['power','电视电源'],['coffee','咖啡'],['phone','电话'],['cd','CD'],['calculator','计算器'],['music','CD 播放'],['pager','寻呼机'],['floppy','软盘'],['clock','时钟'],['pencil','铅笔'],['credits','制作记录'],['rss','RSS'],['walkman','随身听'],['underscan','UNDERSCAN'],['delay','H/V DELAY'],['blue','BLUE ONLY']].map(([action,label]) => <button data-room-action={action}>{label}</button>)}
+        {[['lamp','台灯 L'],['window','窗外 W'],['plant','盆栽'],['work','记事本 N'],['play','播放 / 暂停'],['previous','上一盒'],['next','下一盒'],['stop','停止录像'],['eject','退出录像带'],['power','电视电源'],['coffee','咖啡'],['phone','电话'],['cd','CD'],['calculator','计算器'],['music','CD 播放'],['pager','查看寻呼消息，在电脑中打开在线联系'],['floppy','读取软盘，在电脑中阅读关于'],['clock','时钟'],['pencil','铅笔'],['credits','制作记录'],['rss','RSS'],['walkman','随身听'],['underscan','UNDERSCAN'],['delay','H/V DELAY'],['blue','BLUE ONLY']].map(([action,label]) => <button data-room-action={action}>{label}</button>)}
       </div></details>
       <div id="object-hint" hidden aria-hidden="true"></div>
       <canvas id="window-transition" aria-hidden="true"></canvas>

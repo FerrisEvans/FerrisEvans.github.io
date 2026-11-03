@@ -7,7 +7,151 @@ It does not replace the blog content pipeline. Historical stage notes below are
 retained as a record; their asset sizes, deferred work and limitations describe
 those earlier builds, not the current build.
 
-## Current build — 2026-10-31, high-quality desktop scene
+The delivered asset build is `bb9b4de91395842e`, with bake
+`04414c91e8d8de84`. It includes the subsequent curved CRT layer separation,
+equipment finish, lamp, curtain, foliage and tape-contact corrections.
+
+## Earlier local refinement — 2026-11-03, visual material audit
+
+Asset build `7a6fcf185e2c5c78` retains bake `7b698def110b2608`. This pass began
+with an actual browser comparison against https://felixrieseberg.com/ and twelve
+local views, including object inspections and lamp-off Home. Source complexity
+and test counts were not used as evidence of visual realism.
+
+| Element | Visual finding and treatment |
+| --- | --- |
+| Walnut worktops | Dense, dark fibres competed with the broader grain. Local luminance contrast and micro-normal strength are reduced; knots, colour and baked contact light remain. Repeated source figure is still visible in close views. |
+| Foliage | Pale veins and the uniformly matte response suggested artificial leaves. The cuticle now has a restrained dielectric reflection and slightly less vein contrast. The scanned shape is retained; this is a material correction, not a new plant model. |
+| CRT | Glass read weakly against the sharp programme. Faceplate transmission now follows the curved normal, while room reflection is no longer halved. Reduced-motion film posters use the same beam softness as moving film. |
+| Clock, CD and cassette windows | Ordinary opacity attenuated the physical reflection again and added a diffuse veil. A thin-interface material retains readable internals, view-dependent reflection and absorption; moving clones preserve that shader. |
+| CD and Walkman metal | Modestly stronger captured-room reflection distinguishes their metal skins from rubber and plastic. The Walkman opening still has a small jagged inner-edge artifact in close-up. |
+| Telephone and lamp | Silhouettes, seams, handset highlights and shade thickness were already credible enough to retain. |
+| Ceramic, keyboard, paper | Their material identities and main shapes were retained. Clean glaze does not require artificial dirt; paper and raised calculator views remain somewhat simplified. |
+| Curtains and exterior | Cloth folds remain rather regular. The city still reveals its photographic origin in close inspection; neither issue is claimed to be solved by the material pass. |
+
+Thin glass uses the existing room reflection and a single visible interface. It
+does not add a transmission render target, extra clearcoat or fabricated light
+cards. Compositing normalizes the reflected RGB before tone/output conversion,
+then premultiplies in output space. This is a lightweight approximation, not
+linear-light refractive transmission. The new helper is included in reflection
+source provenance.
+
+Evidence is in `.room-build/visual-audit-nov3/`: `before/`, `after-v1/`, and
+`after-glass-v2/` contain same-camera visual comparisons; `original/` preserves
+the pre-existing source changes. `after-glass/` is superseded. TypeScript and
+175 tests pass. Reflection and all three posters are rebuilt for this pass.
+The production build, static assets and 62-page link verification pass. Final
+Chrome 156 captures in `final/` all report the current build ID and no console,
+page or HTTP errors. `production-inspection/` verifies modal controls, keyboard
+return, computer focus, standby and delayed-history cancellation. Other browsers
+and devices were not visually validated in this pass.
+The scene is improved, but the review does not certify every close-up as nearly
+photoreal or the overall realism as equal to the reference. This is local work,
+not a commit or deployment.
+
+## Earlier local refinement — 2026-11-03, desktop interaction and material pass
+
+Asset build `a9e46a52d5bb788b`, bake `7b698def110b2608`. The floppy sits
+clear of the keyboard and paper, with an ABOUT ink mesh; its 8% scale reduction
+keeps the complete outline above the default HUD without changing HomeCamera.
+The CD moves slightly left and forward. Both retain desktop contact. Placement
+is shared by the source bake and delivered-model patch through
+`desktop-layout.json`. All 983 nodes remain; all existing mesh position, normal
+and UV arrays are unchanged except the replacement floppy lettering.
+
+Only the desk/equipment receiver lighting was rebaked: six main maps and four
+entry maps. Existing colour, normal and ORM atlases remain byte-identical to
+the preceding pass. Runtime contact shadows replace the moved props' baked
+silhouettes. CD turned aluminium, Walkman brushed metal, rubber gaskets and
+buttons have distinct responses; the CD LCD now receives room illumination.
+Linen uses irregular yarn spacing and short tension wrinkles with less of the
+previous visible grid. Existing CRT/VFD optics, city depth, wet pavement,
+coffee, lights, camera and branding are preserved.
+
+Picking keeps CPU geometry before render batching, then binds it to the moving
+named frames. One nearest visible triangle decides both hover and click;
+alpha-tested leaf gaps are respected. There are no enlarged action boxes or
+action-priority sorting. A local Chrome sample reduced median picking time
+from 18.1 ms to 4.3 ms (117 pointer events), without adding rendered meshes.
+Floppy and pager open existing ABOUT/ONLINE documents after a cancellable
+260 ms feedback; reduced motion navigates immediately. All inspections restore
+the previous camera/orbit and route state. Calculator/cards disable document
+controls underneath them; N, TV sliders and same-hash history cancellation
+have explicit browser coverage. The large computer tabs are document headers;
+the top navigation, paging, terminal shortcuts and contact links remain.
+
+Local validation: `check`, 173 tests, `build`, static asset verification and
+62-page link verification and the existing browser smoke pass. At 1920×1080, 89 real pointer checks cover the
+visible centres/edges and foreground occlusion; route, inspection return,
+sound/music and standby re-entry checks pass without console or page errors.
+`scripts/room/inspection-smoke.mjs` also exercises normal-motion modal controls,
+keyboard focus, raised-paper TV inspection and delayed history cancellation.
+Evidence is in `.room-build/interaction-round5/`, including the final production
+interaction captures and same-camera material comparisons. This is local work;
+it has not been committed or deployed.
+
+## Earlier local refinement — 2026-11-02, optical round four
+
+Asset build `63744973da4edc48` retains bake `6e77f892aee00410`. The source,
+public receipt, three newly rendered posters and production manifest agree.
+TypeScript, all 157 tests, the production build and 62-page link verification
+pass. Existing browser smoke passes; 16 additional real 3D interaction checks
+pass without browser errors. Chrome 156 at 1920×1080 (internal DPR 1.5) reports
+60.0 render FPS during separate sustained Home-film and tape-playback samples.
+Twelve full views and seven DPR-2 close views are in
+`.room-build/optical-round4/review/`; those captures all use this asset build.
+
+This pass keeps the round-three delivered model, cameras, controls and baked
+night illumination. CRT standby and programmes share the same curved aperture,
+filtered raster and phosphor bandwidth; the computer applies a weaker variant.
+The VCR is an elapsed counter behind a smoked optical layer, with restrained
+segment variation and its own local halo. Display emission no longer goes
+through the broad lamp/city bloom. Existing near-screen bounce follows programme
+colour with a short temporal response.
+
+Physical-scale finishes distinguish ABS, controls, spun metal, wood varnish,
+ceramic glaze, linen, paper edges and plaster. Linen combines crossing yarns,
+small spacing variation, short tension wrinkles and local yarn self-shadowing;
+its diffuse response uses the existing lamp-on/off irradiance. Moving props
+retain these finishes when their baked material is replaced by a live-lit clone.
+The city keeps its wet pavement, with slightly softer distant layers and divided
+lightbox illumination. Glass reflections remain tied to the actual room sources.
+
+The runtime liquid uses the actual cup opening, a resolved capillary edge and
+flat central normals. Its directional window, bulb and inner-wall reflections
+replace broad unoccluded analytic light cards. Coffee remains dark; the exterior
+room is still a photographic plate and general room reflections still use one
+static probe. This is a local refinement, not a production deployment.
+
+## Earlier local build — 2026-11-02, physical surface review
+
+Asset build `afba93133116143b` retains the earlier wood, cloth, foliage and
+telephone refinements. The clock now has a rounded nickel bezel, recessed dial
+and thin crystal; the CD player has a shaped case, real lid opening, gasket and
+latch; the Walkman window reveals a recessed cassette and wound tape. CRT and
+computer housings retain flat front-panel normals around their rounded openings.
+The VCR has a thin vented cover and a dark internal chassis.
+
+Equipment charts use a denser 4K colour bake with 2K normal/ORM/main-light maps.
+This removes missing texels on cords and thin metal rings. Ceramic and equipment
+RGBM irradiance is decoded before bilinear filtering, eliminating false contour
+lines without flattening their normal maps or specular response. Both the baked
+and analytic window sources now remain outside the joinery.
+
+The retained candidate passed 154 tests, TypeScript and production asset/build
+checks, with 13 matched 1440×900 DPR-2 Chrome views including close-ups and lamp
+off. A delivered-model regression rejects the actual flat-panel normal error.
+Real-browser checks also cover inspection return, calculator input, coffee,
+lamp switching, all three CD buttons and page navigation. The full CD assembly
+uses surface picking so its bounding box cannot intercept its raised controls.
+This desktop Chrome completed a 20-second motion sample at 60 FPS without
+console errors; other browsers and devices have not been measured in this pass.
+The packed model is 3,782,911 bytes; atlas allocation including mipmaps is about
+542 MiB before runtime textures, probes, render targets and driver overhead.
+The city remains a photographic plate and the reflection probe remains static.
+This local asset promotion does not constitute a production deployment.
+
+## Previous build — 2026-10-31, high-quality desktop scene
 
 The subsequent [immersion pass](IMMERSION.md) records complete panorama browsing,
 native movie streaming, loading stage measurements, delayed runtime advice and
@@ -115,18 +259,22 @@ and hashes the packed files. Do not use the historical `build.py` below.
 python3 scripts/room/build-assets.py bake --candidate .room-build/my-candidate
 python3 scripts/room/build-assets.py audit --candidate .room-build/my-candidate
 python3 scripts/room/build-assets.py site --candidate .room-build/my-candidate
-# Run npm run build with cwd=.room-build/my-candidate/site, then preview its dist.
-# Capture actual WebGL loading.png (1440×1440), reading.png (1440×900),
-# and share.png (1200×630). Read #room.dataset.assetBuildId from that page.
-python3 scripts/room/build-assets.py seal-posters --candidate .room-build/my-candidate --poster-dir /path/to/captures --capture-build-id ACTUAL_BUILD_ID
-python3 scripts/room/build-assets.py promote --candidate .room-build/my-candidate
+# Run these commands with cwd=.room-build/my-candidate/site:
+npm run assets:model
+npm run assets:lighting
+npm run assets:reflection
+npm run assets:posters
+npm run build
+npm run verify:build
 ```
 
-Promotion requires a final bake, a valid packed-file hash and matching poster
-receipt. It backs up the previous public bundle and preserves the separately
-authored city and film bindings. Film sources and temporary rendered frames do
-not download with the website. The current validation report records actual
-browser evidence and full resource costs separately from pipeline checks.
+After actual browser acceptance, back up `public/room`, then promote the complete
+prepared `site/public/room` directory and verify its receipt hashes. The legacy
+`seal-posters`/`promote` stages only understand the raw packed bundle; they do not
+include the current meshopt model, entry textures and reflection receipt. Keep
+the separately authored city and film bindings. Film sources and temporary
+rendered frames do not download with the website. Browser evidence and full
+resource costs remain separate from pipeline checks.
 
 ## Previous build — 2026-10-30, Home playback and programme refinement
 
