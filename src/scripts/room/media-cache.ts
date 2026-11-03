@@ -11,7 +11,7 @@ export function prepareMediaCache(files:MediaFile[],signal?:AbortSignal,timeoutM
     ||signal?.aborted||!('serviceWorker' in navigator))return Promise.resolve(false);
   return new Promise(resolve=>{
     const workers=navigator.serviceWorker;
-    let finished=false,port:MessagePort|undefined;
+    let finished=false,port:MessagePort|undefined,registered:ServiceWorkerRegistration|undefined;
     const removers:(()=>void)[]=[];
     const finish=(ready:boolean)=>{
       if(finished)return;finished=true;window.clearTimeout(timer);port?.close();
@@ -22,6 +22,12 @@ export function prepareMediaCache(files:MediaFile[],signal?:AbortSignal,timeoutM
       if(finished)return;
       port?.close();port=undefined;
       const controller=workers.controller;
+      // Keep the retiring worker idle while its replacement takes control.
+      // Sending it an unhandled MessagePort can postpone activation in Chromium.
+      if(!registered)return;
+      const replacement=registered.installing??registered.waiting;
+      if(replacement&&replacement!==controller)return;
+      if(registered.active&&registered.active!==controller)return;
       if(!controller||new URL(controller.scriptURL).pathname!=='/sw.min.js')return;
       const channel=new MessageChannel();port=channel.port1;
       port.onmessage=event=>{
@@ -36,6 +42,7 @@ export function prepareMediaCache(files:MediaFile[],signal?:AbortSignal,timeoutM
     workers.addEventListener('controllerchange',check);signal?.addEventListener('abort',abort,{once:true});
     void Promise.resolve().then(()=>workers.register('/sw.min.js',{scope:'/',updateViaCache:'none'})).then(registration=>{
       if(finished)return;
+      registered=registration;
       const watch=()=>{
         const worker=registration.installing??registration.waiting;
         if(worker){worker.addEventListener('statechange',check);removers.push(()=>worker.removeEventListener('statechange',check));}
@@ -44,6 +51,5 @@ export function prepareMediaCache(files:MediaFile[],signal?:AbortSignal,timeoutM
       registration.addEventListener('updatefound',watch);
       removers.push(()=>registration.removeEventListener('updatefound',watch));watch();
     }).catch(()=>finish(false));
-    check();
   });
 }

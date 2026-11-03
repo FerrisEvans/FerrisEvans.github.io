@@ -15,7 +15,7 @@ const flush=()=>new Promise(resolve=>setImmediate(resolve));
 function fixture(t,{registrationResult,unavailable=false}={}){
   let now=0,id=0;
   const timers=new Map(),channels=[],calls=[],workerTargets=[];
-  const registration=new EventTarget();registration.installing=null;registration.waiting=null;
+  const registration=new EventTarget();registration.installing=null;registration.waiting=null;registration.active=null;
   const workers=new EventTarget();workers.controller=null;
   workers.register=(...args)=>{calls.push(args);return registrationResult?registrationResult():Promise.resolve(registration);};
   function replace(name,value){
@@ -83,6 +83,45 @@ test('missing service worker support retains native playback',async t=>{
   assert.equal(f.calls.length,0);f.assertClean();
 });
 
+test('registration must settle before any handshake reaches the existing controller',async t=>{
+  let completeRegistration;
+  const registered=new Promise(resolve=>{completeRegistration=resolve;});
+  const f=fixture(t,{registrationResult:()=>registered}),old=f.worker();
+  f.workers.controller=old;f.registration.active=old;
+  const pending=prepareMediaCache([film],undefined,50);await flush();
+  assert.equal(f.calls.length,1);
+  assert.equal(old.messages.length,0,'register may still discover a pending replacement');
+  assert.equal(f.channels.length,0,'do not transfer a MessagePort before registration is known');
+  f.control(old);await flush();assert.equal(old.messages.length,0);
+  completeRegistration(f.registration);await flush();
+  assert.equal(old.messages.length,1,'an unchanged active controller can configure after registration settles');
+  old.reply();assert.equal(await pending,true);f.assertClean();
+});
+
+test('installing and waiting replacements receive configuration only after taking control',async t=>{
+  const f=fixture(t),old=f.worker(),next=f.worker();
+  f.workers.controller=old;f.registration.active=old;f.registration.installing=next;
+  let result;
+  const pending=prepareMediaCache([film],undefined,50).then(value=>result=value);await flush();
+  assert.equal(old.messages.length,0);assert.equal(next.messages.length,0);assert.equal(f.channels.length,0);
+  f.registration.installing=null;f.registration.waiting=next;
+  next.state='installed';next.dispatchEvent(new Event('statechange'));await flush();
+  f.control(old);await flush();
+  assert.equal(old.messages.length,0,'waiting for activation must not reopen a port on the old controller');
+  f.registration.waiting=null;f.registration.active=next;
+  for(const state of ['activating','activated']){
+    next.state=state;next.dispatchEvent(new Event('statechange'));await flush();
+    assert.equal(old.messages.length,0,'the new active worker may not have claimed the page yet');
+    assert.equal(next.messages.length,0);assert.equal(result,undefined);
+  }
+  f.control(next);await flush();
+  assert.deepEqual(next.messages.at(-1).data,{type:'praxis-media-configure',files:[{
+    url:film.url,bytes:film.bytes,sha256:film.sha256,chunkSize:film.chunkSize,chunks:[...film.chunks],
+  }]});
+  assert.equal(old.messages.length,0);
+  next.reply();assert.equal(await pending,true);f.assertClean();
+});
+
 test('first install waits for the correct controller and an exact supported handshake',async t=>{
   const f=fixture(t),installing=f.worker(),foreign=f.worker('/other-project/sw.js');
   f.registration.installing=installing;
@@ -108,9 +147,11 @@ test('an unsupported configuration stays pending until a capable controller conf
   let result;
   const pending=prepareMediaCache([film],undefined,50).then(value=>result=value);await flush();
   old.reply({...supported,supported:false});await flush();assert.equal(result,undefined);
+  const oldMessages=old.messages.length;
   f.registration.installing=next;f.registration.dispatchEvent(new Event('updatefound'));
   next.state='activated';next.dispatchEvent(new Event('statechange'));await flush();
   assert.equal(next.messages.length,0,'installing/activated workers cannot answer for the current page');
+  assert.equal(old.messages.length,oldMessages,'an update must stop new handshakes to the old worker');
   old.reply({...supported,supported:false});await flush();assert.equal(result,undefined);
   f.control(next);await flush();
   assert.deepEqual(next.messages.at(-1).data,{type:'praxis-media-configure',files:[{
@@ -157,22 +198,29 @@ test('timeout releases native playback and a late registration does not attach l
   f.workers.controller=controller;f.registration.installing=installing;
   let result;
   const pending=prepareMediaCache([film],undefined,50).then(value=>result=value);await flush();
+  assert.equal(controller.messages.length,0);assert.equal(f.channels.length,0);
   f.advance(49);await flush();assert.equal(result,undefined);
   f.advance(1);assert.equal(await pending,false);f.assertClean();
   completeRegistration(f.registration);await flush();
-  const count=f.channels.length;f.control(installing);controller.reply();await flush();
+  const count=f.channels.length;f.control(installing);await flush();
   assert.equal(f.channels.length,count);f.assertClean();
 });
 
 test('abort closes the handshake and removes registration, worker and signal listeners',async t=>{
-  const f=fixture(t),controller=f.worker(),installing=f.worker(),aborter=new AbortController();
-  f.workers.controller=controller;f.registration.installing=installing;
-  const pending=prepareMediaCache([film],aborter.signal,50);await flush();
-  assert.equal(getEventListeners(installing,'statechange').length,1);
-  aborter.abort();assert.equal(await pending,false);f.assertClean(aborter.signal);
-  const count=f.channels.length;f.control(installing);controller.reply();
-  f.registration.dispatchEvent(new Event('updatefound'));await flush();
-  assert.equal(f.channels.length,count);f.assertClean(aborter.signal);
+  for(const upgrading of [false,true])await t.test(upgrading?'replacement is pending':'handshake port is open',async t=>{
+    const f=fixture(t),controller=f.worker(),installing=f.worker(),aborter=new AbortController();
+    f.workers.controller=controller;f.registration.installing=upgrading?installing:null;
+    const pending=prepareMediaCache([film],aborter.signal,50);await flush();
+    if(upgrading){
+      assert.equal(getEventListeners(installing,'statechange').length,1);
+      assert.equal(controller.messages.length,0);assert.equal(f.channels.length,0);
+    }else assert(controller.messages.length>0,'exercise abort with an actual open handshake port');
+    aborter.abort();assert.equal(await pending,false);f.assertClean(aborter.signal);
+    const count=f.channels.length;f.control(installing);
+    if(controller.messages.length)controller.reply();
+    f.registration.dispatchEvent(new Event('updatefound'));await flush();
+    assert.equal(f.channels.length,count);f.assertClean(aborter.signal);
+  });
 });
 
 test('postMessage failure closes both untransferred ports and times out to native playback',async t=>{
