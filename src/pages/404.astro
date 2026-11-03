@@ -4,8 +4,8 @@ import Base from '../layouts/Base.astro';
 
 <Base title="页面不存在">
   <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
-    <div class="surface-card w-full p-10 sm:p-14">
-      <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-paper-subtle px-3 py-1 font-mono text-xs font-semibold text-accent dark:border-line-dark dark:bg-night-subtle dark:text-accent-dark">
+    <div class="w-full border-y border-line py-12 dark:border-line-dark sm:py-16">
+      <span class="font-mono text-xs font-semibold tracking-[0.16em] text-accent dark:text-accent-dark">
         ERROR // 404 NOT FOUND
       </span>
       <p class="mt-4 font-mono text-7xl font-bold tracking-tighter text-ink/15 sm:text-8xl dark:text-snow/15">
@@ -18,13 +18,13 @@ import Base from '../layouts/Base.astro';
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a
           href="/"
-          class="inline-flex items-center gap-2 rounded-xl bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-transform hover:-translate-y-0.5 dark:bg-snow dark:text-night"
+          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85"
         >
           回到首页
         </a>
         <a
           href="/search/"
-          class="inline-flex items-center gap-2 rounded-xl border border-line bg-paper-elev px-5 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:text-snow"
+          class="inline-flex items-center gap-2 rounded-md border border-line px-5 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-accent/50 hover:text-accent dark:border-line-dark dark:text-snow-soft dark:hover:border-accent-dark/50 dark:hover:text-accent-dark"
         >
           搜索文章
         </a>

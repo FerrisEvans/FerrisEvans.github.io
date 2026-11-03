@@ -10,7 +10,7 @@ const { tag, class: className } = Astro.props;
 <a
   href={`/tags/${encodeURIComponent(tag)}/`}
   class:list={[
-    'relative z-10 inline-flex min-h-6 items-center rounded-full bg-ink/[0.05] px-2.5 py-0.5 text-xs text-ink-soft transition-colors hover:bg-ink/10 hover:text-ink dark:bg-white/[0.07] dark:text-snow-soft dark:hover:bg-white/[0.12] dark:hover:text-snow',
+    'relative z-10 inline-flex min-h-6 items-center text-xs text-ink-faint transition-colors hover:text-accent dark:text-snow-faint dark:hover:text-accent-dark',
     className,
   ]}
 >

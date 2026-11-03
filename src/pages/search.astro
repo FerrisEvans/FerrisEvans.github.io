@@ -6,7 +6,7 @@ const quickQueries = ['Agent', 'RAG', 'Godot', '指针', 'C++', '链表', '栈',
 
 <Base title="搜索">
   <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-7 p-7 sm:p-9">
+    <header class="page-header mb-8">
       <p class="eyebrow">Search / 全站搜索</p>
       <h1 class="page-title">搜索</h1>
       <p class="mt-3 text-ink-soft dark:text-snow-soft">搜索全站文章的标题与正文。</p>
@@ -15,13 +15,13 @@ const quickQueries = ['Agent', 'RAG', 'Godot', '指针', 'C++', '链表', '栈',
       </p>
     </header>
 
-    <div class="mb-7 flex flex-wrap items-center gap-2">
+    <div class="mb-8 flex flex-wrap items-center gap-x-4 gap-y-2">
       <span class="text-xs text-ink-faint dark:text-snow-faint">快捷搜索</span>
       {quickQueries.map((query) => (
         <button
           type="button"
           data-query={query}
-          class="quick-query rounded-full border border-line bg-paper-elev px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+          class="quick-query border-b border-transparent py-1 text-xs text-ink-soft transition-colors hover:border-accent/60 hover:text-accent dark:text-snow-soft dark:hover:border-accent-dark/60 dark:hover:text-accent-dark"
         >
           {query}
         </button>

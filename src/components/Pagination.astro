@@ -44,7 +44,7 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
               aria-current={n === currentPage ? 'page' : undefined}
               class:list={[
                 'pager-link min-w-10 px-2 font-mono',
-                n === currentPage && 'border-ink bg-ink text-paper hover:bg-ink hover:text-paper dark:border-snow dark:bg-snow dark:text-night dark:hover:bg-snow dark:hover:text-night',
+                n === currentPage && 'border-accent/60 text-accent hover:border-accent/60 hover:text-accent dark:border-accent-dark/60 dark:text-accent-dark dark:hover:border-accent-dark/60 dark:hover:text-accent-dark',
               ]}
             >
               {n}
@@ -72,6 +72,6 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
   @reference "../styles/global.css";
 
   .pager-link {
-    @apply inline-flex h-10 items-center justify-center rounded-full border border-line bg-paper-elev text-xs font-medium text-ink-soft transition-colors hover:border-accent/40 hover:text-ink dark:border-line-dark dark:bg-night-elev dark:text-snow-soft dark:hover:border-accent-dark/40 dark:hover:text-snow;
+    @apply inline-flex h-10 items-center justify-center rounded-md border border-line/70 text-xs font-medium text-ink-soft transition-colors hover:border-accent/50 hover:text-accent dark:border-line-dark/70 dark:text-snow-soft dark:hover:border-accent-dark/50 dark:hover:text-accent-dark;
   }
 </style>

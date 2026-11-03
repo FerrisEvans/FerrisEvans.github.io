@@ -1,6 +1,5 @@
 ---
 import { formatDate, postUrl, readingTime, type Post } from '../utils/posts';
-import CardCover from './CardCover.astro';
 import CategoryBadge from './CategoryBadge.astro';
 import TagChip from './TagChip.astro';
 
@@ -13,85 +12,72 @@ const { post, featured = false } = Astro.props;
 const minutes = readingTime(post);
 ---
 
-<article
-  class:list={[
-    'post-card group relative overflow-hidden rounded-xl border border-line bg-paper-elev dark:border-line-dark dark:bg-night-elev',
-    featured ? 'grid md:grid-cols-[1.05fr_1fr]' : 'flex flex-col',
-  ]}
->
-  <CardCover
-    category={post.data.category}
-    class={featured ? 'aspect-[16/8] md:aspect-auto md:h-full md:min-h-80' : 'aspect-[16/9]'}
-  />
-  <div class:list={['flex flex-1 flex-col', featured ? 'gap-4 p-6 sm:p-8' : 'gap-3 p-5']}>
-    <div class="flex flex-wrap items-center gap-3">
-      <CategoryBadge category={post.data.category} />
-      <time datetime={post.data.pubDate.toISOString()} class="text-xs text-ink-faint dark:text-snow-faint">
+{featured ? (
+  <article class="group relative py-2">
+    <div class="md:grid md:grid-cols-[minmax(0,1fr)_11rem] md:gap-10">
+      <div>
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <CategoryBadge category={post.data.category} />
+          <time datetime={post.data.pubDate.toISOString()} class="font-mono text-xs text-ink-faint dark:text-snow-faint">
+            {formatDate(post.data.pubDate)}
+          </time>
+          <span class="text-xs text-ink-faint dark:text-snow-faint">{minutes} 分钟阅读</span>
+        </div>
+        <h2 class="mt-5 max-w-3xl font-serif text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+          <a
+            href={postUrl(post)}
+            class="transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark"
+          >
+            {post.data.title}
+          </a>
+        </h2>
+        {post.data.description && (
+          <p class="mt-4 max-w-2xl text-[0.9375rem] leading-7 text-ink-soft dark:text-snow-soft">
+            {post.data.description}
+          </p>
+        )}
+      </div>
+      <div class="mt-6 flex flex-wrap items-center justify-between gap-4 md:mt-0 md:flex-col md:items-end md:justify-between">
+        {post.data.tags.length > 0 && (
+          <div class="flex flex-wrap gap-x-3 gap-y-1 md:justify-end">
+            {post.data.tags.slice(0, 4).map((tag) => <TagChip tag={tag} />)}
+          </div>
+        )}
+        <span class="inline-flex items-center gap-2 text-sm font-medium text-accent dark:text-accent-dark">
+          阅读全文
+          <span aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+        </span>
+      </div>
+    </div>
+  </article>
+) : (
+  <article class="group relative py-6 sm:py-7">
+    <div class="grid gap-3 sm:grid-cols-[7.5rem_minmax(0,1fr)_auto] sm:gap-x-6">
+      <time datetime={post.data.pubDate.toISOString()} class="font-mono text-xs leading-6 text-ink-faint dark:text-snow-faint sm:pt-1">
         {formatDate(post.data.pubDate)}
       </time>
-      <span aria-hidden="true" class="text-xs text-ink-faint dark:text-snow-faint">·</span>
-      <span class="text-xs text-ink-faint dark:text-snow-faint">{minutes} 分钟</span>
-    </div>
-    <h2 class:list={['font-serif font-bold leading-snug tracking-tight', featured ? 'text-2xl sm:text-3xl' : 'text-xl']}>
-      <a
-        href={postUrl(post)}
-        class="post-card-title text-ink transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark"
-      >
-        {post.data.title}
-      </a>
-    </h2>
-    {post.data.description && (
-      <p class:list={['text-ink-soft dark:text-snow-soft', featured ? 'text-[0.9375rem] leading-7' : 'line-clamp-2 text-sm leading-6']}>
-        {post.data.description}
-      </p>
-    )}
-    <div class="mt-auto flex flex-wrap items-end justify-between gap-3 pt-3">
-      {post.data.tags.length > 0 ? (
-        <div class="flex flex-wrap gap-1.5">
-          {post.data.tags.slice(0, featured ? 4 : 3).map((tag) => <TagChip tag={tag} />)}
+      <div class="min-w-0">
+        <h2 class="pr-6 font-serif text-xl font-semibold leading-snug tracking-tight sm:pr-0 sm:text-2xl">
+          <a
+            href={postUrl(post)}
+            class="transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark"
+          >
+            {post.data.title}
+          </a>
+        </h2>
+        {post.data.description && (
+          <p class="mt-2 line-clamp-2 max-w-2xl text-sm leading-6 text-ink-soft dark:text-snow-soft">
+            {post.data.description}
+          </p>
+        )}
+        <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <CategoryBadge category={post.data.category} />
+          <span class="text-xs text-ink-faint dark:text-snow-faint">{minutes} 分钟</span>
         </div>
-      ) : <span />}
-      {featured && (
-        <span class="ml-auto inline-flex items-center gap-1.5 text-sm font-medium text-accent dark:text-accent-dark">
-          阅读全文
-          <svg class="h-4 w-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14m-5-5 5 5-5 5" />
-          </svg>
-        </span>
-      )}
+      </div>
+      <span aria-hidden="true" class="absolute right-0 top-7 text-lg text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent dark:text-snow-faint dark:group-hover:text-accent-dark sm:static sm:self-center">
+        →
+      </span>
     </div>
-  </div>
-</article>
-
-<style>
-  @reference "../styles/global.css";
-
-  .post-card {
-    box-shadow: 0 12px 30px -24px rgb(79 58 31 / 0.32);
-    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 220ms ease, box-shadow 260ms ease;
-  }
-
-  .post-card:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-line));
-    box-shadow: 0 18px 36px -26px rgb(121 85 40 / 0.36);
-  }
-
-  :global(.dark) .post-card:hover {
-    border-color: color-mix(in srgb, var(--color-accent-dark) 42%, var(--color-line-dark));
-    box-shadow: 0 20px 40px -26px rgb(0 0 0 / 0.6);
-  }
-
-  .post-card:has(.post-card-title:focus-visible) {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
-  }
-
-  :global(.dark) .post-card:has(.post-card-title:focus-visible) {
-    outline-color: var(--color-accent-dark);
-  }
-
-  .post-card-title:focus-visible {
-    outline: none;
-  }
-</style>
+  </article>
+)}

@@ -47,7 +47,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       (function () {
         var stored;
         try { stored = localStorage.getItem('theme'); } catch {}
-        if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (stored !== 'light') {
           document.documentElement.classList.add('dark');
         }
       })();

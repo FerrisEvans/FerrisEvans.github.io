@@ -10,20 +10,20 @@ const zen = ABOUT.zen.lines;
 
 <Base title="关于">
   <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header p-7 sm:p-9">
+    <header class="page-header">
       <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-        <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover shadow-sm dark:border-line-dark" />
+        <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover dark:border-line-dark" />
         <div>
           <p class="eyebrow">About / 关于</p>
-          <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">{aboutGreeting(SITE.author)}</h1>
+          <h1 class="mt-3 font-serif text-4xl font-semibold tracking-tight">{aboutGreeting(SITE.author)}</h1>
           <p class="mt-4 max-w-2xl leading-8 text-ink-soft dark:text-snow-soft">
             {ABOUT.intro}
           </p>
-          <div class="mt-5 flex flex-wrap gap-2.5">
-            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-10 items-center rounded-full bg-ink px-4 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85">
+          <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-3">
+            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-10 items-center rounded-md bg-ink px-4 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85">
               GitHub <span class="ml-1.5" aria-hidden="true">↗</span>
             </a>
-            <a href={`mailto:${SITE.email}`} class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm text-ink-soft transition-colors hover:border-ink/20 hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:border-white/20 dark:hover:text-snow">
+            <a href={`mailto:${SITE.email}`} class="inline-flex min-h-10 items-center text-sm text-ink-soft underline decoration-line underline-offset-4 transition-colors hover:text-accent dark:text-snow-soft dark:decoration-line-dark dark:hover:text-accent-dark">
               {SITE.email}
             </a>
           </div>
@@ -31,17 +31,17 @@ const zen = ABOUT.zen.lines;
       </div>
     </header>
 
-    <section aria-labelledby="interests-heading" class="mt-10">
+    <section aria-labelledby="interests-heading" class="mt-12">
       <p class="eyebrow">Interests / 研究方向</p>
       <h2 id="interests-heading" class="sr-only">研究方向</h2>
-      <div class="mt-4 grid gap-3 sm:grid-cols-3">
+      <div class="mt-4 grid gap-x-8 border-b border-line dark:border-line-dark sm:grid-cols-3">
         {interests.map((cat, index) => (
-          <a href={`/categories/${cat.slug}/`} class="group rounded-xl border border-line bg-paper-elev p-5 transition-colors hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20">
+          <a href={`/categories/${cat.slug}/`} class="group border-t border-line py-5 dark:border-line-dark">
             <div class="flex items-center justify-between">
               <span class="font-mono text-xs text-ink-faint dark:text-snow-faint">0{index + 1}</span>
               <span class="font-mono text-sm" style={`color: ${cat.accent};`}>{cat.mark}</span>
             </div>
-            <h3 class="mt-4 font-serif text-lg font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
+            <h3 class="mt-4 font-serif text-lg font-semibold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
             <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
           </a>
         ))}
@@ -50,7 +50,7 @@ const zen = ABOUT.zen.lines;
 
     <section aria-labelledby="principles-heading" class="mt-14">
       <p class="eyebrow">Notes to self</p>
-      <h2 id="principles-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">一些相信的事</h2>
+      <h2 id="principles-heading" class="mt-2 font-serif text-2xl font-semibold tracking-tight">一些相信的事</h2>
       <ol class="mt-5 sm:grid sm:grid-cols-2 sm:gap-x-10">
         {principles.map((principle, index) => (
           <li class="flex gap-4 border-t border-line py-4 dark:border-line-dark">
@@ -63,15 +63,15 @@ const zen = ABOUT.zen.lines;
 
     <section aria-labelledby="quotes-heading" class="mt-14">
       <p class="eyebrow">On practice</p>
-      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">{ABOUT.practice.title}</h2>
+      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-semibold tracking-tight">{ABOUT.practice.title}</h2>
       <blockquote class="mt-6 border-l-2 border-accent/50 pl-5 text-[0.9375rem] leading-8 text-ink-soft dark:border-accent-dark/50 dark:text-snow-soft">
         {ABOUT.practice.quotes.map((quote, index) => <p class={index > 0 ? 'mt-4' : undefined}>{quote}</p>)}
         <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">{ABOUT.practice.attribution}</footer>
       </blockquote>
     </section>
 
-    <div class="mt-14 space-y-4">
-      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+    <div class="mt-14 divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
+      <details class="about-disclosure py-5">
         <summary>{ABOUT.zen.title} <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">{ABOUT.zen.author}</span></summary>
         <div class="prose-custom mt-5">
           <pre><code class="language-python">{ABOUT.zen.command}</code></pre>
@@ -79,7 +79,7 @@ const zen = ABOUT.zen.lines;
         </div>
       </details>
 
-      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+      <details class="about-disclosure py-5">
         <summary>{ABOUT.formatting.title}</summary>
         <div class="prose-custom mt-5">
           {ABOUT.formatting.paragraphs.map((paragraph) => (

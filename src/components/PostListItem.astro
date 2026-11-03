@@ -13,29 +13,34 @@ const { post, headingLevel = 2, showTags = false } = Astro.props;
 const Heading = headingLevel === 3 ? 'h3' : 'h2';
 ---
 
-<li class="group relative rounded-xl border border-line bg-paper-elev p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40 sm:flex sm:items-center sm:justify-between sm:gap-6">
-  <div class="min-w-0">
-    <Heading class="font-serif text-lg font-bold leading-snug">
-      <a href={postUrl(post)} class="transition-colors after:absolute after:inset-0 after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
-        {post.data.title}
-      </a>
-    </Heading>
-    {post.data.description && (
-      <p class="mt-1.5 line-clamp-1 text-sm leading-6 text-ink-soft dark:text-snow-soft">{post.data.description}</p>
-    )}
-    {showTags ? (
-      post.data.tags.length > 0 && (
-        <div class="mt-3 flex flex-wrap gap-1.5">
-          {post.data.tags.map((tag) => <TagChip tag={tag} />)}
+<li class="group relative py-6">
+  <div class="grid gap-3 sm:grid-cols-[7.5rem_minmax(0,1fr)_auto] sm:gap-x-6">
+    <time datetime={post.data.pubDate.toISOString()} class="font-mono text-xs leading-6 text-ink-faint dark:text-snow-faint sm:pt-1">
+      {formatDate(post.data.pubDate)}
+    </time>
+    <div class="min-w-0">
+      <Heading class="pr-6 font-serif text-xl font-semibold leading-snug sm:pr-0">
+        <a href={postUrl(post)} class="transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
+          {post.data.title}
+        </a>
+      </Heading>
+      {post.data.description && (
+        <p class="mt-2 line-clamp-2 max-w-2xl text-sm leading-6 text-ink-soft dark:text-snow-soft">{post.data.description}</p>
+      )}
+      {showTags ? (
+        post.data.tags.length > 0 && (
+          <div class="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+            {post.data.tags.map((tag) => <TagChip tag={tag} />)}
+          </div>
+        )
+      ) : (
+        <div class="mt-3">
+          <CategoryBadge category={post.data.category} />
         </div>
-      )
-    ) : (
-      <div class="mt-3">
-        <CategoryBadge category={post.data.category} />
-      </div>
-    )}
+      )}
+    </div>
+    <span aria-hidden="true" class="absolute right-0 top-7 text-lg text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent dark:text-snow-faint dark:group-hover:text-accent-dark sm:static sm:self-center">
+      →
+    </span>
   </div>
-  <time datetime={post.data.pubDate.toISOString()} class="mt-3 block shrink-0 text-sm text-ink-faint dark:text-snow-faint sm:mt-0">
-    {formatDate(post.data.pubDate)}
-  </time>
 </li>

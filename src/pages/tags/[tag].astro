@@ -23,21 +23,19 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
 ---
 
 <Base title={`标签 · ${tag}`}>
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
+  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
     <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
       <a href="/tags/" class="transition-colors hover:text-ink dark:hover:text-snow">标签</a>
       <span>/</span>
       <span class="text-ink-soft dark:text-snow-soft">#{tag}</span>
     </nav>
-    <header class="page-header mb-10 p-7 sm:p-9">
+    <header class="page-header mb-10">
       <p class="eyebrow">Tag / 标签</p>
       <h1 class="page-title">#{tag}</h1>
       <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {posts.length} 篇文章。</p>
     </header>
-    <ul class="space-y-3">
-      {
-        posts.map((post) => <PostListItem post={post} />)
-      }
+    <ul class="divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
+      {posts.map((post) => <PostListItem post={post} />)}
     </ul>
   </div>
 </Base>

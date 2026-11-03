@@ -1,9 +1,8 @@
 ---
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
-import CardCover from '../../components/CardCover.astro';
 import PostListItem from '../../components/PostListItem.astro';
-import { categoriesFor, labelFromSlug, type CategoryDef } from '../../data/site';
+import { categoriesFor, labelFromSlug } from '../../data/site';
 import { getPosts, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
@@ -17,7 +16,7 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-const { category, posts } = Astro.props as { category: CategoryDef; posts: Post[] };
+const { category, posts } = Astro.props as { category: ReturnType<typeof categoriesFor>[number]; posts: Post[] };
 
 const groups: { label: string; posts: Post[] }[] = [];
 const grouped = new Map<string, Post[]>();
@@ -35,30 +34,27 @@ for (const key of orderedKeys) {
 ---
 
 <Base title={category.label} description={category.description}>
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
+  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
     <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
       <a href="/categories/" class="transition-colors hover:text-ink dark:hover:text-snow">分类</a>
       <span>/</span>
       <span class="text-ink-soft dark:text-snow-soft">{category.label}</span>
     </nav>
 
-    <header class="surface-card mb-12 overflow-hidden">
-      <CardCover category={category.slug} class="aspect-[16/9] sm:aspect-[3/1]" />
-      <div class="p-6 sm:p-8">
-        <p class="eyebrow">Category / 分类</p>
-        <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">{category.label}</h1>
-        <p class="mt-3 text-sm leading-7 text-ink-soft dark:text-snow-soft">{category.description} · 共 {posts.length} 篇</p>
-      </div>
+    <header class="page-header mb-12">
+      <p class="eyebrow">Category / {category.mark}</p>
+      <h1 class="page-title">{category.label}</h1>
+      <p class="mt-4 max-w-2xl text-sm leading-7 text-ink-soft dark:text-snow-soft">{category.description} · 共 {posts.length} 篇</p>
     </header>
 
     {
       groups.map((group) => (
         <section class="mb-12">
-          <h2 class="mb-5 flex items-center gap-3 font-serif text-xl font-bold">
+          <h2 class="mb-5 flex items-center gap-3 font-serif text-xl font-semibold">
             {group.label}
-            <span class="text-sm font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
+            <span class="font-sans text-xs font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
           </h2>
-          <ul class="space-y-3">
+          <ul class="divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
             {group.posts.map((post) => <PostListItem post={post} headingLevel={3} showTags />)}
           </ul>
         </section>

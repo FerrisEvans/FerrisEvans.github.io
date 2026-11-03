@@ -14,37 +14,37 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
 
 <Base title="标签">
   <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-7 p-7 sm:p-9">
+    <header class="page-header mb-8">
       <p class="eyebrow">Tags / 主题索引</p>
       <h1 class="page-title">标签</h1>
       <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {tags.length} 个标签，按文章数量排列。</p>
     </header>
 
-    <div class="mb-7 flex sm:justify-end">
+    <div class="mb-8 flex sm:justify-end">
       <input
         id="tag-filter"
         type="search"
         placeholder="筛选标签…"
         aria-label="筛选标签"
-        class="w-full rounded-xl border border-line bg-paper-elev px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent dark:border-line-dark dark:bg-night-elev dark:text-snow dark:placeholder:text-snow-faint dark:focus:border-accent-dark sm:w-64"
+        class="w-full rounded-md border border-line bg-transparent px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent dark:border-line-dark dark:text-snow dark:placeholder:text-snow-faint dark:focus:border-accent-dark sm:w-64"
       />
     </div>
 
-    <div class="flex flex-wrap gap-2.5">
+    <div class="flex flex-wrap gap-x-5 gap-y-3">
       {
         tags.map(([tag, count]) => (
           <a
             href={`/tags/${encodeURIComponent(tag)}/`}
             data-tag={tag.toLowerCase()}
-            class="tag-item group inline-flex min-h-10 items-center gap-2 rounded-full border border-line bg-paper-elev px-3.5 py-2 text-sm transition-colors hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
+            class="tag-item group inline-flex min-h-8 items-center gap-2 border-b border-transparent text-sm text-ink-soft transition-colors hover:border-accent/60 hover:text-accent dark:text-snow-soft dark:hover:border-accent-dark/60 dark:hover:text-accent-dark"
           >
             <span>#{tag}</span>
-            <span class="rounded-full bg-ink/[0.05] px-1.5 py-0.5 font-mono text-[0.625rem] leading-none text-ink-faint dark:bg-white/[0.07] dark:text-snow-faint">{count}</span>
+            <span class="font-mono text-[0.625rem] leading-none text-ink-faint dark:text-snow-faint">{count}</span>
           </a>
         ))
       }
     </div>
-    <p id="tag-empty" hidden class="rounded-xl border border-dashed border-line p-6 text-sm text-ink-faint dark:border-line-dark dark:text-snow-faint">没有匹配的标签。</p>
+    <p id="tag-empty" hidden class="border-y border-line py-6 text-sm text-ink-faint dark:border-line-dark dark:text-snow-faint">没有匹配的标签。</p>
   </div>
 
   <script is:inline>

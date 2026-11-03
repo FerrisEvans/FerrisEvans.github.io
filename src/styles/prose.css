@@ -9,7 +9,7 @@
 .prose-custom h2,
 .prose-custom h3,
 .prose-custom h4 {
-  @apply relative font-serif font-bold tracking-tight text-ink dark:text-snow scroll-mt-24;
+  @apply relative font-serif font-semibold tracking-tight text-ink dark:text-snow scroll-mt-24;
 }
 
 .prose-custom h2 {
@@ -202,7 +202,7 @@
 }
 
 .prose-custom details {
-  @apply my-6 rounded-xl border border-line bg-paper-elev px-5 py-4 dark:border-line-dark dark:bg-night-elev;
+  @apply my-6 border-y border-line py-4 dark:border-line-dark;
 }
 
 .prose-custom summary {

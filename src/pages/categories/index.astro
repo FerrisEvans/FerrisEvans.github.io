@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import CardCover from '../../components/CardCover.astro';
 import { categoriesFor } from '../../data/site';
 import { getPosts } from '../../utils/posts';
 
@@ -10,32 +9,28 @@ const countOf = (slug: string) => posts.filter((post) => post.data.category === 
 ---
 
 <Base title="分类">
-  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-10 p-7 sm:p-9">
+  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
+    <header class="page-header mb-10">
       <p class="eyebrow">Categories / 知识地图</p>
       <h1 class="page-title">分类</h1>
       <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {categories.length} 个分类，{posts.length} 篇文章。</p>
     </header>
-    <div class="grid gap-5 sm:grid-cols-2">
+    <div class="grid gap-x-10 border-b border-line dark:border-line-dark sm:grid-cols-2">
       {
         categories.map((cat, index) => (
-          <a
-            href={`/categories/${cat.slug}/`}
-            class="group overflow-hidden rounded-2xl border border-line bg-paper-elev transition-all duration-200 hover:-translate-y-0.5 hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20"
-          >
-            <CardCover category={cat.slug} class="aspect-[16/9] sm:aspect-[21/9]" />
-            <div class="flex items-start justify-between gap-4 p-6">
-              <div>
-                <p class="eyebrow">{String(index + 1).padStart(2, '0')} / Category</p>
-                <h2 class="mt-2 font-serif text-xl font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
-                  {cat.label}
-                </h2>
-                <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
-              </div>
-              <span class="shrink-0 rounded-full bg-ink/[0.05] px-2.5 py-1 text-xs font-medium text-ink-soft dark:bg-white/[0.07] dark:text-snow-soft">
-                {countOf(cat.slug)} 篇
+          <a href={`/categories/${cat.slug}/`} class="group border-t border-line py-7 dark:border-line-dark">
+            <div class="flex items-center justify-between gap-4">
+              <span class="flex items-center gap-3 font-mono text-xs text-ink-faint dark:text-snow-faint">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <span style={`color: ${cat.accent};`}>{cat.mark}</span>
               </span>
+              <span class="text-xs text-ink-faint dark:text-snow-faint">{countOf(cat.slug)} 篇</span>
             </div>
+            <h2 class="mt-4 flex items-center justify-between gap-4 font-serif text-2xl font-semibold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
+              {cat.label}
+              <span aria-hidden="true" class="font-sans text-base font-normal text-ink-faint transition-all group-hover:translate-x-1 group-hover:text-accent dark:text-snow-faint dark:group-hover:text-accent-dark">→</span>
+            </h2>
+            <p class="mt-3 max-w-md text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
           </a>
         ))
       }
