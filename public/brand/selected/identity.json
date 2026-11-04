@@ -16,7 +16,7 @@
   "source": "praxis-system-v5-lock Magazine Lo-fi Pixel. Runtime wordmark is src/components/Brand.astro; selected/wordmark-*.svg are static refs.",
   "component": "src/components/Brand.astro",
   "faviconRoot": "/assets/img/favicons/",
-  "cacheVersion": "praxis-5",
+  "cacheVersion": "praxis-6",
   "dataBrand": "magazine-lofi",
   "dataBrandVersion": "praxis-5",
   "palette": {
