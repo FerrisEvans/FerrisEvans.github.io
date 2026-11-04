@@ -13,7 +13,7 @@
 ```mermaid
 flowchart TD
   Home["首页 /：Hero + 双 CTA"] --> Preload["后台下载书房资源；左下角显示进度"]
-  Home --> Blog["进入实践志 /lofi/"]
+  Home --> Blog["进入博客 /lofi/"]
   Preload --> Enter["进入书房 /room/"]
   Enter --> Prepare["复用缓存；继续下载、解码、准备完整场景"]
   Prepare --> Active["自动进入完整可交互房间"]

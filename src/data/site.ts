@@ -2,7 +2,7 @@ export const SITE = {
   title: 'Praxis',
   tagline: '保持好奇，慢慢来',
   description:
-    'AI 工程实践笔记：读、试、记。从问题到动手，把学到的炼成可用的笔记。',
+    '编程、游戏开发与 AI 的学习笔记。读一点，试一点，记下一点点。',
   intro: '记录编程语言、游戏开发与人工智能的学习、实践和思考。',
   author: 'Ferris',
   email: 'ferris.evans@outlook.com',
@@ -69,7 +69,7 @@ export const CATEGORIES: CategoryDef[] = [
   {
     slug: 'game-dev',
     label: '游戏开发',
-    description: 'Godot 引擎架构、节点系统、渲染帧率与游戏设计实践笔记',
+    description: 'Godot 引擎架构、节点系统、渲染帧率与游戏设计笔记',
     accent: '#c66a24',
     mark: '◇',
     subcategories: { godot: 'Godot', 'game-design': '游戏设计' },

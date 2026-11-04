@@ -18,15 +18,15 @@ const { posterVersion, assetVersion } = Astro.props;
       <p class="home-intro">{SITE.intro}</p>
       <nav class="home-exits" aria-label="选择入口">
         <a id="home-enter-room" class="home-primary" href="/room/">进入书房 <span class="home-dimension">3D</span><span aria-hidden="true">↗</span></a>
-        <a id="home-enter-blog" class="home-secondary" href="/lofi/">进入实践志 <span aria-hidden="true">→</span></a>
+        <a id="home-enter-blog" class="home-secondary" href="/lofi/">进入博客 <span aria-hidden="true">→</span></a>
       </nav>
-      <p class="home-signature">{SITE.title.toUpperCase()} / 实践志</p>
+      <p class="home-signature">{SITE.title.toUpperCase()} / {SITE.author.toUpperCase()}</p>
     </section>
     <aside id="home-preload" class="home-preload" data-state="idle" data-asset-version={assetVersion} aria-label="书房资源预加载">
       <p id="home-preload-status" role="status" aria-live="polite">书房资源准备中…</p>
       <progress id="home-preload-progress" value="0" max="100" aria-label="书房资源预加载进度"></progress>
       <button id="home-preload-retry" type="button" hidden>重试预加载</button>
-      <noscript><p>进入书房需要启用 JavaScript，实践志可直接阅读。</p></noscript>
+      <noscript><p>进入书房需要启用 JavaScript，博客可直接阅读。</p></noscript>
     </aside>
   </div>
 </main>
