@@ -35,18 +35,31 @@ function walkFiles(dir, extension) {
 const htmlFiles = walkFiles(distDir, '.html');
 // Room resources live in JSON rather than href/src, so HTML link checks alone
 // cannot detect a missing texture, stale size, or an accidentally pruned model.
+const roomManifests = [];
 for (const entry of ['index.html', 'room/index.html']) {
   const html = fs.readFileSync(path.join(distDir, entry), 'utf8');
   const manifest = html.match(/<script\b[^>]*id="room-assets"[^>]*>([\s\S]*?)<\/script>/);
   if (!manifest || !/data-asset-version="[a-f0-9]{20}"/.test(html)) {
     throw new Error(`Missing versioned room resource manifest in ${entry}`);
   }
+  roomManifests.push(manifest[1]);
   for (const asset of JSON.parse(manifest[1])) {
     const target = path.join(distDir, asset.url);
     if (!fs.existsSync(target) || fs.statSync(target).size !== asset.bytes) {
       throw new Error(`Missing or stale room resource in ${entry}: ${asset.url}`);
     }
   }
+}
+if (roomManifests[0] !== roomManifests[1]) {
+  throw new Error('Homepage preload and room entry must use the same versioned asset manifest');
+}
+const homepage = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
+for (const [id, href] of [['home-enter-room', '/room/'], ['home-enter-blog', '/lofi/']]) {
+  const anchor = [...homepage.matchAll(/<a\b[^>]*>/g)].find(match => match[0].includes(`id="${id}"`));
+  if (!anchor?.[0].includes(`href="${href}"`)) throw new Error(`Missing homepage destination: ${id} -> ${href}`);
+}
+if (!homepage.includes('id="home-preload"') || homepage.includes('id="scene"')) {
+  throw new Error('Homepage must contain background preload status rather than the room scene');
 }
 const release = JSON.parse(fs.readFileSync(path.join(distDir, 'release.json'), 'utf8'));
 if (!/^\d+\.\d+\.\d+$/.test(release.version) || !/^[a-f0-9]{40}$/.test(release.revision) || !release.roomBuildId) {

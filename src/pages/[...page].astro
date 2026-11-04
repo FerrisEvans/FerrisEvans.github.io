@@ -75,7 +75,7 @@ const categoryPatterns: CardProps["pattern"][] = ["app-pink", "app-yellow", "app
       </header>
       <nav class="topic-paths" aria-label="按分类浏览">{categories.map((cat,index) => <a href={`/categories/${cat.slug}/`}><Card pattern={categoryPatterns[index%categoryPatterns.length]} hoverable className="topic-card"><Icon name={categoryIcons[cat.slug] ?? 'book'} size={42} /><span class="topic-copy"><strong>{cat.label}</strong><small>{categoryCounts[cat.slug]} 篇小笔记</small></span><Icon name="arrow-right" size={18} /></Card></a>)}</nav>
       <div class="featured-grid">
-        <section aria-label="精选实践">{featured && <PostCard post={featured} featured />}</section>
+        <section aria-label="精选文章">{featured && <PostCard post={featured} featured />}</section>
         <aside aria-labelledby="island-notice-title"><Card pattern="app-yellow" className="island-notice"><div class="notice-heading"><Icon name="coffee" size={45} /><Icon name="heart" size={30} /></div><h2 id="island-notice-title">不着急，坐一会儿。</h2><p>这里有 {total} 篇笔记，<br />也有还在慢慢生长的好奇心。</p><p>编程、游戏和一些新的尝试，<br />都从一个小问题开始。</p><a href="/rss.xml" class="notice-about"><Icon name="rss" size={21} />订阅 {SITE.title} 的新消息<Icon name="arrow-right" size={18} /></a></Card></aside>
       </div>
     </> : <header class="page-header"><p class="island-eyebrow"><Icon name="book" size={26} /> 小岛笔记 · 第 {page.currentPage} 页</p><h1 class="island-heading">继续翻一页。</h1><p class="island-lead">共 {total} 篇笔记，每一篇都是探索留下的小脚印。</p></header>}

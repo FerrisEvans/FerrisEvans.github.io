@@ -42,16 +42,26 @@ async function waitForLinkHitTarget(link) {
   assert.fail(`Navigation link remains blocked: ${await link.getAttribute('href')}`);
 }
 
-async function assertVisibleTitle(page) {
-  const title = page.getByRole('heading', { level: 1 });
-  assert.match(await title.innerText(), /保持好奇/);
+async function assertVisibleTitle(page, pattern) {
+  const title = page.getByRole('heading', { level: 1, name: pattern });
+  assert.match(await title.innerText(), pattern);
   const invisible = await title.evaluate((heading) =>
     [heading, ...heading.querySelectorAll('*')].some((element) => {
       const style = getComputedStyle(element);
       return style.opacity === '0' || style.visibility === 'hidden' || style.display === 'none';
     }),
   );
-  assert.equal(invisible, false, 'LO-FI title must be visible without hydration');
+  assert.equal(invisible, false, 'page title must be visible without hydration');
+}
+
+async function assertStaticEntrances(page) {
+  await page.goto(url('/'));
+  await assertVisibleTitle(page, /Praxis/i);
+  assert.equal(await page.locator('#home-enter-room').getAttribute('href'), '/room/');
+  assert.equal(await page.locator('#home-enter-blog').getAttribute('href'), '/lofi/');
+  await page.locator('#home-enter-blog').click();
+  await page.waitForURL(url('/lofi/'));
+  await assertVisibleTitle(page, /保持好奇，慢慢来/);
 }
 
 try {
@@ -60,11 +70,10 @@ try {
   await verifyLegacyWorkerRetirement(browser);
   const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const noJsPage = await noJs.newPage();
-  await noJsPage.goto(url('/lofi/'));
-  await assertVisibleTitle(noJsPage);
+  await assertStaticEntrances(noJsPage);
   await screenshot(noJsPage, 'lofi-no-js');
   const fallbackNav = noJsPage.locator('.no-script-navigation');
-  for (const path of ['/lofi/', '/categories/', '/tags/', '/archives/', '/about/', '/']) {
+  for (const path of ['/lofi/', '/categories/', '/tags/', '/archives/', '/about/', '/room/']) {
     const link = fallbackNav.locator(`a[href="${path}"]`);
     assert(await link.isVisible(), `navigation to ${path} must be available without JavaScript`);
     if (noJsPage.url() !== url(path)) {
@@ -81,11 +90,10 @@ try {
   const blockedJs = await browser.newContext();
   await blockedJs.route('**/*', (route) => route.request().resourceType() === 'script' ? route.abort() : route.continue());
   const blockedPage = await blockedJs.newPage();
-  await blockedPage.goto(url('/lofi/'));
-  await assertVisibleTitle(blockedPage);
+  await assertStaticEntrances(blockedPage);
   await screenshot(blockedPage, 'lofi-blocked-js');
   await blockedJs.close();
-  console.log('PASS: LO-FI title survives disabled JavaScript and failed script requests');
+  console.log('PASS: homepage entrances and blog title survive disabled JavaScript and failed script requests');
 
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   await context.route('https://giscus.app/**', (route) => route.abort());

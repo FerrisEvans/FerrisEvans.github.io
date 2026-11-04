@@ -11,6 +11,8 @@ import { createDeskDetails } from './desk-details';
 import { createCalculator,createCD,calculatorKeys } from './gadgets';
 import { tapes } from './tapes';
 import { createPlayback } from './playback';
+import { createTVStartup } from './tv-startup';
+import { paintTVStartup } from './tv-startup-screen';
 import { createHomeTimeline, isHomePlaying } from './home-program';
 import { renderPixelRatio } from './quality';
 import { yieldForLoading, type LoadingReporter } from './loading';
@@ -97,16 +99,42 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     let paperHidden=false,choosingTape=false;
     const deck=createPlayback(tapes.length);
     const home=createHomeTimeline();
+    const tvStartup=createTVStartup();
     let homeRequested:boolean|null=null,homeAdvancing=false;
     const homeTime=()=>lighting.film?.time??home.time;
     function syncTelevision(){const{selected,transport,time,powered,source,page}=deck.state;
-      if(!powered||source!=='home')lighting.film?.setPlaying(false);
+      if(!powered||source!=='home'||tvStartup.waiting)lighting.film?.setPlaying(false);
       lighting.setPower(powered);
       if(!powered)lighting.setProgram('off');
+      else if(tvStartup.waiting){
+        lighting.setProgram('blank');
+        paintTVStartup(gltf.scene);
+      }
       else if(source==='posts')lighting.setPosts(content,page);
       else if(source==='tape'&&selected!==null){if(props.loading)lighting.setProgram('blank');else lighting.setTape(tapes[selected],time,transport!=='playing');}
       else lighting.setHome(homeTime(),reduced&&homeRequested===null);
       room.dataset.channel=powered?source:'off';room.dataset.television=powered?'on':'off';room.dataset.tvSource=source;
+      room.dataset.tvStartup=tvStartup.phase;room.dataset.tvPowerCycle=String(tvStartup.cycle);
+    }
+    function startTelevision(isReduced=false,skipPrompt=false){
+      reduced=isReduced;tvStartup.power(true,performance.now()/1000,reduced);
+      if(skipPrompt)tvStartup.play();
+      syncTelevision();
+    }
+    function togglePower(){
+      deck.power();tvStartup.power(deck.state.powered,performance.now()/1000,reduced);
+      if(deck.state.powered)homeRequested=null;
+      syncTelevision();callbacks.feedback(deck.state.powered?'电视已打开 · 点击电视播放节目':'电视已关闭');
+    }
+    function playTelevision(){
+      if(!tvStartup.play())return;
+      if(deck.state.source==='home'){
+        homeRequested=true;
+        // Retry within the click's user activation when browser policy blocked
+        // a previous play(). No audio permission is implied by this action.
+        lighting.film?.setPlaying(false);lighting.film?.setPlaying(true);
+      }
+      syncTelevision();callbacks.feedback('播放电视节目');
     }
     let lampOn=true,lampLevel=1,musicOn=false,volume=.6,tracking=0,chroma=1,underscan=false,delay=false,blue=false;
     function toggleLamp(){
@@ -125,7 +153,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     }
     function adjust(id:TVSetting,amount:number){tune(id,({volume,tracking,chroma})[id]+amount);}
     function setPaper(raised:boolean){cancelPendingAction();paperHidden=!raised;props.setPaper(raised,performance.now()/1000,reduced,navigation.workPose);navigation.paper(raised,performance.now(),reduced);room.dataset.paper=raised?'up':'down';callbacks.feedback(raised?'选择录像带 · ESC 放下记事本 · N 再次拿起':'选择录像带 · N 拿起记事本 · ESC 返回桌面',false);callbacks.wake();}
-    function beginTape(index:number){deck.select(index);const selected=deck.state.selected!;
+    function beginTape(index:number){deck.select(index);tvStartup.play();const selected=deck.state.selected!;
       props.selectTape(tapes[selected],performance.now()/1000,reduced);surfaces?.selectTape(selected);
       syncTelevision();callbacks.feedback(`录像带 ${selected+1} · ${tapes[selected].title}`);callbacks.wake();}
     function chooseTape(index:number){const next=((index%tapes.length)+tapes.length)%tapes.length;
@@ -142,7 +170,14 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       if(id.startsWith('calc:')){calculator.press(calculatorKeys[Number(id.split(':')[1])]);callbacks.wake();return;}
       if(id.startsWith('tape:')){chooseTape(Number(id.split(':')[1]));return;}
       switch(id){
-        case 'home-play':homeRequested=!(homeRequested??!reduced);callbacks.feedback(homeRequested?'播放 Home 节目':'Home 节目已暂停');break;
+        case 'home-play':
+          if(tvStartup.waiting||lighting.film?.failed){playTelevision();break;}
+          homeRequested=!(homeRequested??!reduced);callbacks.feedback(homeRequested?'播放 Home 节目':'Home 节目已暂停');break;
+        case 'television':
+          if(!deck.state.powered)togglePower();
+          else if(tvStartup.waiting||lighting.film?.failed)playTelevision();
+          else inspect('tv');
+          break;
         case 'pager':details.page(currentTime);callbacks.feedback('收到消息 · 打开在线联系');openAfterFeedback('online');break;
         case 'floppy':props.nudge('Desk_Floppy_Shutter',currentTime);callbacks.feedback('读取 ABOUT.DAT · 关于 Ferris');openAfterFeedback('about');break;
         case 'pencil':props.nudge('Desk_Pencil',currentTime);break;
@@ -168,11 +203,11 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
         case 'window': inspect('window');break;
         case 'lamp': void toggleLamp();break;
         case 'plant': props.nudge('plant',currentTime);callbacks.feedback('盆栽 · 轻触叶片',false);break;
-        case 'play': pauseTape();break;
+        case 'play': if(tvStartup.waiting)playTelevision();else pauseTape();break;
         case 'next': chooseTape((deck.state.selected??-1)+1);break;
         case 'previous': chooseTape((deck.state.selected??1)-1);break;
         case 'eject': ejectTape();break;
-        case 'power': deck.power();syncTelevision();callbacks.feedback(deck.state.powered?'电视已打开':'电视已关闭');break;
+        case 'power': togglePower();break;
         case 'coffee': if(details.sip(currentTime,camera,reduced))callbacks.feedback('休息一下，再继续。');else if(details.getstate().empty)callbacks.feedback('咖啡喝完了。');break;
         case 'phone':inspect('phone');break;
         case 'cd':inspect('cd');break;
@@ -191,7 +226,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       targets.push({id,label,roots});
     }
     tapes.forEach((t,i)=>addTarget(t.object,`tape:${i}`,`播放 ${String(i+1).padStart(2,'0')} · ${t.title}`,['Label_'+t.object]));
-    const objects=[['CRT_Screen','zoom','电视 · 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['Work_Notepad','work','记事本 · 录像带目录'],
+    const objects=[['CRT_Screen','television','电视 · 播放 / 放大 / 返回'],['CRT_Button','home','HOME'],['CRT_Button.001','work','WORK'],['CRT_Button.002','posts','POSTS'],['CRT_Button.003','underscan','UNDERSCAN'],['CRT_Button.004','delay','H/V DELAY'],['CRT_Button.005','blue','BLUE ONLY'],['CRT_Power','power','电视电源'],['Work_Notepad','work','记事本 · 录像带目录'],
       ['Computer_Monitor','computer','电脑 · 查看屏幕'],['Computer_Keyboard','computer','键盘 · 打开电脑'],
       ['Lamp_Shade','lamp','台灯 · 开 / 关'],['Lamp_Base','lamp','台灯 · 开 / 关'],['Lamp_Stem','lamp','台灯 · 开 / 关'],
       ['City_Backdrop','window','预览窗外夜景'],['Window_Handle','window','预览窗外夜景'],['Desk_Book','work','打开研究笔记'],
@@ -284,15 +319,16 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       // room's decorative movement, not the VCR transport.
       if(active&&!document.hidden)deck.tick(elapsed>.25?0:dt,props.loading);
       const{selected,time:tapeTime,transport,powered,source}=deck.state;
-      const homePlaying=isHomePlaying({view:navigation.view,source,powered,active,motion,hidden:document.hidden,requested:homeRequested});
+      tvStartup.update(time,reduced);room.dataset.tvStartup=tvStartup.phase;
+      const homePlaying=!tvStartup.waiting&&isHomePlaying({view:navigation.view,source,powered,active,motion,hidden:document.hidden,requested:homeRequested});
       homeAdvancing=homePlaying;
       if(lighting.film)lighting.film.setPlaying(homePlaying);
       else home.tick(elapsed>.25?0:dt,homePlaying);
       const filmTime=homeTime(),playing=lighting.film?lighting.film.playing:homePlaying;
-      if(active&&powered&&source==='home')lighting.setHome(filmTime,reduced&&homeRequested===null);
+      if(active&&powered&&!tvStartup.waiting&&source==='home')lighting.setHome(filmTime,reduced&&homeRequested===null);
       callbacks.homeAudio(playing,filmTime);
-      room.dataset.homeTime=filmTime.toFixed(3);room.dataset.homeProgram=reduced&&homeRequested===null?'still':playing?'playing':lighting.film?.failed?'blocked':'paused';
-      if(powered&&source==='tape'&&selected!==null&&!props.loading)lighting.setTape(tapes[selected],tapeTime,transport!=='playing');
+      room.dataset.homeTime=filmTime.toFixed(3);room.dataset.homeProgram=tvStartup.waiting?'awaiting-play':reduced&&homeRequested===null?'still':playing?'playing':lighting.film?.failed?'blocked':'paused';
+      if(powered&&!tvStartup.waiting&&source==='tape'&&selected!==null&&!props.loading)lighting.setTape(tapes[selected],tapeTime,transport!=='playing');
       room.dataset.playback=selected===null?'empty':props.loading?'loading':transport;
       room.dataset.television=powered?'on':'off';room.dataset.tvSource=source;room.dataset.channel=powered?source:'off';
       if(selected!==null){room.dataset.tape=tapes[selected].id;room.dataset.tapeTime=tapeTime.toFixed(2);}
@@ -300,7 +336,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       Object.assign(room.dataset,props.tapeState);
       camera.updateMatrixWorld(true);surfaces?.updateComputer(time,animated);
       lighting.updateWeather(environmentTime,Math.max(-.004,Math.min(.004,(camera.position.x-worldPosition.x)*.002)),Math.max(-.002,Math.min(.002,(camera.position.y-worldPosition.y)*.001)),animated,selected===null?undefined:tapeTime);
-      const linear=lighting.updateCRT(time,motion,snow,reveal);renderer.info.reset();const windowShown=navigation.view==='window'&&!navigation.moving;
+      const linear=lighting.updateCRT(time,motion,snow,room.dataset.state==='active'||room.dataset.state==='entering'?tvStartup.reveal:reveal);renderer.info.reset();const windowShown=navigation.view==='window'&&!navigation.moving;
       if(hasPresented&&windowShown!==previousWindowShown&&!reduced&&transitionContext){
         // Re-render the last real view before crossing scene/lens boundaries.
         // Dissolve that image over the next view; never insert an opaque color.
@@ -318,7 +354,7 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
       room.dataset.windowActive=String(windowShown);
       if(windowShown){const w=navigation.windowState;Object.assign(room.dataset,{windowMode:w.mode,windowZoom:w.zoom.toFixed(4),windowCenter:w.center.map(v=>v.toFixed(6)).join(','),windowBounds:JSON.stringify(w.bounds)});document.querySelectorAll<HTMLElement>('#window-controls button[data-window-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.windowMode===w.mode)));}
       if(!budgetAt||time-budgetAt>2){measureBudget();budgetAt=time;}
-      const{width,height}=host.getBoundingClientRect();surfaces?.project(camera,navigation.view,width,height,active&&!(navigation.view==='posts'&&!powered)&&!navigation.moving&&!props.paperMoving&&!cards.shown&&inspection!=='calculator',props.raised);
+      const{width,height}=host.getBoundingClientRect();surfaces?.project(camera,navigation.view,width,height,active&&!(navigation.view==='posts'&&(!powered||tvStartup.waiting))&&!navigation.moving&&!props.paperMoving&&!cards.shown&&inspection!=='calculator',props.raised);
       tvControls.project(camera,width,height,active&&!navigation.moving&&!props.moving&&(!props.raised||inspection==='tv')&&!cards.shown&&(!inspection||inspection==='tv')&&['home','posts','work','tv'].includes(navigation.view));
       cards.update(time,width,height);
       calculator.project(camera,width,height,active&&inspection==='calculator'&&!props.moving);
@@ -379,24 +415,13 @@ export async function createExperience(host:HTMLElement,assets:RoomAssets,signal
     function navigate(view:RoomView,page:number,isReduced:boolean,resumeComputer=false){reduced=isReduced;cancelPendingAction();cards.hide();if(inspection)closeInspection(false);clearHover();navigation.go(view,performance.now(),reduced);surfaces?.setMode(view,resumeComputer);
       const raised=view==='work'&&!(choosingTape&&paperHidden);if(view==='work'&&!choosingTape)paperHidden=false;
       props.setPaper(raised,performance.now()/1000,reduced,navigation.workPose);room.dataset.paper=raised?'up':'down';if(view==='work')navigation.paper(raised,performance.now(),reduced);
-      deck.navigate(view,page);if(view==='posts')surfaces?.setPage(page);syncTelevision();
+      deck.navigate(view,page);if(view==='posts'){tvStartup.play();surfaces?.setPage(page);}syncTelevision();
     }
-    function setPage(page:number){deck.navigate('posts',page);syncTelevision();surfaces?.setPage(page);}
+    function setPage(page:number){deck.navigate('posts',page);tvStartup.play();syncTelevision();surfaces?.setPage(page);}
     function settle(){reduced=true;transitionAnimation?.cancel();navigation.finish();props.finish();cards.finish();lampLevel=Number(lampOn);}
-    function standby(){
-      transitionAnimation?.cancel();hasPresented=false;
-      lighting.film?.reset();
-      homeRequested=null;homeAdvancing=false;
-      cancelPendingAction();clearHover();cards.hide();details.reset();if(inspection)callbacks.inspection('cancel',previousView);inspection=null;inspectionReturn=null;delete room.dataset.inspection;
-
-      props.holdCalculator(false,0,true,camera);props.eject(0,true);props.finish();
-      environmentTime=previousTime=0;deck.reset();home.reset();lighting.setPower(true);callbacks.homeAudio(false,0);surfaces?.selectTape(null);delete room.dataset.tape;delete room.dataset.tapeTime;musicOn=false;callbacks.music(false,true);room.dataset.music='stopped';
-      navigation.reset();props.setPaper(false,0,true,navigation.workPose);room.dataset.paper='down';
-      lighting.setProgram('blank');render();
-    }
     function escape(){if(cancelPendingAction()){callbacks.feedback('已取消打开页面',false);callbacks.wake();return true;}if(cards.shown){cards.hide();callbacks.wake();return true;}if(inspection){closeInspection();return true;}if(navigation.view==='work'&&props.raised){setPaper(false);return true;}return false;}
     function suspend(){cancelPendingAction();lighting.film?.setPlaying(false);callbacks.homeAudio(false,homeTime());}
-    return{resize,render,navigate,setPage,standby,settle,escape,action,chooseTape,suspend,cancelPendingNavigation:cancelPendingAction,returnFromWindow:()=>{if(inspection==='window')closeInspection();},windowMode:(mode:'overview'|'detail')=>{if(navigation.view==='window'){navigation.windowMode(mode);callbacks.wake();}},get windowActive(){return inspection==='window';},nextTape:()=>chooseTape((deck.state.selected??-1)+1),computerPage:(delta:number)=>surfaces?.changeComputerPage(delta),calculatorKey:calculator.press,computerKey:(key:string)=>surfaces?.computerKey(key),
-      setProgram:lighting.setProgram,get calculatorActive(){return inspection==='calculator';},get inspectionActive(){return inspection!==null;},get cameraMoving(){return navigation.moving;},get mediaPlaying(){return homeAdvancing||deck.state.transport==='playing'||musicOn&&callbacks.musicRunning();},get moving(){return navigation.moving||props.moving||cards.moving||details.moving||lighting.detailsMoving||Math.abs(lampLevel-Number(lampOn))>.001;},dispose};
+    return{resize,render,navigate,setPage,startTelevision,settle,escape,action,chooseTape,suspend,cancelPendingNavigation:cancelPendingAction,returnFromWindow:()=>{if(inspection==='window')closeInspection();},windowMode:(mode:'overview'|'detail')=>{if(navigation.view==='window'){navigation.windowMode(mode);callbacks.wake();}},get windowActive(){return inspection==='window';},nextTape:()=>chooseTape((deck.state.selected??-1)+1),computerPage:(delta:number)=>surfaces?.changeComputerPage(delta),calculatorKey:calculator.press,computerKey:(key:string)=>surfaces?.computerKey(key),
+      setProgram:lighting.setProgram,get calculatorActive(){return inspection==='calculator';},get inspectionActive(){return inspection!==null;},get cameraMoving(){return navigation.moving;},get mediaPlaying(){return homeAdvancing||deck.state.transport==='playing'||musicOn&&callbacks.musicRunning();},get moving(){return tvStartup.moving||navigation.moving||props.moving||cards.moving||details.moving||lighting.detailsMoving||Math.abs(lampLevel-Number(lampOn))>.001;},dispose};
   }catch(error){for(const r of resources)r.dispose();dispose();throw error;}
 }

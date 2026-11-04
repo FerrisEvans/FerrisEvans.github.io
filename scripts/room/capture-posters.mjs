@@ -25,7 +25,7 @@ try{
     const context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,reducedMotion:'reduce'}),page=await context.newPage(),errors=[];
     page.on('pageerror',error=>errors.push(String(error)));
     page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
-    await page.goto(`http://127.0.0.1:${port}/?capture=${mode}`);
+    await page.goto(`http://127.0.0.1:${port}/room/?capture=${mode}`);
     await page.waitForFunction(()=>{
       const data=document.querySelector('#room')?.dataset;
       if(data?.state==='fallback')throw new Error('Capture requires working WebGL 2');

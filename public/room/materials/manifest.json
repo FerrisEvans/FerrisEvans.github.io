@@ -1,6 +1,6 @@
 {
   "version": 18,
-  "buildId": "d852fbcd47a5d5a8",
+  "buildId": "9cb7fb5a86c49163",
   "quality": "final",
   "encoding": "RGBM8",
   "city": "/room/window/city-panorama-v2.webp",
@@ -13,6 +13,33 @@
   ],
   "camera": "HomeCamera",
   "atlases": {
+    "curtains": {
+      "size": 1024,
+      "albedo": "curtains-albedo.webp",
+      "orm": "curtains-orm.webp",
+      "normal": "curtains-normal.webp",
+      "room": {
+        "file": "curtains-room.webp",
+        "range": 2,
+        "peak": 1.0211410522460938,
+        "preview": "curtains-room-entry.webp"
+      },
+      "lampOff": {
+        "file": "curtains-lamp-off.webp",
+        "range": 1,
+        "peak": 0.3174130618572235
+      },
+      "tv": {
+        "file": "curtains-tv.webp",
+        "range": 1,
+        "peak": 0.004875489044934511,
+        "preview": "curtains-tv-entry.webp"
+      },
+      "entry": {
+        "normal": "curtains-normal-entry.webp",
+        "orm": "curtains-orm-entry.webp"
+      }
+    },
     "equipment": {
       "size": 4096,
       "albedo": "equipment-albedo.webp",
@@ -145,33 +172,6 @@
       "entry": {
         "normal": "lamp-normal-entry.webp",
         "orm": "lamp-orm-entry.webp"
-      }
-    },
-    "curtains": {
-      "size": 1024,
-      "albedo": "curtains-albedo.webp",
-      "orm": "curtains-orm.webp",
-      "normal": "curtains-normal.webp",
-      "room": {
-        "file": "curtains-room.webp",
-        "range": 2,
-        "peak": 1.106115460395813,
-        "preview": "curtains-room-entry.webp"
-      },
-      "lampOff": {
-        "file": "curtains-lamp-off.webp",
-        "range": 1,
-        "peak": 0.31946423649787903
-      },
-      "tv": {
-        "file": "curtains-tv.webp",
-        "range": 1,
-        "peak": 0.004894380923360586,
-        "preview": "curtains-tv-entry.webp"
-      },
-      "entry": {
-        "normal": "curtains-normal-entry.webp",
-        "orm": "curtains-orm-entry.webp"
       }
     },
     "window": {
@@ -466,13 +466,13 @@
     ]
   },
   "atlasReuse": {
-    "buildId": "bb9b4de91395842e",
+    "buildId": "d852fbcd47a5d5a8",
     "atlases": [
+      "equipment",
       "architecture",
       "desk",
       "props",
       "lamp",
-      "curtains",
       "window",
       "walls",
       "ceramic",
@@ -481,18 +481,18 @@
       "tape"
     ],
     "modelVerification": {
-      "acceptedBuildId": "bb9b4de91395842e",
-      "acceptedSourceSha256": "f0169a81017636b557358424c4b80c2b4c2ad246dcfef30ecc57ac92ec1cf734",
+      "acceptedBuildId": "d852fbcd47a5d5a8",
+      "acceptedSourceSha256": "18b136cf8b1177a2750ba1c0dc49e9052179390d7c5f3ba25717e34cef18fd51",
       "scriptSha256": "75e95200f0b07916650277e7a8246fda742ca95c20b17f71ed0cd5c851799eab",
       "selectedAtlases": [
-        "equipment"
+        "curtains"
       ],
-      "retainedNodes": 487,
+      "retainedNodes": 988,
       "retainedAtlases": [
         "architecture",
         "ceramic",
-        "curtains",
         "desk",
+        "equipment",
         "foliage",
         "lamp",
         "paper",
@@ -508,24 +508,38 @@
   "model": "study-meshopt.glb.bin",
   "modelEncoding": "gzip",
   "transport": "webp-gzip",
-  "bakeBuildId": "4a1a7ea4ef9c914f",
+  "bakeBuildId": "303ab0c720678a94",
   "packingScriptSha256": "997a48ba033c098d371bf2c847700b36e3176e0e69705ed9ed1c55e1192929c8",
   "homeFilm": "/room/film/manifest.json",
   "geometryTransport": {
     "source": "study.glb.bin",
-    "sourceSha256": "18b136cf8b1177a2750ba1c0dc49e9052179390d7c5f3ba25717e34cef18fd51",
-    "sha256": "2d14a809f1e517f034c592b02464e70d0ddf2962bdcd5e36a8f78bd4bec81be7",
+    "sourceSha256": "e20d1459a709c2913bfedddd2eb932b0e5f7bce2486d1b87cd86d835f9e6dc89",
+    "sha256": "cb95e0ea67980e703bb6eb6047eeb561df9938c182355f07a5cdabe13c4e559d",
     "extension": "EXT_meshopt_compression",
     "normalBits": 16,
     "uvBits": 16,
     "positions": "unchanged",
     "nodes": 990,
-    "sourceBytes": 9046438,
-    "bytes": 4727589,
+    "sourceBytes": 9168230,
+    "bytes": 4759477,
     "scriptSha256": "0372edb0acf6cd9f7089367f4ac6185ae1f960cb18de1934cb8300ebe070535e"
   },
   "entryLighting": {
     "sources": {
+      "curtains-room.webp": {
+        "sha256": "37f5a351dfa799c24cca1ff9d1afdd81c7bfc29117679e8c30bfb1ace2e3a550",
+        "range": 2
+      },
+      "curtains-tv.webp": {
+        "sha256": "ca414f5e07489b7067639a28e9ccf5ea2cbfda928195bfd55d38504889c35840",
+        "range": 1
+      },
+      "curtains-normal.webp": {
+        "sha256": "20f5c0b107900709160b0606150b0c82548de7e0f7aebd49dd386d896c3b1900"
+      },
+      "curtains-orm.webp": {
+        "sha256": "4a84505c449961f958f53b68a4a39456624324966a5a608d496cfd4a4799209b"
+      },
       "equipment-room.webp": {
         "sha256": "622d4332d310d5f4380594d9cac19b95191c9c66c8fb773771fc32977a737430",
         "range": 64
@@ -592,20 +606,6 @@
       },
       "lamp-orm.webp": {
         "sha256": "983a74fc771cc5c208a47965791cb336a8fc5903287c61b5f62e4750853981c6"
-      },
-      "curtains-room.webp": {
-        "sha256": "6978277b60c18154f27f8ade2e780a060653b59d50d98628a57728c09f0548f9",
-        "range": 2
-      },
-      "curtains-tv.webp": {
-        "sha256": "aef4cc58d5d9fb30de597508b1339f9974beb53e492558cb96ad3f45bdd62828",
-        "range": 1
-      },
-      "curtains-normal.webp": {
-        "sha256": "7313f5a0ac68d8dcabbbfe1dc9e97f8bd35d530e92e9f85f1912f75632950abb"
-      },
-      "curtains-orm.webp": {
-        "sha256": "867bb3667a0d6f743f61f47b75444b0087f983f1238f3ea23f30defe561bbfdd"
       },
       "window-room.webp": {
         "sha256": "db403d0dcc4089dcb0706603bf1f6deec7bb91c4b2c32cb522d8de02429d9bdf",
@@ -683,6 +683,10 @@
       }
     },
     "files": {
+      "curtains-room-entry.webp": "718eb56c9741c229200c94122f5ee3cd85972b8bcd7675e5f2f9afd5b7e78c5a",
+      "curtains-tv-entry.webp": "62b584772240eaab2aa2eab00342ac9814c9ebbbeaadf37a7b040debb8e538d9",
+      "curtains-normal-entry.webp": "b2cb8b314279e8b2a650b6e821a75521501c99cfbd5eb558b2861d3a2b2c0ed5",
+      "curtains-orm-entry.webp": "b66b18dbf4fd23410f2427c07a6b0c9fc9e74e091e884e3c748eff16b293a6c8",
       "equipment-room-entry.webp": "0cd06ca0b767be2ed39643b862bc709768190fe7f25de85bc578e83b05674413",
       "equipment-tv-entry.webp": "7251e6f2bfc90021ce582ff3236543c0f142ab13683d67d3486828c5340ec340",
       "equipment-normal-entry.webp": "49eefb82eb41ced1ae8e05d92504e2ddbd27eff2c1c6253c995dbcda903a581d",
@@ -702,10 +706,6 @@
       "lamp-tv-entry.webp": "db9923fa3957996268b4f4e01945c76c06f8510685d6b6e98ce0f91f921336a8",
       "lamp-normal-entry.webp": "a9c90d99b7711620ca99217e39641bb152c0d7caa5fb61b6b3a3400c5a58576c",
       "lamp-orm-entry.webp": "f239b0f71ae17b0a158bdab88016938e68940c659e2b7caa468908ec7b02b499",
-      "curtains-room-entry.webp": "d4184d82f8ebe5b322faa909d12e9dac08e4797be8c30475a3377353ab66794b",
-      "curtains-tv-entry.webp": "442281137841653a2a489465ee1828cd21eef1ca0c98fe48514a60deb67b2162",
-      "curtains-normal-entry.webp": "e34384367278b4a14d6d66a871e2bbbd5e84bc540149efd4d8f38b82bb0a8ba9",
-      "curtains-orm-entry.webp": "7335c9b19f1c0153e1f5683a3a153ef02f51ab0d725536112ae5b89f378922f8",
       "window-room-entry.webp": "ba24c168d2284104648d7f241a96f83ea6f69b9f4491f7cc2edc0ad8051234e0",
       "window-tv-entry.webp": "5d1b5a16ce383f5f386afeb9e8264656b699992b8e19663584b5ddac756ae419",
       "window-normal-entry.webp": "d229a5372cf3eeb83adebfa4018b36b94551cf691f16d54951eb9345e7abb682",
@@ -729,8 +729,8 @@
       "tape-orm-entry.webp": "8ff203faa0e1b36dd23b8c03d972a991683741c3cf3e3ed16f338f843e9c5238"
     },
     "scriptSha256": "c14b27fcd9ec041d23dda0466c662ccb9be657ea6d7b625a95d01ff315b315a0",
-    "fullBytes": 14722842,
-    "entryBytes": 1980120
+    "fullBytes": 14722992,
+    "entryBytes": 1979664
   },
   "reflection": {
     "file": "reflection-cubeuv.bin",
@@ -738,8 +738,8 @@
     "width": 384,
     "height": 512,
     "threeRevision": "186",
-    "manifestSha256": "540f24a561aaddd8787ae7d1709bc6168d6f2a2ef238d18dff4d45b2a7b4345d",
-    "sha256": "b847173e96920e5f7e2ec00d87a5d2505362e63871f4f7ed51ac88b964eb6a46",
+    "manifestSha256": "f75c61b3727844a4e4b938aebeaa35450d9c93e3ba7c62e1d45ca9a1756501ea",
+    "sha256": "a0565c3c703f4c33ca4d64cbc21ed8d906cb028e9189a1cde52291606dcbbfd0",
     "sources": {
       "node_modules/three/package.json": "f9c474a27c920b9435353a6235968f4453436bee0444fac7e5fd289c8fa463de",
       "public/room/materials/architecture-albedo.webp": "92da7a6eeae5b8e97f2b55697711b1be38b082fe606f17e96cfbb2a215a59a09",
@@ -754,12 +754,12 @@
       "public/room/materials/ceramic-orm.webp": "5ca82e6d007681b5dc441d4107b30088eceb6ee2e04dad6493cbc602274cec5d",
       "public/room/materials/ceramic-room.webp": "96db316a5087804e006ecaae113233246962c5bd8d69ff83e9663287478aee31",
       "public/room/materials/ceramic-tv.webp": "e282fdf2ba813e7427f71cd12e25a69141d5cfe33de24d645e7109928046c14f",
-      "public/room/materials/curtains-albedo.webp": "7171e3dc70093886f8ddf34bd9f63c92c5e3798c8023f8d04e33a7f52798b730",
-      "public/room/materials/curtains-lamp-off.webp": "b339e3ddebdbba9885ecd6a73d9897d374bb30b897de401c3c5ccd95743d1811",
-      "public/room/materials/curtains-normal.webp": "7313f5a0ac68d8dcabbbfe1dc9e97f8bd35d530e92e9f85f1912f75632950abb",
-      "public/room/materials/curtains-orm.webp": "867bb3667a0d6f743f61f47b75444b0087f983f1238f3ea23f30defe561bbfdd",
-      "public/room/materials/curtains-room.webp": "6978277b60c18154f27f8ade2e780a060653b59d50d98628a57728c09f0548f9",
-      "public/room/materials/curtains-tv.webp": "aef4cc58d5d9fb30de597508b1339f9974beb53e492558cb96ad3f45bdd62828",
+      "public/room/materials/curtains-albedo.webp": "0545f8e981229f24037b8d3f3ce8957eab20264265cf6dc0b7b991da7d4592d9",
+      "public/room/materials/curtains-lamp-off.webp": "62279284386992967d43dc07af6dcc0607fd526e2b1f2fe45e8a130980273ee9",
+      "public/room/materials/curtains-normal.webp": "20f5c0b107900709160b0606150b0c82548de7e0f7aebd49dd386d896c3b1900",
+      "public/room/materials/curtains-orm.webp": "4a84505c449961f958f53b68a4a39456624324966a5a608d496cfd4a4799209b",
+      "public/room/materials/curtains-room.webp": "37f5a351dfa799c24cca1ff9d1afdd81c7bfc29117679e8c30bfb1ace2e3a550",
+      "public/room/materials/curtains-tv.webp": "ca414f5e07489b7067639a28e9ccf5ea2cbfda928195bfd55d38504889c35840",
       "public/room/materials/desk-albedo.webp": "6348247e2815445fca99e4f245132f468ef4b36e99676786786bebd3196c3cc2",
       "public/room/materials/desk-lamp-off.webp": "ddf4775f7fb064a330bd4b1fc5d6362b7a115b82a9262ded7dd8476ef825f18c",
       "public/room/materials/desk-normal.webp": "ee413660056c01c91b6dda4251ebd0d75ca68c257bbee9ef50e518d8d624be73",
@@ -796,7 +796,7 @@
       "public/room/materials/props-orm.webp": "820bcdae1dc2344d653e7300a8591bcd4d04fe658e24f8caa7c2a453fcf86f3a",
       "public/room/materials/props-room.webp": "b403b1b7c6d492ba2918b6ddec91771a7223b5025d293ac5c3d61d41cef9dcb3",
       "public/room/materials/props-tv.webp": "4d702d229e9acfbe1cde17e24cbb9ac581e55c049b32f2d5db0f08c6d6d84c7d",
-      "public/room/materials/study-meshopt.glb.bin": "2d14a809f1e517f034c592b02464e70d0ddf2962bdcd5e36a8f78bd4bec81be7",
+      "public/room/materials/study-meshopt.glb.bin": "cb95e0ea67980e703bb6eb6047eeb561df9938c182355f07a5cdabe13c4e559d",
       "public/room/materials/tape-albedo.webp": "72fb0341b448a17c8cfaff88acdc9a78bf894bbe18f224a2fad075400f64ff40",
       "public/room/materials/tape-lamp-off.webp": "95161d50d20bebda1424672dfc3743cb4de9650dc7f977fc38719fab9b79520d",
       "public/room/materials/tape-normal.webp": "7daa3200085ab6ac0c96fac10b399d7a6179e7b2c7e47c7999b8c8ee8ccbfe08",
@@ -819,7 +819,7 @@
       "scripts/room/build-reflection.mjs": "c44860627f9fd79e846e529fd5709daee66e8d3a6067a46315b0c02df9a9d668",
       "scripts/room/capture-reflection.ts": "59e8decf157e9f66f67e0ce9274643622cc642241970112abd88792699b4485a",
       "src/scripts/room/crt.ts": "e115a4c3654257d91c5228b4359f4a0e6216d9f7f5807b853cda15233a822119",
-      "src/scripts/room/lighting.ts": "5f3a8c8559c7a7d067f528c6fbc49712c91318852aa5a5f06a168b9f2bf16fc9",
+      "src/scripts/room/lighting.ts": "1463e58fc63a1f4e4843b31e1af7dec9d349977935c8fca8e4cd731724f3eff8",
       "src/scripts/room/micro-surfaces.ts": "2fc7c499d010d410c3986067988480144eb4841289fa21c233c8838c5091401e",
       "src/scripts/room/model.ts": "fbc6f2c14e416932b089e8759e8d06d47e3c4e62644413451c120078893a2f7d",
       "src/scripts/room/phosphor.ts": "794edc628d674a0aafd0c01cee0750009e6b1ef398ec766ce0714c4d9a82ca59",

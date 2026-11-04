@@ -72,7 +72,7 @@ export const CATEGORIES: CategoryDef[] = [
   {
     slug: 'game-dev',
     label: '游戏开发',
-    description: 'Godot 引擎架构、节点系统、渲染帧率与游戏设计实践笔记',
+    description: 'Godot 引擎架构、节点系统、渲染帧率与游戏设计笔记',
     accent: '#c66a24',
     mark: '◇',
     subcategories: { godot: 'Godot', 'game-design': '游戏设计' },

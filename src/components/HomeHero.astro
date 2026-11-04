@@ -1,0 +1,81 @@
+---
+import { SITE } from '../data/site';
+interface Props { posterVersion: string; assetVersion: string; }
+const { posterVersion, assetVersion } = Astro.props;
+---
+
+<!-- Homepage styling stays local so another skin can replace this component
+     without changing the blog or the room's UI. -->
+<main class="home-hero" aria-labelledby="home-title">
+  <div id="home-rain-glass" class="home-rain" data-src={`/room/reading.jpg?v=${posterVersion}`}>
+    <img class="home-backdrop" src={`/room/reading.jpg?v=${posterVersion}`} width="1440" height="1440" alt="" fetchpriority="high" />
+    <div class="home-glass" aria-hidden="true"></div>
+    <span id="home-rain-fog" hidden></span>
+    <div class="home-rain-layer" aria-hidden="true"><canvas id="home-rain-canvas"></canvas></div>
+    <section class="home-copy">
+      <h1 id="home-title">{SITE.title.toUpperCase()}<span aria-hidden="true">.</span></h1>
+      <p class="home-tagline">{SITE.tagline}</p>
+      <p class="home-intro">{SITE.intro}</p>
+      <nav class="home-exits" aria-label="选择入口">
+        <a id="home-enter-room" class="home-primary" href="/room/">进入书房 <span class="home-dimension">3D</span><span aria-hidden="true">↗</span></a>
+        <a id="home-enter-blog" class="home-secondary" href="/lofi/">进入博客 <span aria-hidden="true">→</span></a>
+      </nav>
+      <p class="home-signature">{SITE.title} · {SITE.author} 的个人博客</p>
+    </section>
+    <aside id="home-preload" class="home-preload" data-state="idle" data-asset-version={assetVersion} aria-label="书房资源预加载">
+      <p id="home-preload-status" role="status" aria-live="polite">书房资源准备中…</p>
+      <progress id="home-preload-progress" value="0" max="100" aria-label="书房资源预加载进度"></progress>
+      <button id="home-preload-retry" type="button" hidden>重试预加载</button>
+      <noscript><p>进入书房需要启用 JavaScript，博客可直接阅读。</p></noscript>
+    </aside>
+  </div>
+</main>
+
+<script>
+  // Keep the original rain simulation while the homepage's content and CSS
+  // stay independent of Lofi. The obsolete React wrapper has been removed.
+  import { RainGlassController } from './kokonutui/rain-glass-controller';
+  const root = document.querySelector<HTMLDivElement>('#home-rain-glass')!;
+  const canvas = root.querySelector<HTMLCanvasElement>('#home-rain-canvas')!;
+  const fogElement = root.querySelector<HTMLSpanElement>('#home-rain-fog')!;
+  let controller: RainGlassController | undefined;
+  function mountRain() {
+    controller = new RainGlassController({ root, canvas, fogElement, src: root.dataset.src!, rain: 0.35, interactive: true });
+    controller.mount();
+  }
+  window.addEventListener('pagehide', () => { controller?.destroy(); controller = undefined; });
+  window.addEventListener('pageshow', event => { if (event.persisted && !controller) mountRain(); });
+  mountRain();
+</script>
+
+<style>
+  .home-rain { position: relative; isolation: isolate; display: grid; place-items: center; box-sizing: border-box; min-height: 100svh; padding: 80px 24px 132px; overflow: hidden; color: #f3ead8; font-family: system-ui, 'PingFang SC', sans-serif; touch-action: pan-y; user-select: none; }
+  .home-backdrop, .home-glass, .home-rain-layer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+  .home-backdrop { object-fit: cover; }
+  .home-glass { background: linear-gradient(rgba(12, 17, 22, .35), rgba(12, 17, 22, .55)); }
+  #home-rain-fog { color: #1a2025; }
+  #home-rain-canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity .7s ease-out; }
+  .home-copy { width: min(100%, 700px); text-align: center; text-wrap: balance; }
+  .home-copy h1 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(4rem, 13vw, 7.25rem); font-weight: 600; line-height: 1; letter-spacing: -.055em; text-shadow: 0 5px 36px #0004; }
+  .home-tagline { margin: 32px 0 16px; font-family: 'Songti SC', 'Noto Serif CJK SC', serif; font-size: clamp(1.2rem, 3vw, 1.5rem); line-height: 1.8; letter-spacing: .08em; }
+  .home-intro { max-width: 32em; margin: 0 auto; font-size: .9rem; line-height: 1.9; color: #d0c7b9; }
+  .home-exits { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .home-exits a { display: inline-flex; gap: 12px; align-items: center; justify-content: center; min-height: 48px; box-sizing: border-box; padding: 12px 22px; border: 1px solid transparent; border-radius: 7px; font-size: .9rem; font-weight: 600; text-decoration: none; transition: background-color .15s, border-color .15s; }
+  .home-exits a:focus-visible, .home-preload button:focus-visible { outline: 3px solid #f4d8a3; outline-offset: 5px; }
+  .home-primary { background: #d6a45f; color: #211b14; }
+  .home-primary:hover { background: #e5b978; }
+  .home-dimension { font-size: .65rem; font-weight: 500; opacity: .75; }
+  .home-exits .home-secondary { border-color: #d6c6a870; background: #11191560; color: #eee2cc; }
+  .home-exits .home-secondary:hover { border-color: #d6a45f; background: #111915b3; }
+  .home-signature { margin: 38px 0 0; font-family: ui-monospace, monospace; font-size: .65rem; line-height: 1.8; letter-spacing: .16em; color: #c1b49d; }
+  .home-preload { position: absolute; left: max(24px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); max-width: calc(100% - 48px); font: .72rem/1.7 ui-monospace, 'PingFang SC', monospace; color: #d4cfc3; }
+  .home-preload p { margin: 0 0 6px; }
+  .home-preload progress { display: block; width: 190px; height: 3px; border: none; border-radius: 2px; overflow: hidden; background: #ffffff26; accent-color: #d6a45f; }
+  .home-preload progress::-webkit-progress-bar { background: #ffffff26; }
+  .home-preload progress::-webkit-progress-value { background: #d6a45f; }
+  .home-preload progress::-moz-progress-bar { background: #d6a45f; }
+  .home-preload button { margin-top: 8px; border: 1px solid #d6c6a870; padding: 5px 9px; border-radius: 4px; color: inherit; background: #11191580; font: inherit; cursor: pointer; }
+  .home-preload [hidden] { display: none; }
+  @media (max-width: 480px) { .home-rain { padding: 64px 22px 148px; } .home-exits { flex-direction: column; max-width: 260px; margin-inline: auto; } .home-preload { font-size: .68rem; } }
+  @media (prefers-reduced-motion: reduce) { .home-exits a, #home-rain-canvas { transition: none; } }
+</style>
