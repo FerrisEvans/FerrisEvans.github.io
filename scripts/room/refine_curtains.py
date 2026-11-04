@@ -154,6 +154,18 @@ def _geometry(source, side):
             # unlike extra periodic pleats they do not corrugate the panel.
             selvedge=math.exp(-(u/.075)**2)-.7*math.exp(-((1-u)/.065)**2)
             y += .0045*selvedge*math.sin(math.pi*down)*math.sin(down*11+phase)
+            # A broad seam-tension fold crosses several of the long body's
+            # 9 cm rows. A narrow crest/shoulder pair fell between those rows
+            # and baked into short self-shadow marks in this thin cloth shell.
+            tension = (((0., .30, .013, .50), (1., .61, -.012, .48)) if side == 'Left'
+                       else ((0., .43, -.014, .52), (1., .24, .012, .48)))
+            for edge_u, start, amount, reach in tension:
+                across = abs(u-edge_u)/reach
+                if across < 1:
+                    diagonal = start + .14*across
+                    width_v = .043+.012*across
+                    crease = math.exp(-((down-diagonal)/width_v)**2)
+                    y += amount*crease*(1-_smooth(across))*release
             # Narrow sewn returns receive a shallow channel, with a small
             # amount of local take-up instead of a perfectly straight seam.
             seam_u=.022+.003*math.sin(down*13+phase)

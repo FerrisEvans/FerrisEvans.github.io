@@ -461,18 +461,21 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     edge.name='Paper edges '+name;object.material=edge;
     resources.add(edge);materials.set('paper-edge-'+name,edge);paperEdges.set(edge,object);
   }
-  const finished=new Set<MeshStandardMaterial>();
+  // Shared bases may be visited before their control/gasket clones. Finish
+  // every clone first so copying its callback cannot also copy a micro finish.
+  const finishes=new Map<MeshStandardMaterial,{kind:MicroSurface;frame?:Object3D}>();
+  function finish(material:MeshStandardMaterial,kind:MicroSurface,frame?:Object3D){finishes.set(material,{kind,frame});}
   const detailFinishes=new Map<string,MeshStandardMaterial>();
   scene.traverse(object=>{
     if(!(object instanceof Mesh)||!(object.material instanceof MeshStandardMaterial))return;
     const atlas=object.userData.atlas,profile=object.userData.surface_profile??'';
     let material=object.material,kind:MicroSurface|undefined;
-    if(paperEdges.has(material)){applyMicroSurface(material,'paper-edge',paperEdges.get(material));finished.add(material);return;}
+    if(paperEdges.has(material)){finish(material,'paper-edge',paperEdges.get(material));return;}
     if(object.name==='Lamp_Shade'){
       const shade=material.clone();shade.onBeforeCompile=material.onBeforeCompile;
       shade.customProgramCacheKey=material.customProgramCacheKey;shade.name='Spun lamp shade';
       resources.add(shade);materials.set('spun-shade',shade);object.material=material=shade;
-      applyMicroSurface(material,'spun-metal',object);finished.add(material);return;
+      finish(material,'spun-metal',object);return;
     }
     if(object.name==='Desk_CD_Lid'||object.name==='Desk_Walkman_Door'){
       // These two aluminium skins have their own machining direction. Do not
@@ -480,8 +483,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
       const skin=material.clone();skin.onBeforeCompile=material.onBeforeCompile;
       skin.customProgramCacheKey=material.customProgramCacheKey;skin.name='Machined '+object.name+'/satin-metal';
       resources.add(skin);materials.set('machined-'+object.name,skin);object.material=skin;
-      applyMicroSurface(skin,object.name==='Desk_CD_Lid'?'satin-turned':'satin-brushed',object);
-      finished.add(skin);return;
+      finish(skin,object.name==='Desk_CD_Lid'?'satin-turned':'satin-brushed',object);return;
     }
     const gasket=/^(Desk_CD_(Seam|DisplaySeat)|Desk_Walkman_(Seam|WindowBezel))$/.test(object.name);
     const smallControl=/^(Desk_CD_Button|Desk_Walkman_(Key|Stop))(?:[.]|$)/.test(object.name);
@@ -493,7 +495,7 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
         detail.name=material.name+(gasket?'/gasket':'/control');detail.roughness=gasket?1.15:.86;
         if(detail instanceof MeshPhysicalMaterial){detail.ior=gasket?1.46:1.51;detail.specularIntensity=gasket?.38:.85;}
         resources.add(detail);materials.set('detail-'+key,detail);detailFinishes.set(key,detail);
-        applyMicroSurface(detail,gasket?'rubber':'abs-controls');finished.add(detail);
+        finish(detail,gasket?'rubber':'abs-controls');
       }
       object.material=detail;return;
     }
@@ -507,8 +509,9 @@ export async function applyMaterialStudy(scene: Object3D, resources: Set<Resourc
     else if(profile==='pbt')kind='abs-controls';
     else if(profile==='painted-metal')kind='painted-metal';
     else if(atlas==='paper'||profile==='paper')kind='paper';
-    if(kind&&!finished.has(material)){applyMicroSurface(material,kind);finished.add(material);}
+    if(kind&&!finishes.has(material))finish(material,kind);
   });
+  for(const [material,{kind,frame}]of finishes)applyMicroSurface(material,kind,frame);
 
   const movingFill=new HemisphereLight(0xc8d4df,0x685241,.52);scene.add(movingFill);
   RectAreaLightUniformsLib.init();
