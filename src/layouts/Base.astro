@@ -24,6 +24,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Match the homepage opt-in before external styles finish loading. -->
+    <style is:inline>@view-transition { navigation: auto; }</style>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

@@ -28,6 +28,7 @@ async function closeContext(instance) {
   // Finish those finite animations before destroying the test document.
   for (const page of instance.pages()) await page.evaluate(async () => {
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await document.activeViewTransition?.finished;
     await Promise.allSettled(document.getAnimations()
       .filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity)
       .map(animation => animation.finished));
