@@ -1,4 +1,5 @@
 ---
+import { SITE } from '../data/site';
 interface Props {
   tagline?: boolean;
   compact?: boolean;
@@ -7,8 +8,8 @@ interface Props {
 const { tagline = false, compact = false, class: className } = Astro.props;
 ---
 <span class:list={['island-brand-identity', className]}>
-  <img class="island-brand-badge" src="/brand/island/mark.svg" alt={compact ? 'Praxis' : ''} width="44" height="44" />
-  {!compact && <span class="island-brand-lettering"><span class="island-brand-name">Praxis</span>{tagline && <span class="island-brand-tagline">保持好奇，慢慢来</span>}</span>}
+  <img class="island-brand-badge" src="/brand/island/mark.svg" alt={compact ? `${SITE.title} 博客标志` : ''} width="44" height="44" />
+  {!compact && <span class="island-brand-lettering"><span class="island-brand-name">{SITE.title}</span>{tagline && <span class="island-brand-tagline">{SITE.tagline}</span>}</span>}
 </span>
 <style>
   .island-brand-identity { display:inline-flex; align-items:center; gap:10px; color:var(--color-ink,#725d42); vertical-align:middle; }

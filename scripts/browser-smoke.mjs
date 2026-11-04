@@ -109,7 +109,7 @@ try {
   assert.equal(await menu.getAttribute('aria-expanded'), 'false');
   assert.equal(await menu.evaluate((element) => document.activeElement === element), true);
   await menu.click();
-  await page.locator('#mobile-menu').getByRole('link', { name: '关于', exact: true }).click();
+  await page.locator('#mobile-menu').getByRole('link', { name: '关于作者', exact: true }).click();
   await page.waitForURL(url('/about/'));
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');

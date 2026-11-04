@@ -8,7 +8,7 @@ import Toc from '../../components/Toc.astro';
 import Giscus from '../../components/Giscus.astro';
 import CategoryBadge from '../../components/CategoryBadge.astro';
 import TagChip from '../../components/TagChip.astro';
-import { categoryOf, labelFromSlug } from '../../data/site';
+import { SITE, categoryOf, labelFromSlug } from '../../data/site';
 import { getPosts, formatDate, postUrl, postSlug, readingTime, wordCount, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
@@ -77,6 +77,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
           <h1>{post.data.title}</h1>
           {post.data.description && <p class="notebook-description">{post.data.description}</p>}
           <div class="notebook-meta">
+            <a href="/about/" rel="author"><Icon name="user" size={15} />作者：{SITE.author}</a>
             <span><Icon name="calendar" size={15} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>
             <span><Icon name="clock" size={15} />{readingMinutes} 分钟 · 约 {words} 字</span>
             {post.data.updatedDate && <span><time datetime={post.data.updatedDate.toISOString()}>更新于 {formatDate(post.data.updatedDate)}</time></span>}
@@ -177,7 +178,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
   .notebook-header h1 { font-size:clamp(1.8rem,3vw,2.65rem); font-weight:750; line-height:1.35; letter-spacing:.01em; margin:20px 0 18px; overflow-wrap:anywhere; }
   .notebook-description { font-size:15px; line-height:1.9; color:var(--color-ink-soft); }
   .notebook-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; margin-top:24px; font-size:11px; color:var(--color-ink-faint); }
-  .notebook-meta > span { display:inline-flex; align-items:center; gap:6px; }
+  .notebook-meta > span, .notebook-meta > a { display:inline-flex; align-items:center; gap:6px; }
   .notebook-topics { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
   .comments-jump { display:inline-flex; align-items:center; gap:7px; margin-top:20px; font-size:12px; color:var(--color-accent); }
   .notebook-series { border:1px solid var(--color-line); background:var(--color-paper-subtle); padding:16px 18px; border-radius:16px; margin-top:28px; }

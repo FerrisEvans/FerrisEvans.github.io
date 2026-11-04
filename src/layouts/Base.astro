@@ -26,6 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.title} />
@@ -33,10 +34,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(SITE.avatar, Astro.site)} />
+    <meta property="og:image:alt" content={`${SITE.author} 的头像，${SITE.title} 博客作者`} />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(SITE.avatar, Astro.site)} />
+    <meta name="twitter:image:alt" content={`${SITE.author} 的头像，${SITE.title} 博客作者`} />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=praxis-island-1" />
     <link rel="icon" type="image/png" sizes="16x16" href="/brand/island/favicon-16x16.png?v=praxis-island-1" />
     <link rel="icon" type="image/png" sizes="32x32" href="/brand/island/favicon-32x32.png?v=praxis-island-1" />
