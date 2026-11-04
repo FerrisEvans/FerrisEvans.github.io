@@ -50,10 +50,10 @@ jobs:
       - name: Verify build output
         run: npm run verify:build
 
-      - name: Install browser for production smoke tests
-        run: npx playwright install --with-deps chromium
-
       - name: Verify production reading and fallback paths
+        env:
+          # GitHub's Ubuntu runner already includes Chrome and its dependencies.
+          BROWSER_CHANNEL: chrome
         run: |
           npm run preview -- --host 127.0.0.1 --port 4327 > "$RUNNER_TEMP/preview.log" 2>&1 &
           preview_pid=$!
