@@ -2,6 +2,9 @@
 
 首页 `/` 保留「写给自己的实践志」Hero 的内容与两个出口。Hero 使用独立的
 `HomeHero.astro` 样式作用域，后续首页换皮不依赖博客的视觉系统。
+雨滴、折射、雾气恢复和按住拖动擦拭复用原 `RainGlassBackground` 的
+`RainGlassController`；离开页面释放资源，浏览器返回缓存页面时重新挂载。
+无 WebGL / JavaScript 时保留静态背景和双入口。减少动态效果时保留静态雨滴与擦拭。
 `/lofi/` 从现有文章目录开始，分类、阅读、搜索和分页沿用原界面。
 
 ```mermaid
@@ -39,10 +42,12 @@ flowchart TD
 
 ```sh
 BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:room-flow
+BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:rain-glass
 ```
 
 可将 `SMOKE_SCREENSHOT_DIR` 指向已忽略的 `.room-build/home-room-flow/` 保存证据。
 该脚本覆盖首页预加载和缓存复用、提前进入、失败重试、电视反复开关、深链刷新、
 返回首页与博客，以及窄屏和 WebGL 不可用的降级。
+雨玻璃脚本用真实拖拽和截图像素比较验证擦雾、雨滴动画、返回首页后的恢复与静态降级。
 
 本次不更换首页为卡通岛视觉，不引入 UI 依赖，不修改书房几何或美术资源。
