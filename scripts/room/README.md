@@ -1,15 +1,51 @@
 # Room study
 
-The current `/` is the rainy-night desktop experience; `/room/` is a compatible
-noindex alias with a root canonical. `/lofi/` preserves the reading homepage;
+The current `/` is the interactive rain-glass homepage with room and blog links.
+`/room/` hosts the rainy-night desktop experience with a self canonical and
+`noindex,follow`. `/lofi/` preserves the reading homepage;
 article routes, existing `/page/2/` pagination, categories and About remain available.
 It does not replace the blog content pipeline. Historical stage notes below are
 retained as a record; their asset sizes, deferred work and limitations describe
 those earlier builds, not the current build.
 
-The delivered asset build is `bb9b4de91395842e`, with bake
-`04414c91e8d8de84`. It includes the subsequent curved CRT layer separation,
-equipment finish, lamp, curtain, foliage and tape-contact corrections.
+The current local asset build is `9cb7fb5a86c49163`, with bake
+`303ab0c720678a94`. It includes the subsequent curved CRT layer separation,
+equipment finish, lamp, curtain, foliage and tape-contact corrections. This
+identifier describes the repository assets, not a deployment confirmation.
+
+## MCP inspection and local curtain refinement
+
+MCP for Blender 2.2.6 was connected and verified through scene queries, Python
+execution and returned viewport images. Interactive work uses a separate copy;
+the CLI remains responsible for repeatable geometry and baking.
+
+Two offline cloth simulations made the broad folds narrower and more regular,
+so neither result was adopted. `simulate-curtains.py` retains the reproducible
+authoring experiment: it reads a real greybox with `--base`, records its hash,
+pins the header and writes private candidates without changing public assets.
+
+The accepted change adds broad, shallow side-seam tension to the existing
+curtains. The maximum displacement is about 14 mm. Header points, hanging
+hardware, topology, UVs and runtime motion are unchanged. An earlier narrow
+crease produced baked self-shadow specks and was rejected; the accepted
+transition spans several mesh rows. The browser improvement is subtle, mainly
+in the right curtain's middle section, and does not resolve all fold regularity.
+
+Raw candidate inspection also exposed order-dependent duplicate micro-surface
+shader injection on shared ABS control and gasket materials. Finish selection
+now completes all material clones before injecting shaders. A regression test
+covers both scene orders and repeated shader compilation; actual WebGL captures
+verify the runtime-reflection path without shader errors.
+
+Evidence and rejected candidates are under `.room-build/mcp-curtains/`.
+`after-d/` records matching-camera overview, curtain details and lamp-off checks;
+`candidate-d/retained-atlases.json` verifies 988 other nodes and restores their
+accepted UVs. Final model, entry maps, reflection and posters are regenerated.
+`final/` and `final-motion/` verify the prepared production build with no browser
+errors, including lamp switching and CD inspection. All compared views retain
+their original draw-call, triangle and texture counts; Home remains 263 calls,
+925,758 triangles, 109 textures and 149 geometries. No FPS benchmark is claimed.
+TypeScript, 204 tests, the production build and the 62-page link check passed.
 
 ## Earlier local refinement — 2026-11-03, visual material audit
 

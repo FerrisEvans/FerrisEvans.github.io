@@ -17,6 +17,7 @@ const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
     <style is:inline>@view-transition { navigation: auto; }</style>
     <title>{SITE.title} — {SITE.tagline}</title>
     <meta name="description" content={SITE.description} />
+    <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.title} />

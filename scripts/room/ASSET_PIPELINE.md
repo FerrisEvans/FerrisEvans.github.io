@@ -3,6 +3,28 @@
 `build-assets.py` is the current candidate build entry. `build.py` is a historical
 scene and must not replace the current public bundle.
 
+## Interactive Blender inspection
+
+The local Codex integration uses the community **MCP for Blender** server
+(`mcp-for-blender` 2.2.6, addon protocol 15). Its `get_scene_info`,
+`execute_blender_code`, and `look` tools inspect and edit a running Blender
+instance. The workstation configuration lives outside this repository; telemetry
+is disabled. The integration was verified with Blender 5.2.1 LTS.
+
+Open a copy of a candidate's `build/study-materials.blend` for interactive work.
+Do not replace an already open scene with unsaved work. Check the scene filename
+before editing. `look` can frame named objects from several sides, but does not
+hide surrounding geometry; temporarily isolate the target when walls obscure
+the inspection, then restore visibility.
+
+MCP is an authoring and inspection aid. Keep accepted changes in the refinement
+scripts or versioned source assets, since `geometry` and `bake` reconstruct a
+fresh scene. Long simulations and final baking continue through the CLI stages
+below. A Blender viewport improvement still requires the fixed-camera WebGL
+comparison and delivery checks before promotion.
+
+## Candidate construction
+
 Use an existing Python environment with Pillow and NumPy, and the installed
 Blender application. No command installs software. From the repository root:
 

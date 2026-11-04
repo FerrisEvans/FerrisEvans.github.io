@@ -9,7 +9,7 @@ import { getRoomAssetManifest } from '../utils/room-assets';
 const { files, assetVersion, posterVersion, hasPoster } = getRoomAssetManifest();
 const posts = await getPosts();
 const canonical = new URL('/room/', Astro.site);
-const description = `${SITE.title}：Ferris 的编程语言、游戏开发与 AI 笔记。`;
+const description = `${SITE.title}：${SITE.author} 的编程语言、游戏开发与 AI 笔记。`;
 const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
 const content = {
   author: SITE.author, intro: ABOUT.intro, github: SITE.github, email: SITE.email,
@@ -26,6 +26,7 @@ const content = {
     <style is:inline>@view-transition { navigation: auto; }</style>
     <meta name="robots" content="noindex,follow" />
     <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.title} />

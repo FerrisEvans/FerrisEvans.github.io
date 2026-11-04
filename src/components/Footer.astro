@@ -7,12 +7,12 @@ const year = new Date().getFullYear();
 ---
 <div class="footer-wave" aria-hidden="true"><Divider type="ocean-wave" animated={false} /></div>
 <footer data-pagefind-ignore class="island-footer">
-  <div><a href="/lofi/" aria-label="Praxis 文章首页"><IslandBrand /></a><span>© {year} {SITE.author} · {SITE.tagline}</span></div>
-  <nav aria-label="社交与订阅">
-    <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="github" size={18} /></a>
-    <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter" class="social-x">𝕏</a>
-    <a href={`mailto:${SITE.email}`} aria-label="Email"><Icon name="mail" size={18} /></a>
-    <a href="/rss.xml" aria-label="RSS"><Icon name="rss" size={18} /></a>
+  <div><a href="/lofi/" aria-label={`${SITE.title} 博客首页`}><IslandBrand /></a><span>© {year} <a href="/about/" rel="author">{SITE.author}</a> · {SITE.tagline}</span></div>
+  <nav aria-label="作者联系与博客订阅">
+    <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label={`${SITE.author} 的 GitHub`}><Icon name="github" size={18} /></a>
+    <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" aria-label={`${SITE.author} 的 X（Twitter）`} class="social-x">𝕏</a>
+    <a href={`mailto:${SITE.email}`} aria-label={`给 ${SITE.author} 发邮件`}><Icon name="mail" size={18} /></a>
+    <a href="/rss.xml" aria-label={`订阅 ${SITE.title} RSS`}><Icon name="rss" size={18} /></a>
     <a class="astro-credit" href="https://astro.build" target="_blank" rel="noopener noreferrer">Built with Astro</a>
   </nav>
 </footer>

@@ -9,22 +9,22 @@ const principles = ABOUT.principles;
 const zen = ABOUT.zen.lines;
 ---
 
-<Base title="关于">
+<Base title={`关于 ${SITE.author}`}>
   <div class="island-page about-page">
     <header class="about-title">
-      <p class="island-eyebrow">来自岛主的一封信</p>
-      <h1 class="island-heading">关于这座小岛</h1>
-      <p class="island-lead">一个存放实践、问题和好奇心的地方。</p>
+      <p class="island-eyebrow">来自 {SITE.author} 的一封信</p>
+      <h1 class="island-heading">关于作者与博客</h1>
+      <p class="island-lead">{SITE.title} 是 {SITE.author} 的个人博客，一个存放实践、问题和好奇心的地方。</p>
     </header>
 
     <section class="island-panel profile-note" aria-labelledby="profile-heading">
-      <div class="profile-photo"><img src={SITE.avatar} alt={SITE.author} width="112" height="112" /></div>
+      <div class="profile-photo"><img src={SITE.avatar} alt={`${SITE.author} 的个人头像`} width="112" height="112" /></div>
       <div class="profile-copy">
         <h2 id="profile-heading">{aboutGreeting(SITE.author)}</h2>
         <p>{ABOUT.intro}</p>
         <div class="profile-links">
-          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="profile-github"><Icon name="github" size={17} />GitHub<Icon name="arrow-right" size={15} /></a>
-          <a href={`mailto:${SITE.email}`}><Icon name="mail" size={16} /><span>{SITE.email}</span></a>
+          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="profile-github" aria-label={`${SITE.author} 的 GitHub`}><Icon name="github" size={17} />GitHub<Icon name="arrow-right" size={15} /></a>
+          <a href={`mailto:${SITE.email}`} aria-label={`给 ${SITE.author} 发邮件：${SITE.email}`}><Icon name="mail" size={16} /><span>{SITE.email}</span></a>
         </div>
       </div>
     </section>

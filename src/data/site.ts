@@ -1,10 +1,13 @@
+const BLOG_NAME = 'Praxis';
+const AUTHOR_NAME = 'Ferris';
+const BLOG_INTRO = '记录编程语言、游戏开发与人工智能的学习、实践和思考。';
+
 export const SITE = {
-  title: 'Praxis',
+  title: BLOG_NAME,
   tagline: '保持好奇，慢慢来',
-  description:
-    '编程、游戏开发与 AI 的学习笔记。读一点，试一点，记下一点点。',
-  intro: '记录编程语言、游戏开发与人工智能的学习、实践和思考。',
-  author: 'Ferris',
+  description: `${BLOG_NAME} 是 ${AUTHOR_NAME} 的个人博客。${BLOG_INTRO}`,
+  intro: BLOG_INTRO,
+  author: AUTHOR_NAME,
   email: 'ferris.evans@outlook.com',
   avatar: '/brand/island/ferris-avatar.png?v=1',
   github: 'https://github.com/FerrisEvans',

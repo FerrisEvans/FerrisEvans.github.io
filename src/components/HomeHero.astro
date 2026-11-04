@@ -20,7 +20,7 @@ const { posterVersion, assetVersion } = Astro.props;
         <a id="home-enter-room" class="home-primary" href="/room/">进入书房 <span class="home-dimension">3D</span><span aria-hidden="true">↗</span></a>
         <a id="home-enter-blog" class="home-secondary" href="/lofi/">进入博客 <span aria-hidden="true">→</span></a>
       </nav>
-      <p class="home-signature">{SITE.title.toUpperCase()} / {SITE.author.toUpperCase()}</p>
+      <p class="home-signature">{SITE.title} · {SITE.author} 的个人博客</p>
     </section>
     <aside id="home-preload" class="home-preload" data-state="idle" data-asset-version={assetVersion} aria-label="书房资源预加载">
       <p id="home-preload-status" role="status" aria-live="polite">书房资源准备中…</p>

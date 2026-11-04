@@ -8,7 +8,7 @@ const links = [
   { href: '/categories/', label: '分类', icon: 'grid', detail: '沿着兴趣探索' },
   { href: '/tags/', label: '标签', icon: 'tag', detail: '串起零散的想法' },
   { href: '/archives/', label: '归档', icon: 'archive', detail: '留下时间的脚印' },
-  { href: '/about/', label: '关于', icon: 'user', detail: '认识这位记录者' },
+  { href: '/about/', label: '关于作者', icon: 'user', detail: `认识 ${SITE.author}` },
 ];
 const path = Astro.url.pathname;
 const isActive = (href: string) => href === '/lofi/' ? path === '/lofi/' || path.startsWith('/page/') || path.startsWith('/posts/') : path.startsWith(href);
