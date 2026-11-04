@@ -1,0 +1,98 @@
+---
+import type { CategoryDef } from '../data/site';
+
+interface Props {
+  categories: CategoryDef[];
+  counts: Record<string, number>;
+  label?: string;
+}
+
+const { categories, counts, label = '栏目' } = Astro.props;
+---
+
+{
+  categories.length > 0 && (
+    <ul class="category-wall" aria-label={label}>
+      {categories.map((cat) => {
+        const count = counts[cat.slug] ?? 0;
+        const unconfigured = cat.configured === false;
+        return (
+          <li>
+            <a href={`/categories/${cat.slug}/`} class="category-wall-card group">
+              <span class="category-wall-bar" style={`background: ${cat.accent};`} aria-hidden="true" />
+              <span class="flex items-center justify-between gap-2">
+                <span class="font-mono text-sm font-semibold" style={`color: ${cat.accent};`}>
+                  {cat.mark}
+                </span>
+                {unconfigured && <span class="category-wall-flag">未配置</span>}
+              </span>
+              <span class="mt-3 block font-sans text-lg font-medium tracking-tight text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
+                {cat.label}
+              </span>
+              {unconfigured ? (
+                <span class="mt-1 block text-xs leading-5 text-ink-faint dark:text-snow-faint">在 site.ts 的 CATEGORIES 补全显示名</span>
+              ) : (
+                <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? '尚无文章' : `${count} 篇文章`}</span>
+              )}
+              {unconfigured && <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? '尚无文章' : `${count} 篇文章`}</span>}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  )
+}
+
+<style>
+  .category-wall {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .category-wall-card {
+    position: relative;
+    display: flex;
+    min-height: 7.5rem;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-paper-elev);
+    padding: 1rem 1rem 1rem 1.15rem;
+    transition: transform 220ms ease, border-color 220ms ease;
+  }
+
+  .category-wall-card:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-line));
+  }
+
+  :global(.dark) .category-wall-card {
+    border-color: var(--color-line-dark);
+    background: var(--color-night-elev);
+  }
+
+  .category-wall-bar {
+    position: absolute;
+    inset-block: 0;
+    left: 0;
+    width: 4px;
+  }
+
+  .category-wall-flag {
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    padding: 0.125rem 0.4rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+  }
+
+  :global(.dark) .category-wall-flag {
+    color: var(--color-accent-soft);
+  }
+</style>
