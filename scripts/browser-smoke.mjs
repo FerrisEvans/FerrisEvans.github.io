@@ -123,6 +123,20 @@ try {
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');
 
   await page.goto(url('/tags/'));
+  await page.locator('.tag-cloud-panel astro-island:not([ssr])').waitFor();
+  const cloudMarks = page.locator('.tag-word-cloud [data-chart-mark]');
+  assert(await cloudMarks.count() > 0, 'tag word cloud uses published article tags');
+  const cloudTag = await cloudMarks.first().locator('text').textContent();
+  await cloudMarks.first().hover();
+  assert.match(await page.locator('.tag-word-cloud [role="tooltip"]').innerText(), /\d+ 篇笔记/);
+  await cloudMarks.first().focus();
+  await page.keyboard.press('ArrowRight');
+  const focusedTag = await page.locator('.tag-word-cloud [data-chart-mark]:focus text').textContent();
+  assert.notEqual(focusedTag, cloudTag, 'arrow keys browse word-cloud tags');
+  await page.keyboard.press('Enter');
+  await page.waitForURL(url(`/tags/${encodeURIComponent(focusedTag)}/`));
+  await page.goto(url('/tags/'));
+  console.log('PASS: theme word cloud exposes article counts and keyboard navigation to tag pages');
   const tagFilter = page.getByRole('searchbox', { name: '筛选标签' });
   const tagCount = await page.locator('.tag-item').count();
   const firstTag = await page.locator('.tag-item').first().getAttribute('data-tag');
@@ -202,12 +216,39 @@ try {
     navigator.clipboard.writeText = async (text) => { window.__smokeCopiedCode = text; };
   });
   const firstCode = page.locator('.code-block').first();
-  const expectedCode = await firstCode.locator('pre').innerText();
-  await firstCode.getByRole('button', { name: '复制代码' }).click();
+  const sourceCode = firstCode.locator('pre > code');
+  const expectedCode = await sourceCode.textContent();
+  const lineNumbers = await sourceCode.locator(':scope > .line').evaluateAll(lines => lines.map(line => {
+    const marker = line.firstElementChild;
+    return {
+      marker: marker?.classList.contains('code-line-number'),
+      number: marker?.getAttribute('data-line-number'),
+      hidden: marker?.getAttribute('aria-hidden'),
+      text: marker?.textContent,
+      display: marker ? getComputedStyle(marker, '::before').content : null,
+    };
+  }));
+  assert(lineNumbers.length > 0, 'ordinary code blocks have line numbers');
+  for (const [index, line] of lineNumbers.entries()) {
+    assert(line.marker);
+    assert.equal(line.number, String(index + 1));
+    assert.equal(line.hidden, 'true');
+    assert.equal(line.text, '');
+    assert.equal(line.display, JSON.stringify(String(index + 1)), 'line number is displayed by CSS');
+  }
+  const copy = firstCode.getByRole('button', { name: '复制代码', exact: true });
+  assert.equal((await copy.innerText()).trim(), '', 'ordinary copy control is icon-only');
+  const copyIcons = copy.locator('svg');
+  assert(await copyIcons.count() > 0);
+  for (const icon of await copyIcons.all()) assert.equal(await icon.getAttribute('aria-hidden'), 'true');
+  await copy.click();
   await page.waitForFunction(() => typeof window.__smokeCopiedCode === 'string');
-  assert.equal(await page.evaluate(() => window.__smokeCopiedCode), expectedCode);
-  assert.equal(await firstCode.getByRole('button', { name: '复制代码' }).innerText(), '已复制');
-  console.log('PASS: mobile code retains its formatting, scrolls to the end, and remains copyable');
+  assert.equal(await page.evaluate(() => window.__smokeCopiedCode), expectedCode, 'copy preserves exact source whitespace without line numbers');
+  assert.equal(await copy.getAttribute('data-copied'), 'true');
+  assert.equal(await copy.getAttribute('title'), '已复制');
+  assert.equal(await copy.getAttribute('aria-label'), '复制代码');
+  assert.equal((await copy.innerText()).trim(), '', 'successful copying does not add visible text');
+  console.log('PASS: mobile code retains its formatting, scrolls to the end, and copies without decorative line numbers');
 
   await page.setViewportSize({ width: 1536, height: 900 });
   await page.goto(url('/posts/agent_dev_tutorial/'));

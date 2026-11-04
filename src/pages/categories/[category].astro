@@ -37,7 +37,7 @@ for (const key of orderedKeys) {
 
 <Base title={category.label} description={category.description}>
   <div class="island-page">
-    <a href="/categories/" class="back-link"><Icon name="arrow-left" size={17} />全部分类</a>
+    <a href="/categories/" class="back-link blog-button"><Icon name="arrow-left" size={17} />全部分类</a>
     <header class="collection-intro island-panel">
       <span class="intro-symbol"><Icon name="book" size={52} /></span>
       <div>
@@ -67,8 +67,7 @@ for (const key of orderedKeys) {
 </Base>
 
 <style>
-  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 18px; padding: 8px 16px; border-radius: 50px; background: var(--color-paper-elev); font-size: 14px; font-weight: 700; color: var(--color-ink-soft); }
-  .back-link:hover { color: var(--color-accent); }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 18px; padding: 8px 16px; font-size: 14px; }
   .collection-intro { display: flex; align-items: center; gap: 28px; padding: 36px; background: #fff3cf; background-image: radial-gradient(#e5c88840 1.4px, transparent 1.4px); background-size: 14px 14px; border: 2px solid #e3ca91; border-radius: 30px; box-shadow: none; }
   .collection-title { margin-bottom: 22px; }
   .intro-symbol { display: grid; place-items: center; flex: 0 0 90px; height: 90px; border-radius: 36px 28px 34px 30px; color: #794f27; background: #fff9e7; transform: rotate(-7deg); }
@@ -85,10 +84,10 @@ for (const key of orderedKeys) {
   .empty-collection { margin-top: 28px; padding: 28px; color: var(--color-ink-soft); }
   .empty-collection a { text-decoration: underline; }
   :global(.dark) .collection-intro { background-color: #493f2c; border-color: #7c6a42; background-image: radial-gradient(#eedb9f16 1.4px, transparent 1.4px); }
-  :global(.dark) .group-index a, :global(.dark) .back-link { background: var(--color-night-elev); border-color: var(--color-line-dark); }
+  :global(.dark) .group-index a { background: var(--color-night-elev); border-color: var(--color-line-dark); }
   :global(.dark) .intro-symbol { color: #f3d28f; background: #605035; }
-  :global(.dark) .back-link, :global(.dark) .collection-total, :global(.dark) .empty-collection { color: var(--color-snow-soft); }
-  :global(.dark) .group-index a:hover, :global(.dark) .back-link:hover { border-color: var(--color-accent-dark); color: var(--color-accent-dark); }
+  :global(.dark) .collection-total, :global(.dark) .empty-collection { color: var(--color-snow-soft); }
+  :global(.dark) .group-index a:hover { border-color: var(--color-accent-dark); color: var(--color-accent-dark); }
   :global(.dark) .group-index a span:last-child, :global(.dark) .group-heading > span { background: #5c4e34; color: #f3dba9; }
   @media (max-width: 640px) { .collection-intro { display: block; padding: 27px; } .intro-symbol { width: 76px; height: 76px; margin-bottom: 25px; } .collection-notes { grid-template-columns: 1fr; } }
 </style>

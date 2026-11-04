@@ -2,11 +2,10 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
-import { ABOUT, aboutGreeting, aboutInterests } from '../data/room-about';
+import { ABOUT, aboutGreeting } from '../data/room-about';
+import { ABOUT_GUIDES } from '../data/about-guides';
 
-const interests = aboutInterests();
 const principles = ABOUT.principles;
-const zen = ABOUT.zen.lines;
 ---
 
 <Base title={`关于 ${SITE.author}`}>
@@ -23,21 +22,22 @@ const zen = ABOUT.zen.lines;
         <h2 id="profile-heading">{aboutGreeting(SITE.author)}</h2>
         <p>{ABOUT.intro}</p>
         <div class="profile-links">
-          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="profile-github" aria-label={`${SITE.author} 的 GitHub`}><Icon name="github" size={17} />GitHub<Icon name="arrow-right" size={15} /></a>
+          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="profile-github blog-button" aria-label={`${SITE.author} 的 GitHub`}><Icon name="github" size={17} />GitHub<Icon name="arrow-right" size={15} /></a>
           <a href={`mailto:${SITE.email}`} aria-label={`给 ${SITE.author} 发邮件：${SITE.email}`}><Icon name="mail" size={16} /><span>{SITE.email}</span></a>
         </div>
       </div>
     </section>
 
-    <section aria-labelledby="interests-heading" class="about-section">
-      <div class="about-section-heading"><div><p class="island-eyebrow">CURRENT CURIOSITIES</p><h2 id="interests-heading">正在探索</h2></div><Icon name="sparkles" size={24} /></div>
-      <div class="interest-grid">
-        {interests.map((cat) => (
-          <a href={`/categories/${cat.slug}/`} class="island-panel interest-note">
-            <span class="interest-icon"><Icon name={({ 'programming-language': 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' } as Record<string, string>)[cat.slug] ?? 'book'} size={25} /></span>
-            <h3>{cat.label}</h3>
-            <p>{cat.description}</p>
-            <span class="interest-link">翻翻相关笔记<Icon name="arrow-right" size={16} /></span>
+    <section class="about-guides" aria-labelledby="guides-heading">
+      <div class="guide-section-heading"><div><p class="island-eyebrow">阅读与写作</p><h2 id="guides-heading">几份常翻的笔记</h2></div><Icon name="book" size={24} /></div>
+      <div class="guide-card-grid">
+        {ABOUT_GUIDES.map((guide, index) => (
+          <a id={guide.id} href={guide.href} class="island-panel guide-card">
+            <span class="guide-card-top"><span class="guide-card-icon"><Icon name={guide.icon} size={24} /></span><span class="guide-card-number">0{index + 1}</span></span>
+            <span class="guide-card-label">{guide.label}</span>
+            <h3>{guide.title}</h3>
+            <p>{guide.description}</p>
+            <span class="guide-card-action">阅读全文<Icon name="arrow-right" size={16} /></span>
           </a>
         ))}
       </div>
@@ -60,23 +60,7 @@ const zen = ABOUT.zen.lines;
       </section>
     </div>
 
-    <section class="island-panel about-extras" aria-label="更多笔记">
-      <details class="about-disclosure">
-        <summary><span>{ABOUT.zen.title}</span><span class="extra-author">{ABOUT.zen.author}</span></summary>
-        <div class="prose-custom"><pre><code class="language-python">{ABOUT.zen.command}</code></pre><ol>{zen.map((line) => <li>{line}</li>)}</ol></div>
-      </details>
-      <details class="about-disclosure">
-        <summary>{ABOUT.formatting.title}</summary>
-        <div class="prose-custom">
-          {ABOUT.formatting.paragraphs.map((paragraph) => (
-            <p>{paragraph.map((part) => {
-              const Tag = part.tag ?? 'span';
-              return <Tag class={part.accent ? 'text-accent dark:text-accent-dark' : undefined}>{part.text}</Tag>;
-            })}</p>
-          ))}
-        </div>
-      </details>
-    </section>
+
   </div>
 </Base>
 
@@ -89,20 +73,12 @@ const zen = ABOUT.zen.lines;
   .profile-copy h2 { margin:0 0 14px; font-size:24px; font-weight:700; }
   .profile-copy > p { font-size:14px; line-height:1.95; color:var(--color-ink-soft); max-width:640px; }
   .profile-links { display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px; margin-top:22px; }
-  .profile-links a { display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--color-ink-soft); min-width:0; }
+  .profile-links a { display:inline-flex; align-items:center; gap:8px; font-size:12px; min-width:0; }
+  .profile-links a:not(.blog-button) { color:var(--color-ink-soft); }
   .profile-links a span { overflow-wrap:anywhere; }
-  .profile-links .profile-github { padding:11px 17px; border-radius:12px; background:var(--color-accent); color:var(--color-paper-elev); }
-  .profile-links a:hover { opacity:.8; }
-  .about-section { margin-top:38px; }
-  .about-section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; color:var(--color-accent); }
-  .about-section h2, .about-note-grid h2 { font-size:22px; font-weight:700; margin-top:7px; color:var(--color-ink); }
-  .interest-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-  .interest-note { display:flex; flex-direction:column; align-items:flex-start; gap:13px; min-width:0; padding:25px; transition:transform .15s; }
-  .interest-note:hover { transform:translateY(-3px); }
-  .interest-icon { display:grid; place-items:center; width:48px; height:48px; border-radius:17px; background:var(--color-paper-subtle); color:var(--color-accent); }
-  .interest-note h3 { font-size:16px; font-weight:700; }
-  .interest-note p { font-size:12px; line-height:1.9; color:var(--color-ink-soft); }
-  .interest-link { display:flex; align-items:center; justify-content:space-between; align-self:stretch; gap:8px; font-size:11px; padding-top:10px; margin-top:auto; color:var(--color-accent); }
+  .profile-links .profile-github { padding:11px 17px; }
+  .profile-links a:not(.blog-button):hover { opacity:.8; }
+  .about-note-grid h2 { font-size:22px; font-weight:700; margin-top:7px; color:var(--color-ink); }
   .about-note-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:20px; margin-top:28px; }
   .principles-note, .practice-note { padding:28px; }
   .principles-note ol { display:grid; gap:16px; margin-top:22px; }
@@ -113,20 +89,33 @@ const zen = ABOUT.zen.lines;
   .practice-note blockquote { font-size:13px; line-height:1.95; margin-top:18px; color:var(--color-ink-soft); }
   .practice-note blockquote p + p { margin-top:15px; }
   .practice-note footer { margin-top:18px; font-size:10px; color:var(--color-ink-faint); }
-  .about-extras { margin-top:28px; padding:6px 28px; }
-  .about-disclosure { padding:21px 0; }
-  .about-disclosure + .about-disclosure { border-top:1px dashed var(--color-line); }
-  .about-disclosure summary { font-size:13px; }
-  .extra-author { margin-left:auto; font-size:11px; color:var(--color-ink-faint); }
-  .about-disclosure .prose-custom { margin-top:18px; }
+  .about-guides { margin-top:36px; }
+  .guide-section-heading { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:18px; color:var(--color-accent); }
+  .guide-section-heading h2 { margin-top:7px; font-size:22px; font-weight:700; color:var(--color-ink); }
+  .guide-card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+  .guide-card { display:flex; flex-direction:column; align-items:flex-start; min-width:0; padding:26px; scroll-margin-top:110px; transition:transform .15s; }
+  .guide-card:hover { transform:translateY(-3px); }
+  .guide-card:focus-visible { outline:2px solid var(--color-accent); outline-offset:5px; }
+  .guide-card-top { display:flex; width:100%; align-items:center; justify-content:space-between; margin-bottom:22px; }
+  .guide-card-icon { display:grid; place-items:center; width:46px; height:46px; border-radius:16px; color:var(--color-accent); background:var(--color-paper-subtle); }
+  .guide-card-number { font-size:12px; color:var(--color-ink-faint); }
+  .guide-card-label { font-size:10px; color:var(--color-ink-faint); margin-bottom:8px; }
+  .guide-card h3 { font-size:17px; line-height:1.5; font-weight:700; margin-bottom:12px; }
+  .guide-card p { font-size:12px; line-height:1.9; color:var(--color-ink-soft); margin-bottom:24px; }
+  .guide-card-action { display:flex; align-self:stretch; align-items:center; justify-content:space-between; gap:12px; padding-top:17px; margin-top:auto; border-top:1px dashed var(--color-line); font-size:11px; color:var(--color-accent); }
+  :global(.dark) .guide-card h3, :global(.dark) .guide-section-heading h2 { color:var(--color-snow); }
+  :global(.dark) .guide-section-heading, :global(.dark) .guide-card-icon, :global(.dark) .guide-card-action { color:var(--color-accent-dark); }
+  :global(.dark) .guide-card-icon { background:var(--color-night-subtle); }
+  :global(.dark) .guide-card p { color:var(--color-snow-soft); }
+  :global(.dark) .guide-card-label, :global(.dark) .guide-card-number { color:var(--color-snow-faint); }
+  :global(.dark) .guide-card-action { border-color:var(--color-line-dark); }
+  @media(prefers-reduced-motion:reduce) { .guide-card { transition:none; } .guide-card:hover { transform:none; } }
   :global(.dark) .profile-photo img { border-color:var(--color-night-subtle); }
-  :global(.dark) .profile-copy > p, :global(.dark) .profile-links a, :global(.dark) .interest-note p, :global(.dark) .practice-note blockquote { color:var(--color-snow-soft); }
-  :global(.dark) .profile-links .profile-github { color:var(--color-night); background:var(--color-accent-dark); }
-  :global(.dark) .about-section-heading, :global(.dark) .interest-icon, :global(.dark) .interest-link, :global(.dark) .principles-note li > span, :global(.dark) .practice-note > :global(svg) { color:var(--color-accent-dark); }
-  :global(.dark) .about-section h2, :global(.dark) .about-note-grid h2 { color:var(--color-snow); }
-  :global(.dark) .interest-icon, :global(.dark) .practice-note { background:var(--color-night-subtle); }
-  :global(.dark) .practice-note footer, :global(.dark) .extra-author { color:var(--color-snow-faint); }
-  :global(.dark) .about-disclosure + .about-disclosure { border-color:var(--color-line-dark); }
-  @media (max-width:800px) { .interest-grid { grid-template-columns:1fr; } .about-note-grid { grid-template-columns:1fr; } }
-  @media (max-width:639px) { .profile-note { flex-direction:column; padding:25px; gap:22px; } .profile-copy h2 { font-size:22px; } .principles-note, .practice-note, .about-extras { padding-inline:23px; } .extra-author { display:none; } }
+  :global(.dark) .profile-copy > p, :global(.dark) .profile-links a:not(.blog-button), :global(.dark) .practice-note blockquote { color:var(--color-snow-soft); }
+  :global(.dark) .principles-note li > span, :global(.dark) .practice-note > :global(svg) { color:var(--color-accent-dark); }
+  :global(.dark) .about-note-grid h2 { color:var(--color-snow); }
+  :global(.dark) .practice-note { background:var(--color-night-subtle); }
+  :global(.dark) .practice-note footer { color:var(--color-snow-faint); }
+  @media (max-width:800px) { .about-note-grid, .guide-card-grid { grid-template-columns:1fr; } }
+  @media (max-width:639px) { .profile-note { flex-direction:column; padding:25px; gap:22px; } .profile-copy h2 { font-size:22px; } .principles-note, .practice-note { padding-inline:23px; } }
 </style>

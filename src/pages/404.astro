@@ -12,8 +12,8 @@ import Icon from '../components/Icon.astro';
       <h1>这张笔记走丢了</h1>
       <p class="lost-description">你访问的页面不存在，或者已经被移动。<br />沿着下面的小路，继续逛逛吧。</p>
       <div class="lost-actions">
-        <a href="/lofi/" class="back-to-notes"><Icon name="book" size={18} />回到笔记</a>
-        <a href="/search/"><Icon name="search" size={18} />搜索文章</a>
+        <a href="/lofi/" class="back-to-notes blog-button blog-button--primary"><Icon name="book" size={18} />回到笔记</a>
+        <a href="/search/" class="blog-button"><Icon name="search" size={18} />搜索文章</a>
       </div>
       <a href="/room/" class="back-to-room"><Icon name="home" size={15} />回到书房<Icon name="arrow-right" size={14} /></a>
     </section>
@@ -28,15 +28,11 @@ import Icon from '../components/Icon.astro';
   .lost-note h1 { font-size:28px; font-weight:700; }
   .lost-description { margin-top:17px; font-size:13px; line-height:1.9; color:var(--color-ink-soft); }
   .lost-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:28px; }
-  .lost-actions a { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:11px 18px; border:1px solid var(--color-line); border-radius:14px; font-size:13px; transition:transform .15s; }
-  .lost-actions a:hover { transform:translateY(-2px); }
-  .lost-actions .back-to-notes { background:var(--color-accent); color:var(--color-paper-elev); border-color:var(--color-accent); }
+  .lost-actions a { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:11px 18px; font-size:13px; }
   .back-to-room { display:inline-flex; align-items:center; gap:7px; margin-top:30px; font-size:11px; color:var(--color-ink-faint); }
   :global(.dark) .lost-icon { background:var(--color-night-subtle); color:var(--color-accent-dark); }
   :global(.dark) .lost-number { color:var(--color-accent-dark); }
   :global(.dark) .lost-description { color:var(--color-snow-soft); }
-  :global(.dark) .lost-actions a { border-color:var(--color-line-dark); }
-  :global(.dark) .lost-actions .back-to-notes { background:var(--color-accent-dark); border-color:var(--color-accent-dark); color:var(--color-night); }
   :global(.dark) .back-to-room { color:var(--color-snow-faint); }
   @media (max-width:639px) { .lost-page { padding-block:30px; } .lost-note { padding:34px 20px; } .lost-note h1 { font-size:23px; } }
 </style>

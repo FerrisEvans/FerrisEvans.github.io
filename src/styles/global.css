@@ -160,27 +160,32 @@ button {
 
 .series-nav > summary,
 .mobile-toc > summary,
-.about-disclosure > summary {
+.guide-toc-mobile > summary {
   @apply flex cursor-pointer list-none items-center justify-between gap-4 font-medium;
 }
 
 .series-nav > summary::-webkit-details-marker,
 .mobile-toc > summary::-webkit-details-marker,
-.about-disclosure > summary::-webkit-details-marker {
+.guide-toc-mobile > summary::-webkit-details-marker {
   display: none;
 }
 
 .series-nav > summary::after,
 .mobile-toc > summary::after,
-.about-disclosure > summary::after {
-  content: "+";
-  @apply font-mono text-lg font-normal text-ink-faint dark:text-snow-faint;
+.guide-toc-mobile > summary::after {
+  content: '';
+  flex:none;
+  width:20px;
+  height:20px;
+  background:currentColor;
+  mask:url('../../node_modules/naive-icons/svg/chevron-down.svg') center/contain no-repeat;
+  @apply text-ink-faint dark:text-snow-faint;
 }
 
 .series-nav[open] > summary::after,
 .mobile-toc[open] > summary::after,
-.about-disclosure[open] > summary::after {
-  content: "−";
+.guide-toc-mobile[open] > summary::after {
+  transform:rotate(180deg);
 }
 
 @media (hover: none) {

@@ -1,10 +1,12 @@
 ---
 import { render } from 'astro:content';
 import katexStyles from 'katex/dist/katex.min.css?url';
+import 'rehype-code-group/styles.css';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
+import ReadingTools from '../../components/ReadingTools.astro';
 import Giscus from '../../components/Giscus.astro';
 import CategoryBadge from '../../components/CategoryBadge.astro';
 import TagChip from '../../components/TagChip.astro';
@@ -12,22 +14,24 @@ import { SITE, categoryOf, labelFromSlug } from '../../data/site';
 import { getPosts, formatDate, postUrl, postSlug, readingTime, wordCount, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
-  const posts = await getPosts();
-  return posts.map((post, i) => {
-    const series = posts
+  const posts = await getPosts({ includeDrafts: import.meta.env.DEV });
+  return posts.map((post) => {
+    const visiblePosts = posts.filter((candidate) => !candidate.data.draft || candidate.id === post.id);
+    const position = visiblePosts.findIndex((candidate) => candidate.id === post.id);
+    const series = visiblePosts
       .filter((candidate) =>
         candidate.data.category === post.data.category &&
         (candidate.data.subcategory ?? '') === (post.data.subcategory ?? ''))
       .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
-    const related = posts
+    const related = visiblePosts
       .filter((candidate) => candidate.id !== post.id && candidate.data.category === post.data.category)
       .slice(0, 3);
     return {
       params: { slug: postSlug(post) },
       props: {
         post,
-        older: posts[i + 1] ?? null,
-        newer: posts[i - 1] ?? null,
+        older: visiblePosts[position + 1] ?? null,
+        newer: visiblePosts[position - 1] ?? null,
         series,
         related,
       },
@@ -42,7 +46,9 @@ const { post, older, newer, series, related } = Astro.props as {
   series: Post[];
   related: Post[];
 };
-const { Content, headings } = await render(post);
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const hasMath = remarkPluginFrontmatter.hasMath === true || post.data.math;
+const isDraft = post.data.draft;
 const cat = categoryOf(post.data.category);
 const sub = post.data.subcategory
   ? (cat.subcategories[post.data.subcategory] ?? labelFromSlug(post.data.subcategory))
@@ -58,11 +64,13 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
 
 <Base title={post.data.title} description={post.data.description}>
   <Fragment slot="head">
-    {post.data.math && <link rel="stylesheet" href={katexStyles} />}
+    {hasMath && <link rel="stylesheet" href={katexStyles} />}
+    {isDraft && <meta name="robots" content="noindex,nofollow" />}
   </Fragment>
   <div id="read-progress" class="fixed left-0 top-0 z-50 h-0.5 bg-accent dark:bg-accent-dark" style="width: 0%" aria-hidden="true"></div>
 
   <div class="island-page reading-page">
+    {isDraft && <aside class="draft-preview" aria-label="草稿预览" data-pagefind-ignore><strong>草稿预览 · 仅本地可见</strong><p>准备发布时，将文章头部的 <code>draft</code> 改为 <code>false</code>。</p><a href="/drafts/">返回草稿列表</a></aside>}
     <nav aria-label="面包屑" class="reading-breadcrumb">
       <a href="/lofi/"><Icon name="book" size={16} /> 文章</a>
       <span aria-hidden="true">/</span>
@@ -86,7 +94,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
             <CategoryBadge category={post.data.category} />
             {post.data.tags.map((tag) => <TagChip tag={tag} />)}
           </div>
-          <a href="#comments" class="comments-jump"><Icon name="message" size={16} />参与讨论<Icon name="arrow-right" size={14} /></a>
+          {!isDraft && <a href="#comments" class="comments-jump"><Icon name="message" size={16} />参与讨论<Icon name="arrow-right" size={14} /></a>}
 
           {series.length > 1 && (
             <details class="series-nav notebook-series">
@@ -146,19 +154,16 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
               </a>
             )}
           </nav>
-          <Giscus />
+          {!isDraft && <Giscus />}
         </footer>
-        <dialog id="image-viewer" class="image-viewer" aria-label="图片预览">
-          <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label="关闭图片预览">关闭</button>
-          <img id="image-viewer-image" alt="" />
-        </dialog>
+        <ReadingTools />
       </article>
 
       {hasToc && (
         <aside data-pagefind-ignore class="reading-bookmarks">
           <div class="bookmarks-sticky">
             <div class="toc-scroll"><Toc headings={headings} /></div>
-            <a href="#comments" class="bookmark-comments"><Icon name="message" size={16} />讨论与评论<Icon name="arrow-right" size={14} /></a>
+            {!isDraft && <a href="#comments" class="bookmark-comments"><Icon name="message" size={16} />讨论与评论<Icon name="arrow-right" size={14} /></a>}
           </div>
         </aside>
       )}
@@ -169,6 +174,10 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
 <style>
   @reference "../../styles/global.css";
   .reading-page { max-width:1280px; }
+  .draft-preview { margin-bottom:24px; padding:20px; border:1px dashed var(--color-accent); border-radius:16px; background:var(--color-paper-subtle); font-size:14px; line-height:1.8; }
+  .draft-preview a { color:var(--color-accent); text-decoration:underline; }
+  :global(.dark) .draft-preview { background:var(--color-night-subtle); border-color:var(--color-accent-dark); }
+  :global(.dark) .draft-preview a { color:var(--color-accent-dark); }
   .reading-breadcrumb { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:24px; font-size:12px; color:var(--color-ink-faint); }
   .reading-breadcrumb a { display:inline-flex; align-items:center; gap:7px; }
   .reading-breadcrumb a:hover { color:var(--color-accent); }
@@ -226,117 +235,3 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
   @media (min-width:1440px) { .reading-layout.has-bookmarks { grid-template-columns:minmax(0,880px) 190px; justify-content:center; } .reading-bookmarks { display:block; align-self:stretch; padding-top:30px; } .notebook-mobile-toc { display:none; } }
   @media (max-width:639px) { .notebook-sheet { padding:25px 20px; } .reading-breadcrumb { font-size:11px; gap:8px; } .notebook-header h1 { font-size:26px; } .notebook-description { font-size:14px; } .notebook-series { padding:14px; } .series-heading { gap:6px; } .series-count { font-size:10px; } }
 </style>
-
-<script is:inline>
-  (function () {
-    document.querySelectorAll('.prose-custom h2[id]:not(.sr-only), .prose-custom h3[id]:not(.sr-only)').forEach(function (heading) {
-      if (heading.querySelector('.heading-anchor')) return;
-      var anchor = document.createElement('a');
-      anchor.className = 'heading-anchor';
-      anchor.setAttribute('href', '#' + heading.id);
-      anchor.setAttribute('aria-label', '转到本节');
-      anchor.textContent = '#';
-      heading.appendChild(anchor);
-    });
-
-    document.querySelectorAll('.prose-custom pre').forEach(function (pre) {
-      if (pre.parentElement?.classList.contains('code-block')) return;
-      var wrapper = document.createElement('div');
-      var header = document.createElement('div');
-      var language = document.createElement('span');
-      var button = document.createElement('button');
-      var resetTimer;
-      wrapper.className = 'code-block';
-      header.className = 'code-block-header';
-      language.className = 'code-language';
-      language.textContent = pre.getAttribute('data-language') || 'code';
-      button.type = 'button';
-      button.className = 'code-copy';
-      button.textContent = '复制';
-      button.setAttribute('aria-label', '复制代码');
-      button.setAttribute('aria-live', 'polite');
-      header.append(language, button);
-      pre.parentNode.insertBefore(wrapper, pre);
-      wrapper.append(header, pre);
-      button.addEventListener('click', async function () {
-        window.clearTimeout(resetTimer);
-        try {
-          await navigator.clipboard.writeText(pre.innerText);
-          button.dataset.copied = 'true';
-          button.textContent = '已复制';
-        } catch {
-          button.dataset.copied = 'false';
-          button.textContent = '复制失败';
-        }
-        resetTimer = window.setTimeout(function () {
-          button.dataset.copied = 'false';
-          button.textContent = '复制';
-        }, 1600);
-      });
-    });
-
-    var viewer = document.getElementById('image-viewer');
-    var viewerImage = document.getElementById('image-viewer-image');
-    var viewerClose = document.getElementById('image-viewer-close');
-    if (viewer && viewerImage && viewerClose) {
-      document.querySelectorAll('.image-zoom').forEach(function (button) {
-        button.addEventListener('click', function () {
-          var image = button.querySelector('img');
-          if (!image) return;
-          viewerImage.src = image.currentSrc || image.src;
-          viewerImage.alt = image.alt;
-          if (!viewer.open) viewer.showModal();
-        });
-      });
-      viewerClose.addEventListener('click', function () { viewer.close(); });
-      viewer.addEventListener('click', function (event) {
-        if (event.target === viewer) viewer.close();
-      });
-    }
-
-    var bar = document.getElementById('read-progress');
-    var tocLinks = Array.from(document.querySelectorAll('.toc-link'));
-    var headingElements = Array.from(document.querySelectorAll('.prose-custom h2[id], .prose-custom h3[id]'));
-    var ticking = false;
-
-    function updateReading() {
-      var doc = document.documentElement;
-      var total = doc.scrollHeight - doc.clientHeight;
-      if (bar) {
-        var pct = total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0;
-        bar.style.width = pct + '%';
-      }
-      if (tocLinks.length && headingElements.length) {
-        var current = null;
-        headingElements.forEach(function (heading) {
-          if (heading.getBoundingClientRect().top <= 140) current = heading;
-        });
-        if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) {
-          current = headingElements[headingElements.length - 1];
-        }
-        var href = current ? '#' + current.id : '';
-        tocLinks.forEach(function (link) {
-          var active = link.getAttribute('href') === href;
-          link.classList.toggle('active', active);
-          if (active) {
-            link.setAttribute('aria-current', 'location');
-          } else {
-            link.removeAttribute('aria-current');
-          }
-        });
-      }
-      ticking = false;
-    }
-
-    function scheduleUpdate() {
-      if (!ticking) {
-        window.requestAnimationFrame(updateReading);
-        ticking = true;
-      }
-    }
-
-    window.addEventListener('scroll', scheduleUpdate, { passive: true });
-    window.addEventListener('resize', scheduleUpdate);
-    updateReading();
-  })();
-</script>

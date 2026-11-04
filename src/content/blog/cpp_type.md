@@ -5,7 +5,6 @@ pubDate: 2025-02-22
 category: programming-language
 subcategory: cpp
 tags: [type]
-math: true
 ---
 
 

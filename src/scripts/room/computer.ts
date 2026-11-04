@@ -1,4 +1,4 @@
-import { ABOUT as about, aboutGreeting, aboutInterests, aboutPlainText } from '../../data/room-about';
+import { ABOUT as about, aboutGreeting, aboutInterests } from '../../data/room-about';
 
 export type ComputerPage = { title: string; lines: string[] };
 export type ComputerSection = { title: string; paragraphs: readonly string[] };
@@ -71,7 +71,6 @@ export function computerPages(content: ComputerContent): ComputerPage[] {
     { title: '一些相信的事', paragraphs: about.principles.map((value, i) => `${String(i + 1).padStart(2, '0')}  ${value}`) },
     { title: about.practice.title, paragraphs: [...about.practice.quotes, about.practice.attribution] },
     { title: about.zen.title, paragraphs: [`${about.zen.author}\n${about.zen.command}`, ...about.zen.lines.map((value, i) => `${String(i + 1).padStart(2, '0')}  ${value}`)] },
-    { title: about.formatting.title, paragraphs: about.formatting.paragraphs.map(aboutPlainText) },
   ]);
 }
 

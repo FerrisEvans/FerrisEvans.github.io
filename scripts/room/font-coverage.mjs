@@ -15,23 +15,19 @@ export function collectFontCharacters(projectRoot = root, spec = json(resolve(pr
     if (!files.length && !['*', '?', '{', '['].some(char => pattern.includes(char))) throw new Error(`Missing font text source: ${pattern}`);
     return files.map(path => path.replaceAll('\\', '/'));
   }))].sort();
-  const sources = expand(spec.sources), frontMatter = expand(spec.frontMatter), required = new Set(spec.extraCodepoints);
+  // Article metadata is open-ended content. The TV's title font stack falls
+  // back to system fonts; publishing an article must not rebuild this UI font.
+  const sources = expand(spec.sources), required = new Set(spec.extraCodepoints);
   for (let cp = spec.baseRange[0]; cp <= spec.baseRange[1]; cp++) required.add(cp);
   const add = text => { for (const char of text) if (!/\p{C}/u.test(char)) required.add(char.codePointAt(0)); };
   for (const file of sources) add(readFileSync(resolve(projectRoot, file), 'utf8'));
-  for (const file of frontMatter) {
-    const text = readFileSync(resolve(projectRoot, file), 'utf8');
-    const front = text.match(/^---\s*\r?\n([\s\S]*?)^---\s*$/m);
-    if (!front) throw new Error(`Missing article front matter: ${file}`);
-    add(front[1]);
-  }
   const allowedFallbacks = spec.systemFallbacks.map(item => {
     if ([...item.character].length !== 1 || item.character.codePointAt(0) !== item.codepoint || !item.reason) {
       throw new Error('Each system font fallback needs a matching codepoint, character and reason');
     }
     return item.codepoint;
   });
-  return { requestedCodepoints: [...required].sort((a, b) => a - b), sourceFiles: [...new Set([...sources, ...frontMatter])].sort(), allowedFallbacks };
+  return { requestedCodepoints: [...required].sort((a, b) => a - b), sourceFiles: sources, allowedFallbacks };
 }
 
 export function verifyFontCoverage(requested, coverage, fontBytes, expectedSourceHash, allowedFallbacks = []) {

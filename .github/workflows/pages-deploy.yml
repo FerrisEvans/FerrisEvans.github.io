@@ -71,6 +71,8 @@ jobs:
             exit 1
           fi
           npm run test:browser
+          npm run test:guides
+          npm run test:authoring
 
       - name: Setup Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'

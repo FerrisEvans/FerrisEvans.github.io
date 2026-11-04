@@ -38,6 +38,28 @@
   font-weight: 400;
 }
 
+/* Override Pagefind's scoped mask and text arrow with the blog's icon family. */
+#pagefind-search .pagefind-ui__form::before {
+  width:calc(26px * var(--pagefind-ui-scale));
+  height:calc(26px * var(--pagefind-ui-scale));
+  top:calc(19px * var(--pagefind-ui-scale));
+  left:calc(18px * var(--pagefind-ui-scale));
+  background:transparent url('../../node_modules/naive-icons/svg/search.svg') center / contain no-repeat;
+  -webkit-mask:none;
+  mask:none;
+  opacity:1;
+}
+
+#pagefind-search .pagefind-ui__result-nested .pagefind-ui__result-link::before {
+  content:'';
+  width:1.15em;
+  height:1.15em;
+  top:.15em;
+  right:calc(100% + .2em);
+  background:url('../../node_modules/naive-icons/svg/arrow-right.svg') center / contain no-repeat;
+  pointer-events:none;
+}
+
 #pagefind-search .pagefind-ui__search-clear,
 #pagefind-search .pagefind-ui__button {
   font-weight: 500;

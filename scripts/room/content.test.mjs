@@ -12,13 +12,15 @@ const require = createRequire(import.meta.url);
 const yaml = require('js-yaml');
 const read = path => readFileSync(resolve(root, path), 'utf8');
 
-function loadTS(path, overrides = {}) {
+function loadTS(path, overrides = {}, { development = false } = {}) {
   const cache = new Map();
   function load(filename) {
     if (cache.has(filename)) return cache.get(filename).exports;
     if (filename.endsWith('.json')) return JSON.parse(readFileSync(filename, 'utf8'));
     const module = { exports: {} }; cache.set(filename, module);
-    const js = ts.transpileModule(readFileSync(filename, 'utf8'), { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText;
+    // Match Vite's compile-time environment replacement before loading TS in Node.
+    const source = readFileSync(filename, 'utf8').replaceAll('import.meta.env.DEV', String(development));
+    const js = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true } }).outputText;
     const localRequire = name => {
       if (Object.hasOwn(overrides, name)) return overrides[name];
       if (!name.startsWith('.')) return require(name);
@@ -54,6 +56,30 @@ test('published posts exclude drafts and retain the current publication-date ord
   assert.deepEqual((await getPosts()).map(post => post.id), ['future', 'new', 'old']);
 });
 
+test('draft previews require development mode and explicit opt-in; public indexes remain published-only', async () => {
+  const fixture = [
+    { id: 'published', data: { pubDate: new Date('2026-01-01'), draft: false } },
+    { id: 'unfinished', data: { pubDate: new Date('2026-02-01'), draft: true } },
+    { id: 'another-draft', data: { pubDate: new Date('2025-12-01'), draft: true } },
+  ];
+  for (const development of [false, true]) {
+    const { getPosts } = loadTS('src/utils/posts.ts', {
+      'astro:content': { getCollection: async (_name, filter) => fixture.filter(filter) },
+    }, { development });
+    // RSS, category, tag, archive and room consumers all use this default call.
+    assert.deepEqual((await getPosts()).map(post => post.id), ['published']);
+    assert.deepEqual((await getPosts({ includeDrafts: false })).map(post => post.id), ['published']);
+    assert.deepEqual((await getPosts({ includeDrafts: true })).map(post => post.id),
+      development ? ['unfinished', 'published', 'another-draft'] : ['published']);
+  }
+});
+
+test('preview URLs preserve legacy filename case and custom collection slugs', () => {
+  const { postUrl } = loadTS('src/utils/posts.ts', { 'astro:content': {} });
+  assert.equal(postUrl({ id: 'gdscript' }), '/posts/GDScript/');
+  assert.equal(postUrl({ id: 'stable-custom-url' }), '/posts/stable-custom-url/');
+});
+
 test('all real non-draft articles are available, with case-correct article URLs', async () => {
   const collection = articles();
   const { getPosts, postUrl } = loadTS('src/utils/posts.ts', { 'astro:content': { getCollection: async (_name, filter = () => true) => collection.filter(filter) } });
@@ -63,7 +89,30 @@ test('all real non-draft articles are available, with case-correct article URLs'
   for (const post of posts) assert.equal(postUrl(post), post.href);
 });
 
-test('the twelve manually selected tapes have implemented visuals and published article destinations', () => {
+test('category discovery removes empty categories while retaining their reusable display configuration', async t => {
+  t.mock.method(console, 'warn', () => {});
+  const { CATEGORIES, categoriesFor } = loadTS('src/data/site.ts');
+  const configured = CATEGORIES.find(category => category.slug === 'data-structures');
+  assert(configured, 'the category definition remains available for future posts');
+  let collection = [
+    { id: 'published', data: { category: 'data-structures', pubDate: new Date('2026-01-01'), draft: false } },
+    { id: 'unfinished', data: { category: 'data-structures', pubDate: new Date('2026-02-01'), draft: true } },
+    { id: 'other', data: { category: 'new-topic', pubDate: new Date('2026-03-01'), draft: false } },
+  ];
+  const { getPosts } = loadTS('src/utils/posts.ts', {
+    'astro:content': { getCollection: async (_name, filter) => collection.filter(filter) },
+  });
+  const discover = async () => categoriesFor((await getPosts()).map(post => post.data.category));
+  assert.deepEqual((await discover()).map(category => category.slug), ['data-structures', 'new-topic']);
+  assert.equal((await discover())[0], configured, 'existing names and colors remain authoritative');
+  collection = collection.filter(post => post.id !== 'published');
+  assert.deepEqual((await discover()).map(category => category.slug), ['new-topic'], 'a draft does not keep an empty published category alive');
+  collection = [];
+  assert.deepEqual(await discover(), [], 'neither configuration nor cached generated metadata creates a category');
+  assert.equal(categoriesFor(['data-structures'])[0], configured, 'publishing another article restores the same configured category');
+});
+
+test('the twelve manually selected tapes retain implemented visuals independently of article publication', () => {
   const tapes = JSON.parse(read('src/data/room-tapes.json'));
   const source = ts.createSourceFile('tapes.ts', read('src/scripts/room/tapes.ts'), ts.ScriptTarget.Latest, true);
   const visualType = source.statements.find(node => ts.isTypeAliasDeclaration(node) && node.name.text === 'TapeKind');
@@ -71,19 +120,18 @@ test('the twelve manually selected tapes have implemented visuals and published 
   const painterDeclaration = source.statements.filter(ts.isVariableStatement).flatMap(node => [...node.declarationList.declarations]).find(node => node.name.getText(source) === 'painters');
   const painters = new Set(painterDeclaration.initializer.properties.map(node => node.name.text));
   assert.deepEqual(kinds, painters);
-  const published = new Set(articles().filter(post => !post.data.draft).map(post => post.href));
   const slots = [...Array.from({ length: 5 }, (_, i) => `VHS_A_${i + 1}`), ...Array.from({ length: 7 }, (_, i) => `VHS_B_${i + 1}`)];
   assert.deepEqual(tapes.map(tape => tape.object), slots);
   assert.equal(new Set(tapes.map(tape => tape.id)).size, tapes.length);
   for (const tape of tapes) {
     assert(kinds.has(tape.kind), `${tape.id} requires a deliberately implemented animation kind`);
-    assert(published.has(tape.href), `${tape.id} must link to a real non-draft article`);
+    assert(/^\/posts\/[^/]+\/$/.test(tape.href), `${tape.id} keeps a valid article reference; surfaces only expose it while published`);
     assert(tape.title.trim() && tape.description.trim());
     assert(/^[\x20-\x7e]{1,14}$/u.test(tape.label), `${tape.id} has a short English label`);
   }
 });
 
-const { ABOUT, aboutGreeting, aboutInterests, aboutPlainText } = loadTS('src/data/room-about.ts');
+const { ABOUT, aboutGreeting, aboutInterests } = loadTS('src/data/room-about.ts');
 const { SITE } = loadTS('src/data/site.ts');
 const { computerPages, paginateComputerSections, paintComputer } = loadTS('src/scripts/room/computer.ts');
 const normalize = value => value.replace(/\s+/gu, '');
@@ -91,8 +139,7 @@ const normalize = value => value.replace(/\s+/gu, '');
 test('computer pages preserve every shared About passage in order, including all bilingual Zen entries', () => {
   const pages = computerPages(SITE), visible = normalize(pages.flatMap(page => page.lines).join(''));
   const passages = [ABOUT.intro, ...aboutInterests().flatMap(item => [item.label, item.description]), ...ABOUT.principles,
-    ...ABOUT.practice.quotes, ABOUT.practice.attribution, ABOUT.zen.author, ABOUT.zen.command, ...ABOUT.zen.lines,
-    ...ABOUT.formatting.paragraphs.map(aboutPlainText)];
+    ...ABOUT.practice.quotes, ABOUT.practice.attribution, ABOUT.zen.author, ABOUT.zen.command, ...ABOUT.zen.lines];
   let cursor = 0;
   for (const passage of passages) {
     const value = normalize(passage), at = visible.indexOf(value, cursor);
@@ -105,8 +152,6 @@ test('computer pages preserve every shared About passage in order, including all
   const interestLabels = aboutInterests().map((item, i) => `${String(i + 1).padStart(2, '0')}  ${item.label}`);
   assert(pages.every(page => !interestLabels.includes(page.lines.at(-1))), 'interest headings stay with their descriptions');
   assert(pages.flatMap(page => page.lines).every(line => [...line].reduce((sum, c) => sum + (c.codePointAt(0) < 128 ? 1 : 2), 0) <= 54));
-  const tags = new Set(['strong', 'code', 'em', 'sub', 'span', 'u']);
-  for (const part of ABOUT.formatting.paragraphs.flat()) assert(!part.tag || tags.has(part.tag));
 });
 
 test('short sections flow together, while long paragraphs cross pages without losing content or context', () => {

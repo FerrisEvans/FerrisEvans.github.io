@@ -1,0 +1,26 @@
+---
+import Guide from '../../layouts/Guide.astro';
+import { ABOUT } from '../../data/room-about';
+import { Code } from 'astro:components';
+import { codeLineNumbers } from '../../plugins/code-line-numbers.mjs';
+const { zen } = ABOUT;
+const headings = [{ depth:2, slug:'read-in-python', text:'在 Python 中阅读' }, { depth:2, slug:'bilingual-text', text:'中英对照' }];
+---
+<Guide title={zen.title} description="十九条关于简洁、明确与可读性的编程思考，中英对照。" headings={headings} byline={zen.author}>
+  <p>这些简短的原则提醒我们，在代码的表达与设计之间反复权衡。中文沿用本站原有译文，英文原文见 <a href="https://peps.python.org/pep-0020/">PEP 20 — The Zen of Python</a>。</p>
+  <h2 id="read-in-python">在 Python 中阅读</h2>
+  <p>在 Python 解释器中运行：</p>
+  <Code code={zen.command} lang="python" themes={{ light: 'github-light-default', dark: 'github-dark-default' }} transformers={[codeLineNumbers]} />
+  <h2 id="bilingual-text">中英对照</h2>
+  <ol class="zen-lines">{zen.lines.map(line => {
+    const split = line.search(/[\u3400-\u9fff]/u);
+    return <li><p lang="en">{line.slice(0, split).trim()}</p><p>{line.slice(split)}</p></li>;
+  })}</ol>
+</Guide>
+<style>
+  .zen-lines li { padding:6px 0 16px; }
+  .zen-lines li p { margin:6px 0; }
+  .zen-lines li p[lang="en"] { font-weight:550; }
+  .zen-lines li p + p { font-size:.9em; color:var(--color-ink-soft); }
+  :global(.dark) .zen-lines li p + p { color:var(--color-snow-soft); }
+</style>

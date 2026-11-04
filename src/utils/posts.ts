@@ -12,8 +12,10 @@ const caseMap = new Map(
     })
 );
 
-export async function getPosts(): Promise<Post[]> {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+/** Drafts are opt-in for local previews and can never enter a production build. */
+export async function getPosts(options: { includeDrafts?: boolean } = {}): Promise<Post[]> {
+  const includeDrafts = import.meta.env.DEV && options.includeDrafts === true;
+  const posts = await getCollection('blog', ({ data }) => !data.draft || includeDrafts);
   return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 

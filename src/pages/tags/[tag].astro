@@ -26,7 +26,7 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
 
 <Base title={`标签 · ${tag}`}>
   <div class="island-page">
-    <a href="/tags/" class="back-link"><Icon name="arrow-left" size={17} />全部标签</a>
+    <a href="/tags/" class="back-link blog-button"><Icon name="arrow-left" size={17} />全部标签</a>
     <header class="tag-heading">
       <span class="tag-stamp"><Icon name="tag" size={52} /></span>
       <p class="tag-caption">标签收集册</p>
@@ -40,16 +40,13 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
 </Base>
 
 <style>
-  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 22px; padding: 8px 16px; border-radius: 50px; background: var(--color-paper-elev); color: var(--color-ink-soft); font-size: 14px; font-weight: 700; }
-  .back-link:hover { color: var(--color-accent); }
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 22px; padding: 8px 16px; font-size: 14px; }
   .tag-heading { position: relative; padding: 26px 120px 35px 0; }
   .tag-caption { margin-bottom: 18px; font-size: 14px; font-weight: 700; color: var(--color-ink-soft); }
   .tag-stamp { position: absolute; top: 22px; right: 4px; display: grid; place-items: center; width: 96px; height: 96px; border: 2px dashed #d59499; border-radius: 34px 28px 36px 30px; transform: rotate(8deg); color: #794f27; background: #ffe1e4; }
   .tag-heading h1 { overflow-wrap: anywhere; margin-bottom: 22px; }
   .tag-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; list-style: none; }
-  :global(.dark) .back-link { background: var(--color-night-elev); }
-  :global(.dark) .back-link, :global(.dark) .tag-caption { color: var(--color-snow-soft); }
-  :global(.dark) .back-link:hover { color: var(--color-accent-dark); }
+  :global(.dark) .tag-caption { color: var(--color-snow-soft); }
   :global(.dark) .tag-stamp { background: #553e3a; color: #f2c4b1; border-color: #96716b; }
   @media (max-width: 640px) { .tag-notes { grid-template-columns: 1fr; } .tag-heading { padding-right: 0; padding-top: 0; } .tag-stamp { display: none; } }
 </style>

@@ -5,7 +5,6 @@ pubDate: 2025-03-19
 category: game-dev
 subcategory: godot
 tags: [godot, frame]
-math: true
 ---
 
 

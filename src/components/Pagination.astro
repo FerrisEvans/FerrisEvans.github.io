@@ -27,12 +27,12 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
 
       <div class="flex items-center gap-2">
         {page.url.prev ? (
-          <a href={page.url.prev} class="pager-link gap-1.5 px-3" aria-label="上一页">
+          <a href={page.url.prev} class="pager-link blog-button gap-1.5 px-3" aria-label="上一页">
             <Icon name="arrow-left" size={18} />
             <span>上一页</span>
           </a>
         ) : (
-          <span class="pager-link cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
+          <span class="pager-link blog-button cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
             <Icon name="arrow-left" size={18} />
             <span>上一页</span>
           </span>
@@ -44,7 +44,7 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
               href={hrefFor(n)}
               aria-current={n === currentPage ? 'page' : undefined}
               class:list={[
-                'pager-link min-w-10 px-2 font-sans',
+                'pager-link blog-button min-w-10 px-2 font-sans',
                 n === currentPage && 'border-accent/60 text-accent hover:border-accent/60 hover:text-accent dark:border-accent-dark/60 dark:text-accent-dark dark:hover:border-accent-dark/60 dark:hover:text-accent-dark',
               ]}
             >
@@ -54,12 +54,12 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
         </div>
 
         {page.url.next ? (
-          <a href={page.url.next} class="pager-link gap-1.5 px-3" aria-label="下一页">
+          <a href={page.url.next} class="pager-link blog-button gap-1.5 px-3" aria-label="下一页">
             <span>下一页</span>
             <Icon name="arrow-right" size={18} />
           </a>
         ) : (
-          <span class="pager-link cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
+          <span class="pager-link blog-button cursor-not-allowed gap-1.5 px-3 opacity-35" aria-hidden="true">
             <span>下一页</span>
             <Icon name="arrow-right" size={18} />
           </span>
@@ -72,9 +72,7 @@ const hrefFor = (n: number) => (n === 1 ? '/lofi/' : `/page/${n}/`);
 <style>
   @reference "../styles/global.css";
 
-  .pager-link[aria-current="page"] { background: var(--island-muted); color: var(--island-green); }
-
   .pager-link {
-    @apply inline-flex h-10 items-center justify-center rounded-full border border-line/70 text-xs font-medium text-ink-soft transition-colors hover:border-accent/50 hover:text-accent dark:border-line-dark/70 dark:text-snow-soft dark:hover:border-accent-dark/50 dark:hover:text-accent-dark;
+    @apply inline-flex h-10 items-center justify-center text-xs;
   }
 </style>

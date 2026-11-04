@@ -5,7 +5,6 @@ pubDate: 2024-06-06
 category: programming-language
 subcategory: cpp
 tags: [pointer]
-math: true
 ---
 
 

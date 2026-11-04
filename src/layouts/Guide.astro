@@ -1,0 +1,96 @@
+---
+import type { MarkdownHeading } from 'astro';
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import Toc from '../components/Toc.astro';
+import ReadingTools from '../components/ReadingTools.astro';
+import { ABOUT_GUIDES } from '../data/about-guides';
+import katexStyles from 'katex/dist/katex.min.css?url';
+import 'rehype-code-group/styles.css';
+
+interface Props {
+  title: string;
+  description: string;
+  headings: MarkdownHeading[];
+  hasMath?: boolean;
+  byline?: string;
+}
+const { title, description, headings, hasMath = false, byline = '本站阅读资料' } = Astro.props;
+const related = ABOUT_GUIDES.filter(guide => guide.href !== Astro.url.pathname.replace(/\/?$/, '/'));
+---
+
+<Base title={title} description={description}>
+  <Fragment slot="head">{hasMath && <link rel="stylesheet" href={katexStyles} />}</Fragment>
+  <div id="read-progress" class="guide-progress" aria-hidden="true"></div>
+  <div class="island-page guide-page">
+    <a class="guide-back" href="/about/"><Icon name="arrow-left" size={16} />返回关于作者</a>
+    <div class="guide-layout">
+      <article class="island-panel guide-article" data-pagefind-body>
+        <header class="guide-header">
+          <p class="island-eyebrow">{byline}</p>
+          <h1 class="island-heading" data-pagefind-meta="title">{title}</h1>
+          <p class="island-lead">{description}</p>
+        </header>
+        <details class="guide-toc-mobile" data-pagefind-ignore>
+          <summary>本页目录</summary>
+          <Toc headings={headings} showTitle={false} />
+        </details>
+        <div class="prose-custom"><slot /></div>
+        <footer class="guide-footer" data-pagefind-ignore>
+          <a href="/about/">返回关于作者</a>
+          <nav aria-label="相关阅读">
+            <p>相关阅读</p>
+            {related.map(guide => <a href={guide.href}>{guide.title}<Icon name="arrow-right" size={15} /></a>)}
+          </nav>
+        </footer>
+      </article>
+      <aside class="guide-toc-desktop" data-pagefind-ignore>
+        <div class="guide-bookmarks">
+          <p class="guide-toc-label">本页目录</p>
+          <Toc headings={headings} showTitle={false} />
+        </div>
+      </aside>
+    </div>
+  </div>
+  <ReadingTools />
+</Base>
+
+<style>
+  .guide-page { max-width:1200px; }
+  .guide-progress { position:fixed; top:0; left:0; z-index:60; height:2px; width:0; background:var(--color-accent); }
+  .guide-back { display:inline-flex; align-items:center; gap:8px; margin-bottom:24px; font-size:12px; color:var(--color-ink-soft); }
+  .guide-back:hover { color:var(--color-accent); }
+  .guide-layout { display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:32px; align-items:start; }
+  .guide-article { min-width:0; padding:42px 46px; }
+  .guide-header { padding-bottom:28px; margin-bottom:28px; border-bottom:1px dashed var(--color-line); }
+  .guide-header h1 { margin:10px 0 16px; font-size:34px; line-height:1.45; overflow-wrap:anywhere; }
+  .guide-header .island-lead { font-size:14px; }
+  .guide-bookmarks { max-height:calc(100dvh - 140px); overflow:auto; scrollbar-width:thin; padding-right:8px; }
+  .guide-toc-desktop { position:sticky; top:110px; min-width:0; }
+  .guide-toc-label { font-size:12px; font-weight:650; color:var(--color-accent); margin:0 0 14px 11px; }
+  .guide-toc-mobile { display:none; }
+  .guide-footer { margin-top:44px; padding-top:26px; border-top:1px dashed var(--color-line); font-size:12px; color:var(--color-ink-soft); }
+  .guide-footer > a { color:var(--color-accent); text-decoration:underline; text-underline-offset:4px; }
+  .guide-footer nav { margin-top:26px; display:grid; gap:12px; }
+  .guide-footer nav p { color:var(--color-ink-faint); }
+  .guide-footer nav a { display:flex; gap:12px; align-items:center; justify-content:space-between; padding:16px 18px; background:var(--color-paper-subtle); border-radius:12px; }
+  .guide-footer nav a:hover { color:var(--color-accent); }
+  :global(.dark) .guide-header, :global(.dark) .guide-footer { border-color:var(--color-line-dark); }
+  :global(.dark) .guide-back, :global(.dark) .guide-footer { color:var(--color-snow-soft); }
+  :global(.dark) .guide-back:hover, :global(.dark) .guide-footer a:hover, :global(.dark) .guide-footer > a, :global(.dark) .guide-toc-label { color:var(--color-accent-dark); }
+  :global(.dark) .guide-footer nav a { background:var(--color-night-subtle); }
+  :global(.dark) .guide-footer nav p { color:var(--color-snow-faint); }
+  @media(max-width:1000px) {
+    .guide-layout { grid-template-columns:minmax(0,1fr); }
+    .guide-toc-desktop { display:none; }
+    .guide-toc-mobile { display:block; padding:16px; border:1px solid var(--color-line); border-radius:14px; margin-bottom:28px; }
+    .guide-toc-mobile > summary { cursor:pointer; font-size:13px; font-weight:650; }
+    .guide-toc-mobile[open] > summary { margin-bottom:14px; }
+    :global(.dark) .guide-toc-mobile { border-color:var(--color-line-dark); }
+  }
+  @media(max-width:639px) {
+    .guide-article { padding:26px 20px; }
+    .guide-header h1 { font-size:26px; }
+    .guide-header { padding-bottom:22px; margin-bottom:22px; }
+  }
+</style>

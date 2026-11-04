@@ -1,0 +1,37 @@
+.tag-word-cloud.tag-word-cloud {
+  --tag-cloud-color-1:#167e75;
+  --tag-cloud-color-2:#a45b37;
+  --tag-cloud-color-3:#527d45;
+  --tag-cloud-color-4:#8b5c9c;
+  --tag-cloud-color-5:#916b1e;
+  --tag-cloud-color-6:#4c7397;
+  --animal-bg-color:var(--island-surface);
+  --animal-text-color:var(--color-ink);
+  --animal-primary-color:var(--color-accent);
+  --animal-border-color-light:var(--island-border);
+  padding:0;
+  border:0;
+  background:transparent;
+}
+
+.dark .tag-word-cloud {
+  --tag-cloud-color-1:#8fdfc6;
+  --tag-cloud-color-2:#efb58d;
+  --tag-cloud-color-3:#b4dca0;
+  --tag-cloud-color-4:#d4b1e8;
+  --tag-cloud-color-5:#e9ce83;
+  --tag-cloud-color-6:#adcee8;
+  --animal-text-color:var(--color-snow);
+  --animal-primary-color:var(--color-accent-dark);
+}
+
+/* The SSR drawing starts at 640px; constrain it until Chart measures its viewport. */
+.tag-word-cloud > div:first-child > svg { max-width:100%; }
+
+/* Chart has no data-table switch. The page's linked tag list is the full fallback;
+   also suppress the library's overflow note that points to its hidden table. */
+.tag-word-cloud > details,
+.tag-word-cloud > details + div { display:none; }
+
+.tag-word-cloud-tooltip { display:grid; gap:3px; }
+.tag-word-cloud-tooltip strong { font-size:14px; }

@@ -1,23 +1,55 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { collectFontCharacters, verifyFontCoverage } from './font-coverage.mjs';
+import { dirname, join } from 'node:path';
+import { collectFontCharacters, root, verifyFontCoverage } from './font-coverage.mjs';
 
-test('one collector includes UI, JSON and nested article front matter without copying long article bodies', t => {
+test('one collector includes fixed UI and JSON without control characters', t => {
   const dir = mkdtempSync(join(tmpdir(), 'room-font-coverage-'));
   t.after(() => rmSync(dir, { recursive: true, force: true }));
-  mkdirSync(join(dir, 'posts/nested'), { recursive: true });
   writeFileSync(join(dir, 'ui.ts'), "const title = '你好';\u0007\n");
   writeFileSync(join(dir, 'data.json'), JSON.stringify({ label: '文章' }));
-  writeFileSync(join(dir, 'posts/nested/test.md'), '---\ntitle: 新标题\ndescription: 简介\n---\n正文稀有字龘不需要加入字体。\n');
-  const result = collectFontCharacters(dir, { sources: ['ui.ts', '*.json'], frontMatter: ['posts/**/*.md'], baseRange: [32, 126], extraCodepoints: [160], systemFallbacks: [] });
+  const result = collectFontCharacters(dir, { sources: ['ui.ts', '*.json'], baseRange: [32, 126], extraCodepoints: [160], systemFallbacks: [] });
   const chars = new Set(result.requestedCodepoints.map(cp => String.fromCodePoint(cp)));
-  for (const char of '你好文章新标题简介') assert(chars.has(char));
-  assert(!chars.has('龘')); assert(!chars.has('\u0007')); assert(!chars.has('\n'));
-  assert.deepEqual(result.sourceFiles, ['data.json', 'posts/nested/test.md', 'ui.ts']);
+  for (const char of '你好文章') assert(chars.has(char));
+  assert(!chars.has('\u0007')); assert(!chars.has('\n'));
+  assert.deepEqual(result.sourceFiles, ['data.json', 'ui.ts']);
+});
+
+test('real font inputs allow publishing, editing and renaming articles without changing the installed subset', t => {
+  const dir = mkdtempSync(join(tmpdir(), 'room-article-font-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const spec = JSON.parse(readFileSync(new URL('./font-inputs.json', import.meta.url), 'utf8'));
+  // Mirror required fixed sources so this exercises the production input rules,
+  // including any future change that accidentally scans blog content again.
+  for (const source of spec.sources.filter(pattern => !/[*?{[]/u.test(pattern))) {
+    const path = join(dir, source);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, 'ROOM UI');
+  }
+  const baseline = collectFontCharacters(dir, spec);
+  const metadata = JSON.parse(readFileSync(join(root, 'scripts/room/font-source.json'), 'utf8'));
+  const coverage = JSON.parse(readFileSync(join(root, 'public/fonts/room-pixel-zh.coverage.json'), 'utf8'));
+  const fontBytes = readFileSync(join(root, metadata.publicSubset));
+  const verifyUnchanged = () => {
+    const current = collectFontCharacters(dir, spec);
+    assert.deepEqual(current, baseline);
+    verifyFontCoverage(current.requestedCodepoints, coverage, fontBytes, metadata.faceSha256, current.allowedFallbacks);
+  };
+  const article = join(dir, 'src/content/blog/travel.md');
+  mkdirSync(dirname(article), { recursive: true });
+  writeFileSync(article, '---\ntitle: 旅行与摄影\ndescription: 烘焙美食\npubDate: 2026-01-01\ncategory: travel\ntags: [哲学, 睡眠]\n---\n龘\n');
+  verifyUnchanged();
+  writeFileSync(article, '---\ntitle: 鲸与熵\ndescription: 锚与韧\npubDate: 2026-01-01\ncategory: travel\ntags: [金融]\ndraft: true\n# 草稿注释也不影响字体\n---\n旅行\n');
+  verifyUnchanged();
+  const renamed = join(dir, 'src/content/blog/nested/renamed.md');
+  mkdirSync(dirname(renamed), { recursive: true });
+  renameSync(article, renamed);
+  verifyUnchanged();
+  rmSync(renamed);
+  verifyUnchanged();
 });
 
 const bytes = Buffer.from('font fixture bytes');

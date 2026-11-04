@@ -41,13 +41,10 @@ export interface CategoryDef {
 }
 
 /**
- * Categories are config-first. `CATEGORIES` owns display names, accents, and
- * wall slots. `categoriesFor()` appends slugs found on posts that are not
- * configured. Templates must not hard-code the category list or a 4-column
- * grid. A generated label is a placeholder: show 「未配置」 until the slug is
- * added here. Title Case from `labelFromSlug` is not a brand name.
- * Wall slots (`wall: true`) may render at count 0. Every other category is
- * hidden until it has at least one post.
+ * Published posts determine which categories exist in blog indexes and routes.
+ * `CATEGORIES` only supplies display metadata and ordering; keeping a custom
+ * definition here must not create an empty category after its last post is
+ * removed. New slugs receive generated metadata without a configuration edit.
  */
 
 export const CATEGORIES: CategoryDef[] = [
@@ -138,12 +135,13 @@ export function categoryOf(slug: string): CategoryDef {
 }
 
 export function categoriesFor(slugs: Iterable<string>): CategoryDef[] {
+  const publishedSlugs = new Set(slugs);
   const configuredSlugs = new Set(CATEGORIES.map((category) => category.slug));
-  const discovered = [...new Set(slugs)]
+  const discovered = [...publishedSlugs]
     .filter((slug) => !configuredSlugs.has(slug))
     .sort()
     .map(categoryOf);
-  return [...CATEGORIES, ...discovered];
+  return [...CATEGORIES.filter((category) => publishedSlugs.has(category.slug)), ...discovered];
 }
 
 export function categoryCounts(slugs: Iterable<string>, categories: CategoryDef[] = CATEGORIES): Record<string, number> {

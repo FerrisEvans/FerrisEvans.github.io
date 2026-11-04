@@ -1,0 +1,40 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PostListItem from '../../components/PostListItem.astro';
+import { getPosts } from '../../utils/posts';
+
+export const getStaticPaths = (() =>
+  import.meta.env.DEV ? [{ params: { page: undefined } }] : []
+) satisfies GetStaticPaths;
+
+const drafts = (await getPosts({ includeDrafts: true })).filter((post) => post.data.draft);
+---
+
+<Base title="草稿预览" description="本地草稿预览">
+  <Fragment slot="head"><meta name="robots" content="noindex,nofollow" /></Fragment>
+  <div class="island-page drafts-page" data-pagefind-ignore>
+    <header>
+      <h1 class="island-heading">草稿预览</h1>
+      <p class="island-lead">{drafts.length} 篇草稿，仅在本地开发时可见。</p>
+      <p class="drafts-hint">准备发布时，在文章头部将 <code>draft</code> 改为 <code>false</code>。</p>
+    </header>
+    {drafts.length > 0 ? (
+      <ul class="drafts-list">
+        {drafts.map((post) => <PostListItem post={post} showTags />)}
+      </ul>
+    ) : <p class="island-panel drafts-empty">还没有草稿。在文章头部设置 <code>draft: true</code> 后，就能在这里预览。</p>}
+    <a class="drafts-back" href="/lofi/">返回文章列表</a>
+  </div>
+</Base>
+
+<style>
+  .drafts-page { max-width: 1000px; }
+  .drafts-page header { margin-bottom: 30px; }
+  .drafts-hint { margin-top: 12px; color: var(--color-ink-soft); line-height: 1.8; }
+  .drafts-list { display: grid; gap: 20px; list-style: none; }
+  .drafts-empty { padding: 28px; line-height: 1.8; }
+  .drafts-back { display: inline-block; margin-top: 28px; color: var(--color-accent); text-decoration: underline; }
+  :global(.dark) .drafts-hint { color: var(--color-snow-soft); }
+  :global(.dark) .drafts-back { color: var(--color-accent-dark); }
+</style>

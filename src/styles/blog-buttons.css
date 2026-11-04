@@ -1,0 +1,115 @@
+/* Native blog controls follow Animal Island UI's default/primary Button states.
+   These explicit selectors never reach the Chart or the separate 3D document. */
+.blog-body {
+  --blog-button-paper:var(--island-surface);
+  --blog-button-ink:var(--color-ink);
+  --blog-button-border:var(--island-border);
+  --blog-button-accent:var(--island-green);
+  --blog-button-focus:var(--island-green);
+  --blog-button-shadow:0 2px 4px #3d34280f;
+  --blog-button-shadow-hover:0 4px 12px #3d34281a;
+}
+.dark .blog-body {
+  --blog-button-paper:#465341;
+  --blog-button-ink:var(--color-snow);
+  --blog-button-shadow:0 2px 4px #00000018;
+  --blog-button-shadow-hover:0 4px 12px #00000026;
+}
+/* Naive Icons keep their original dark outlines and colored fills in both modes. */
+.dark .blog-body :is(.island-icon-button, .back-to-top) {
+  --blog-button-paper:#fff7e2;
+  --blog-button-hover-paper:#d9eedb;
+  --blog-button-ink:#794f27;
+  --blog-button-border:#d8c99f;
+  --blog-button-accent:#087f77;
+}
+
+/* Repeating our class keeps page-scoped legacy skins below the shared control. */
+.blog-body .blog-button.blog-button,
+.blog-body #tag-reset,
+.blog-body #pagefind-search .pagefind-ui__button,
+.blog-body #pagefind-search .pagefind-ui__search-clear {
+  border:1.5px solid var(--blog-button-border);
+  border-radius:50px;
+  background:var(--blog-button-paper);
+  color:var(--blog-button-ink);
+  box-shadow:var(--blog-button-shadow);
+  font-family:var(--font-display);
+  font-weight:650;
+  letter-spacing:.02em;
+  line-height:1.4;
+  text-decoration:none;
+  cursor:pointer;
+  user-select:none;
+  transition:transform .2s var(--island-ease),translate .2s var(--island-ease),opacity .2s var(--island-ease),background .2s var(--island-ease),color .2s var(--island-ease),border-color .2s var(--island-ease),box-shadow .2s var(--island-ease);
+}
+
+.blog-body .blog-button.blog-button:hover:not(:disabled):not([aria-hidden="true"]),
+.blog-body #tag-reset:hover:not(:disabled),
+.blog-body #pagefind-search .pagefind-ui__button:hover:not(:disabled),
+.blog-body #pagefind-search .pagefind-ui__search-clear:hover:not(:disabled) {
+  border-color:var(--blog-button-hover-border, var(--blog-button-accent));
+  background:var(--blog-button-hover-paper, var(--blog-button-paper));
+  color:var(--blog-button-accent);
+  box-shadow:var(--blog-button-shadow-hover);
+  transform:translateY(var(--blog-button-hover-offset, -1px));
+}
+.blog-body .blog-button.blog-button:active:not(:disabled):not([aria-hidden="true"]),
+.blog-body #tag-reset:active:not(:disabled),
+.blog-body #pagefind-search .pagefind-ui__button:active:not(:disabled),
+.blog-body #pagefind-search .pagefind-ui__search-clear:active:not(:disabled) {
+  transform:translateY(var(--blog-button-pressed-offset, 0px));
+  box-shadow:var(--blog-button-shadow-active, var(--blog-button-shadow));
+}
+.blog-body .blog-button.blog-button:focus-visible,
+.blog-body #tag-reset:focus-visible,
+.blog-body #pagefind-search .pagefind-ui__button:focus-visible,
+.blog-body #pagefind-search .pagefind-ui__search-clear:focus-visible {
+  outline:2px solid var(--blog-button-focus);
+  outline-offset:3px;
+}
+.blog-body .blog-button.blog-button:disabled,
+.blog-body .blog-button.blog-button[aria-hidden="true"],
+.blog-body #tag-reset:disabled,
+.blog-body #pagefind-search .pagefind-ui__button:disabled,
+.blog-body #pagefind-search .pagefind-ui__search-clear:disabled {
+  cursor:not-allowed;
+  box-shadow:none;
+}
+
+.blog-body .blog-button--primary.blog-button--primary,
+.blog-body .island-button.primary {
+  --blog-button-paper:#f8f8f0;
+  --blog-button-ink:#794f27;
+  --blog-button-border:#f8f8f0;
+  --blog-button-accent:#794f27;
+  --blog-button-hover-border:#f8f8f0;
+  --blog-button-shadow:0 5px 0 #bdaea0;
+  --blog-button-shadow-hover:0 6px 0 #bdaea0;
+  --blog-button-shadow-active:0 1px 0 #bdaea0;
+  --blog-button-pressed-offset:2px;
+}
+
+.blog-body .pager-link[aria-current="page"] {
+  --blog-button-paper:var(--island-muted);
+  --blog-button-ink:var(--island-green);
+  --blog-button-border:var(--island-green);
+}
+.blog-body #pagefind-search .pagefind-ui__button { min-height:44px; }
+.blog-body #pagefind-search .pagefind-ui__search-clear {
+  top:8px;
+  right:8px;
+  height:40px;
+  padding-inline:13px;
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .blog-body .blog-button.blog-button,
+  .blog-body #tag-reset,
+  .blog-body #pagefind-search .pagefind-ui__button,
+  .blog-body #pagefind-search .pagefind-ui__search-clear {
+    --blog-button-hover-offset:0px;
+    --blog-button-pressed-offset:0px;
+    transition:none;
+  }
+}

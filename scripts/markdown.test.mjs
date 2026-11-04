@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import katex from 'katex';
+import { fromHtml } from 'hast-util-from-html';
+import rehypeReading from '../src/plugins/rehype-reading.mjs';
 import config from '../astro.config.mjs';
 
 // Exercise the configured processor, including its plugin and option resolution.
@@ -35,6 +37,17 @@ test('configured light and dark code highlighting preserves code and matching he
   assert(code.includes(`<h2 id="${heading.slug}">代码示例</h2>`));
 });
 
+test('math assets follow parsed formulas without requiring a frontmatter flag', async () => {
+  for (const content of ['$x^2$', '$$\n\\sqrt{x}\n$$']) {
+    const result = await renderer.render(content, { frontmatter: { math: false } });
+    assert.equal(result.metadata.frontmatter.hasMath, true);
+  }
+  for (const content of ['普通文章。', '`$x^2$`', '```text\n$x^2$\n```', String.raw`A price is \$5.`]) {
+    const result = await renderer.render(content, { frontmatter: { hasMath: true } });
+    assert.equal(result.metadata.frontmatter.hasMath, false, content);
+  }
+});
+
 test('configured alert and reading plugins retain notices and accessible image zoom controls', async () => {
   const { code } = await renderer.render('> [!NOTE]\n> 保留提醒内容。\n\n![示意图](/avatar.png)');
   assert.match(code, /<blockquote class="markdown-alert markdown-alert-note">/);
@@ -44,6 +57,49 @@ test('configured alert and reading plugins retain notices and accessible image z
   assert.match(code, /<figure><button\b[^>]*class="image-zoom"[^>]*aria-label="放大图片：示意图"/);
   assert.match(code, /<img\b[^>]*src="\/avatar.png"[^>]*loading="lazy"[^>]*decoding="async"/);
   assert.match(code, /<figcaption>示意图<\/figcaption>/);
+});
+
+test('reading tables retain GFM content and alignment inside one keyboard-scrollable region', async () => {
+  const { code } = await renderer.render(String.raw`| Topic | Status | Time |
+| :--- | :---: | ---: |
+| [Guide](/about/markdown/) | **Ready** | 12 |
+| \`A\|B\` | $x^2$ | 4 |
+
+> | Nested | Value |
+> | --- | --- |
+> | Row | 2 |
+
+\`\`\`text
+| This is literal | code |
+\`\`\``.replaceAll('\\`', '`'));
+  const tree = fromHtml(code, { fragment: true });
+  const tables = [];
+  const collect = node => {
+    for (const child of node.children ?? []) {
+      if (child.tagName === 'table') tables.push({ table: child, wrapper: node });
+      collect(child);
+    }
+  };
+  collect(tree);
+  assert.equal(tables.length, 2, 'code fences remain literal; nested tables are wrapped');
+  for (const { table, wrapper } of tables) {
+    assert.equal(wrapper.tagName, 'div');
+    assert(wrapper.properties.className.includes('prose-table-scroll'));
+    assert.equal(wrapper.properties.tabIndex, 0);
+    assert.equal(wrapper.properties.role, 'region');
+    assert(wrapper.properties.ariaLabel);
+    assert.equal(wrapper.children.filter(node => node.type === 'element').length, 1);
+  }
+  const header = tables[0].table.children.find(node => node.tagName === 'thead');
+  const row = header.children.find(node => node.tagName === 'tr');
+  assert.deepEqual(row.children.filter(node => node.tagName === 'th').map(node => node.properties.align), ['left', 'center', 'right']);
+  assert.match(code, /href="\/about\/markdown\/"/);
+  assert.match(code, /<strong>Ready<\/strong>/);
+  assert.match(code, /<code>A\|B<\/code>/);
+  assert.match(code, /class="katex"/);
+  const before = JSON.stringify(tree);
+  rehypeReading()(tree);
+  assert.equal(JSON.stringify(tree), before, 'running the reading transform again never nests table wrappers');
 });
 
 test('the site keeps math untrusted and KaTeX ignores prototype-inherited trust', async () => {

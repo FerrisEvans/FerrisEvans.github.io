@@ -1,0 +1,7 @@
+---
+import Guide from '../../layouts/Guide.astro';
+import { Content, frontmatter, getHeadings } from '../../content/pages/markdown-features.md';
+---
+<Guide title={frontmatter.title} description={frontmatter.description} headings={getHeadings()} hasMath={frontmatter.hasMath === true}>
+  <Content />
+</Guide>

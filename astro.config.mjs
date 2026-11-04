@@ -6,9 +6,15 @@ import { unified } from '@astrojs/markdown-remark';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
+import remarkDirective from 'remark-directive';
+import remarkCrossReferences from './src/plugins/remark-cross-references.mjs';
+import rehypeCrossReferenceTargets from './src/plugins/rehype-cross-reference-targets.mjs';
 import rehypeKatex from 'rehype-katex';
 import rehypeGithubAlerts from './src/plugins/rehype-github-alerts.mjs';
 import rehypeReading from './src/plugins/rehype-reading.mjs';
+import rehypeMathMetadata from './src/plugins/rehype-math-metadata.mjs';
+import rehypeCodeGroup from 'rehype-code-group';
+import { codeLineNumbers } from './src/plugins/code-line-numbers.mjs';
 
 import react from '@astrojs/react';
 
@@ -72,10 +78,12 @@ export default defineConfig({
   },
   markdown: {
     processor: unified({
-      remarkPlugins: [remarkMath],
-      rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex],
+      gfm: true,
+      remarkPlugins: [remarkMath, remarkDirective, remarkCrossReferences],
+      rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex, rehypeMathMetadata, [rehypeCodeGroup, { assets: 'none', diagnostics: 'error' }], rehypeCrossReferenceTargets],
     }),
     shikiConfig: {
+      transformers: [codeLineNumbers],
       themes: {
         light: 'github-light-default',
         dark: 'github-dark-default',

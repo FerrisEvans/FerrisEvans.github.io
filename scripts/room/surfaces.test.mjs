@@ -30,7 +30,7 @@ function fixture(){
   const layer=new Element('div'),room=new Element('main');
   const document={createElement:tag=>new Element(tag),querySelector:selector=>selector==='#surface-layer'?layer:room};
   const content={posts:Array.from({length:12},(_,i)=>({title:'文章 '+i,date:'2026-01-01',href:'/posts/'+i})),github:'https://example.com',email:'test@example.com'};
-  const tapes=[0,1].map(i=>({id:'tape'+i,label:'TAPE '+i,title:'Tape '+i,description:'Description',href:'/tapes/'+i}));
+  const tapes=[0,1].map(i=>({id:'tape'+i,label:'TAPE '+i,title:'Tape '+i,description:'Description',href:'/posts/'+i}));
   const module={exports:{}};
   new Function('require','module','exports','document',source)(name=>({
     three,'./anchors.json':{default:anchors},'./paper-shape':shape.exports,'./phosphor':tube.exports,'./thin-glass':glass.exports,
@@ -42,7 +42,7 @@ function fixture(){
   const camera=new three.PerspectiveCamera(35,16/9,.1,100);camera.position.set(1.35,2.65,6.65);camera.lookAt(1.3,1.28,.1);camera.updateMatrixWorld(true);
   const navigations=[],noop=()=>{},surfaces=module.exports.createSurfaces(scene,resources,content,{page:noop,tape:noop,paper:noop,navigate:view=>navigations.push(view),wake:noop},paper,environment);
   const section=view=>layer.children.find(el=>el.className.endsWith('surface-'+view));
-  return{surfaces,scene,camera,paper,projections,section,navigations,get styleWrites(){return styleWrites;},project:(view='work',w=1440,h=900,enabled=true,raised=true)=>surfaces.project(camera,view,w,h,enabled,raised),dispose(){for(const resource of resources)resource.dispose();environment.dispose();}};
+  return{surfaces,scene,camera,paper,projections,section,navigations,content,tapes,get styleWrites(){return styleWrites;},project:(view='work',w=1440,h=900,enabled=true,raised=true)=>surfaces.project(camera,view,w,h,enabled,raised),dispose(){for(const resource of resources)resource.dispose();environment.dispose();}};
 }
 
 test('CRT inner coatings sit behind their curved glass by physical millimetres in transformed frames',()=>{
@@ -115,6 +115,26 @@ test('post pagination, computer page changes and modem completion invalidate cac
   f.project('about');f.surfaces.changeComputerPage(1);count=f.projections.length;f.project('about');assert(f.projections.length>count);
   f.surfaces.setMode('online');f.project('online');assert(f.section('online').hidden);
   f.surfaces.updateComputer(performance.now()/1000+2,true);count=f.projections.length;f.project('online');assert(f.projections.length>count);assert(!f.section('online').hidden);f.dispose();
+});
+
+test('removing a published article removes its tape link while preserving playback controls and slots',()=>{
+  const f=fixture();
+  try{
+    const post=f.content.posts[0];
+    f.surfaces.selectTape(0);
+    assert.equal(f.section('work').querySelectorAll('a')[0].href,post.href);
+    f.content.posts=f.content.posts.filter(candidate=>candidate.href!==post.href);
+    f.surfaces.selectTape(0);
+    assert.equal(f.section('work').querySelectorAll('a').length,0,'removed or draft-only articles cannot remain linked');
+    const playbackButtons=f.section('work').children.filter(element=>element.dataset.tape);
+    assert.deepEqual(playbackButtons.map(element=>element.dataset.tape),f.tapes.map(tape=>tape.id),'physical slots and playback controls survive unpublishing');
+    assert.equal(playbackButtons[0].attributes['aria-pressed'],'true');
+    f.surfaces.selectTape(1);
+    assert.equal(f.section('work').querySelectorAll('a')[0].href,f.tapes[1].href,'other published article links remain available');
+    f.content.posts.push(post);
+    f.surfaces.selectTape(0);
+    assert.equal(f.section('work').querySelectorAll('a')[0].href,post.href,'republishing restores the link without changing tape metadata');
+  }finally{f.dispose();}
 });
 
 test('computer headings have no hidden tab targets while paging, real links and terminal routes remain available',()=>{

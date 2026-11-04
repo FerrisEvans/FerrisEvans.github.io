@@ -9,6 +9,7 @@ const links = [
   { href: '/tags/', label: '标签', icon: 'tag', detail: '串起零散的想法' },
   { href: '/archives/', label: '归档', icon: 'archive', detail: '留下时间的脚印' },
   { href: '/about/', label: '关于作者', icon: 'user', detail: `认识 ${SITE.author}` },
+  ...(import.meta.env.DEV ? [{ href: '/drafts/', label: '草稿', icon: 'book', detail: '本地预览' }] : []),
 ];
 const path = Astro.url.pathname;
 const isActive = (href: string) => href === '/lofi/' ? path === '/lofi/' || path.startsWith('/page/') || path.startsWith('/posts/') : path.startsWith(href);
@@ -21,9 +22,9 @@ const isActive = (href: string) => href === '/lofi/' ? path === '/lofi/' || path
     </nav>
     <div class="nav-actions">
       <a href="/room/" class="nav-room" aria-label="回到 3D 书房"><Icon name="home" size={23} /><span>书房</span></a>
-      <a href="/search/" class="island-icon-button" aria-label="搜索" aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
+      <a href="/search/" class="island-icon-button blog-button" aria-label="搜索" aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
       <ThemeToggle />
-      <button id="menu-toggle" type="button" aria-label="打开菜单" aria-controls="mobile-menu" aria-expanded="false" class="island-icon-button mobile-menu-toggle">
+      <button id="menu-toggle" type="button" aria-label="打开菜单" aria-controls="mobile-menu" aria-expanded="false" class="island-icon-button blog-button mobile-menu-toggle">
         <span id="menu-icon-open"><Icon name="menu" /></span><span id="menu-icon-close" class="hidden"><Icon name="close" /></span>
       </button>
     </div>

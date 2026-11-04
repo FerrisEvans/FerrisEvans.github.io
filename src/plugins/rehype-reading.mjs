@@ -38,6 +38,24 @@ function visit(node) {
   const children = node.children ?? [];
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
+    if (child.type === 'element' && child.tagName === 'table' &&
+        !node.properties?.className?.includes('prose-table-scroll')) {
+      // Keep the native table semantics and GFM alignment. The surrounding
+      // region owns clipping and keyboard scrolling, including without JS.
+      visit(child);
+      children[i] = {
+        type: 'element',
+        tagName: 'div',
+        properties: {
+          className: ['prose-table-scroll'],
+          tabIndex: 0,
+          role: 'region',
+          ariaLabel: '表格（可横向滚动）',
+        },
+        children: [child],
+      };
+      continue;
+    }
     if (child.type === 'element' && child.tagName === 'p') {
       const image = standaloneImage(child);
       if (image) {

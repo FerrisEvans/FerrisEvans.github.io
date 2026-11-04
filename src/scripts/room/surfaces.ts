@@ -100,6 +100,8 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
   const pages=computerPages(content);let dialing=false,dialStart=0,dialStep=-1;
   function paintWork() {
     const c=work.ctx,tape=selected===null?null:tapes[selected];c.clearRect(0,0,width,height);c.textAlign='left';
+    // A curated animation can outlive its article without exposing a dead link.
+    const hasArticle=!!tape&&content.posts.some(post=>post.href===tape.href);
     // Light ruling belongs to the paper; transparent ink still receives room light.
     c.strokeStyle='rgba(93,114,119,.16)';c.lineWidth=.8;c.beginPath();
     for(let y=146;y<526;y+=29){c.moveTo(21,y);c.lineTo(747,y);}c.stroke();
@@ -110,12 +112,12 @@ export function createSurfaces(scene:Object3D, resources:Set<{dispose():void}>,c
     c.fillStyle='#b6a78b';c.fillRect(363,130,1,343);c.fillStyle='#815634';c.font='29px RoomPixel,monospace';c.fillText(selected===null?'SELECT A TAPE':`TAPE ${String(selected+1).padStart(2,'0')}`,392,148);
     c.fillStyle='#332e25';c.font='24px RoomPixelZH,sans-serif';wrapText(c,tape?.title??'精选内容与概念动画',330,2).forEach((line,i)=>c.fillText(line,392,191+i*32));
     c.font='24px RoomPixelZH,sans-serif';wrapText(c,tape?.description??'选择左侧标题播放。录像带是精选内容，完整文章请查看 POSTS。',318,7).forEach((line,i)=>c.fillText(line,392,267+i*29));
-    c.fillStyle='#815634';c.font='24px RoomPixelZH,sans-serif';if(tape)c.fillText('阅读全文 →',392,473);
+    c.fillStyle='#815634';c.font='24px RoomPixelZH,sans-serif';if(hasArticle)c.fillText('阅读全文 →',392,473);
     c.fillStyle='#62533c';c.font='25px RoomPixel,monospace';c.fillText('[ESC] PUT DOWN',40,521);
     work.map.needsUpdate=true;
     const section=controls.get('work')!;section.replaceChildren();
     tapes.forEach((t,i)=>{const b=button(section,`播放录像带 ${i+1}：${t.title}`,[28,117+i*29,320,29],()=>callbacks.tape(i));b.dataset.tape=t.id;b.setAttribute('aria-pressed',String(i===selected));});
-    if(tape)link(section,'阅读全文：'+tape.title,tape.href,[384,450,342,34]);button(section,'放下记事本，继续播放',[28,489,310,48],callbacks.paper);
+    if(tape&&hasArticle)link(section,'阅读全文：'+tape.title,tape.href,[384,450,342,34]);button(section,'放下记事本，继续播放',[28,489,310,48],callbacks.paper);
   }
   function paintPC() {
     const source=pages[computerPage],visible=(lineOffset===0?source.lines:[...source.lines.slice(lineOffset),...(pages[computerPage+1]?[pages[computerPage+1].title,...pages[computerPage+1].lines]:[])]).slice(0,8);

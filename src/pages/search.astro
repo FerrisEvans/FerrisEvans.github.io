@@ -22,7 +22,7 @@ const quickQueries = ['Agent', 'RAG', 'Godot', '指针', 'C++', '链表', '栈',
     <section aria-labelledby="quick-search-heading" class="search-suggestions">
       <h2 id="quick-search-heading"><Icon name="sparkles" size={17} />试试这些关键词</h2>
       <div class="query-list">
-        {quickQueries.map((query) => <button type="button" data-query={query} class="quick-query">{query}<Icon name="arrow-right" size={13} /></button>)}
+        {quickQueries.map((query) => <button type="button" data-query={query} class="quick-query blog-button">{query}<Icon name="arrow-right" size={13} /></button>)}
       </div>
       <div class="search-alternatives"><span>或者，慢慢逛逛</span><a href="/categories/"><Icon name="grid" size={16} />分类</a><a href="/tags/"><Icon name="tag" size={16} />标签</a><a href="/archives/"><Icon name="archive" size={16} />归档</a></div>
     </section>
@@ -72,16 +72,14 @@ const quickQueries = ['Agent', 'RAG', 'Godot', '指针', 'C++', '链表', '栈',
   .search-suggestions { padding:26px 8px 0; }
   .search-suggestions h2 { display:flex; align-items:center; gap:8px; font-size:12px; font-weight:500; color:var(--color-ink-soft); }
   .query-list { display:flex; flex-wrap:wrap; gap:10px; margin-top:15px; }
-  .quick-query { display:inline-flex; align-items:center; gap:14px; min-height:38px; border:1px solid var(--color-line); border-radius:12px; background:var(--color-paper-elev); padding:8px 14px; font-size:12px; transition:background .15s,color .15s; }
+  .quick-query { display:inline-flex; align-items:center; gap:14px; min-height:38px; padding:8px 14px; font-size:12px; }
   .quick-query > :global(svg) { color:var(--color-ink-faint); }
-  .quick-query:hover { background:var(--color-paper-subtle); color:var(--color-accent); }
   .search-alternatives { display:flex; flex-wrap:wrap; align-items:center; gap:17px; margin-top:32px; padding-top:24px; border-top:1px dashed var(--color-line); font-size:11px; color:var(--color-ink-faint); }
   .search-alternatives a { display:flex; align-items:center; gap:6px; color:var(--color-accent); }
-  :global(.dark) .search-heading-icon, :global(.dark) .quick-query { background:var(--color-night-elev); border-color:var(--color-line-dark); color:var(--color-accent-dark); }
+  :global(.dark) .search-heading-icon { background:var(--color-night-elev); border-color:var(--color-line-dark); color:var(--color-accent-dark); }
   :global(.dark) .search-hint, :global(.dark) .search-loading, :global(.dark) .quick-query > :global(svg), :global(.dark) .search-alternatives { color:var(--color-snow-faint); }
   :global(.dark) .search-hint > span:first-child, :global(.dark) .search-suggestions h2 { color:var(--color-snow-soft); }
   :global(.dark) .search-hint kbd { background:var(--color-night); border-color:var(--color-line-dark); }
-  :global(.dark) .quick-query:hover { background:var(--color-night-subtle); }
   :global(.dark) .search-alternatives { border-color:var(--color-line-dark); }
   :global(.dark) .search-alternatives a { color:var(--color-accent-dark); }
   @media (max-width:639px) { .search-panel { padding:21px 18px; } .search-hint > span:last-child { font-size:0; } .search-hint kbd { margin:0; } .search-alternatives { gap:14px; } .search-alternatives > span { flex-basis:100%; } }

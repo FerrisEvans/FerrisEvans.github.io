@@ -1,0 +1,89 @@
+---
+import Icon from './Icon.astro';
+---
+<dialog id="image-viewer" class="image-viewer" aria-label="图片预览">
+  <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label="关闭图片预览" title="关闭图片预览"><Icon name="close" size={22} /></button>
+  <img id="image-viewer-image" alt="" />
+</dialog>
+
+<script>
+  import { enhanceCodeBlocks } from '../scripts/code-tabs';
+  enhanceCodeBlocks();
+</script>
+
+<script is:inline>
+  (function () {
+    document.querySelectorAll('.prose-custom h2[id]:not(.sr-only), .prose-custom h3[id]:not(.sr-only), .prose-custom h4[id]:not(.sr-only)').forEach(function (heading) {
+      if (heading.querySelector('.heading-anchor')) return;
+      var anchor = document.createElement('a');
+      anchor.className = 'heading-anchor';
+      anchor.setAttribute('href', '#' + heading.id);
+      anchor.setAttribute('aria-label', '转到本节');
+      heading.appendChild(anchor);
+    });
+
+    var viewer = document.getElementById('image-viewer');
+    var viewerImage = document.getElementById('image-viewer-image');
+    var viewerClose = document.getElementById('image-viewer-close');
+    if (viewer && viewerImage && viewerClose) {
+      document.querySelectorAll('.image-zoom').forEach(function (button) {
+        button.addEventListener('click', function () {
+          var image = button.querySelector('img');
+          if (!image) return;
+          viewerImage.src = image.currentSrc || image.src;
+          viewerImage.alt = image.alt;
+          if (!viewer.open) viewer.showModal();
+        });
+      });
+      viewerClose.addEventListener('click', function () { viewer.close(); });
+      viewer.addEventListener('click', function (event) {
+        if (event.target === viewer) viewer.close();
+      });
+    }
+
+    var bar = document.getElementById('read-progress');
+    var tocLinks = Array.from(document.querySelectorAll('.toc-link'));
+    var headingElements = Array.from(document.querySelectorAll('.prose-custom h2[id], .prose-custom h3[id]'));
+    var ticking = false;
+
+    function updateReading() {
+      var doc = document.documentElement;
+      var total = doc.scrollHeight - doc.clientHeight;
+      if (bar) {
+        var pct = total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0;
+        bar.style.width = pct + '%';
+      }
+      if (tocLinks.length && headingElements.length) {
+        var current = null;
+        headingElements.forEach(function (heading) {
+          if (heading.getBoundingClientRect().top <= 140) current = heading;
+        });
+        if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) {
+          current = headingElements[headingElements.length - 1];
+        }
+        var href = current ? '#' + current.id : '';
+        tocLinks.forEach(function (link) {
+          var active = link.getAttribute('href') === href;
+          link.classList.toggle('active', active);
+          if (active) {
+            link.setAttribute('aria-current', 'location');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      }
+      ticking = false;
+    }
+
+    function scheduleUpdate() {
+      if (!ticking) {
+        window.requestAnimationFrame(updateReading);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+    updateReading();
+  })();
+</script>
