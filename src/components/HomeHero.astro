@@ -32,9 +32,8 @@ const { posterVersion, assetVersion } = Astro.props;
 </main>
 
 <script>
-  // RainGlassBackground's original controller owns the drops, refraction, fog
-  // recovery and pointer wiping. Keep its implementation shared with the old
-  // component while the homepage's content and CSS stay independent of Lofi.
+  // Keep the original rain simulation while the homepage's content and CSS
+  // stay independent of Lofi. The obsolete React wrapper has been removed.
   import { RainGlassController } from './kokonutui/rain-glass-controller';
   const root = document.querySelector<HTMLDivElement>('#home-rain-glass')!;
   const canvas = root.querySelector<HTMLCanvasElement>('#home-rain-canvas')!;

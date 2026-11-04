@@ -112,7 +112,7 @@ try {
   assert(Number(await page.locator('#home-preload').getAttribute('data-loaded-bytes')) > 0);
   await page.locator('#home-enter-blog').click();
   await page.waitForURL(url('/lofi/'));
-  await page.getByRole('heading', { level: 1, name: /实践志/ }).waitFor({ state: 'visible' });
+  await page.getByRole('heading', { level: 1, name: /保持好奇，慢慢来/ }).waitFor({ state: 'visible' });
   await settle(page);
   // A BFCache document fires pageshow rather than another load event.
   await page.goBack({ waitUntil: 'commit' });

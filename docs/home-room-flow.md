@@ -1,11 +1,14 @@
 # 首页与书房入口
 
-首页 `/` 保留「写给自己的实践志」Hero 的内容与两个出口。Hero 使用独立的
+首页 `/` 保留雨玻璃 Hero 的结构与两个出口。标语读取与博客相同的
+`SITE.tagline`（当前为「保持好奇，慢慢来」），避免两处文案分叉。Hero 使用独立的
 `HomeHero.astro` 样式作用域，后续首页换皮不依赖博客的视觉系统。
 雨滴、折射、雾气恢复和按住拖动擦拭复用原 `RainGlassBackground` 的
 `RainGlassController`；离开页面释放资源，浏览器返回缓存页面时重新挂载。
 无 WebGL / JavaScript 时保留静态背景和双入口。减少动态效果时保留静态雨滴与擦拭。
-`/lofi/` 从现有文章目录开始，分类、阅读、搜索和分页沿用原界面。
+`/lofi/` 使用最新主分支的小岛博客，欢迎区、分类、阅读、搜索和分页均沿用新版。
+该路由仅由 `src/pages/[...page].astro` 生成；旧的 `LofiHero`、React 雨玻璃外壳
+和未使用的 `MagazineToolbar` 已删除，雨玻璃控制器与 shader 保留给首页使用。
 
 ```mermaid
 flowchart TD
@@ -50,4 +53,5 @@ BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:rain-glass
 返回首页与博客，以及窄屏和 WebGL 不可用的降级。
 雨玻璃脚本用真实拖拽和截图像素比较验证擦雾、雨滴动画、返回首页后的恢复与静态降级。
 
-本次不更换首页为卡通岛视觉，不引入 UI 依赖，不修改书房几何或美术资源。
+本次不更换首页为卡通岛视觉，不为首页额外引入 UI 依赖，不修改书房几何或美术资源。
+新版博客已有的 `animal-island-ui` 依赖随主分支保留。

@@ -1,3 +1,8 @@
+/**
+ * Original Rain Glass Background by @dorianbaffier (Kokonut UI).
+ * License: MIT. Attribution retained from the removed React wrapper.
+ * https://kokonutui.com / https://github.com/kokonut-labs/kokonutui
+ */
 import {
   createPane,
   dropSprite,
