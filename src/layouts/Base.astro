@@ -1,5 +1,8 @@
 ---
+import 'animal-island-ui/style';
 import '../styles/global.css';
+import IslandCursor from '../components/IslandCursor.astro';
+import '../styles/island.css';
 import { SITE } from '../data/site';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -17,7 +20,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-brand="magazine-lofi" data-brand-version="praxis-5">
+<html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,12 +37,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(SITE.avatar, Astro.site)} />
-    <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=praxis-6" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png?v=praxis-6" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png?v=praxis-6" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png?v=praxis-6" />
-    <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=praxis-6" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=praxis-6" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=praxis-island-1" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/brand/island/favicon-16x16.png?v=praxis-island-1" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/brand/island/favicon-32x32.png?v=praxis-island-1" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/brand/island/favicon-96x96.png?v=praxis-island-1" />
+    <link rel="icon" type="image/svg+xml" sizes="any" href="/favicon.svg?v=praxis-island-1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/brand/island/apple-touch-icon.png?v=praxis-island-1" />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
     <LegacyWorkerRecovery />
     <slot name="head" />
@@ -47,19 +50,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       (function () {
         var stored;
         try { stored = localStorage.getItem('theme'); } catch {}
-        if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (stored === 'dark') {
           document.documentElement.classList.add('dark');
         }
       })();
     </script>
   </head>
-  <body class="min-h-screen flex flex-col">
+  <body class="blog-body min-h-screen">
+    <IslandCursor />
     <a href="#main-content" class="skip-link">跳到正文</a>
     <Nav />
-    <main id="main-content" tabindex="-1" class="flex-1 w-full focus:outline-none">
+    <div class="blog-workspace">
+    <main id="main-content" tabindex="-1" class="min-w-0 focus:outline-none">
       <slot />
     </main>
     <Footer />
+    </div>
     <BackToTop />
     <script is:inline>
       document.addEventListener('keydown', function (event) {

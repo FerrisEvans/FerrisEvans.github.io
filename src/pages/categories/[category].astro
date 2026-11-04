@@ -1,9 +1,10 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Title } from 'animal-island-ui';
 import Base from '../../layouts/Base.astro';
-import CardCover from '../../components/CardCover.astro';
 import PostListItem from '../../components/PostListItem.astro';
-import { categoriesFor, labelFromSlug, type CategoryDef } from '../../data/site';
+import Icon from '../../components/Icon.astro';
+import { categoriesFor, labelFromSlug } from '../../data/site';
 import { getPosts, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
@@ -17,7 +18,7 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-const { category, posts } = Astro.props as { category: CategoryDef; posts: Post[] };
+const { category, posts } = Astro.props as { category: ReturnType<typeof categoriesFor>[number]; posts: Post[] };
 
 const groups: { label: string; posts: Post[] }[] = [];
 const grouped = new Map<string, Post[]>();
@@ -35,37 +36,59 @@ for (const key of orderedKeys) {
 ---
 
 <Base title={category.label} description={category.description}>
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
-      <a href="/categories/" class="transition-colors hover:text-ink dark:hover:text-snow">分类</a>
-      <span>/</span>
-      <span class="text-ink-soft dark:text-snow-soft">{category.label}</span>
-    </nav>
-
-    <header class="surface-card mb-12 overflow-hidden">
-      <CardCover category={category.slug} class="aspect-[16/9] sm:aspect-[3/1]" />
-      <div class="p-6 sm:p-8">
-        <p class="eyebrow">Category / 分类</p>
-        <h1 class="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">{category.label}</h1>
-        <p class="mt-3 text-sm leading-7 text-ink-soft dark:text-snow-soft">{category.description} · 共 {posts.length} 篇</p>
-        {category.configured === false && (
-          <p class="mt-3 text-sm text-accent dark:text-accent-soft">未配置 · 在 site.ts 的 CATEGORIES 补全显示名</p>
-        )}
+  <div class="island-page">
+    <a href="/categories/" class="back-link"><Icon name="arrow-left" size={17} />全部分类</a>
+    <header class="collection-intro island-panel">
+      <span class="intro-symbol"><Icon name="book" size={52} /></span>
+      <div>
+        <h1 class="collection-title"><Title color="app-yellow" size="middle">{category.label}</Title></h1>
+        <p class="island-lead">{category.description}</p>
+        <p class="collection-total">这本小册子里，收集了 {posts.length} 篇笔记</p>
       </div>
     </header>
-
-    {
-      groups.map((group) => (
-        <section class="mb-12">
-          <h2 class="mb-5 flex items-center gap-3 font-sans text-xl font-bold">
-            {group.label}
-            <span class="text-sm font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
-          </h2>
-          <ul class="space-y-3">
-            {group.posts.map((post) => <PostListItem post={post} headingLevel={3} showTags />)}
-          </ul>
-        </section>
-      ))
-    }
+    {groups.length > 1 && (
+      <nav aria-label="子分类" class="group-index">
+        {groups.map((group, index) => <a href={`#group-${index}`}><span>{group.label}</span><span>{group.posts.length}</span></a>)}
+      </nav>
+    )}
+    {groups.map((group, index) => (
+      <section class="collection-group" aria-labelledby={`group-${index}`}>
+        <div class="group-heading">
+          <h2 id={`group-${index}`}>{group.label}</h2>
+          <span>{group.posts.length} 篇</span>
+        </div>
+        <ul class="collection-notes">
+          {group.posts.map((post) => <PostListItem post={post} headingLevel={3} showTags />)}
+        </ul>
+      </section>
+    ))}
+    {posts.length === 0 && <p class="empty-collection island-panel">这一册还没有笔记。<a href="/lofi/">先读读其他文章。</a></p>}
   </div>
 </Base>
+
+<style>
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 18px; padding: 8px 16px; border-radius: 50px; background: var(--color-paper-elev); font-size: 14px; font-weight: 700; color: var(--color-ink-soft); }
+  .back-link:hover { color: var(--color-accent); }
+  .collection-intro { display: flex; align-items: center; gap: 28px; padding: 36px; background: #fff3cf; background-image: radial-gradient(#e5c88840 1.4px, transparent 1.4px); background-size: 14px 14px; border: 2px solid #e3ca91; border-radius: 30px; box-shadow: none; }
+  .collection-title { margin-bottom: 22px; }
+  .intro-symbol { display: grid; place-items: center; flex: 0 0 90px; height: 90px; border-radius: 36px 28px 34px 30px; color: #794f27; background: #fff9e7; transform: rotate(-7deg); }
+  .collection-total { margin-top: 18px; color: var(--color-ink-soft); font-size: 14px; font-weight: 600; }
+  .group-index { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .group-index a { display: flex; align-items: center; gap: 15px; min-height: 46px; padding: 9px 20px; border: 2px solid #c1dfd0; border-radius: 50px; font-size: 14px; font-weight: 700; background: #ecf8e9; }
+  .group-index a:hover { border-color: var(--color-accent); color: var(--color-accent); }
+  .group-index a span:last-child { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: #fffbe7; font-size: 12px; }
+  .collection-group { margin-top: 36px; }
+  .group-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .group-heading h2 { scroll-margin-top: 115px; font-size: 23px; font-weight: 800; }
+  .group-heading > span { border-radius: 50px; padding: 5px 12px; background: #f7e2a4; color: #725d42; font-size: 12px; font-weight: 700; }
+  .collection-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; list-style: none; }
+  .empty-collection { margin-top: 28px; padding: 28px; color: var(--color-ink-soft); }
+  .empty-collection a { text-decoration: underline; }
+  :global(.dark) .collection-intro { background-color: #493f2c; border-color: #7c6a42; background-image: radial-gradient(#eedb9f16 1.4px, transparent 1.4px); }
+  :global(.dark) .group-index a, :global(.dark) .back-link { background: var(--color-night-elev); border-color: var(--color-line-dark); }
+  :global(.dark) .intro-symbol { color: #f3d28f; background: #605035; }
+  :global(.dark) .back-link, :global(.dark) .collection-total, :global(.dark) .empty-collection { color: var(--color-snow-soft); }
+  :global(.dark) .group-index a:hover, :global(.dark) .back-link:hover { border-color: var(--color-accent-dark); color: var(--color-accent-dark); }
+  :global(.dark) .group-index a span:last-child, :global(.dark) .group-heading > span { background: #5c4e34; color: #f3dba9; }
+  @media (max-width: 640px) { .collection-intro { display: block; padding: 27px; } .intro-symbol { width: 76px; height: 76px; margin-bottom: 25px; } .collection-notes { grid-template-columns: 1fr; } }
+</style>

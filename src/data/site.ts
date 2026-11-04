@@ -1,12 +1,12 @@
 export const SITE = {
   title: 'Praxis',
-  tagline: '写给自己的实践志',
+  tagline: '保持好奇，慢慢来',
   description:
     'AI 工程实践笔记：读、试、记。从问题到动手，把学到的炼成可用的笔记。',
   intro: '记录编程语言、游戏开发与人工智能的学习、实践和思考。',
   author: 'Ferris',
   email: 'ferris.evans@outlook.com',
-  avatar: '/avatar.png?v=praxis-1',
+  avatar: '/brand/island/ferris-avatar.png?v=1',
   github: 'https://github.com/FerrisEvans',
   twitter: 'https://twitter.com/ferrisgeek',
   postsPerPage: 9,

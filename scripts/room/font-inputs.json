@@ -5,7 +5,8 @@
     "src/scripts/room/**/*.ts",
     "src/data/room*.ts",
     "src/data/room*.json",
-    "src/components/*.astro"
+    "src/components/Brand.astro",
+    "src/components/LegacyWorkerRecovery.astro"
   ],
   "frontMatter": ["src/content/blog/**/*.md"],
   "baseRange": [32, 126],

@@ -60,6 +60,8 @@ export default defineConfig({
   compressHTML: true,
   integrations: [sitemap({ filter: page => new URL(page).pathname !== '/room/' }), react()],
   vite: {
+    // The component library imports CSS modules that Astro must bundle for SSR.
+    resolve: { noExternal: ['animal-island-ui'] },
     // Asset candidates share node_modules, but must not overwrite a running
     // checkout's optimized dependency hashes through that shared directory.
     cacheDir: fileURLToPath(new URL('./.astro/vite', import.meta.url)),

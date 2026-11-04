@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
 import { SITE } from '../data/site';
 import { ABOUT, aboutGreeting, aboutInterests } from '../data/room-about';
 
@@ -9,79 +10,64 @@ const zen = ABOUT.zen.lines;
 ---
 
 <Base title="关于">
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header p-7 sm:p-9">
-      <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
-        <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover shadow-sm dark:border-line-dark" />
-        <div>
-          <p class="eyebrow">About / 关于</p>
-          <h1 class="mt-3 font-sans text-4xl font-bold tracking-tight">{aboutGreeting(SITE.author)}</h1>
-          <p class="mt-4 max-w-2xl leading-8 text-ink-soft dark:text-snow-soft">
-            {ABOUT.intro}
-          </p>
-          <div class="mt-5 flex flex-wrap gap-2.5">
-            <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-10 items-center rounded-full bg-ink px-4 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85">
-              GitHub <span class="ml-1.5" aria-hidden="true">↗</span>
-            </a>
-            <a href={`mailto:${SITE.email}`} class="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm text-ink-soft transition-colors hover:border-ink/20 hover:text-ink dark:border-line-dark dark:text-snow-soft dark:hover:border-white/20 dark:hover:text-snow">
-              {SITE.email}
-            </a>
-          </div>
-        </div>
-      </div>
+  <div class="island-page about-page">
+    <header class="about-title">
+      <p class="island-eyebrow">来自岛主的一封信</p>
+      <h1 class="island-heading">关于这座小岛</h1>
+      <p class="island-lead">一个存放实践、问题和好奇心的地方。</p>
     </header>
 
-    <section aria-labelledby="interests-heading" class="mt-10">
-      <p class="eyebrow">Interests / 研究方向</p>
-      <h2 id="interests-heading" class="sr-only">研究方向</h2>
-      <div class="mt-4 grid gap-3 sm:grid-cols-3">
-        {interests.map((cat, index) => (
-          <a href={`/categories/${cat.slug}/`} class="group rounded-xl border border-line bg-paper-elev p-5 transition-colors hover:border-ink/20 dark:border-line-dark dark:bg-night-elev dark:hover:border-white/20">
-            <div class="flex items-center justify-between">
-              <span class="font-mono text-xs text-ink-faint dark:text-snow-faint">0{index + 1}</span>
-              <span class="font-mono text-sm" style={`color: ${cat.accent};`}>{cat.mark}</span>
-            </div>
-            <h3 class="mt-4 font-sans text-lg font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
-            <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
+    <section class="island-panel profile-note" aria-labelledby="profile-heading">
+      <div class="profile-photo"><img src={SITE.avatar} alt={SITE.author} width="112" height="112" /></div>
+      <div class="profile-copy">
+        <h2 id="profile-heading">{aboutGreeting(SITE.author)}</h2>
+        <p>{ABOUT.intro}</p>
+        <div class="profile-links">
+          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="profile-github"><Icon name="github" size={17} />GitHub<Icon name="arrow-right" size={15} /></a>
+          <a href={`mailto:${SITE.email}`}><Icon name="mail" size={16} /><span>{SITE.email}</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="interests-heading" class="about-section">
+      <div class="about-section-heading"><div><p class="island-eyebrow">CURRENT CURIOSITIES</p><h2 id="interests-heading">正在探索</h2></div><Icon name="sparkles" size={24} /></div>
+      <div class="interest-grid">
+        {interests.map((cat) => (
+          <a href={`/categories/${cat.slug}/`} class="island-panel interest-note">
+            <span class="interest-icon"><Icon name={({ 'programming-language': 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' } as Record<string, string>)[cat.slug] ?? 'book'} size={25} /></span>
+            <h3>{cat.label}</h3>
+            <p>{cat.description}</p>
+            <span class="interest-link">翻翻相关笔记<Icon name="arrow-right" size={16} /></span>
           </a>
         ))}
       </div>
     </section>
 
-    <section aria-labelledby="principles-heading" class="mt-14">
-      <p class="eyebrow">Notes to self</p>
-      <h2 id="principles-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">一些相信的事</h2>
-      <ol class="mt-5 sm:grid sm:grid-cols-2 sm:gap-x-10">
-        {principles.map((principle, index) => (
-          <li class="flex gap-4 border-t border-line py-4 dark:border-line-dark">
-            <span class="shrink-0 font-mono text-xs leading-7 text-ink-faint dark:text-snow-faint">{String(index + 1).padStart(2, '0')}</span>
-            <p class="text-sm leading-7 text-ink-soft dark:text-snow-soft">{principle}</p>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <div class="about-note-grid">
+      <section aria-labelledby="principles-heading" class="island-panel principles-note">
+        <p class="island-eyebrow">记在心里的小事</p>
+        <h2 id="principles-heading">一些相信的事</h2>
+        <ol>{principles.map((principle, index) => <li><span>{String(index + 1).padStart(2, '0')}</span><p>{principle}</p></li>)}</ol>
+      </section>
+      <section aria-labelledby="quotes-heading" class="island-panel practice-note">
+        <Icon name="leaf" size={32} />
+        <p class="island-eyebrow">慢慢实践</p>
+        <h2 id="quotes-heading">{ABOUT.practice.title}</h2>
+        <blockquote>
+          {ABOUT.practice.quotes.map((quote) => <p>{quote}</p>)}
+          <footer>{ABOUT.practice.attribution}</footer>
+        </blockquote>
+      </section>
+    </div>
 
-    <section aria-labelledby="quotes-heading" class="mt-14">
-      <p class="eyebrow">On practice</p>
-      <h2 id="quotes-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">{ABOUT.practice.title}</h2>
-      <blockquote class="mt-6 border-l-2 border-accent/50 pl-5 text-[0.9375rem] leading-8 text-ink-soft dark:border-accent-dark/50 dark:text-snow-soft">
-        {ABOUT.practice.quotes.map((quote, index) => <p class={index > 0 ? 'mt-4' : undefined}>{quote}</p>)}
-        <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">{ABOUT.practice.attribution}</footer>
-      </blockquote>
-    </section>
-
-    <div class="mt-14 space-y-4">
-      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
-        <summary>{ABOUT.zen.title} <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">{ABOUT.zen.author}</span></summary>
-        <div class="prose-custom mt-5">
-          <pre><code class="language-python">{ABOUT.zen.command}</code></pre>
-          <ol>{zen.map((line) => <li>{line}</li>)}</ol>
-        </div>
+    <section class="island-panel about-extras" aria-label="更多笔记">
+      <details class="about-disclosure">
+        <summary><span>{ABOUT.zen.title}</span><span class="extra-author">{ABOUT.zen.author}</span></summary>
+        <div class="prose-custom"><pre><code class="language-python">{ABOUT.zen.command}</code></pre><ol>{zen.map((line) => <li>{line}</li>)}</ol></div>
       </details>
-
-      <details class="about-disclosure rounded-xl border border-line bg-paper-elev p-5 dark:border-line-dark dark:bg-night-elev">
+      <details class="about-disclosure">
         <summary>{ABOUT.formatting.title}</summary>
-        <div class="prose-custom mt-5">
+        <div class="prose-custom">
           {ABOUT.formatting.paragraphs.map((paragraph) => (
             <p>{paragraph.map((part) => {
               const Tag = part.tag ?? 'span';
@@ -90,6 +76,57 @@ const zen = ABOUT.zen.lines;
           ))}
         </div>
       </details>
-    </div>
+    </section>
   </div>
 </Base>
+
+<style>
+  .about-title { margin-bottom:30px; }
+  .profile-note { display:flex; align-items:flex-start; gap:28px; padding:34px; }
+  .profile-photo { flex-shrink:0; }
+  .profile-photo img { width:112px; height:112px; object-fit:cover; object-position:center; border-radius:32px; border:5px solid var(--color-paper); }
+  .profile-copy { min-width:0; }
+  .profile-copy h2 { margin:0 0 14px; font-size:24px; font-weight:700; }
+  .profile-copy > p { font-size:14px; line-height:1.95; color:var(--color-ink-soft); max-width:640px; }
+  .profile-links { display:flex; flex-wrap:wrap; align-items:center; gap:14px 20px; margin-top:22px; }
+  .profile-links a { display:inline-flex; align-items:center; gap:8px; font-size:12px; color:var(--color-ink-soft); min-width:0; }
+  .profile-links a span { overflow-wrap:anywhere; }
+  .profile-links .profile-github { padding:11px 17px; border-radius:12px; background:var(--color-accent); color:var(--color-paper-elev); }
+  .profile-links a:hover { opacity:.8; }
+  .about-section { margin-top:38px; }
+  .about-section-heading { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; color:var(--color-accent); }
+  .about-section h2, .about-note-grid h2 { font-size:22px; font-weight:700; margin-top:7px; color:var(--color-ink); }
+  .interest-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .interest-note { display:flex; flex-direction:column; align-items:flex-start; gap:13px; min-width:0; padding:25px; transition:transform .15s; }
+  .interest-note:hover { transform:translateY(-3px); }
+  .interest-icon { display:grid; place-items:center; width:48px; height:48px; border-radius:17px; background:var(--color-paper-subtle); color:var(--color-accent); }
+  .interest-note h3 { font-size:16px; font-weight:700; }
+  .interest-note p { font-size:12px; line-height:1.9; color:var(--color-ink-soft); }
+  .interest-link { display:flex; align-items:center; justify-content:space-between; align-self:stretch; gap:8px; font-size:11px; padding-top:10px; margin-top:auto; color:var(--color-accent); }
+  .about-note-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:20px; margin-top:28px; }
+  .principles-note, .practice-note { padding:28px; }
+  .principles-note ol { display:grid; gap:16px; margin-top:22px; }
+  .principles-note li { display:flex; gap:12px; align-items:baseline; font-size:12px; line-height:1.85; }
+  .principles-note li > span { font-family:var(--font-sans); font-size:10px; color:var(--color-accent); }
+  .practice-note { background:var(--color-paper-subtle); }
+  .practice-note > :global(svg) { color:var(--color-accent); margin-bottom:18px; }
+  .practice-note blockquote { font-size:13px; line-height:1.95; margin-top:18px; color:var(--color-ink-soft); }
+  .practice-note blockquote p + p { margin-top:15px; }
+  .practice-note footer { margin-top:18px; font-size:10px; color:var(--color-ink-faint); }
+  .about-extras { margin-top:28px; padding:6px 28px; }
+  .about-disclosure { padding:21px 0; }
+  .about-disclosure + .about-disclosure { border-top:1px dashed var(--color-line); }
+  .about-disclosure summary { font-size:13px; }
+  .extra-author { margin-left:auto; font-size:11px; color:var(--color-ink-faint); }
+  .about-disclosure .prose-custom { margin-top:18px; }
+  :global(.dark) .profile-photo img { border-color:var(--color-night-subtle); }
+  :global(.dark) .profile-copy > p, :global(.dark) .profile-links a, :global(.dark) .interest-note p, :global(.dark) .practice-note blockquote { color:var(--color-snow-soft); }
+  :global(.dark) .profile-links .profile-github { color:var(--color-night); background:var(--color-accent-dark); }
+  :global(.dark) .about-section-heading, :global(.dark) .interest-icon, :global(.dark) .interest-link, :global(.dark) .principles-note li > span, :global(.dark) .practice-note > :global(svg) { color:var(--color-accent-dark); }
+  :global(.dark) .about-section h2, :global(.dark) .about-note-grid h2 { color:var(--color-snow); }
+  :global(.dark) .interest-icon, :global(.dark) .practice-note { background:var(--color-night-subtle); }
+  :global(.dark) .practice-note footer, :global(.dark) .extra-author { color:var(--color-snow-faint); }
+  :global(.dark) .about-disclosure + .about-disclosure { border-color:var(--color-line-dark); }
+  @media (max-width:800px) { .interest-grid { grid-template-columns:1fr; } .about-note-grid { grid-template-columns:1fr; } }
+  @media (max-width:639px) { .profile-note { flex-direction:column; padding:25px; gap:22px; } .profile-copy h2 { font-size:22px; } .principles-note, .practice-note, .about-extras { padding-inline:23px; } .extra-author { display:none; } }
+</style>

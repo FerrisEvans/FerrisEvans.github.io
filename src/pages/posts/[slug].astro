@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import katexStyles from 'katex/dist/katex.min.css?url';
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
 import Toc from '../../components/Toc.astro';
 import Giscus from '../../components/Giscus.astro';
 import CategoryBadge from '../../components/CategoryBadge.astro';
@@ -61,149 +62,168 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
   </Fragment>
   <div id="read-progress" class="fixed left-0 top-0 z-50 h-0.5 bg-accent dark:bg-accent-dark" style="width: 0%" aria-hidden="true"></div>
 
-  <article class="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-12">
-    <div class="lg:grid lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-x-12">
-      <header class="page-header min-w-0 p-6 sm:p-8 lg:col-start-1 lg:row-start-1">
-        <nav aria-label="面包屑" class="mb-6 flex flex-wrap items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
-          <a href="/categories/" class="transition-colors hover:text-ink dark:hover:text-snow">分类</a>
-          <span>/</span>
-          <a href={`/categories/${cat.slug}/`} class="transition-colors hover:text-ink dark:hover:text-snow">{cat.label}</a>
-          {sub && (
-            <>
-              <span>/</span>
-              <span class="text-ink-soft dark:text-snow-soft">{sub}</span>
-            </>
-          )}
-        </nav>
-        <h1 class="font-serif text-3xl font-bold leading-tight tracking-tight sm:text-[2.625rem]">{post.data.title}</h1>
-        {post.data.description && (
-          <p class="mt-5 max-w-2xl text-[0.9375rem] leading-7 text-ink-soft dark:text-snow-soft">
-            {post.data.description}
-          </p>
-        )}
-        <div class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-ink-faint dark:text-snow-faint">
-          <CategoryBadge category={post.data.category} />
-          <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-          <span aria-hidden="true">·</span>
-          <span>{readingMinutes} 分钟阅读 · 约 {words} 字</span>
-          {post.data.updatedDate && (
-            <>
-              <span aria-hidden="true">·</span>
-              <time datetime={post.data.updatedDate.toISOString()}>更新于 {formatDate(post.data.updatedDate)}</time>
-            </>
-          )}
-        </div>
-        {post.data.tags.length > 0 && (
-          <div class="mt-4 flex flex-wrap gap-1.5">
+  <div class="island-page reading-page">
+    <nav aria-label="面包屑" class="reading-breadcrumb">
+      <a href="/lofi/"><Icon name="book" size={16} /> 实践笔记</a>
+      <span aria-hidden="true">/</span>
+      <a href={`/categories/${cat.slug}/`}>{cat.label}</a>
+      {sub && <><span aria-hidden="true">/</span><span>{sub}</span></>}
+    </nav>
+
+    <div class:list={["reading-layout", hasToc && "has-bookmarks"]}>
+      <article class="island-panel notebook-sheet">
+        <header class="notebook-header">
+          <div class="notebook-label"><span class="island-eyebrow">一页小笔记</span><Icon name="leaf" size={24} /></div>
+          <h1>{post.data.title}</h1>
+          {post.data.description && <p class="notebook-description">{post.data.description}</p>}
+          <div class="notebook-meta">
+            <span><Icon name="calendar" size={15} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time></span>
+            <span><Icon name="clock" size={15} />{readingMinutes} 分钟 · 约 {words} 字</span>
+            {post.data.updatedDate && <span><time datetime={post.data.updatedDate.toISOString()}>更新于 {formatDate(post.data.updatedDate)}</time></span>}
+          </div>
+          <div class="notebook-topics">
+            <CategoryBadge category={post.data.category} />
             {post.data.tags.map((tag) => <TagChip tag={tag} />)}
           </div>
-        )}
+          <a href="#comments" class="comments-jump"><Icon name="message" size={16} />参与讨论<Icon name="arrow-right" size={14} /></a>
 
-        {series.length > 1 && (
-          <details class="series-nav mt-7 rounded-xl border border-line bg-paper-elev px-5 py-4 dark:border-line-dark dark:bg-night-elev">
-            <summary>
-              <span class="text-sm">
-                {seriesLabel} 系列
-                <span class="ml-2 text-xs font-normal text-ink-faint dark:text-snow-faint">第 {seriesIndex} / {series.length} 篇</span>
-              </span>
-            </summary>
-            <ol class="mt-4 space-y-2.5 border-t border-line pt-4 dark:border-line-dark">
-              {series.map((item, index) => (
-                <li class="flex items-baseline gap-3 text-sm leading-6">
-                  <span class="shrink-0 font-mono text-xs text-ink-faint dark:text-snow-faint">{String(index + 1).padStart(2, '0')}</span>
-                  {item.id === post.id ? (
-                    <span aria-current="page" class="font-medium text-accent dark:text-accent-dark">{item.data.title}</span>
-                  ) : (
-                    <a href={postUrl(item)} class="transition-colors hover:text-accent dark:hover:text-accent-dark">{item.data.title}</a>
-                  )}
-                </li>
-              ))}
-            </ol>
-          </details>
-        )}
-      </header>
-
-      <aside data-pagefind-ignore class="min-w-0 lg:col-start-2 lg:row-start-2">
-        {hasToc && (
-          <>
-            <details class="mobile-toc mt-8 rounded-xl border border-line bg-paper-elev px-4 py-3 dark:border-line-dark dark:bg-night-elev lg:hidden">
-              <summary class="text-sm">
-                本文目录
-                <span class="text-xs font-normal text-ink-faint dark:text-snow-faint">{tocCount} 节</span>
+          {series.length > 1 && (
+            <details class="series-nav notebook-series">
+              <summary>
+                <span class="series-heading"><Icon name="layers" size={18} />{seriesLabel} 系列</span>
+                <span class="series-count">第 {seriesIndex} / {series.length} 篇</span>
               </summary>
-              <div class="mt-3 border-t border-line pt-3 dark:border-line-dark">
-                <Toc headings={headings} showTitle={false} />
-              </div>
+              <ol>
+                {series.map((item, index) => (
+                  <li>
+                    <span class="series-number">{String(index + 1).padStart(2, '0')}</span>
+                    {item.id === post.id ? (
+                      <span aria-current="page" class="series-current">{item.data.title}</span>
+                    ) : <a href={postUrl(item)}>{item.data.title}</a>}
+                  </li>
+                ))}
+              </ol>
             </details>
-            <div class="sticky top-24 mt-12 hidden lg:block">
-              <div class="toc-scroll max-h-[calc(100vh-7rem)] overflow-y-auto pb-4">
-                <Toc headings={headings} />
+          )}
+          {hasToc && (
+            <details data-pagefind-ignore class="mobile-toc notebook-mobile-toc">
+              <summary><span>本文目录</span><span>{tocCount} 节</span></summary>
+              <div class="mobile-toc-content"><Toc headings={headings} showTitle={false} /></div>
+            </details>
+          )}
+        </header>
+
+        <div data-pagefind-body class="prose-custom notebook-content"><Content /></div>
+
+        <footer data-pagefind-ignore class="notebook-footer">
+          {related.length > 0 && (
+            <section aria-labelledby="related-heading" class="related-notes">
+              <p class="island-eyebrow">KEEP EXPLORING</p>
+              <h2 id="related-heading">接着读一篇</h2>
+              <div class="related-grid">
+                {related.map((item) => (
+                  <a href={postUrl(item)}>
+                    <Icon name="book" size={20} />
+                    <h3>{item.data.title}</h3>
+                    <span>阅读笔记 <Icon name="arrow-right" size={16} /></span>
+                  </a>
+                ))}
               </div>
-            </div>
-          </>
-        )}
-      </aside>
-
-      <div class="min-w-0 lg:col-start-1 lg:row-start-2">
-        <div data-pagefind-body class="prose-custom mt-9 lg:mt-12">
-          <Content />
-        </div>
-      </div>
-
-      <footer data-pagefind-ignore class="min-w-0 lg:col-start-1">
-        {related.length > 0 && (
-          <section aria-labelledby="related-heading" class="mt-16 border-t border-line pt-10 dark:border-line-dark">
-            <p class="eyebrow">Related notes</p>
-            <h2 id="related-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">继续阅读</h2>
-            <div class="mt-5 grid gap-3 sm:grid-cols-3">
-              {related.map((item) => (
-                <a href={postUrl(item)} class="group rounded-xl border border-line bg-paper-elev p-4 transition-colors hover:border-accent/40 dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40">
-                  <h3 class="font-serif font-bold leading-6 transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{item.data.title}</h3>
-                  <span class="mt-4 inline-flex items-center gap-1 text-xs text-ink-faint dark:text-snow-faint">
-                    阅读文章 <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
-                  </span>
-                </a>
-              ))}
-            </div>
-          </section>
-        )}
-
-        <nav aria-label="相邻文章" class="mt-10 grid gap-4 sm:grid-cols-2">
-          {
-            older ? (
+            </section>
+          )}
+          <nav aria-label="相邻文章" class="adjacent-notes">
+            {older ? (
               <a href={postUrl(older)} class="prev-next-card">
-                <span class="text-xs text-ink-faint dark:text-snow-faint">← 上一篇</span>
-                <span class="mt-1.5 font-serif font-bold leading-snug">{older.data.title}</span>
+                <span><Icon name="arrow-left" size={16} />上一篇</span>
+                <strong>{older.data.title}</strong>
               </a>
-            ) : <span />
-          }
-          {
-            newer && (
-              <a href={postUrl(newer)} class="prev-next-card sm:text-right">
-                <span class="text-xs text-ink-faint dark:text-snow-faint">下一篇 →</span>
-                <span class="mt-1.5 font-serif font-bold leading-snug">{newer.data.title}</span>
+            ) : <span />}
+            {newer && (
+              <a href={postUrl(newer)} class="prev-next-card next-note">
+                <span>下一篇<Icon name="arrow-right" size={16} /></span>
+                <strong>{newer.data.title}</strong>
               </a>
-            )
-          }
-        </nav>
+            )}
+          </nav>
+          <Giscus />
+        </footer>
+        <dialog id="image-viewer" class="image-viewer" aria-label="图片预览">
+          <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label="关闭图片预览">关闭</button>
+          <img id="image-viewer-image" alt="" />
+        </dialog>
+      </article>
 
-        <Giscus />
-      </footer>
+      {hasToc && (
+        <aside data-pagefind-ignore class="reading-bookmarks">
+          <div class="bookmarks-sticky">
+            <div class="toc-scroll"><Toc headings={headings} /></div>
+            <a href="#comments" class="bookmark-comments"><Icon name="message" size={16} />讨论与评论<Icon name="arrow-right" size={14} /></a>
+          </div>
+        </aside>
+      )}
     </div>
-
-    <dialog id="image-viewer" class="image-viewer" aria-label="图片预览">
-      <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label="关闭图片预览">关闭</button>
-      <img id="image-viewer-image" alt="" />
-    </dialog>
-  </article>
+  </div>
 </Base>
 
 <style>
   @reference "../../styles/global.css";
-
-  .prev-next-card {
-    @apply flex flex-col rounded-xl border border-line bg-paper-elev p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40;
-  }
+  .reading-page { max-width:1280px; }
+  .reading-breadcrumb { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:24px; font-size:12px; color:var(--color-ink-faint); }
+  .reading-breadcrumb a { display:inline-flex; align-items:center; gap:7px; }
+  .reading-breadcrumb a:hover { color:var(--color-accent); }
+  .reading-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:start; }
+  .notebook-sheet { min-width:0; width:100%; max-width:880px; margin-inline:auto; padding:38px 40px 30px; }
+  .notebook-label { display:flex; align-items:center; justify-content:space-between; color:var(--color-accent); gap:16px; }
+  .notebook-header h1 { font-size:clamp(1.8rem,3vw,2.65rem); font-weight:750; line-height:1.35; letter-spacing:.01em; margin:20px 0 18px; overflow-wrap:anywhere; }
+  .notebook-description { font-size:15px; line-height:1.9; color:var(--color-ink-soft); }
+  .notebook-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; margin-top:24px; font-size:11px; color:var(--color-ink-faint); }
+  .notebook-meta > span { display:inline-flex; align-items:center; gap:6px; }
+  .notebook-topics { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
+  .comments-jump { display:inline-flex; align-items:center; gap:7px; margin-top:20px; font-size:12px; color:var(--color-accent); }
+  .notebook-series { border:1px solid var(--color-line); background:var(--color-paper-subtle); padding:16px 18px; border-radius:16px; margin-top:28px; }
+  .notebook-series summary { font-size:13px; gap:8px; }
+  .series-heading { display:flex; align-items:center; gap:8px; }
+  .series-count { margin-left:auto; font-size:11px; color:var(--color-ink-faint); }
+  .notebook-series ol { margin-top:16px; padding-top:16px; border-top:1px dashed var(--color-line); }
+  .notebook-series li { display:flex; align-items:baseline; gap:12px; font-size:13px; line-height:1.7; margin-top:10px; }
+  .series-number { flex-shrink:0; font-size:10px; font-family:var(--font-sans); color:var(--color-ink-faint); }
+  .series-current { font-weight:650; color:var(--color-accent); }
+  .notebook-series li a:hover { color:var(--color-accent); }
+  .notebook-mobile-toc { margin-top:22px; border-block:1px solid var(--color-line); padding-block:16px; }
+  .notebook-mobile-toc summary { font-size:13px; }
+  .notebook-mobile-toc summary > span:last-child { margin-left:auto; color:var(--color-ink-faint); font-size:11px; }
+  .mobile-toc-content { margin-top:16px; }
+  .notebook-content { margin-top:36px; padding-top:8px; }
+  .notebook-footer { min-width:0; margin-top:52px; }
+  .related-notes { border-top:1px dashed var(--color-line); padding-top:30px; }
+  .related-notes h2 { font-size:21px; font-weight:700; margin:8px 0 20px; }
+  .related-grid { display:grid; gap:12px; }
+  .related-grid > a { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:12px; border:1px solid var(--color-line); border-radius:16px; padding:17px; background:var(--color-paper); transition:background .15s,transform .15s; }
+  .related-grid > a:hover { background:var(--color-paper-subtle); transform:translateY(-2px); }
+  .related-grid > a > :global(svg) { color:var(--color-accent); }
+  .related-grid h3 { font-size:13px; font-weight:650; line-height:1.7; }
+  .related-grid span { display:flex; align-items:center; justify-content:space-between; align-self:stretch; gap:8px; margin-top:auto; font-size:10px; color:var(--color-ink-faint); }
+  .adjacent-notes { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; margin-top:30px; padding-block:24px; border-block:1px dashed var(--color-line); }
+  .prev-next-card { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
+  .prev-next-card > span { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--color-ink-faint); }
+  .prev-next-card strong { font-size:13px; font-weight:600; line-height:1.7; }
+  .prev-next-card:hover strong { color:var(--color-accent); }
+  .next-note { text-align:right; align-items:flex-end; }
+  .reading-bookmarks { display:none; }
+  .bookmarks-sticky { position:sticky; top:96px; }
+  .toc-scroll { max-height:calc(100vh - 12rem); overflow-y:auto; padding:0 8px 20px 0; }
+  .bookmark-comments { display:flex; align-items:center; gap:8px; padding-top:18px; border-top:1px dashed var(--color-line); color:var(--color-ink-faint); font-size:12px; }
+  .bookmark-comments > :global(svg:last-child) { margin-left:auto; }
+  :global(.dark) .reading-breadcrumb, :global(.dark) .notebook-meta, :global(.dark) .series-count, :global(.dark) .series-number, :global(.dark) .notebook-mobile-toc summary > span:last-child, :global(.dark) .related-grid span, :global(.dark) .prev-next-card > span, :global(.dark) .bookmark-comments { color:var(--color-snow-faint); }
+  :global(.dark) .notebook-description { color:var(--color-snow-soft); }
+  :global(.dark) .notebook-label, :global(.dark) .comments-jump, :global(.dark) .series-current, :global(.dark) .related-grid > a > :global(svg) { color:var(--color-accent-dark); }
+  :global(.dark) .notebook-series { background:var(--color-night-subtle); border-color:var(--color-line-dark); }
+  :global(.dark) .notebook-series ol, :global(.dark) .notebook-mobile-toc, :global(.dark) .related-notes, :global(.dark) .adjacent-notes, :global(.dark) .bookmark-comments { border-color:var(--color-line-dark); }
+  :global(.dark) .related-grid > a { background:var(--color-night); border-color:var(--color-line-dark); }
+  :global(.dark) .related-grid > a:hover { background:var(--color-night-subtle); }
+  @media (min-width:640px) { .related-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media (min-width:1440px) { .reading-layout.has-bookmarks { grid-template-columns:minmax(0,880px) 190px; justify-content:center; } .reading-bookmarks { display:block; align-self:stretch; padding-top:30px; } .notebook-mobile-toc { display:none; } }
+  @media (max-width:639px) { .notebook-sheet { padding:25px 20px; } .reading-breadcrumb { font-size:11px; gap:8px; } .notebook-header h1 { font-size:26px; } .notebook-description { font-size:14px; } .notebook-series { padding:14px; } .series-heading { gap:6px; } .series-count { font-size:10px; } }
 </style>
 
 <script is:inline>

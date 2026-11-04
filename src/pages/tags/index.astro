@@ -1,58 +1,54 @@
 ---
+import { Title, Tag, NoData } from 'animal-island-ui';
 import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
 import { getPosts } from '../../utils/posts';
 
 const posts = await getPosts();
 const counts = new Map<string, number>();
 for (const post of posts) {
-  for (const tag of post.data.tags) {
-    counts.set(tag, (counts.get(tag) ?? 0) + 1);
-  }
+  for (const tag of post.data.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
 }
 const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+const tagColors = ['app-pink', 'app-yellow', 'app-teal', 'purple', 'app-orange', 'app-green'] as const;
 ---
 
 <Base title="标签">
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-7 p-7 sm:p-9">
-      <p class="eyebrow">Tags / 主题索引</p>
-      <h1 class="page-title">标签</h1>
-      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {tags.length} 个标签，按文章数量排列。</p>
+  <div class="island-page">
+    <header class="tag-intro">
+      <span class="page-decoration"><Icon name="tag" size={52} /></span>
+      <h1><Title color="app-yellow" size="large">标签收集册</Title></h1>
+      <p class="island-lead">{tags.length} 枚标签，帮你找到感兴趣的笔记。点开一枚，看看里面藏了什么。</p>
     </header>
-
-    <div class="mb-7 flex sm:justify-end">
-      <input
-        id="tag-filter"
-        type="search"
-        placeholder="筛选标签…"
-        aria-label="筛选标签"
-        class="w-full rounded-xl border border-line bg-paper-elev px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-faint focus:border-accent dark:border-line-dark dark:bg-night-elev dark:text-snow dark:placeholder:text-snow-faint dark:focus:border-accent-dark sm:w-64"
-      />
-    </div>
-
-    <div class="flex flex-wrap gap-2.5">
-      {
-        tags.map(([tag, count]) => (
-          <a
-            href={`/tags/${encodeURIComponent(tag)}/`}
-            data-tag={tag.toLowerCase()}
-            class="tag-item group inline-flex min-h-10 items-center gap-2 rounded-full border border-line bg-paper-elev px-3.5 py-2 text-sm transition-colors hover:border-accent/40 hover:text-accent dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40 dark:hover:text-accent-dark"
-          >
-            <span>#{tag}</span>
-            <span class="rounded-full bg-ink/[0.05] px-1.5 py-0.5 font-mono text-[0.625rem] leading-none text-ink-faint dark:bg-white/[0.07] dark:text-snow-faint">{count}</span>
+    <section class="tag-board island-panel" aria-label="标签索引">
+      <div class="tag-tools">
+        <p id="tag-count" role="status" aria-live="polite">全部 {tags.length} 个标签</p>
+        <label class="tag-search">
+          <Icon name="search" size={18} />
+          <input id="tag-filter" type="search" placeholder="筛选标签…" aria-label="筛选标签" />
+        </label>
+      </div>
+      <div class="tag-collection">
+        {tags.map(([tag, count], index) => (
+          <a href={`/tags/${encodeURIComponent(tag)}/`} data-tag={tag.toLowerCase()} data-color={index % 4} class="tag-item">
+            <Tag size="large" variant="soft" color={tagColors[index % tagColors.length]} className="collection-tag"><span class="tag-label"><Icon name="tag" size={21} /><span>{tag}</span><span class="tag-quantity">{count}</span></span></Tag>
           </a>
-        ))
-      }
-    </div>
-    <p id="tag-empty" hidden class="rounded-xl border border-dashed border-line p-6 text-sm text-ink-faint dark:border-line-dark dark:text-snow-faint">没有匹配的标签。</p>
+        ))}
+      </div>
+      <div id="tag-empty" hidden class="tag-empty">
+        <NoData variant="search" size="small" title="没有匹配的标签。" description="换个关键词，再找找看吧。"><button id="tag-reset" type="button">清空筛选</button></NoData>
+      </div>
+      <p class="tag-caption">按文章数量排列 · 点击标签，查看相关笔记</p>
+    </section>
   </div>
-
   <script is:inline>
     (function () {
       var input = document.getElementById('tag-filter');
       var empty = document.getElementById('tag-empty');
+      var count = document.getElementById('tag-count');
+      var reset = document.getElementById('tag-reset');
       var items = Array.from(document.querySelectorAll('.tag-item'));
-      input?.addEventListener('input', function () {
+      function filterTags() {
         var query = input.value.trim().toLowerCase();
         var visible = 0;
         items.forEach(function (item) {
@@ -61,7 +57,47 @@ const tags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeComp
           if (matches) visible++;
         });
         if (empty) empty.hidden = visible !== 0;
+        if (count) count.textContent = query ? '找到 ' + visible + ' 个标签' : '全部 ' + items.length + ' 个标签';
+      }
+      input?.addEventListener('input', filterTags);
+      reset?.addEventListener('click', function () {
+        input.value = '';
+        filterTags();
+        input.focus();
       });
     })();
   </script>
 </Base>
+
+<style>
+  .tag-intro { margin-bottom: 38px; text-align: center; }
+  .page-decoration { display: inline-flex; color: var(--color-accent); margin-bottom: 14px; transform: rotate(9deg); }
+  .tag-intro h1 { margin-bottom: 22px; }
+  .tag-board { padding: 34px; border: 2px solid #ddcfa9; border-radius: 30px; box-shadow: none; }
+  .tag-tools { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding-bottom: 26px; border-bottom: 2px dashed var(--color-line); }
+  #tag-count { font-size: 15px; font-weight: 700; color: var(--color-ink-soft); }
+  .tag-search { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 18px; border: 2.5px solid #c4b89e; border-radius: 50px; background: #fffbe7; color: var(--color-ink-soft); }
+  .tag-search:focus-within { outline: 3px solid #ffcc00; outline-offset: 3px; }
+  #tag-filter { width: 230px; min-width: 0; height: 46px; border: 0; background: transparent; font-size: 14px; font-weight: 500; color: var(--color-ink); outline: none; }
+  #tag-filter::placeholder { color: var(--color-ink-faint); }
+  .tag-collection { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 14px; padding: 34px 0; }
+  .tag-item { display: inline-flex; max-width: 100%; border-radius: 50px; transition: transform .2s cubic-bezier(.4,0,.2,1); }
+  .tag-item :global(.collection-tag) { min-height: 50px; padding: 12px 18px; border-radius: 50px; color: #725d42; }
+  .tag-label { display: inline-flex; align-items: center; gap: 10px; min-width: 0; font-weight: 700; }
+  .tag-label > span:not(.tag-quantity) { overflow-wrap: anywhere; }
+  .tag-item:hover { transform: translateY(-2px) rotate(-2deg); }
+  .tag-quantity { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 50%; font-size: 12px; font-weight: 800; background: #fffbeabb; color: #725d42; }
+  .tag-item[hidden], .tag-empty[hidden] { display: none; }
+  .tag-empty { padding: 25px 0; }
+  .tag-empty button { min-height: 46px; margin-top: 5px; padding: 9px 24px; border: 2px solid #c4b89e; border-radius: 50px; color: var(--color-accent); font-size: 14px; font-weight: 700; background: #fffbe7; }
+  .tag-caption { border-top: 2px dashed var(--color-line); padding-top: 22px; font-size: 13px; color: var(--color-ink-faint); }
+  :global(.dark) .tag-board, :global(.dark) .tag-tools, :global(.dark) .tag-caption { border-color: var(--color-line-dark); }
+  :global(.dark) #tag-count, :global(.dark) .tag-caption, :global(.dark) .tag-empty { color: var(--color-snow-soft); }
+  :global(.dark) .tag-search, :global(.dark) .tag-empty button { background: var(--color-night); border-color: var(--color-line-dark); color: var(--color-snow-soft); }
+  :global(.dark) #tag-filter { color: var(--color-snow); }
+  :global(.dark) #tag-filter::placeholder { color: var(--color-snow-faint); }
+  :global(.dark) .tag-item :global(.collection-tag) { background: #4b3c36; border-color: #84685b; color: #f7dfbf; }
+  :global(.dark) .tag-item:nth-child(3n) :global(.collection-tag) { background: #344b42; border-color: #668776; color: #e0f0c9; }
+  :global(.dark) .tag-quantity { background: #f6deb726; color: #f6dfb5; }
+  @media (max-width: 640px) { .tag-board { padding: 24px; } .tag-tools { align-items: stretch; flex-direction: column; gap: 18px; } #tag-filter { width: 100%; } .tag-search { width: 100%; } .tag-collection { gap: 12px 10px; } .tag-item :global(.collection-tag) { padding: 9px 13px; font-size: 14px; } }
+</style>

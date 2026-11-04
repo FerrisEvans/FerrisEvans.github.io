@@ -1,8 +1,7 @@
 /* ---------- prose ---------- */
 
 .prose-custom {
-  @apply font-sans text-body text-ink dark:text-snow;
-  max-width: var(--measure);
+  @apply font-sans text-[1.0625rem] leading-8 text-ink dark:text-snow;
   overflow-wrap: break-word;
 }
 
@@ -10,11 +9,11 @@
 .prose-custom h2,
 .prose-custom h3,
 .prose-custom h4 {
-  @apply relative font-serif font-bold tracking-tight text-ink dark:text-snow scroll-mt-24;
+  @apply relative font-sans font-semibold tracking-tight text-ink dark:text-snow scroll-mt-24;
 }
 
 .prose-custom h2 {
-  @apply mb-6 mt-14 border-b border-line pb-3 text-2xl dark:border-line-dark;
+  @apply mb-5 mt-12 pb-2 text-[1.4rem];
 }
 
 .prose-custom h3 {
@@ -66,7 +65,7 @@
 }
 
 .prose-custom blockquote {
-  @apply my-6 rounded-r-xl border-l-2 border-accent/50 bg-paper-subtle px-5 py-3 text-ink-soft dark:border-accent-dark/50 dark:bg-night-subtle dark:text-snow-soft;
+  @apply my-6 rounded-2xl border-l-4 border-accent/50 bg-paper-subtle px-5 py-4 text-ink-soft dark:border-accent-dark/50 dark:bg-night-subtle dark:text-snow-soft;
 }
 
 .prose-custom blockquote p:first-child {
@@ -94,7 +93,7 @@
 }
 
 .prose-custom .code-block {
-  @apply my-6 overflow-hidden rounded-xl border border-line dark:border-line-dark;
+  @apply my-6 overflow-hidden rounded-2xl border border-line dark:border-line-dark;
 }
 
 .prose-custom .code-block pre {
@@ -102,7 +101,7 @@
 }
 
 .code-block-header {
-  @apply flex h-10 items-center justify-between border-b border-line bg-paper-subtle pl-4 pr-2 dark:border-line-dark dark:bg-night-subtle;
+  @apply flex h-12 items-center justify-between border-b border-line bg-paper-subtle pl-4 pr-2 dark:border-line-dark dark:bg-night-subtle;
 }
 
 .code-language {
@@ -110,7 +109,7 @@
 }
 
 .code-copy {
-  @apply inline-flex min-h-8 items-center gap-1.5 rounded-md px-2.5 text-xs text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink dark:text-snow-soft dark:hover:bg-white/[0.07] dark:hover:text-snow;
+  @apply inline-flex min-h-8 items-center gap-1.5 rounded-lg px-3 text-xs text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink dark:text-snow-soft dark:hover:bg-white/[0.07] dark:hover:text-snow;
 }
 
 .code-copy[data-copied="true"] {
@@ -169,8 +168,13 @@
 }
 
 .image-viewer {
-  max-width: 92vw;
-  max-height: 90vh;
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
   padding: 0;
   border: 0;
   background: transparent;
@@ -188,10 +192,13 @@
 
 .image-viewer img {
   display: block;
-  max-width: 92vw;
-  max-height: 84vh;
+  margin: auto;
+  width: auto;
+  height: auto;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
   object-fit: contain;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
 }
 
 .image-viewer-close {
@@ -203,7 +210,7 @@
 }
 
 .prose-custom details {
-  @apply my-6 rounded-xl border border-line bg-paper-elev px-5 py-4 dark:border-line-dark dark:bg-night-elev;
+  @apply my-6 rounded-2xl border border-line p-5 dark:border-line-dark;
 }
 
 .prose-custom summary {
@@ -264,3 +271,33 @@
 .prose-custom .markdown-alert-caution .markdown-alert-title {
   @apply text-rose-700 dark:text-rose-400;
 }
+
+@media (max-width: 639px) {
+  .prose-custom { font-size: 1rem; line-height: 1.9; }
+  .prose-custom h2 { font-size: 1.25rem; }
+  .prose-custom h3 { font-size: 1.1rem; }
+  .prose-custom pre { padding: 1rem; font-size: 0.75rem; }
+}
+
+/* Keep technical material scrollable inside the reading sheet. */
+.prose-custom .code-block { min-width:0; max-width:100%; }
+.prose-custom pre,
+.prose-custom .code-block pre { min-width:0; max-width:100%; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:thin; scrollbar-color:var(--color-line) transparent; }
+.prose-custom pre code { display:block; width:max-content; min-width:100%; white-space:pre; word-break:normal; overflow-wrap:normal; }
+.prose-custom pre::-webkit-scrollbar { height:8px; }
+.prose-custom pre::-webkit-scrollbar-thumb { background:var(--color-line); border-radius:8px; }
+.dark .prose-custom pre { scrollbar-color:var(--color-line-dark) transparent; }
+.dark .prose-custom pre::-webkit-scrollbar-thumb { background:var(--color-line-dark); }
+.prose-custom figure { width:100%; }
+.prose-custom figure img { width:auto; height:auto; max-width:100%; max-height:none; }
+.prose-custom [data-footnotes],
+.prose-custom .footnotes { margin-top:40px; padding-top:20px; border-top:1px dashed var(--color-line); font-size:0.8125rem; line-height:1.8; color:var(--color-ink-soft); }
+.prose-custom [data-footnotes] p,
+.prose-custom .footnotes p { margin-block:8px; }
+.prose-custom [data-footnotes] ol,
+.prose-custom .footnotes ol { margin-block:12px; padding-left:20px; }
+.prose-custom sup { font-size:0.7em; line-height:0; vertical-align:super; }
+.prose-custom [data-footnote-ref] { padding-inline:2px; text-decoration:none; }
+.prose-custom [data-footnote-backref] { font-size:0.8em; }
+.dark .prose-custom [data-footnotes],
+.dark .prose-custom .footnotes { color:var(--color-snow-soft); border-color:var(--color-line-dark); }

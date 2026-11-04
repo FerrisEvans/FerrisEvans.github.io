@@ -1,0 +1,86 @@
+/* Blog wrappers share Animal Island UI's warm, playful palette and bundled fonts. */
+:root {
+  --island-surface: #fffbee;
+  --island-muted: #e3f4e7;
+  --island-green: #087f77;
+  --island-shadow: none;
+  --island-border: #e4d7b8;
+  --font-display: 'Nunito', 'Noto Sans SC', sans-serif;
+  --island-ease: cubic-bezier(.4,0,.2,1);
+}
+:root.dark {
+  --island-surface: #3c493d;
+  --island-muted: #465c49;
+  --island-green: #8fdfc6;
+  --island-border: #667054;
+  --animal-text-color: #fff5df;
+  --animal-text-color-body: #e2d7bd;
+  --animal-bg-color: #303b32;
+  --animal-bg-color-content: #3c493d;
+  --animal-bg-color-secondary: #465341;
+  --animal-bg-color-input: #3c493d;
+  --animal-border-color: #8a886d;
+}
+.blog-body { margin:0; background-color:var(--color-paper); background-image:radial-gradient(#c4b89e26 1.4px,transparent 1.4px),radial-gradient(#c4b89e15 1.4px,transparent 1.4px); background-size:28px 28px,14px 14px; background-position:0 0,7px 7px; }
+.dark .blog-body { background-color:var(--color-night); }
+.blog-workspace { min-height:calc(100vh - 104px); display:flex; flex-direction:column; min-width:0; }
+.blog-workspace > main { flex:1; }
+.island-icon { display:inline-flex; flex:none; align-items:center; justify-content:center; vertical-align:middle; line-height:1; }
+.island-icon > svg { display:block; }
+.island-page { width:100%; max-width:1200px; margin:0 auto; padding:36px 40px 24px; }
+.island-panel { background:var(--island-surface); border:1.5px solid var(--island-border); border-radius:28px; box-shadow:none; }
+.island-eyebrow,.eyebrow { color:var(--color-ink-soft); font:700 12px/1.7 var(--font-sans); letter-spacing:.025em; text-transform:none; }
+.dark :is(.island-eyebrow,.eyebrow) { color:var(--color-snow-soft); }
+.island-heading { font:900 clamp(28px,3vw,38px)/1.5 var(--font-display); letter-spacing:.01em; margin-top:10px; }
+.island-lead { color:var(--color-ink-soft); line-height:1.9; font-size:15px; margin-top:14px; }
+.dark .island-lead { color:var(--color-snow-soft); }
+.island-icon-button { display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border:1.5px solid var(--island-border); border-radius:50px; color:var(--color-ink); background:var(--island-surface); box-shadow:0 2px 4px #3d34280f; transition:transform .2s var(--island-ease),background .2s var(--island-ease); }
+.island-icon-button:hover { background:var(--island-muted); transform:translateY(-1px); }
+.dark .island-icon-button { background:#fff7e2; border-color:#d8c99f; }
+.dark .island-icon-button:hover { background:#d9eedb; }
+.island-button { display:inline-flex; align-items:center; justify-content:center; gap:10px; min-height:46px; border-radius:50px; padding:12px 24px; font-size:14px; font-weight:700; background:var(--island-surface); color:var(--color-ink); border:1.5px solid var(--island-border); box-shadow:0 2px 4px #3d34280f; transition:transform .2s var(--island-ease),box-shadow .2s var(--island-ease); }
+.island-button:hover { transform:translateY(-1px); box-shadow:0 3px 10px #3d34281a; }
+.island-button.primary { background:#fff7e2; color:#794f27; border-color:#fff7e2; box-shadow:0 5px 0 #bdaea0; }
+.island-button.primary:hover { box-shadow:0 6px 0 #bdaea0; }
+.island-button.primary:active { transform:translateY(2px); box-shadow:0 1px 0 #bdaea0; }
+.island-nav { position:sticky; top:0; z-index:40; background:var(--island-surface); border-bottom:2px solid var(--island-border); }
+.nav-bar { max-width:1280px; margin:0 auto; min-height:94px; padding:16px 40px; display:flex; gap:24px; align-items:center; justify-content:space-between; }
+.island-brand { display:inline-flex; flex-shrink:0; }
+.nav-links { display:flex; gap:5px; align-items:center; }
+.nav-link { display:inline-flex; align-items:center; gap:7px; padding:10px 15px; border-radius:50px; font-size:14px; font-weight:700; color:var(--color-ink-soft); transition:background .2s var(--island-ease),transform .2s var(--island-ease); }
+.nav-link:hover { background:#f0e8d8; transform:translateY(-1px); }
+.nav-link.is-active { background:#b7e4d4; color:#5b4a33; }
+.nav-actions { display:flex; gap:8px; align-items:center; }
+.nav-room { display:inline-flex; align-items:center; gap:6px; padding:10px 8px; white-space:nowrap; font-size:12px; }
+.dark .nav-link { color:var(--color-snow-soft); }
+.dark .nav-link:hover { background:#50634c; }
+.dark .nav-link.is-active { background:#84c7a8; color:#3f452c; }
+.mobile-menu-toggle,.mobile-menu,.no-script-navigation { display:none; }
+.page-header { border-bottom:2px dashed var(--island-border); }
+.page-title { font-family:var(--font-display); font-weight:900; }
+.category-badge { display:inline-flex; align-items:center; gap:7px; min-height:30px; padding:5px 12px; border-radius:50px; color:#725d42; background:#fff8e7; font-size:12px; font-weight:700; position:relative; z-index:2; }
+.category-badge > span { width:7px; height:7px; }
+.tag-chip { position:relative; z-index:2; display:inline-flex; min-height:30px; align-items:center; padding:4px 11px; border:1.5px dashed #cdbb9b; border-radius:50px; color:var(--color-ink-soft); font-size:12px; font-weight:600; }
+.tag-chip:hover { background:#fff7de; color:#794f27; }
+.dark .tag-chip { color:var(--color-snow-soft); border-color:#9c9476; }
+.dark .tag-chip:hover { background:#53634d; color:#fff5df; }
+.dark .category-badge { color:#fff3d2; background:#526849; }
+@media (max-width:1100px) { .nav-bar { padding-inline:24px; gap:12px; } .nav-link { padding:10px 11px; } .nav-room span { display:none; } }
+@media (max-width:999px) {
+ .desktop-navigation { display:none; }
+ .mobile-menu-toggle { display:inline-flex; }
+ .mobile-menu { display:grid; grid-template-rows:0fr; visibility:hidden; transition:grid-template-rows .25s var(--island-ease),visibility .25s; }
+ .mobile-menu[data-open="true"] { grid-template-rows:1fr; visibility:visible; }
+ .mobile-menu-inner { overflow:hidden; }
+ .mobile-menu nav { padding:5px 24px 20px; display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+ .no-script-navigation { display:flex; flex-wrap:wrap; gap:8px 20px; padding:0 24px 18px; font-size:14px; }
+}
+@media (max-width:767px) {
+ .island-page { padding:24px 20px; }
+ .nav-bar { min-height:78px; padding:12px 16px; }
+ .nav-room { display:none; }
+ .nav-actions { gap:6px; }
+ .island-icon-button { width:38px; height:38px; }
+ .mobile-menu nav { grid-template-columns:repeat(2,1fr); padding-inline:20px; }
+ .nav-link { font-size:14px; }
+}
