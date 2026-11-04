@@ -1,0 +1,1189 @@
+{
+  "pack": "Tiny Treats - Pretty Park 1.0",
+  "author": "Isa Lousberg / Tiny Treats",
+  "sourcePage": "https://tinytreats.itch.io/pretty-park",
+  "repository": "https://github.com/TinyTreats-Game-Assets/Tiny-Treats-Pretty-Park-1.0",
+  "commit": "050e7ba991da7d4338d5539d35acd97134709386",
+  "downloadedArchiveUrl": "https://codeload.github.com/TinyTreats-Game-Assets/Tiny-Treats-Pretty-Park-1.0/zip/refs/heads/main",
+  "archiveSha256": "9f0dd08efab329460030853d8ac0df23ed2d7959fdcc80fa74b9db5fb5fa7381",
+  "license": "CC0-1.0",
+  "licenseFile": "LICENSE.txt",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-11-04",
+  "tier": "free public distribution; no paid source tier purchased",
+  "status": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "files": [
+    {
+      "file": "LICENSE.txt",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/LICENSE.txt",
+      "bytes": 559,
+      "sha256": "2c62f208e3a9b36b0524b9fc43f410985e106b0ffd5b65b604cd18f9581cb256"
+    },
+    {
+      "file": "bench.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bench.bin",
+      "bytes": 19272,
+      "sha256": "27a4a3840f6bdff1980beeb2e06f033ee39fdc6cb2a068760d9d664a3aa41f67"
+    },
+    {
+      "file": "bench.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bench.gltf",
+      "bytes": 3488,
+      "sha256": "5728657c25a018ec0b2ede7cc222867d4832b4f8a56ec034d2b320293af99bd4"
+    },
+    {
+      "file": "bird.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bird.bin",
+      "bytes": 18280,
+      "sha256": "556e56aa63ff69f25cfce57f58e2d8cb79053ad0e5d6e6b4e6e262a37184a7f6"
+    },
+    {
+      "file": "bird.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bird.gltf",
+      "bytes": 3543,
+      "sha256": "9c1457c81726032801693e82f673f4374e2976d2074cefa046a0a45bd2105a68"
+    },
+    {
+      "file": "bush_large.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bush_large.bin",
+      "bytes": 7504,
+      "sha256": "72b9ef0317e9dc7ea152902e0576aaf19eb4ef87bb8e3bb8d49876d8e57c7054"
+    },
+    {
+      "file": "bush_large.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/bush_large.gltf",
+      "bytes": 3555,
+      "sha256": "d4413bc4f6d5147edc07e627749cc75f3b0941b1b181542b6a7f3d6f2fc9d18b"
+    },
+    {
+      "file": "cobble_stones.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/cobble_stones.bin",
+      "bytes": 18144,
+      "sha256": "3a07fce09677331c8859d365c423b857d0f477a1e1a28739914c1b9165295fe9"
+    },
+    {
+      "file": "cobble_stones.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/cobble_stones.gltf",
+      "bytes": 3569,
+      "sha256": "391f06ef62294dfc4889b34774952bbfe1057dbdd5170b16bb8cc0b41d186f6a"
+    },
+    {
+      "file": "floor_grass_sliced_A.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_A.bin",
+      "bytes": 3356,
+      "sha256": "c37702e2f56ec9f12e7af181caa8a4e9a62ef5ff594aa815946d8651ee97fb78"
+    },
+    {
+      "file": "floor_grass_sliced_A.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_A.gltf",
+      "bytes": 3489,
+      "sha256": "5a5479f2ce3605c9ff55210265d8f8a4a95918a747d0330bb6a206a150c63972"
+    },
+    {
+      "file": "floor_grass_sliced_B.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_B.bin",
+      "bytes": 1360,
+      "sha256": "b515ec63faf0b0dca4d732aa043a3ac528bea7d8de3223ff93fbd514222adbe3"
+    },
+    {
+      "file": "floor_grass_sliced_B.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_B.gltf",
+      "bytes": 3484,
+      "sha256": "42a4ece412af8da0c3acfa6e31c38113b119e0a0914ae1791e2e25de28bd7339"
+    },
+    {
+      "file": "floor_grass_sliced_C.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_C.bin",
+      "bytes": 3356,
+      "sha256": "58e096044675b1567ff382149fe473bf5691469c9af244d119e7641e79d4e717"
+    },
+    {
+      "file": "floor_grass_sliced_C.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_C.gltf",
+      "bytes": 3489,
+      "sha256": "ab69807c4b103b86edb96e81e316f600befd2b3c70456b7ce05c340ef3054ff8"
+    },
+    {
+      "file": "floor_grass_sliced_D.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_D.bin",
+      "bytes": 1360,
+      "sha256": "08121cde1aff06d1b53b8ed71824c08febde98a0ee5643dccd3dcd4d26d8d754"
+    },
+    {
+      "file": "floor_grass_sliced_D.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_D.gltf",
+      "bytes": 3484,
+      "sha256": "a5d93fe8720e4bf5779604fb243cab5f57d2cc5f6d74a680c80eb22e957a897c"
+    },
+    {
+      "file": "floor_grass_sliced_E.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_E.bin",
+      "bytes": 840,
+      "sha256": "cfcce8df2e186499a90007614a44a4da35ef270cdea534b370772f7774177542"
+    },
+    {
+      "file": "floor_grass_sliced_E.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_E.gltf",
+      "bytes": 3481,
+      "sha256": "237666d836bc9044dd6ff47a75098f7e4dde829fb9c98328218195b34deeded2"
+    },
+    {
+      "file": "floor_grass_sliced_F.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_F.bin",
+      "bytes": 1360,
+      "sha256": "3b0c3ddab2539919e2c79218483e3d738d63adc7bc7e6bf0de4d53f0b8c4afd5"
+    },
+    {
+      "file": "floor_grass_sliced_F.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_F.gltf",
+      "bytes": 3484,
+      "sha256": "db450a5864133e355a69c0a331aa7a94e0e2a0f0f9fc12d6afa675e2baab5c96"
+    },
+    {
+      "file": "floor_grass_sliced_G.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_G.bin",
+      "bytes": 3356,
+      "sha256": "abb4a6f3f4e3668b5d8ab888e4bfbed07baa85fa74ca7e89b800589988fbe5b7"
+    },
+    {
+      "file": "floor_grass_sliced_G.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_G.gltf",
+      "bytes": 3489,
+      "sha256": "1107eb6e936857f315ccb6c76f1669ad512282e7ef114fa57623460615b0bee1"
+    },
+    {
+      "file": "floor_grass_sliced_H.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_H.bin",
+      "bytes": 1360,
+      "sha256": "1e67132bc6cf8cca53cc10d6922eb178f5373a708f6983299d3ad8d49fc2ab82"
+    },
+    {
+      "file": "floor_grass_sliced_H.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_H.gltf",
+      "bytes": 3484,
+      "sha256": "973252a6f8e02b2151fca0424c7f324b308600433ea6090b40b8a2c89768a0db"
+    },
+    {
+      "file": "floor_grass_sliced_I.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_I.bin",
+      "bytes": 3356,
+      "sha256": "89daa3af6c1d1c3a24178eac15cf550a8b9725458a3d380a1649e02d0557f8f8"
+    },
+    {
+      "file": "floor_grass_sliced_I.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/floor_grass_sliced_I.gltf",
+      "bytes": 3489,
+      "sha256": "4a187a6a8b9e6b64c8cb2feaeeda650f76306207accb757410da129e7212018b"
+    },
+    {
+      "file": "flower_A.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/flower_A.bin",
+      "bytes": 8768,
+      "sha256": "07694a48cf4189fd26b38a4c44c62ec2f867824a756f2dec080b1809f6cde9f8"
+    },
+    {
+      "file": "flower_A.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/flower_A.gltf",
+      "bytes": 3548,
+      "sha256": "603089d57186c714e0cec3bee26f97d796310f1aa7a321d4d2bf44bc0e81968a"
+    },
+    {
+      "file": "flower_B.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/flower_B.bin",
+      "bytes": 6820,
+      "sha256": "29307e12a9db373831896f0f115236e3c906692fc7d1bf58c20d2a0beb50c299"
+    },
+    {
+      "file": "flower_B.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/flower_B.gltf",
+      "bytes": 3550,
+      "sha256": "01d603a026ac7f48b4fe8c651b98b660c83471d57fc935cb9546a4a4b2741438"
+    },
+    {
+      "file": "fountain.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/fountain.bin",
+      "bytes": 63476,
+      "sha256": "2d1eeb8058bbe4915147dda967577add7bc5d7af2807a8a9464aa6098b8fc75b"
+    },
+    {
+      "file": "fountain.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/fountain.gltf",
+      "bytes": 7442,
+      "sha256": "9ec7b207872cd6c21d18c80fa838e82dec63e7ea41831eedb4ae19e2e81548a9"
+    },
+    {
+      "file": "grass_B.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/grass_B.bin",
+      "bytes": 6496,
+      "sha256": "e88dff441286035d3f0ec766dbe90fa6c9ee0103384a8ed859ca277b78b73158"
+    },
+    {
+      "file": "grass_B.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/grass_B.gltf",
+      "bytes": 3545,
+      "sha256": "2aa99cec13764b47b8142ad48ca7e9b465567ab48c494da522c122b29a123b29"
+    },
+    {
+      "file": "hedge_straight.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/hedge_straight.bin",
+      "bytes": 5232,
+      "sha256": "8bb8a17454c2450a9423076f2ba2fd6d4077a4b6726401683c7a14c4b80147cb"
+    },
+    {
+      "file": "hedge_straight.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/hedge_straight.gltf",
+      "bytes": 3490,
+      "sha256": "9eb84a19787499a221d5fa59d80aad2def5bdeef110bae8daa3963f78221574b"
+    },
+    {
+      "file": "hedge_straight_long.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/hedge_straight_long.bin",
+      "bytes": 8632,
+      "sha256": "1a1c61ea4794417f133025ea99751e46b4cde86e5e90f23d92721452289fd8ef"
+    },
+    {
+      "file": "hedge_straight_long.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/hedge_straight_long.gltf",
+      "bytes": 3564,
+      "sha256": "46cb948b2f6b05d6d105b054c0f7c02d491c3dc1e2c6bf79655fba04871b494c"
+    },
+    {
+      "file": "street_lantern.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/street_lantern.bin",
+      "bytes": 15056,
+      "sha256": "138715d364113f3cc80c1c44fce89c5e763f779aa301f526da2de12dd1d3efb4"
+    },
+    {
+      "file": "street_lantern.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/street_lantern.gltf",
+      "bytes": 3569,
+      "sha256": "33df9044b08b588d9761260caa1ec4a79c7a9b726c55b19084ab00ddb7ec0358"
+    },
+    {
+      "file": "tiny_treats_grass_texture.png",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/Textures/tiny_treats_grass_texture.png",
+      "bytes": 10306,
+      "sha256": "136855dcfd827f6e53a29a23a00611e1836ad3a73af59545bf662aceac96fe8b"
+    },
+    {
+      "file": "tiny_treats_texture_1.png",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/Textures/tiny_treats_texture_1.png",
+      "bytes": 20167,
+      "sha256": "0dc04a048fd85b129183864788cf85bd63ead6fdccb788a21be98d92f2c4e408"
+    },
+    {
+      "file": "tree.bin",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/tree.bin",
+      "bytes": 8448,
+      "sha256": "6392d155cd97bf9bbe8fc8dcd267cb7abadc34a76534396b359cc7e02ca62222"
+    },
+    {
+      "file": "tree.gltf",
+      "originalPath": "Tiny-Treats-Pretty-Park-1.0-main/addons/tiny_treats_pretty_park_set/Assets/gltf/tree.gltf",
+      "bytes": 3532,
+      "sha256": "bdf34d136c163a47c5e2c87f74e731eab9b43f3d4ee84468f2b2f37fdc9dcaa7"
+    }
+  ],
+  "adaptation": "Byte-exact original models, buffers, and image atlas. PNG paths flattened alongside glTF without editing original URI strings. No recoloring or geometry changes.",
+  "selectedModels": [
+    {
+      "file": "bench.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 396,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        1.31665,
+        1.405944
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -0.6,
+          0
+        ],
+        "max": [
+          1,
+          0.71665,
+          1.405944
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "bird.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 652,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.442206,
+        0.550051,
+        0.440414
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.221701,
+          -0.28261,
+          0
+        ],
+        "max": [
+          0.220504,
+          0.267441,
+          0.440414
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.001",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "bush_large.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 312,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.500432,
+        1.413935,
+        0.759157
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.750214,
+          -0.706967,
+          0
+        ],
+        "max": [
+          0.750218,
+          0.706967,
+          0.759157
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.003",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "cobble_stones.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 448,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.97441,
+        1,
+        0.15
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.487218,
+          -0.505,
+          -0.1
+        ],
+        "max": [
+          0.487192,
+          0.495,
+          0.05
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.004",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_A.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 90,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_B.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 24,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.001",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_C.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 90,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.002",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_D.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 24,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.003",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_E.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 12,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.004",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_F.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 24,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.005",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_G.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 90,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.006",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_H.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 24,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.007",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "floor_grass_sliced_I.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 90,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_grass"
+      ],
+      "images": [
+        "tiny_treats_grass_texture.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        2,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -1,
+          -0.5
+        ],
+        "max": [
+          1,
+          1,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_grass.008",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "flower_A.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 192,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.449063,
+        0.449063,
+        0.138326
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.224531,
+          -0.224531,
+          -0.02
+        ],
+        "max": [
+          0.224532,
+          0.224531,
+          0.118326
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.006",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "flower_B.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 166,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.31112,
+        0.296295,
+        0.110661
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.15556,
+          -0.116669,
+          -0.02
+        ],
+        "max": [
+          0.15556,
+          0.179625,
+          0.090661
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.007",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "fountain.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 1646,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        4,
+        4,
+        1.599999
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.999995,
+          -2,
+          0
+        ],
+        "max": [
+          2.000005,
+          2,
+          1.599999
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.008",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "grass_B.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 208,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.474395,
+        0.513818,
+        0.405424
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.145195,
+          -0.167074,
+          -0.041524
+        ],
+        "max": [
+          0.3292,
+          0.346743,
+          0.363901
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.010",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "hedge_straight.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 232,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2,
+        1.5,
+        1.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1,
+          -0.75,
+          0
+        ],
+        "max": [
+          1,
+          0.75,
+          1.5
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.012",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "hedge_straight_long.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 372,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        4,
+        1.5,
+        1.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -2,
+          -0.75,
+          -0.005908
+        ],
+        "max": [
+          2,
+          0.75,
+          1.494092
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.013",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "street_lantern.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 424,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.93978,
+        0.93978,
+        4.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.469886,
+          -0.46989,
+          -0.2
+        ],
+        "max": [
+          0.469894,
+          0.46989,
+          4.3
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.014",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "tree.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 320,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2.477934,
+        2.365629,
+        3.618354
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.238968,
+          -1.182816,
+          -0.2
+        ],
+        "max": [
+          1.238966,
+          1.182813,
+          3.418354
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.016",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    }
+  ],
+  "palette": "Original TinyTreats atlas-driven colors preserved unchanged. BaseColor factors alone do not represent the painted color; see the included PNG atlas and contact sheet.",
+  "textures": [
+    {
+      "file": "tiny_treats_grass_texture.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 10306,
+      "sha256": "136855dcfd827f6e53a29a23a00611e1836ad3a73af59545bf662aceac96fe8b"
+    },
+    {
+      "file": "tiny_treats_texture_1.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 20167,
+      "sha256": "0dc04a048fd85b129183864788cf85bd63ead6fdccb788a21be98d92f2c4e408"
+    }
+  ]
+}

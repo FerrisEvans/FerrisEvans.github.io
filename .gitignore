@@ -8,7 +8,7 @@ node_modules
 dist
 .astro
 
-# Reproducible Blender working files (GLB is exported to public/room)
+# Legacy isolated worktrees/build artifacts (current GLB: public/island)
 .room-build/
 __pycache__/
 *.pyc

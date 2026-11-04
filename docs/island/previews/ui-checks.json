@@ -1,0 +1,376 @@
+{
+  "generatedAt": "2026-11-04T16:13:03.558Z",
+  "base": "http://127.0.0.1:4327",
+  "buildId": "67826794edc7d8e26cc8",
+  "errors": [],
+  "checks": [
+    {
+      "name": "home-desktop",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-library",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-recent",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-categories",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-about",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-bear",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-rabbit",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-tags",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "hover-mail",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "friends-webgl-close",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "blink-dog",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ],
+      "blink": {
+        "eye": "Dog_Eye_L",
+        "scale": [
+          1,
+          0.226084847810194,
+          1
+        ],
+        "method": "Paused through the existing visibility handler at a naturally occurring closed-eye frame; no pose overrides."
+      }
+    },
+    {
+      "name": "blink-rabbit",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ],
+      "blink": {
+        "eye": "Rabbit_Eye_L",
+        "scale": [
+          1,
+          0.2838377238044967,
+          1
+        ],
+        "method": "Paused through the existing visibility handler at a naturally occurring closed-eye frame; no pose overrides."
+      }
+    },
+    {
+      "name": "home-desktop-night",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "garden-plants",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "island-categories",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "island-about",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "about-desktop",
+      "url": "/about/",
+      "title": "关于 Ferris | 未尽",
+      "overflowX": false,
+      "overflowY": true,
+      "duplicateIds": [],
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "tags-desktop",
+      "url": "/tags/",
+      "title": "标签 | 未尽",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "notes-desktop",
+      "url": "/notes/",
+      "title": "笔记 | 未尽",
+      "overflowX": false,
+      "overflowY": true,
+      "duplicateIds": [],
+      "cursor": "url(\"http://127.0.0.1:4327/cursors/animal-island-default.svg\") 8 5, default",
+      "viewport": [
+        1440,
+        900
+      ]
+    },
+    {
+      "name": "home-mobile",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "auto",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "name": "island-mobile-about",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "auto",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "name": "home-mobile-navigation",
+      "url": "/",
+      "title": "未尽 — 保持好奇，慢慢来",
+      "overflowX": false,
+      "overflowY": false,
+      "duplicateIds": [],
+      "scene": "ready",
+      "buildId": "67826794edc7d8e26cc8",
+      "cursor": "auto",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "name": "tags-mobile",
+      "url": "/tags/",
+      "title": "标签 | 未尽",
+      "overflowX": false,
+      "overflowY": true,
+      "duplicateIds": [],
+      "cursor": "auto",
+      "viewport": [
+        390,
+        844
+      ]
+    },
+    {
+      "name": "about-mobile",
+      "url": "/about/",
+      "title": "关于 Ferris | 未尽",
+      "overflowX": false,
+      "overflowY": true,
+      "duplicateIds": [],
+      "cursor": "auto",
+      "viewport": [
+        390,
+        844
+      ]
+    }
+  ]
+}

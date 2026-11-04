@@ -1,0 +1,3699 @@
+{
+  "capturedAt": "2026-11-04T16:00:12.534Z",
+  "passed": true,
+  "evidence": [
+    {
+      "name": "island-desktop-light",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "readyMs": "173",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":false},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "33",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":\"categories\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0.44222520987693625,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":true,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"categories\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"looking-around\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0.032544626182323774,0.012055576403589152],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.08152692113926929,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.02261292985825866,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.8575789618847015,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.12006105466385822,0.0030353643634657666,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0.023791421059566217,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.8147000137904664],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.19132574504105404,0.006206478400617648,-0.0012030457208659217],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[3.740710519187858e-11,3.234670552819951e-12,-4.329195890662768e-10],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.01641398649633708,-1.3046950566765423e-9,-1.5500902798577735e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000004434541791,2.41845777237833e-9,-5.11659341812025e-10],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Categories\",\"drawn\":\"Categories\",\"opacity\":0.4573959953906248,\"postprocessing\":true,\"calls\":394,\"triangles\":423870,\"prepared\":true,\"dark\":false}",
+        "hover": ""
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-desktop-restored",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "view": "home",
+        "hover": "recent",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "147",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":false},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "104",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274311002},{\"x\":679.6026922042024,\"y\":340.47065210304726},{\"x\":826.8914213912319,\"y\":454.82337124353376},{\"x\":599.509239433448,\"y\":344.17248731029196},{\"x\":1023.5177498993927,\"y\":380.83938675815637},{\"x\":390.2632161214394,\"y\":338.58210938065696}]",
+        "effects": "{\"active\":\"recent\",\"strength\":{\"library\":0,\"recent\":0.9989757554883907,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":2.3975418131721375,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"recent\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9918351141347157,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.23588841837568522,0.0006523326835854936,0.0002039342102743514],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.23548188310545376,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.01930379745546168,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9990879964420775,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13987231950189086,0.00005234031737634925,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0.004971832330829305,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9491335966199735],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.20129044615450234,0.0006847651397880459,-0.00014022671896854114],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-2.3283062111262884e-10,5.587935447475607e-9,1.86628312868857e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.02278801814331915,5.00359015931378e-9,2.1502461611646793e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000004434541791,-5.4023806489752216e-9,-4.0603849726924965e-11],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Noticeboard\",\"drawn\":\"Noticeboard\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":366,\"triangles\":413094,\"prepared\":true,\"dark\":false}"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-lifecycle-recovered",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "143",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":false},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "31",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"looking-around\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0.027325214043037366,0.010175592576936072],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.1175632334465535,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.020744914371236337,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.770226893682776,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.10783176511558865,0.004099163827425909,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0.02082298926279244,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.7317155489986371],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.18472509789388963,-0.0002702021962012483,0.000050483122144222163],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[3.7914578756366515e-11,-4.225484483892299e-12,-4.3855352501900265e-10],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.016065823660154542,-1.0628793490308704e-9,-2.437825261667486e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000002527143844,2.431853404563421e-9,-5.167427878279614e-10],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-mobile-light",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "readyMs": "208",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":false},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "31",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":198.81951347200047,\"y\":308.08682065601243},{\"x\":179.84425278616433,\"y\":346.29538469714385},{\"x\":235.10216151338741,\"y\":389.1967808314737},{\"x\":149.79581169170316,\"y\":347.68419206301775},{\"x\":308.8699221156001,\"y\":361.4404122041226},{\"x\":71.29355478766588,\"y\":345.5868653015506}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"looking-around\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0.02838330374578878,0.010559153793930943],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.11172299699702669,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.021197754475234254,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.789459113377188,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.11052427587280633,0.0039037435843336916,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0.021462154482958608,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.7499861577083285],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.18604061812290043,0.0010224083201352142,-0.00019330995237324303],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[3.740710519187858e-11,3.234670552819951e-12,-4.329195890662768e-10],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.01613306749113039,-1.8147534923716166e-9,-1.8529302656060463e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000004434541791,2.41845777237833e-9,-5.11659341812025e-10],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-mobile-panel",
+      "url": "http://127.0.0.1:4327/#about",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "readyMs": "208",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.17639076948366805,-0.016593923790665738,0.0009398891045839385],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.009272473713398486,0.001569404933491742,0.03272920395261185],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.01769146197265202,4.866646580500712e-9,-1.8693361486025489e-10],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000413088675,1.4519739077076775e-9,0.00025144961583542085],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.5051904128460422,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"greeting\",\"sniff\":0.4470779958837224,\"greeting\":0.5529082098567009,\"poses\":{\"Dog_Head\":{\"rotation\":[0.11973333945507547,0.020375255969348496,0.07076808718015302],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.2772041090414654,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.06556174011490157,0,-0.019351787344984533],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.3759775827025566,-0.7152250846115364],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.6665341197696271,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999691466945247,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.1399956805372335,0.0000021377178084651656,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.028674895521724895,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499706893597984],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false},\"calls\":238,\"triangles\":275054,\"geometries\":119,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "177",
+        "cameraMoving": "true",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":226.4849964278211,\"y\":206.57797472195222},{\"x\":201.47194157679672,\"y\":256.9442344515525},{\"x\":274.312527265226,\"y\":313.49655235960194},{\"x\":161.86229838256338,\"y\":258.77495052946335},{\"x\":371.5526691915857,\"y\":276.90830293126},{\"x\":58.38117681169696,\"y\":256.01026917969625}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.02166364290697164,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9628143061218316,\"greeting\":0.037180781519145924,\"poses\":{\"Dog_Head\":{\"rotation\":[0.2007965502690867,0.0025756064437948796,0.004008654895303761],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,-0.26970986886651394,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.012844513957347198,0,-0.0013013273531701074],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.02528293143301923,-0.04117165758640477],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.9999835590968579,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999948979424921,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999928571194892,3.551842256433955e-7,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.026792892914819316,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499951530453674],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.24714336316665114,0.022666960960043607,-0.0057183334322422315],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.1259954186292167,-0.01559072814025608,-0.03934020032592436],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.006205904888296592,8.240293896771973e-9,3.703641318327364e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000003032733838,-1.550717474568808e-9,0.30614620756546734],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}",
+        "hover": "",
+        "view": "about",
+        "frameMs": "80.55"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-desktop-night-reduced",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "166",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":true},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "25",
+        "cameraMoving": "false",
+        "motion": "reduced",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274311002},{\"x\":679.6026922042024,\"y\":340.47065210304726},{\"x\":826.8914213912319,\"y\":454.82337124353376},{\"x\":599.509239433448,\"y\":344.17248731029196},{\"x\":1023.5177498993927,\"y\":380.83938675815637},{\"x\":390.2632161214394,\"y\":338.58210938065696}]",
+        "effects": "{\"active\":\"library\",\"strength\":{\"library\":1,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":true,\"active\":\"library\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Library\",\"drawn\":\"Library\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":364,\"triangles\":411078,\"prepared\":true,\"dark\":true}",
+        "hover": "library",
+        "frameMs": "342.84",
+        "view": "home"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-resource-retry",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "readyMs": "238",
+        "metrics": "{\"animation\":\"still\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.16004918266655652,-0.024680606321340507,0.003983763370715661],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.014999999531743921,0,0],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000005942604436,0,0],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":true,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":true,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":false,\"dog\":{\"activity\":\"still\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"still\",\"pour\":0,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,0],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":237,\"triangles\":274046,\"prepared\":true,\"dark\":false},\"calls\":237,\"triangles\":274046,\"geometries\":118,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "29",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"looking-around\",\"sniff\":0,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0,0.02733156677600922,0.010177898894968248],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.11753050736040391,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.02074773972587042,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.7703444802930585,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.10784822724102819,0.004098032455693819,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[0.02082687978200854,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.7318272562784055],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.18473290121877914,-0.00026253023447688373,0.00004905501111089966],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[3.740710519187858e-11,3.234670552819951e-12,-4.329195890662768e-10],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.016066213357433422,-1.065674558568637e-9,-2.4387940665313022e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000004434541791,2.41845777237833e-9,-5.11659341812025e-10],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-no-webgl",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "data": {
+        "state": "fallback",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    },
+    {
+      "name": "island-no-javascript",
+      "url": "http://127.0.0.1:4327/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "data": {
+        "state": "loading",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8"
+      },
+      "browser": "156.0.8078.80",
+      "emulated": true
+    }
+  ],
+  "cameraJourneys": [
+    {
+      "label": "open content after orbit and zoom",
+      "projectedTravelPx": 217.941,
+      "firstFrameStepPx": 0.023,
+      "largestFrameStepPx": 9.482,
+      "samples": 71
+    },
+    {
+      "label": "close to overview after orbit and zoom",
+      "projectedTravelPx": 269.645,
+      "firstFrameStepPx": 0.062,
+      "largestFrameStepPx": 11.854,
+      "samples": 71
+    },
+    {
+      "label": "close after history/reload",
+      "projectedTravelPx": 445.92,
+      "firstFrameStepPx": 0.071,
+      "largestFrameStepPx": 19.199,
+      "samples": 71
+    },
+    {
+      "label": "reduced-motion close",
+      "distinctProjectedStates": 2,
+      "overviewDeviationPx": 0
+    }
+  ],
+  "effectChecks": [
+    {
+      "mode": "full",
+      "view": "library",
+      "active": "library",
+      "strength": {
+        "library": 0.5475599451104456,
+        "recent": 0,
+        "categories": 2.2821515211650386e-50,
+        "about": 7.544187801587042e-45,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Library",
+        "drawn": "Library",
+        "opacity": 0.6829751993066357,
+        "postprocessing": true,
+        "calls": 366,
+        "triangles": 413094,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "library",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": true,
+        "dog": {
+          "activity": "looking-around",
+          "sniff": 0.07749590401137192,
+          "greeting": 1.5043585239716868e-38,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0.017661302791503065,
+                -0.05547318504277661,
+                0.012282238434854797
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0.027891475036248777,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0.004931823638590575,
+                0,
+                -5.2652548339009045e-40
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                1.0229637963007471e-38,
+                -2.03088134480608e-38
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "watering",
+          "pour": 0.9999999999999994,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0.13999999999999993,
+                6.523545821735147e-18,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                -0.009874958244388991,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                -0.9499999999999994
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                0.9999998174093118,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "library",
+      "active": null,
+      "strength": {
+        "library": 0.0008951821556798514,
+        "recent": 0,
+        "categories": 3.730991166442063e-53,
+        "about": 1.233366749957602e-47,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "full",
+      "view": "recent",
+      "active": "recent",
+      "strength": {
+        "library": 6.46570669050571e-7,
+        "recent": 0.5034146962085905,
+        "categories": 2.694814054773179e-56,
+        "about": 8.908340717528938e-51,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 1.2081952709006172,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Noticeboard",
+        "drawn": "Noticeboard",
+        "opacity": 0.587890625,
+        "postprocessing": true,
+        "calls": 366,
+        "triangles": 413094,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "recent",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": true,
+        "dog": {
+          "activity": "looking-around",
+          "sniff": 0,
+          "greeting": 1.2484365923582886e-43,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                3.121091480895722e-45,
+                0.04651418840512971,
+                -0.023239637426642954
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0.1497426984199961,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0.022763640187597314,
+                0,
+                -4.369528073254011e-45
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                8.489368828036363e-44,
+                -1.5867057875471259e-43
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                0.9521393198571626,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "watering",
+          "pour": 0.9397802365988617,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0.13156923312384064,
+                -0.003311862001079778,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0.01461013602573668,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                -0.8927912247689186
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "recent",
+      "active": null,
+      "strength": {
+        "library": 1.1873008082643403e-9,
+        "recent": 0.0009244228114743909,
+        "categories": 4.948499921984625e-59,
+        "about": 1.635842861499951e-53,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0.002218614747538538,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "full",
+      "view": "categories",
+      "active": "categories",
+      "strength": {
+        "library": 8.58162143791725e-13,
+        "recent": 6.681581079899468e-7,
+        "categories": 0.5030669648041364,
+        "about": 1.182361207168185e-56,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": true,
+      "notesVisible": false,
+      "lampIntensity": 0.0000016035794591758721,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Categories",
+        "drawn": "Categories",
+        "opacity": 0.5871345140917804,
+        "postprocessing": true,
+        "calls": 392,
+        "triangles": 421854,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "categories",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "looking-around",
+          "sniff": 0,
+          "greeting": 1.1452437624995061e-48,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                2.8631094062487657e-50,
+                0.0795065344432514,
+                -0.00517300362079623
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                -0.11694677487337317,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                -0.015956259508419175,
+                0,
+                -4.0083531687482716e-50
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                7.787657584996642e-49,
+                -1.2959870307405632e-48
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "resting",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                -0.06457664946068074,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                -0.018239168298740324,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "categories",
+      "active": null,
+      "strength": {
+        "library": 1.5758472441101125e-15,
+        "recent": 1.2269419255125353e-9,
+        "categories": 0.0009237842706352688,
+        "about": 2.1711755328966028e-59,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 2.9446606212300845e-9,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "full",
+      "view": "about",
+      "active": "about",
+      "strength": {
+        "library": 9.009084277056143e-19,
+        "recent": 7.014400190951251e-13,
+        "categories": 5.281254499176854e-7,
+        "about": 0.5582008889024221,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 1.6834560458283e-12,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Dog",
+        "drawn": "Dog",
+        "opacity": 0.7051366493261765,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "about",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "greeting",
+          "sniff": 0,
+          "greeting": 0.503514003338307,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0.012587850083457676,
+                -0.0070308601808877005,
+                0.04442096365775168
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                -0.08067755885159515,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                -0.044550991040928786,
+                0,
+                -0.017622990116840747
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0.34238952227004876,
+                -0.5290902754482526
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "resting",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                -0.006492531292537383,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0.02264306175971211,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                0.9999999999999998,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "about",
+      "active": null,
+      "strength": {
+        "library": 5.793222567024104e-22,
+        "recent": 4.510556259735129e-16,
+        "categories": 3.3960702115694334e-10,
+        "about": 0.0003589468015920384,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 1.0825335023364309e-15,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "full",
+      "view": "tags",
+      "active": "tags",
+      "strength": {
+        "library": 4.184319099027313e-25,
+        "recent": 3.257877025522604e-19,
+        "categories": 2.452907908077716e-13,
+        "about": 2.592594950495513e-7,
+        "tags": 0.5034146962085905,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 7.818904861254249e-19,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Tags",
+        "drawn": "Tags",
+        "opacity": 0.587890625,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "tags",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "looking-around",
+          "sniff": 0,
+          "greeting": 0.0000018779237959881206,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                4.694809489970302e-8,
+                -0.08487211728375625,
+                -0.0072657669266403555
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0.04825075452102365,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0.011702502875353207,
+                0,
+                -6.572733285958423e-8
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0.0000012769881812719222,
+                -0.000002400328072431297
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "resting",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0.06081954735231655,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                -0.02851786729540314,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "tags",
+      "active": null,
+      "strength": {
+        "library": 7.683685150157153e-28,
+        "recent": 5.9824551449398865e-22,
+        "categories": 4.504286509215096e-16,
+        "about": 4.760794492495936e-10,
+        "tags": 0.0009244228114743914,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 1.4357892347855727e-21,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "full",
+      "view": "mail",
+      "active": "mail",
+      "strength": {
+        "library": 5.5497592493206455e-31,
+        "recent": 4.320997688667259e-25,
+        "categories": 3.253348520611285e-19,
+        "about": 3.4386186774328856e-13,
+        "tags": 6.676905609749079e-7,
+        "mail": 0.5037621842862232,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": true,
+      "lampIntensity": 1.0370394452801421e-24,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "outline": {
+        "active": true,
+        "selected": "Mailbox",
+        "drawn": "Mailbox",
+        "opacity": 0.5886462320019421,
+        "postprocessing": true,
+        "calls": 386,
+        "triangles": 412718,
+        "prepared": true,
+        "dark": false
+      },
+      "activity": {
+        "reduced": false,
+        "active": "mail",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "sniffing",
+          "sniff": 0.9999999999827829,
+          "greeting": 1.7216657263156812e-11,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0.21885296972253504,
+                -2.369961752751205e-13,
+                6.48241066008975e-13
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                -0.2699352479804508,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0.018242131820144704,
+                0,
+                -6.025830042104885e-13
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                1.1707326938946633e-11,
+                -2.3238468407026822e-11
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "resting",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0.05984458139250575,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0.029564338861301588,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "mode": "leave",
+      "view": "mail",
+      "active": null,
+      "strength": {
+        "library": 1.0191049420887864e-33,
+        "recent": 7.93466869723056e-28,
+        "categories": 5.974139429738429e-22,
+        "about": 6.314351903750833e-16,
+        "tags": 1.2260833666953341e-9,
+        "mail": 0.0009250609054913079,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 1.9043204873353343e-27,
+      "reduced": false,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ]
+    },
+    {
+      "mode": "reduced",
+      "view": "library",
+      "visibleCanvasChange": true,
+      "active": "library",
+      "strength": {
+        "library": 1,
+        "recent": 0,
+        "categories": 0,
+        "about": 0,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "library",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Library",
+        "drawn": "Library",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "recent",
+      "visibleCanvasChange": true,
+      "active": "recent",
+      "strength": {
+        "library": 0,
+        "recent": 1,
+        "categories": 0,
+        "about": 0,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 2.4,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "recent",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Noticeboard",
+        "drawn": "Noticeboard",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "categories",
+      "visibleCanvasChange": true,
+      "active": "categories",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 1,
+        "about": 0,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "categories",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Categories",
+        "drawn": "Categories",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "about",
+      "visibleCanvasChange": true,
+      "active": "about",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 0,
+        "about": 1,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "about",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Dog",
+        "drawn": "Dog",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "tags",
+      "visibleCanvasChange": true,
+      "active": "tags",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 0,
+        "about": 0,
+        "tags": 1,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "tags",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Tags",
+        "drawn": "Tags",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "mail",
+      "visibleCanvasChange": true,
+      "active": "mail",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 0,
+        "about": 0,
+        "tags": 0,
+        "mail": 1,
+        "bear": 0,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "mail",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Mailbox",
+        "drawn": "Mailbox",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "bear",
+      "visibleCanvasChange": true,
+      "active": "bear",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 0,
+        "about": 0,
+        "tags": 0,
+        "mail": 0,
+        "bear": 1,
+        "rabbit": 0
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "bear",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Bear",
+        "drawn": "Bear",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    },
+    {
+      "mode": "reduced",
+      "view": "rabbit",
+      "visibleCanvasChange": true,
+      "active": "rabbit",
+      "strength": {
+        "library": 0,
+        "recent": 0,
+        "categories": 0,
+        "about": 0,
+        "tags": 0,
+        "mail": 0,
+        "bear": 0,
+        "rabbit": 1
+      },
+      "fountainVisible": false,
+      "notesVisible": false,
+      "lampIntensity": 0,
+      "reduced": true,
+      "pivots": [
+        "Library_FeatureBook",
+        "Desk_Page",
+        "Desk_Lamp",
+        "Radio",
+        "Plants_Monstera_Foliage",
+        "Plants_Sansevieria_Foliage",
+        "Plants_Pothos_Foliage"
+      ],
+      "activity": {
+        "reduced": true,
+        "active": "rabbit",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Rabbit",
+        "drawn": "Rabbit",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": true
+      }
+    }
+  ],
+  "activityChecks": [
+    {
+      "mode": "idle",
+      "durationMs": 14367.300000011921,
+      "samples": 141,
+      "wateringFrames": 51,
+      "dogActivities": [
+        "greeting",
+        "sniffing",
+        "looking-around"
+      ],
+      "rabbitActivities": [
+        "watering",
+        "resting"
+      ],
+      "ranges": {
+        "Dog_Head": {
+          "min": [
+            1.963682007849068e-29,
+            -0.08499492064208133,
+            -0.024999986885438447,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.23785548625567834,
+            0.08499132758510917,
+            0.10001446663679253,
+            1,
+            1,
+            1
+          ]
+        },
+        "Dog_Tail": {
+          "min": [
+            0,
+            -0.2828240326643044,
+            0,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0,
+            0.7332710991682493,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Dog_Ear_L": {
+          "min": [
+            -0.02499997010659732,
+            0,
+            -0.03125192908932616,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.054612848853624975,
+            0,
+            -2.091631645288523e-39,
+            1,
+            1,
+            1
+          ]
+        },
+        "Dog_Arm_L": {
+          "min": [
+            0,
+            4.0637414822748446e-38,
+            -1.1497742408890441,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0,
+            0.6071803365926225,
+            -7.132450826476145e-38,
+            1,
+            1,
+            1
+          ]
+        },
+        "Dog_Eye_L": {
+          "min": [
+            0,
+            0,
+            0,
+            1,
+            0.20165703614046404,
+            1
+          ],
+          "max": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Head": {
+          "min": [
+            0,
+            -0.06999644922739214,
+            0,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.1399999999999999,
+            0.06546777894703132,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Ear_L": {
+          "min": [
+            -0.02999521994942663,
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.02999923721763335,
+            0,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_WateringCan": {
+          "min": [
+            0,
+            -1.5707963267948966,
+            -0.9499999999999992,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0,
+            -1.5707963267948966,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Eye_L": {
+          "min": [
+            0,
+            0,
+            0,
+            1,
+            0.12001147523382372,
+            1
+          ],
+          "max": [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Head": {
+          "min": [
+            0.1600491977189151,
+            -0.024680606269229476,
+            -0.007600545984976239,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.2500449882005944,
+            0.03400093465728276,
+            0.004276223021077772,
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Arm_R": {
+          "min": [
+            -0.13984580312508144,
+            -0.019146112188707216,
+            -0.04308497978431578,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            2.8873911402958176e-10,
+            7.450580596923828e-9,
+            1.8680329974274624e-9,
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book": {
+          "min": [
+            -0.01792352936931899,
+            -1.2463335373657004e-8,
+            -2.3101771946816488e-9,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.024986367362930955,
+            1.1168425260264428e-8,
+            1.6368466669623002e-9,
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book_Page": {
+          "min": [
+            0.18000000232446609,
+            -1.084468762013735e-8,
+            -3.0337668559052016e-9,
+            1,
+            1,
+            1
+          ],
+          "max": [
+            0.1800001540000039,
+            2.3535051060785687e-8,
+            0.6999518078242857,
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "blinks": {
+        "Dog_Eye_L": {
+          "minScaleY": 0.20165703614046404,
+          "maxScaleY": 1,
+          "closureRatio": 0.20165703614046404,
+          "closedAtMs": 405,
+          "reopenedAtMs": 609.5999999642372,
+          "restReference": "maximum observed scaleY during this idle cycle"
+        },
+        "Rabbit_Eye_L": {
+          "minScaleY": 0.12001147523382372,
+          "maxScaleY": 1,
+          "closureRatio": 0.12001147523382372,
+          "closedAtMs": 2750.699999988079,
+          "reopenedAtMs": 3056.5,
+          "restReference": "maximum observed scaleY during this idle cycle"
+        }
+      }
+    },
+    {
+      "mode": "companion-hover",
+      "target": "bear",
+      "before": {
+        "Bear_Head": {
+          "rotation": [
+            0.18031978918107264,
+            -0.020675824778295306,
+            0.0025178996729683352
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Arm_R": {
+          "rotation": [
+            0.0011425439418039857,
+            0.002263780268576825,
+            0.025470363561718844
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book": {
+          "rotation": [
+            0.015110926577983323,
+            5.711553904875745e-9,
+            -1.7559142727067515e-10
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book_Page": {
+          "rotation": [
+            0.18000003694447647,
+            3.5162865594907207e-9,
+            0.00017747910006778614
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "after": {
+        "Bear_Head": {
+          "rotation": [
+            -0.09886833201707346,
+            -0.11394154452132736,
+            -0.061200596456540954
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Arm_R": {
+          "rotation": [
+            0.003388361589316864,
+            0.14893348805514797,
+            1.5030022506263756
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book": {
+          "rotation": [
+            0.019968214428871683,
+            -2.0769693580649617e-9,
+            -1.511964969180189e-9
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book_Page": {
+          "rotation": [
+            0.18000007207925445,
+            6.1111805710291e-9,
+            0.007949035003071226
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Bear",
+        "drawn": "Bear",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 366,
+        "triangles": 413094,
+        "prepared": true,
+        "dark": false
+      }
+    },
+    {
+      "mode": "companion-hover",
+      "target": "rabbit",
+      "before": {
+        "Rabbit_Head": {
+          "rotation": [
+            0.009391674044785761,
+            -0.014590060347995443,
+            -0.04127855384345416
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Ear_L": {
+          "rotation": [
+            -0.04060100178001441,
+            0,
+            -0.14248181013296096
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_WateringCan": {
+          "rotation": [
+            0,
+            -1.5707963267948966,
+            -0.38600950155702934
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Eye_L": {
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            0.9972084788980198,
+            1
+          ]
+        }
+      },
+      "after": {
+        "Rabbit_Head": {
+          "rotation": [
+            -0.07265934888577374,
+            -0.037525302581104675,
+            0.05169577404799061
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Ear_L": {
+          "rotation": [
+            0.06360791946866376,
+            0,
+            -0.23199201696629862
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_WateringCan": {
+          "rotation": [
+            0,
+            -1.5707963267948966,
+            -0.031698266175067887
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Rabbit_Eye_L": {
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            0.7217628848982407,
+            1
+          ]
+        }
+      },
+      "outline": {
+        "active": true,
+        "selected": "Rabbit",
+        "drawn": "Rabbit",
+        "opacity": 0.86,
+        "postprocessing": true,
+        "calls": 364,
+        "triangles": 411078,
+        "prepared": true,
+        "dark": false
+      }
+    },
+    {
+      "mode": "full-to-reduced",
+      "activity": {
+        "reduced": true,
+        "active": "about",
+        "pivots": [
+          "Dog_Head",
+          "Dog_Tail",
+          "Dog_Ear_L",
+          "Dog_Ear_R",
+          "Dog_Arm_L",
+          "Dog_Eye_L",
+          "Dog_Eye_R",
+          "Rabbit_Head",
+          "Rabbit_Ear_L",
+          "Rabbit_Ear_R",
+          "Rabbit_Eye_L",
+          "Rabbit_Eye_R",
+          "Rabbit_WateringCan"
+        ],
+        "waterVisible": false,
+        "dog": {
+          "activity": "still",
+          "sniff": 0,
+          "greeting": 0,
+          "poses": {
+            "Dog_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Tail": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Arm_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Dog_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        },
+        "rabbit": {
+          "activity": "still",
+          "pour": 0,
+          "greeting": 0,
+          "poses": {
+            "Rabbit_Head": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Ear_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_WateringCan": {
+              "rotation": [
+                0,
+                -1.5707963267948966,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            "Rabbit_Eye_L": {
+              "rotation": [
+                0,
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        }
+      },
+      "poses": {
+        "Bear_Head": {
+          "rotation": [
+            0.16004918266655652,
+            -0.024680606321340507,
+            0.003983763370715661
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Arm_R": {
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book": {
+          "rotation": [
+            0.014999999531743921,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "Bear_Book_Page": {
+          "rotation": [
+            0.18000005942604436,
+            0,
+            0
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      "renderFrameDelta": 0
+    }
+  ],
+  "errors": []
+}

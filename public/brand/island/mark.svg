@@ -1,7 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Praxis 萌芽标识">
-  <title>Praxis 萌芽标识</title>
-  <path d="M15 5C25 2 44 2 53 8C62 14 62 31 59 45C57 57 44 62 29 60C14 61 4 53 3 39C1 24 4 9 15 5Z" fill="#8edac6" stroke="#725d42" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M20 18C20 16.3 21.3 15 23 15H33C43 15 48 20 48 28C48 36.2 42.8 41 33 41H29V48C29 50.3 27.3 52 24.5 52C21.7 52 20 50.3 20 48ZM29 24V32H33C36.9 32 39 30.6 39 28C39 25.4 36.9 24 33 24Z" fill="#fff9e8" fill-rule="evenodd" stroke="#725d42" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M43 17C44 10.5 48.5 8.5 54 9.5C53.7 15 49.4 19.1 43 17Z" fill="#f7cd67" stroke="#725d42" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M41 20L48.5 13.5" stroke="#725d42" stroke-width="2" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="未尽：翻开的书与嫩芽">
+  <title>未尽：翻开的书与嫩芽</title>
+  <!-- A book left open: the mint cover stays visible below the cream pages. -->
+  <g stroke="#76543b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 29C17 26 25 28 32 33C39 28 47 26 56 29V51C47 49 39 51 32 57C25 51 17 49 8 51Z" fill="#8bc4a8"/>
+    <path d="M10 24C18 21 26 24 32 29C38 24 46 21 54 24V46C46 44 38 47 32 52C26 47 18 44 10 46Z" fill="#fff7e7"/>
+    <path d="M32 30V51" fill="none" stroke-width="2.7"/>
+    <!-- Two unequal leaves continue the open crease upward. -->
+    <path d="M32 29C31 23 33 18 37 14" fill="none"/>
+    <path d="M32 23C25 23 20 17 21 10C28 10 33 15 32 23Z" fill="#8bc4a8"/>
+    <path d="M33 20C33 12 39 7 47 7C47 15 41 21 33 20Z" fill="#8bc4a8"/>
+  </g>
 </svg>

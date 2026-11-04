@@ -4,10 +4,10 @@ import { join } from 'node:path';
 import { chromium } from 'playwright';
 import { verifyLegacyWorkerRetirement } from './legacy-worker-browser.mjs';
 import { verifyRoomAssetCache } from './room/asset-cache-browser.mjs';
-import { verifyVideoCache } from './room/video-cache-browser.mjs';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshots = process.env.SMOKE_SCREENSHOT_DIR;
+const pageOnly = process.env.SMOKE_PAGE_ONLY === '1';
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined });
 const url = (path) => new URL(path, base).href;
 
@@ -55,25 +55,34 @@ async function assertVisibleTitle(page, pattern) {
 }
 
 async function assertStaticEntrances(page) {
+  const sceneRequests = [];
+  const watch = request => { if (/\/island\/.*\.glb(?:[?#]|$)/.test(request.url())) sceneRequests.push(request.url()); };
+  page.on('request', watch);
   await page.goto(url('/'));
-  await assertVisibleTitle(page, /Praxis/i);
-  assert.equal(await page.locator('#home-enter-room').getAttribute('href'), '/room/');
-  assert.equal(await page.locator('#home-enter-blog').getAttribute('href'), '/lofi/');
-  await page.locator('#home-enter-blog').click();
-  await page.waitForURL(url('/lofi/'));
-  await assertVisibleTitle(page, /保持好奇，慢慢来/);
+  await page.waitForTimeout(500);
+  page.off('request', watch);
+  assert.deepEqual(sceneRequests, [], 'disabled or blocked JavaScript leaves the static courtyard cover and reading links usable');
+  assert.equal(await page.getByRole('heading', { level: 1, name: /未尽/ }).count(), 1, 'homepage retains an accessible name without a visible title overlay');
+  assert.equal(await page.locator('#island-root').count(), 1, 'the actual courtyard belongs to the homepage');
+  assert.equal(await page.locator('#home-enter-room').count(), 0, 'there is no separate exploration gateway');
+  const readingLink = page.locator('#island-directory a[href="/notes/"]').first();
+  assert(await readingLink.isVisible(), 'the static fallback directory exposes the reading route');
+  await readingLink.click();
+  await page.waitForURL(url('/notes/'));
+  await assertVisibleTitle(page, /^笔记$/);
 }
 
 try {
-  await verifyRoomAssetCache();
-  await verifyVideoCache();
-  await verifyLegacyWorkerRetirement(browser);
+  if (process.env.SMOKE_SKIP_INFRA !== '1') {
+    await verifyRoomAssetCache();
+    await verifyLegacyWorkerRetirement(browser);
+  }
   const noJs = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
   const noJsPage = await noJs.newPage();
   await assertStaticEntrances(noJsPage);
   await screenshot(noJsPage, 'lofi-no-js');
   const fallbackNav = noJsPage.locator('.no-script-navigation');
-  for (const path of ['/lofi/', '/categories/', '/tags/', '/archives/', '/about/', '/room/']) {
+  for (const path of ['/notes/', '/categories/', '/tags/', '/archives/', '/about/', '/']) {
     const link = fallbackNav.locator(`a[href="${path}"]`);
     assert(await link.isVisible(), `navigation to ${path} must be available without JavaScript`);
     if (noJsPage.url() !== url(path)) {
@@ -96,12 +105,39 @@ try {
   console.log('PASS: homepage entrances and blog title survive disabled JavaScript and failed script requests');
 
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  if (pageOnly) await context.route('**/island/*.glb*', route => route.abort());
   await context.route('https://giscus.app/**', (route) => route.abort());
   const page = await context.newPage();
-  await page.goto(url('/page/2/'));
+  const primaryNavigation = ['/', '/notes/', '/categories/', '/tags/', '/archives/', '/about/'];
+  for (const path of ['/', '/notes/', '/tags/', '/archives/', '/about/', '/posts/agent_dev_tutorial/']) {
+    await page.goto(url(path));
+    await page.locator('.site-header').waitFor({ state: 'visible' });
+    assert.equal(await page.locator('.site-header').count(), 1, `${path} uses the shared site header`);
+    const brands = page.locator('.island-brand-identity');
+    assert(await brands.count() >= 2, 'header and footer share the actual SVG logo');
+    for (const brand of await brands.all()) {
+      assert.equal(await brand.locator('svg[aria-label="未尽"]').count(), 1);
+      assert.equal(await brand.locator('svg text, .island-brand-name').count(), 0, 'the visible wordmark is custom geometry, not ordinary font text');
+      assert(await brand.locator('.weijin-lettering path').count() > 0, 'the wordmark contains editable vector geometry');
+    }
+
+    assert.equal(await page.locator('.site-header > .nav-bar > .island-brand').getAttribute('href'), '/', 'the brand always returns to the actual homepage');
+    assert.deepEqual(await page.locator('.desktop-navigation > a').evaluateAll(links => links.map(link => link.getAttribute('href'))), primaryNavigation, 'primary routes and ordering are consistent across experiences');
+    assert.equal(await page.locator('.desktop-navigation details').count(), 0, 'all six primary destinations are directly visible');
+    for (const selector of ['body', '.desktop-navigation > a']) {
+      assert.match(await page.locator(selector).first().evaluate(element => getComputedStyle(element).cursor), /animal-island-default\.svg/, `${path} shares the native theme cursor`);
+    }
+  }
+  for (const [legacy, current] of [['/lofi/', '/notes/'], ['/page/1/', '/notes/'], ['/page/2/', '/notes/page/2/'], ['/room/', '/'], ['/island/', '/']]) {
+    await page.goto(url(`${legacy}?source=legacy-check#about`));
+    await page.waitForURL(url(`${current}?source=legacy-check#about`));
+    assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), new URL(current, 'https://ferrisevans.github.io').href);
+  }
+  console.log('PASS: six direct shared navigation links, canonical homepage/notes routes and legacy aliases preserve query/hash');
+  await page.goto(url('/notes/page/2/'));
   await page.getByRole('link', { name: '上一页', exact: true }).click();
-  await page.waitForURL(url('/lofi/'));
-  console.log('PASS: pagination returns from page 2 to the LO-FI article list');
+  await page.waitForURL(url('/notes/'));
+  console.log('PASS: notes pagination returns from page 2 to the canonical article list');
   if (await page.evaluate(() => document.documentElement.classList.contains('dark'))) {
     await page.locator('#theme-toggle').click();
   }
@@ -117,26 +153,61 @@ try {
   assert.equal(await menu.getAttribute('aria-expanded'), 'false');
   assert.equal(await menu.evaluate((element) => document.activeElement === element), true);
   await menu.click();
-  await page.locator('#mobile-menu').getByRole('link', { name: '关于作者', exact: true }).click();
+  await page.locator('#mobile-menu').getByRole('link', { name: '关于', exact: true }).click();
   await page.waitForURL(url('/about/'));
+  const currentAvatar = page.locator('.profile-photo img');
+  await currentAvatar.evaluate(image => image.decode());
+  assert.match(await currentAvatar.getAttribute('src'), /\/ferris-dog-avatar\.png(?:\?|$)/, 'about uses the current generated dog avatar');
+  assert.match(await currentAvatar.getAttribute('alt'), /卡通/, 'the illustration is described as a cartoon, not the reference photograph');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');
 
   await page.goto(url('/tags/'));
-  await page.locator('.tag-cloud-panel astro-island:not([ssr])').waitFor();
-  const cloudMarks = page.locator('.tag-word-cloud [data-chart-mark]');
+  await page.locator('astro-island:not([ssr]) .tag-word-cloud').waitFor();
+  const cloudMarks = page.locator('.tag-word-cloud .tag-item');
   assert(await cloudMarks.count() > 0, 'tag word cloud uses published article tags');
-  const cloudTag = await cloudMarks.first().locator('text').textContent();
-  await cloudMarks.first().hover();
-  assert.match(await page.locator('.tag-word-cloud [role="tooltip"]').innerText(), /\d+ 篇笔记/);
+  const tagLinks = await cloudMarks.evaluateAll(links => links.map(link => link.getAttribute('href')));
+  assert.equal(new Set(tagLinks).size, tagLinks.length, 'one tag has one cloud link, without a repeated list');
+  assert.equal(await page.locator('[data-chart-mark], .tag-list').count(), 0, 'there is no second directional chart or repeated tag listing');
+  assert.equal(await page.locator('.tag-word-cloud .tag-token-body').count(), 0, 'the tags page contains words, without the keyword panel capsule component');
+  for (const dark of [false, true]) {
+    if (await page.locator('html').evaluate(element => element.classList.contains('dark')) !== dark) await page.locator('#theme-toggle').click();
+    await cloudMarks.first().hover();
+    const wordStyles = await cloudMarks.evaluateAll(links => links.flatMap(link => [link, link.querySelector('.tag-word')].map(element => {
+      if (!element) return null;
+      const style = getComputedStyle(element);
+      return { text: element.textContent, background: style.backgroundColor, image: style.backgroundImage,
+        borders: [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth],
+        radii: [style.borderTopLeftRadius, style.borderTopRightRadius, style.borderBottomRightRadius, style.borderBottomLeftRadius],
+        shadow: style.boxShadow, color: style.color };
+    })));
+    for (const style of wordStyles) {
+      assert(style, 'every cloud link contains its plain text span');
+      assert.equal(style.background, 'rgba(0, 0, 0, 0)', `tag word background is transparent in ${dark ? 'dark' : 'light'} mode: ${style.text}`);
+      assert.equal(style.image, 'none');
+      assert(style.borders.every(width => parseFloat(width) === 0), 'tag words have no capsule border');
+      assert(style.radii.every(radius => parseFloat(radius) === 0), 'tag words have no capsule corner radius');
+      assert.equal(style.shadow, 'none', 'tag words have no capsule shadow');
+    }
+    assert(new Set(wordStyles.map(style => style.color)).size > 1, 'the plain word cloud retains its varied text colors');
+  }
+  await page.locator('#theme-toggle').click();
+  console.log('PASS: tag cloud computed styles are plain colored text without backgrounds, borders, rounded corners or shadows in light/dark modes');
+  assert.match(await cloudMarks.first().getAttribute('aria-label'), /\d+ 篇笔记/);
   await cloudMarks.first().focus();
   await page.keyboard.press('ArrowRight');
-  const focusedTag = await page.locator('.tag-word-cloud [data-chart-mark]:focus text').textContent();
-  assert.notEqual(focusedTag, cloudTag, 'arrow keys browse word-cloud tags');
-  await page.keyboard.press('Enter');
-  await page.waitForURL(url(`/tags/${encodeURIComponent(focusedTag)}/`));
+  assert(await cloudMarks.first().evaluate(element => document.activeElement === element), 'arrow keys do not implement a separate directional navigation mode');
+  await page.keyboard.press('Tab');
+  const focusedHref = await page.locator('.tag-word-cloud .tag-item:focus').getAttribute('href');
+  assert(focusedHref && focusedHref !== tagLinks[0], 'native Tab reaches the next ordinary tag link');
+  await page.keyboard.press('Enter'); await page.waitForURL(url(focusedHref));
   await page.goto(url('/tags/'));
-  console.log('PASS: theme word cloud exposes article counts and keyboard navigation to tag pages');
+  await page.locator('astro-island:not([ssr]) .tag-word-cloud').waitFor();
+  const firstColor = await cloudMarks.first().getAttribute('data-token-color');
+  await page.reload();
+  await page.waitForFunction(before => document.querySelector('.tag-word-cloud .tag-item')?.getAttribute('data-token-color') !== before, firstColor);
+  assert(await cloudMarks.first().getAttribute('data-token-color'), 'reopening randomizes from the shared tag palette');
+  console.log('PASS: one tag cloud uses native Tab links, accessible counts and a fresh color assignment on reopening');
   const tagFilter = page.getByRole('searchbox', { name: '筛选标签' });
   const tagCount = await page.locator('.tag-item').count();
   const firstTag = await page.locator('.tag-item').first().getAttribute('data-tag');

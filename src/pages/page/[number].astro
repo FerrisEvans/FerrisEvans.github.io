@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro';
+import LegacyRedirect from '../../layouts/LegacyRedirect.astro';
+import { SITE } from '../../data/site';
+import { getPosts } from '../../utils/posts';
+import { notesPageUrl } from '../../utils/routes';
+export const getStaticPaths = (async () => {
+  const count = Math.max(1, Math.ceil((await getPosts()).length / SITE.postsPerPage));
+  return Array.from({ length: count }, (_, index) => ({
+    params: { number: String(index + 1) }, props: { page: index + 1 },
+  }));
+}) satisfies GetStaticPaths;
+const { page } = Astro.props;
+---
+<LegacyRedirect to={notesPageUrl(page)} label={`笔记 · 第 ${page} 页`} />

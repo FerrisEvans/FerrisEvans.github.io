@@ -5,9 +5,9 @@ import {pathToFileURL} from 'node:url';
 import {chromium} from 'playwright';
 import ts from 'typescript';
 
-// This fixture tests migration only. An empty catalog must leave every request
-// on the network even while the replacement video worker controls the page.
-const mediaWorker='const MEDIA_CATALOG = [];\n'+await readFile(new URL('../src/scripts/room/media-worker.js',import.meta.url),'utf8');
+// The replacement must leave all requests on the network while clearing only
+// retired caches owned by this site.
+const retirementWorker=await readFile(new URL('../src/scripts/retirement-worker.js',import.meta.url),'utf8');
 const recovery=ts.transpileModule(await readFile(new URL('../src/scripts/legacy-worker.ts',import.meta.url),'utf8'),{
   compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022},
 }).outputText+'\nvoid retireLegacyWorker();';
@@ -36,7 +36,7 @@ export async function verifyLegacyWorkerRetirement(browser) {
     if(path==='/sw.min.js'){
       workerUpdates++;
       if(mode==='missing'){response.writeHead(404,{'Content-Type':'text/html'});response.end('worker removed during migration');return;}
-      response.writeHead(200,{'Content-Type':'text/javascript'});response.end(mode==='legacy'?legacyWorker:mediaWorker);return;
+      response.writeHead(200,{'Content-Type':'text/javascript'});response.end(mode==='legacy'?legacyWorker:retirementWorker);return;
     }
     if(path==='/app.min.js'||path==='/recovery.js'||path==='/other-project/sw.js'){
       response.writeHead(200,{'Content-Type':'text/javascript'});
@@ -67,16 +67,16 @@ export async function verifyLegacyWorkerRetirement(browser) {
           &&!(await caches.keys()).includes('chirpy-1700000000');
       });
       if(migrated===true)break;
-      if(Date.now()>=deadline)throw new Error('Video worker migration did not finish within 30 seconds');
+      if(Date.now()>=deadline)throw new Error('Retirement worker migration did not finish within 30 seconds');
       await new Promise(resolve=>setTimeout(resolve,100));
     }
     const reply=await page.evaluate(()=>new Promise((resolve,reject)=>{
       const channel=new MessageChannel();
-      const timer=setTimeout(()=>{channel.port1.close();reject(new Error('Video worker handshake timed out'));},5000);
+      const timer=setTimeout(()=>{channel.port1.close();reject(new Error('Retirement worker handshake timed out'));},5000);
       channel.port1.onmessage=event=>{clearTimeout(timer);channel.port1.close();resolve(event.data);};
-      navigator.serviceWorker.controller.postMessage({type:'praxis-media-status',files:[]},[channel.port2]);
+      navigator.serviceWorker.controller.postMessage({type:'praxis-retirement-status',files:[]},[channel.port2]);
     }));
-    assert.equal(reply.type,'praxis-media-ready');assert.equal(reply.version,1);
+    assert.equal(reply.type,'praxis-retirement-ready');assert.equal(reply.version,1);
   }
   try{
     const first=await context(),page=await first.newPage();await installLegacy(page);
@@ -90,6 +90,8 @@ export async function verifyLegacyWorkerRetirement(browser) {
     await page.evaluate(async()=>{
       await(await caches.open('unrelated-app')).put('/other-project/data',new Response('keep'));
       await(await caches.open('chirpy-1700000001')).put('/other-project/',new Response('keep other Chirpy project'));
+      await(await caches.open('praxis-room-video-v1')).put('/room/film/retired.mp4',new Response('old film'));
+      await(await caches.open('praxis-room-video-catalog-v1')).put('/room/film/retired.mp4',new Response('old catalog'));
       await navigator.serviceWorker.register('/other-project/sw.js',{scope:'/other-project/'});
     });
     let navigations=0;page.on('framenavigated',frame=>{if(frame===page.mainFrame())navigations++;});
@@ -97,20 +99,22 @@ export async function verifyLegacyWorkerRetirement(browser) {
     await page.evaluate(async()=>{await(await navigator.serviceWorker.getRegistration('/')).update();});
     await page.waitForFunction(()=>document.title==='Praxis');await waitMigrated(page);
     assert(workerUpdates>beforeUpdate,'the browser must download the replacement at the original worker URL');
-    assert.equal(navigations,1,'Chirpy reloads once when the video worker takes control');
+    assert.equal(navigations,1,'Chirpy reloads once when the retirement worker takes control');
     const retained=await page.evaluate(async()=>({keys:await caches.keys(),scopes:(await navigator.serviceWorker.getRegistrations()).map(reg=>new URL(reg.scope).pathname)}));
     assert(!retained.keys.includes('chirpy-1700000000'));
+    assert(!retained.keys.includes('praxis-room-video-v1'));
+    assert(!retained.keys.includes('praxis-room-video-catalog-v1'));
     assert(retained.keys.includes('unrelated-app'));assert(retained.keys.includes('chirpy-1700000001'));
-    assert.deepEqual(retained.scopes.sort(),['/','/other-project/'],'the video worker stays registered alongside the other project');
+    assert.deepEqual(retained.scopes.sort(),['/','/other-project/'],'the retirement worker stays registered alongside the other project');
     const fresh=await page.reload();assert(!fresh.fromServiceWorker());assert.equal(await page.title(),'Praxis');
     await page.waitForTimeout(250);assert.equal(navigations,2,'migration must not cause a reload loop');
     const [ordinary]=await Promise.all([
       page.waitForResponse(response=>response.url()===base+'/other-project/data'),
       page.evaluate(()=>fetch('/other-project/data').then(response=>response.text())),
     ]);
-    assert(!ordinary.fromServiceWorker(),'non-video requests bypass the worker even when a matching unrelated cache entry exists');
-    assert.notEqual(await ordinary.text(),'keep','the video worker must not serve unrelated cached responses');
-    console.log('PASS: Chirpy migrates to the video worker once; HTML and ordinary requests use the network while other project caches/workers survive');
+    assert(!ordinary.fromServiceWorker(),'ordinary requests bypass the worker even when a matching unrelated cache entry exists');
+    assert.notEqual(await ordinary.text(),'keep','the retirement worker must not serve unrelated cached responses');
+    console.log('PASS: Chirpy migrates to the retirement worker once; HTML and ordinary requests use the network while other project caches/workers survive');
 
     const second=await context(),current=await second.newPage();await installLegacy(current);
     mode='media';
@@ -119,7 +123,7 @@ export async function verifyLegacyWorkerRetirement(browser) {
     await waitMigrated(current);await current.waitForTimeout(250);
     assert.equal(reloads,0,'an already-current Astro page must retain its UI state');
     assert.equal(await current.getByLabel('Draft').inputValue(),'preserve this draft');
-    console.log('PASS: a current page reached through a legacy cache miss upgrades to the video worker without reloading or losing input');
+    console.log('PASS: a current page reached through a legacy cache miss upgrades to the retirement worker without reloading or losing input');
 
     // Their background update checks share this server counter. End both
     // migrated contexts before attributing requests to the clean visitor.
@@ -127,8 +131,8 @@ export async function verifyLegacyWorkerRetirement(browser) {
     const third=await context(),clean=await third.newPage();const beforeClean=workerUpdates;
     await clean.goto(base+'/lofi/');await clean.waitForTimeout(250);
     assert.equal((await clean.evaluate(()=>navigator.serviceWorker.getRegistrations())).length,0);
-    assert.equal(workerUpdates,beforeClean,'clean non-video pages do not install or request the worker');
-    console.log('PASS: clean non-video pages install no service worker');
+    assert.equal(workerUpdates,beforeClean,'clean pages do not install or request the worker');
+    console.log('PASS: clean pages install no service worker');
   }finally{
     await Promise.all(contexts.map(context=>context.close()));
     await new Promise(resolve=>server.close(resolve));

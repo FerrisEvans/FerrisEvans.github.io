@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 
 const distDir = path.resolve('dist');
 const requiredFiles = [
@@ -10,11 +11,13 @@ const requiredFiles = [
   'pagefind/pagefind-entry.json',
   '.nojekyll',
   'lofi/index.html',
+  'notes/index.html',
   'about/index.html',
   'about/python-zen/index.html',
   'about/writing/index.html',
   'about/markdown/index.html',
   'room/index.html',
+  'island/index.html',
   'release.json',
   'sw.min.js',
 ];
@@ -37,40 +40,44 @@ function walkFiles(dir, extension) {
 }
 
 const htmlFiles = walkFiles(distDir, '.html');
-// Room resources live in JSON rather than href/src, so HTML link checks alone
-// cannot detect a missing texture, stale size, or an accidentally pruned model.
-const roomManifests = [];
-for (const entry of ['index.html', 'room/index.html']) {
-  const html = fs.readFileSync(path.join(distDir, entry), 'utf8');
-  const manifest = html.match(/<script\b[^>]*id="room-assets"[^>]*>([\s\S]*?)<\/script>/);
-  if (!manifest || !/data-asset-version="[a-f0-9]{20}"/.test(html)) {
-    throw new Error(`Missing versioned room resource manifest in ${entry}`);
-  }
-  roomManifests.push(manifest[1]);
-  for (const asset of JSON.parse(manifest[1])) {
-    const target = path.join(distDir, asset.url);
-    if (!fs.existsSync(target) || fs.statSync(target).size !== asset.bytes) {
-      throw new Error(`Missing or stale room resource in ${entry}: ${asset.url}`);
-    }
-  }
+// Models are requested by JavaScript, so href/src checks alone miss stale bytes.
+const island = JSON.parse(fs.readFileSync(path.join(distDir, 'island/manifest.json'), 'utf8'));
+if (!/^[a-f0-9]{20}$/.test(island.buildId) || island.posters?.buildId !== island.buildId) throw new Error('Island model/poster build identities differ');
+for (const [file, asset] of [[island.model.file, island.model], ...Object.entries(island.posters.files)]) {
+  if (path.basename(file) !== file) throw new Error('Island assets must be local filenames');
+  const bytes = fs.readFileSync(path.join(distDir, 'island', file));
+  if (bytes.length !== asset.bytes || createHash('sha256').update(bytes).digest('hex') !== asset.sha256) throw new Error(`Missing or stale island resource: ${file}`);
 }
-if (roomManifests[0] !== roomManifests[1]) {
-  throw new Error('Homepage preload and room entry must use the same versioned asset manifest');
+if (fs.readdirSync(path.join(distDir, 'room')).some(file => file !== 'index.html')) throw new Error('Retired study assets must not enter the published room directory');
+for (const file of walkFiles(path.join(distDir, '_astro'), '.js')) {
+  const code = fs.readFileSync(file, 'utf8');
+  if (/\/room\/(?:materials|film|window|fonts)\//.test(code)) throw new Error(`Retired study runtime dependency in ${path.relative(distDir, file)}`);
 }
 const homepage = fs.readFileSync(path.join(distDir, 'index.html'), 'utf8');
-for (const [id, href] of [['home-enter-room', '/room/'], ['home-enter-blog', '/lofi/']]) {
-  const anchor = [...homepage.matchAll(/<a\b[^>]*>/g)].find(match => match[0].includes(`id="${id}"`));
-  if (!anchor?.[0].includes(`href="${href}"`)) throw new Error(`Missing homepage destination: ${id} -> ${href}`);
+if (!homepage.includes('href="/notes/"')) throw new Error('Homepage fallback must retain the reading destination');
+for (const obsolete of ['home-enter-room', 'home-enter-blog', 'island-reset', 'island-panel-reset']) {
+  if (homepage.includes(`id="${obsolete}"`)) throw new Error(`Obsolete homepage control must not return: ${obsolete}`);
 }
-if (!homepage.includes('id="home-preload"') || homepage.includes('id="scene"')) {
-  throw new Error('Homepage must contain background preload status rather than the room scene');
+if (/class="[^"]*island-dock/.test(homepage)) throw new Error('Fixed courtyard must not render a separate dock');
+if (!homepage.includes('weijin-lettering')) throw new Error('Homepage brand must use the original SVG wordmark');
+if (!homepage.includes('id="island-root"') || !homepage.includes('id="island-scene"')) throw new Error('Homepage must directly mount the interactive courtyard');
+if (homepage.includes('id="home-enter-room"')) throw new Error('Homepage must not require a separate exploration entry');
+for (const [file, destination] of [['lofi/index.html', '/notes/'], ['room/index.html', '/'], ['island/index.html', '/'],
+  ...htmlFiles.map(file => path.relative(distDir, file).replaceAll(path.sep, '/')).filter(file => /^page\/\d+\/index\.html$/.test(file)).map(file => [file, file === 'page/1/index.html' ? '/notes/' : `/notes/${file.replace(/index\.html$/, '')}`])]) {
+  const html = fs.readFileSync(path.join(distDir, file), 'utf8');
+  if (!html.includes(`href="${destination}"`) || !html.includes(`rel="canonical"`)) throw new Error(`Legacy alias lacks canonical/direct destination: ${file}`);
+  if (!/<meta\b[^>]*name="robots"[^>]*content="noindex,follow"/.test(html)) throw new Error(`Legacy alias must not create a competing search entry: ${file}`);
 }
+const sitemapUrls = fs.readdirSync(distDir).filter(file => /^sitemap.*\.xml$/.test(file)).flatMap(file =>
+  [...fs.readFileSync(path.join(distDir, file), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1])));
+for (const pathname of ['/', '/notes/']) if (!sitemapUrls.some(url => url.pathname === pathname)) throw new Error(`Missing canonical sitemap route: ${pathname}`);
+if (sitemapUrls.some(url => ['/lofi/', '/room/', '/island/'].includes(url.pathname) || /^\/page\/\d+\/$/.test(url.pathname))) throw new Error('Legacy aliases must stay out of the canonical sitemap');
 const release = JSON.parse(fs.readFileSync(path.join(distDir, 'release.json'), 'utf8'));
 if (!/^\d+\.\d+\.\d+$/.test(release.version) || !/^[a-f0-9]{40}$/.test(release.revision) || !release.roomBuildId) {
   throw new Error('Invalid release provenance');
 }
 const packageVersion = JSON.parse(fs.readFileSync('package.json', 'utf8')).version;
-const roomBuildId = JSON.parse(fs.readFileSync(path.join(distDir, 'room/materials/manifest.json'), 'utf8')).buildId;
+const roomBuildId = island.buildId;
 if (release.version !== packageVersion || release.roomBuildId !== roomBuildId || (process.env.GITHUB_SHA && release.revision !== process.env.GITHUB_SHA)) {
   throw new Error('Release provenance does not match the build inputs');
 }

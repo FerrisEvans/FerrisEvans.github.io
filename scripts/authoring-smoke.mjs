@@ -23,7 +23,7 @@ const category = 'authoring-fixture';
 const tag = 'authoring-contract';
 const postPath = `/posts/${slug}/`;
 const fixturePath = join(temporary, 'src/content/blog', `${slug}.md`);
-const immutable = ['public/fonts/room-pixel-zh.woff2', 'public/fonts/room-pixel-zh.coverage.json', 'src/data/site.ts'];
+const immutable = ['public/island/island.glb', 'public/island/manifest.json', 'src/data/site.ts'];
 const children = new Set();
 const screenshotDirectory = process.env.AUTHORING_SCREENSHOT_DIR ? resolve(process.env.AUTHORING_SCREENSHOT_DIR) : null;
 const revision = process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
@@ -164,7 +164,7 @@ async function startServer(mode) {
       throw new Error(`${mode} server exited before readiness\n${task.output()}`);
     }
     let response;
-    try { response = await fetch(`${base}/lofi/`, { signal: AbortSignal.timeout(2_000) }); }
+    try { response = await fetch(`${base}/notes/`, { signal: AbortSignal.timeout(2_000) }); }
     catch { /* Initial startup can precede the listening socket. */ }
     if (response?.ok) return { ...task, base };
     if (response?.status >= 500) throw new Error(`${mode} server returned HTTP ${response.status}\n${task.output().slice(-12_000)}`);
@@ -189,6 +189,8 @@ async function screenshot(page, name) {
 
 async function newContext(options = {}) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, ...options });
+  context.setDefaultTimeout(30_000);
+  context.setDefaultNavigationTimeout(30_000);
   await context.route('https://giscus.app/**', (route) => route.abort());
   return context;
 }
@@ -349,7 +351,8 @@ async function verifyDraftDevelopment() {
     assert.equal(response.status(), 200);
     assert.match(await page.locator('meta[name="robots"]').getAttribute('content'), /noindex/);
     const draftLink = page.locator(`a[href="${postPath}"]`);
-    assert.equal(await draftLink.count(), 1);
+    await draftLink.waitFor({ state: 'visible' });
+    assert.equal(await draftLink.count(), 1, `draft fixture ${postPath} is listed: ${await page.locator('main').innerText()}`);
     assert((await draftLink.innerText()).includes(title));
     await draftLink.click();
     await page.waitForURL(`${server.base}${postPath}`);
@@ -360,8 +363,8 @@ async function verifyDraftDevelopment() {
     await page.locator('.rehype-code-group').first().getByRole('tab', { name: 'C#', exact: true }).click();
     await assertSelected(page.locator('.rehype-code-group').first().getByRole('tab', { name: 'C#', exact: true }));
     await screenshot(page, 'authoring-draft-preview');
-    for (const path of ['/lofi/', '/categories/', '/tags/', '/archives/', '/rss.xml', '/room/', '/explore/']) {
-      const response = await fetch(`${server.base}${path}`);
+    for (const path of ['/', '/notes/', '/categories/', '/tags/', '/archives/', '/rss.xml', '/explore/']) {
+      const response = await fetch(`${server.base}${path}`, { signal: AbortSignal.timeout(30_000) });
       assert(response.ok, `${path} is available in development`);
       const html = await response.text();
       for (const token of [slug, marker, category, tag]) assert(!html.includes(token), `${path} does not mix drafts into its public collection`);
@@ -378,7 +381,7 @@ async function verifyPublished() {
   assert(article.includes(marker));
   assert(!article.includes('name="robots" content="noindex'), 'published article is indexable');
   assert(!article.includes('class="draft-preview"'), 'published article has no draft banner');
-  for (const path of ['lofi/index.html', `categories/${category}/index.html`, `tags/${tag}/index.html`, 'archives/index.html', 'rss.xml']) {
+  for (const path of ['index.html', 'notes/index.html', `categories/${category}/index.html`, `tags/${tag}/index.html`, 'archives/index.html', 'rss.xml']) {
     assert((await readFile(join(dist, path), 'utf8')).includes(postPath), `${path} discovers the new article automatically`);
   }
   assert((await readFile(join(dist, 'categories/index.html'), 'utf8')).includes(`/categories/${category}/`));
@@ -395,8 +398,19 @@ async function verifyPublished() {
     assert(results.some(({ url, content }) => new URL(url, server.base).pathname === postPath && content.includes(marker)),
       'published article is searchable and its indexed content contains the full body marker');
     const page = await context.newPage();
-    const response = await page.goto(`${server.base}${postPath}`);
+    const modelRequests = [];
+    page.on('request', request => { if (/\/island\/island\.glb(?:[?#]|$)/.test(request.url())) modelRequests.push(request.url()); });
+    const response = await page.goto(`${server.base}/`);
     assert.equal(response.status(), 200);
+    await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
+    assert.equal(modelRequests.length, 1, 'the 3D homepage starts automatically without an exploration button');
+    assert.equal(await page.locator('#home-enter-room').count(), 0);
+    await page.locator('[data-island-access="recent"]').focus();
+    await page.keyboard.press('Enter');
+    await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
+    const publishedLink = page.locator(`#island-panel a[href="${postPath}"]`).first();
+    assert(await publishedLink.isVisible(), 'one published Markdown file appears in the actual homepage scene panel');
+    await Promise.all([page.waitForURL(`${server.base}${postPath}`), publishedLink.click()]);
     await assertMathAndImage(page);
     await assertCodeTabs(page);
 
@@ -419,7 +433,7 @@ async function verifyPublished() {
 
 try {
   const original = await snapshot(root);
-  await Promise.all(['src', 'public', 'scripts', 'astro.config.mjs', 'package.json', 'package-lock.json', 'tsconfig.json'].map((path) =>
+  await Promise.all(['src', 'public', 'scripts', 'assets/island', 'astro.config.mjs', 'package.json', 'package-lock.json', 'tsconfig.json'].map((path) =>
     cp(join(root, path), join(temporary, path), { recursive: true })));
   await symlink(join(root, 'node_modules'), join(temporary, 'node_modules'), 'dir');
   assert.deepEqual(await snapshot(temporary), original);
@@ -437,9 +451,9 @@ try {
   await rm(fixturePath);
   await build('deleted');
   await verifyAbsentProduction('deleted');
-  assert.deepEqual(await snapshot(temporary), original, 'publishing and deleting do not regenerate fonts or alter category configuration');
+  assert.deepEqual(await snapshot(temporary), original, 'publishing and deleting do not regenerate the scene or alter category configuration');
   assert.deepEqual(await snapshot(root), original, 'the source checkout remains unchanged');
-  console.log('PASS: font bytes, coverage manifest and category configuration remain unchanged');
+  console.log('PASS: model bytes, sealed asset manifest and category configuration remain unchanged');
 } catch (error) {
   console.error(error.stack ?? error);
   process.exitCode = 1;

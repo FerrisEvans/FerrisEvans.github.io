@@ -64,7 +64,7 @@ const pagefindDevelopment = {
 export default defineConfig({
   site: 'https://ferrisevans.github.io',
   compressHTML: true,
-  integrations: [sitemap({ filter: page => new URL(page).pathname !== '/room/' }), react()],
+  integrations: [sitemap({ filter: page => !/^\/(?:lofi|room|island)\/$|^\/page\/\d+\/$/.test(new URL(page).pathname) }), react()],
   vite: {
     // The component library imports CSS modules that Astro must bundle for SSR.
     resolve: { noExternal: ['animal-island-ui'] },

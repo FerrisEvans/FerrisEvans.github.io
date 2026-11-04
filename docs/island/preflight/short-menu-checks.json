@@ -1,0 +1,246 @@
+{
+  "capturedAt": "2026-11-04T13:28:04.101Z",
+  "scope": "Live dev menu geometry and actual wheel; model requests blocked.",
+  "records": [
+    {
+      "width": 320,
+      "height": 390,
+      "initial": {
+        "height": 225,
+        "content": 225,
+        "scrollTop": 0,
+        "innerHeight": 225,
+        "innerContent": 225,
+        "outerHeight": 390,
+        "viewport": 390,
+        "outerScroll": 0
+      },
+      "links": [
+        {
+          "text": "首页",
+          "href": "/",
+          "rect": {
+            "x": 20,
+            "y": 83,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "笔记",
+          "href": "/notes/",
+          "rect": {
+            "x": 164,
+            "y": 83,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "分类",
+          "href": "/categories/",
+          "rect": {
+            "x": 20,
+            "y": 135,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "标签",
+          "href": "/tags/",
+          "rect": {
+            "x": 164,
+            "y": 135,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "归档",
+          "href": "/archives/",
+          "rect": {
+            "x": 20,
+            "y": 187,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "关于",
+          "href": "/about/",
+          "rect": {
+            "x": 164,
+            "y": 187,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "草稿",
+          "href": "/drafts/",
+          "rect": {
+            "x": 20,
+            "y": 239,
+            "width": 136,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        }
+      ],
+      "after": {
+        "scrollTop": 0,
+        "outerScroll": 0,
+        "outerHeight": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "initial": {
+        "height": 173,
+        "content": 173,
+        "scrollTop": 0,
+        "innerHeight": 173,
+        "innerContent": 173,
+        "outerHeight": 390,
+        "viewport": 390,
+        "outerScroll": 0
+      },
+      "links": [
+        {
+          "text": "首页",
+          "href": "/",
+          "rect": {
+            "x": 24,
+            "y": 99,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "笔记",
+          "href": "/notes/",
+          "rect": {
+            "x": 292,
+            "y": 99,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "分类",
+          "href": "/categories/",
+          "rect": {
+            "x": 560,
+            "y": 99,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "标签",
+          "href": "/tags/",
+          "rect": {
+            "x": 24,
+            "y": 151,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "归档",
+          "href": "/archives/",
+          "rect": {
+            "x": 292,
+            "y": 151,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "关于",
+          "href": "/about/",
+          "rect": {
+            "x": 560,
+            "y": 151,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        },
+        {
+          "text": "草稿",
+          "href": "/drafts/",
+          "rect": {
+            "x": 24,
+            "y": 203,
+            "width": 260,
+            "height": 44
+          },
+          "fullyVisible": true,
+          "hit": true,
+          "menuScroll": 0,
+          "outerScroll": 0
+        }
+      ],
+      "after": {
+        "scrollTop": 0,
+        "outerScroll": 0,
+        "outerHeight": 390,
+        "viewport": 390
+      }
+    }
+  ]
+}

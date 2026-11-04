@@ -1,23 +1,29 @@
 ---
 import { SITE } from '../data/site';
+import logo from '../../public/brand/island/logo.svg?raw';
+import lettering from '../../public/brand/island/lettering.svg?raw';
+import mark from '../../public/brand/island/mark.svg?raw';
 interface Props {
   tagline?: boolean;
   compact?: boolean;
+  inline?: boolean;
   class?: string;
 }
-const { tagline = false, compact = false, class: className } = Astro.props;
+const { tagline = false, compact = false, inline = false, class: className } = Astro.props;
 ---
-<span class:list={['island-brand-identity', className]}>
-  <img class="island-brand-badge" src="/brand/island/mark.svg" alt={compact ? `${SITE.title} 博客标志` : ''} width="44" height="44" />
-  {!compact && <span class="island-brand-lettering"><span class="island-brand-name">{SITE.title}</span>{tagline && <span class="island-brand-tagline">{SITE.tagline}</span>}</span>}
+<span class:list={['island-brand-identity', { 'island-brand-inline': inline, 'island-brand-compact': compact }, className]}>
+  <Fragment set:html={inline ? lettering : compact ? mark : logo} />
+  {tagline && <span class="island-brand-tagline">{SITE.tagline}</span>}
 </span>
 <style>
-  .island-brand-identity { display:inline-flex; align-items:center; gap:10px; color:var(--color-ink,#725d42); vertical-align:middle; }
-  .island-brand-badge { flex-shrink:0; width:44px; height:44px; transform:rotate(-5deg); }
-  .island-brand-lettering { display:flex; flex-direction:column; gap:3px; }
-  .island-brand-name { font-family:var(--font-display,"Nunito","Arial Rounded MT Bold",sans-serif); font-size:30px; line-height:1; font-weight:900; letter-spacing:-.04em; color:inherit; }
-  .island-brand-tagline { font-family:var(--font-sans,sans-serif); font-size:10px; line-height:1.5; letter-spacing:.06em; color:var(--color-ink-soft,#827157); white-space:nowrap; }
-  :global(.dark) .island-brand-identity { color:var(--color-snow,#fff9e8); }
+  .island-brand-identity { display:inline-flex; flex-direction:column; align-items:flex-start; flex-shrink:0; gap:3px; vertical-align:middle; line-height:1; }
+  .island-brand-identity :global(svg) { display:block; width:auto; height:44px; overflow:visible; }
+  .island-brand-identity :global(.weijin-lettering) { fill:#76543b; }
+  .island-brand-tagline { padding-left:2px; font-family:var(--font-sans,sans-serif); font-size:10px; line-height:1.5; letter-spacing:.06em; color:var(--color-ink-soft,#827157); white-space:nowrap; }
+  :global(.dark) .island-brand-identity :global(.weijin-lettering) { fill:#fff3db; }
   :global(.dark) .island-brand-tagline { color:var(--color-snow-soft,#ddd2bb); }
-  @media(max-width:480px) { .island-brand-badge { width:38px; height:38px; } .island-brand-name { font-size:27px; } .island-brand-identity { gap:8px; } .island-brand-tagline { font-size:9px; } }
+  :global(.island-footer) .island-brand-identity :global(svg) { height:36px; }
+  .island-brand-inline { display:inline-flex; vertical-align:-.38em; margin-inline:.08em; }
+  .island-brand-inline :global(svg) { height:1.65em; }
+  @media(max-width:480px) { .island-brand-identity:not(.island-brand-inline) :global(svg) { height:40px; } :global(.island-footer) .island-brand-identity :global(svg) { height:34px; } }
 </style>

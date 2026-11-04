@@ -1,0 +1,1247 @@
+{
+  "capturedAt": "2026-11-04T16:15:15.376Z",
+  "browser": "156.0.8078.80",
+  "headless": true,
+  "host": {
+    "platform": "darwin",
+    "arch": "arm64",
+    "cpu": "Apple M3 Max"
+  },
+  "conditions": "Local HTTP server, no network or CPU throttling. A fresh browser context has empty HTTP and Cache Storage for each cold profile. Frame intervals use requestAnimationFrame and are not GPU timing. Mobile viewport is emulation on the desktop host, not a physical phone.",
+  "results": [
+    {
+      "profile": "desktop",
+      "cache": "cold-new-context",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "readyMs": "187",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.19148524271726236,-0.017011877200197173,0.0032977536709490234],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1627798849685338e-10,1.8626424889383799e-9,-1.8634755686486075e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.02406177573400838,-1.603751749401989e-10,-1.0317776418515633e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000002524174438,4.868873392208665e-11,1.228508871962343e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.999706451200973,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21039258199362043,0.000024673688683801663,0.0000070914268476220475],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.20881110271157335,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.02497678497159569,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.999706451200973,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13995890316813622,0.000018475431270660008,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009295492070494306,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9497211286409243],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false},\"calls\":238,\"triangles\":275054,\"geometries\":119,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "182",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999952920908546,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.20983235931983624,3.356456310201036e-7,4.384014539693563e-8],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.0831900990574743,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.01740182773313173,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.9999955191157852,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999952920908546,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999934089271965,3.273443851465181e-7,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.026316207732268577,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499955274863118],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.2467947418769074,0.022805501619897264,-0.005744838444450848],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.12795292198764144,-0.015943297107946123,-0.03991689185850542],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.007601506958471791,3.747517988403189e-9,4.3260461885671616e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000007403865398,1.3871859778913365e-8,0.33125553248423645],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}",
+        "frameMs": "16.95"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.700000000000273,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "drawingBuffer": {
+        "width": 1440,
+        "height": 754
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 30311,
+          "encodedBodyBytes": 30011,
+          "durationMs": 5.9
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 3461,
+          "encodedBodyBytes": 3161,
+          "durationMs": 4.7
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 12305,
+          "encodedBodyBytes": 12005,
+          "durationMs": 4.7
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 349,
+          "encodedBodyBytes": 49,
+          "durationMs": 4.7
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 7774,
+          "encodedBodyBytes": 7474,
+          "durationMs": 4.8
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 106694,
+          "encodedBodyBytes": 106394,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16728,
+          "encodedBodyBytes": 16428,
+          "durationMs": 36
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16528,
+          "encodedBodyBytes": 16228,
+          "durationMs": 34.7
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16976,
+          "encodedBodyBytes": 16676,
+          "durationMs": 34.8
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 1192,
+          "encodedBodyBytes": 892,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 176411,
+          "encodedBodyBytes": 176111,
+          "durationMs": 12.7
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 1172544,
+          "encodedBodyBytes": 1172244,
+          "durationMs": 10.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 1159428,
+          "encodedBodyBytes": 1159128,
+          "durationMs": 11.4
+        },
+        {
+          "path": "/island/island.glb",
+          "initiatorType": "fetch",
+          "transferBytes": 4899872,
+          "encodedBodyBytes": 4899572,
+          "durationMs": 11.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 13624,
+          "encodedBodyBytes": 13324,
+          "durationMs": 6.2
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 13716,
+          "encodedBodyBytes": 13416,
+          "durationMs": 5.3
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "warm-same-context",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "inViewport": "true",
+        "readyMs": "156",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.19148737679387398,-0.017008006880128552,0.0032970404140979384],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1614102771187333e-10,1.8626389347106555e-9,-1.8625305204567212e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.024061399369153892,-1.5257674515241693e-10,-1.0292686001179908e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000252714119,4.991865558563921e-11,1.2274585795649424e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9997063337579664,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21040476508963402,0.000024683300557550423,0.000007094432450210548],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.20888286856490573,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.0249765765178607,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997063337579664,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.1399588867261153,0.000018482326601371304,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009290643413123073,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.949721017070068],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false},\"calls\":238,\"triangles\":275054,\"geometries\":119,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "182",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999955945434778,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21188873942128741,3.1169223767098855e-7,3.949216718465567e-8],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.10088199949974512,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.018074281802152592,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.9999985508601009,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999955945434778,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.1399993832360869,3.0597661102415694e-7,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.02589933656869958,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499958148163038],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.24648483769319335,0.02290940120757163,-0.0057634397683444406],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.12933059507084982,-0.01621713680624515,-0.04031454837136707],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.008680532591767766,5.569197643803601e-9,5.3276342930431175e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000006968829407,6.525594356543429e-9,0.3525728001340258],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}",
+        "frameMs": "17.09"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.700000000000273,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "drawingBuffer": {
+        "width": 1440,
+        "height": 754
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 30011,
+          "durationMs": 2.1
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 12005,
+          "durationMs": 2.7
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 3161,
+          "durationMs": 2.8
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 49,
+          "durationMs": 2.8
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 7474,
+          "durationMs": 3.1
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 892,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.2
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.6
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.2
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 176111,
+          "durationMs": 2.2
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "hover-fountain-warm",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "152",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.1914852427172624,-0.017011877200197183,0.003297753670949026],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1627798849685155e-10,1.8626424889383799e-9,-1.8634755686485703e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.02406177573400838,-1.6037517494023057e-10,-1.0317776418515193e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000002524174435,4.868873392204118e-11,1.2285088719623545e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":\"categories\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0.9999989494534443,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":true,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":\"categories\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.999706451200973,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21039258199362038,0.000024673688683801666,0.0000070914268476220475],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.20881110271157366,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.024976784971595684,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.999706451200973,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13995890316813622,0.00001847543127066001,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.00929549207049433,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9497211286409243],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":true,\"selected\":\"Categories\",\"drawn\":\"Categories\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":394,\"triangles\":423870,\"prepared\":true,\"dark\":false},\"calls\":394,\"triangles\":423870,\"geometries\":133,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "213",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":\"categories\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0.9999999999795861,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":true,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"categories\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999994037862937,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.213139845647975,2.9994831458502515e-8,-1.2395453343676152e-9],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.1652561450559862,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.023148275053864402,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999994037862937,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999991653008112,3.8441308606365104e-8,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.00571884059068945,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.949999433596979],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.23408891830979195,0.024301355076874667,-0.0057942800325628974],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.1333193352693949,-0.018783818614989026,-0.040327280063578316],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.010864469185693736,5.569236542077008e-9,4.4660561504025076e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000007332112342,7.897768800058103e-9,0.637590197278428],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Categories\",\"drawn\":\"Categories\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":394,\"triangles\":423870,\"prepared\":true,\"dark\":false}",
+        "hover": "categories",
+        "frameMs": "16.95"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999727,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "drawingBuffer": {
+        "width": 1440,
+        "height": 754
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 30011,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 12005,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 3161,
+          "durationMs": 1.7
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 49,
+          "durationMs": 1.7
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 7474,
+          "durationMs": 1.9
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 892,
+          "durationMs": 0.6
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.2
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 176111,
+          "durationMs": 1.9
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.5
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.5
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.7
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.5
+        }
+      ]
+    },
+    {
+      "profile": "desktop",
+      "cache": "hover-dog-warm",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "145",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.19148737679387398,-0.017008006880128552,0.0032970404140979384],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1614102771187333e-10,1.8626389347106555e-9,-1.8625305204567212e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.024061399369153892,-1.5257674515241693e-10,-1.0292686001179908e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000252714119,4.991865558563921e-11,1.2274585795649424e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":\"about\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.9999990653558796,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":\"about\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"greeting\",\"sniff\":0.000006789768512570275,\"greeting\":0.9999932082369759,\"poses\":{\"Dog_Head\":{\"rotation\":[0.02500125922522803,5.708589064252807e-7,0.08452881534337607],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.7512046553404221,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.017777121096042812,0,-0.03499976228829416],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.6799953816011437,-1.0506792227258845],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997063337579664,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.1399588867261153,0.000018482326601371304,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009290643413123073,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.949721017070068],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":true,\"selected\":\"Dog\",\"drawn\":\"Dog\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":366,\"triangles\":413094,\"prepared\":true,\"dark\":false},\"calls\":366,\"triangles\":413094,\"geometries\":119,\"textures\":21,\"dpr\":1,\"width\":1440,\"height\":754}",
+        "renderFrames": "213",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":730.1808283802557,\"y\":238.62657274310993},{\"x\":679.6026922042024,\"y\":340.4706521030471},{\"x\":826.8914213912319,\"y\":454.8233712435337},{\"x\":599.509239433448,\"y\":344.1724873102919},{\"x\":1023.5177498993928,\"y\":380.8393867581563},{\"x\":390.2632161214394,\"y\":338.5821093806569}]",
+        "effects": "{\"active\":\"about\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.9999999999796003,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"about\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"greeting\",\"sniff\":6.867844134541032e-10,\"greeting\":0.9999999993132151,\"poses\":{\"Dog_Head\":{\"rotation\":[0.02500000013077597,3.5099044051411606e-11,0.06130619784120512],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.09951984790639587,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.09999569555973349,0,-0.03499999997596254],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.6799999995329864,-1.2250039160135975],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999993625988728,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999991076384222,4.1254729333568434e-8,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.006552504798782739,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499993944689291],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.2345460540509798,0.024293169896946833,-0.005804065952866437],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.13447285449224458,-0.018859210141334206,-0.04080053707791341],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.011696364939580461,3.74763283141908e-9,2.22662393469036e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000664963554,-1.2033000082456446e-9,0.6537987106024795],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Dog\",\"drawn\":\"Dog\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":366,\"triangles\":413094,\"prepared\":true,\"dark\":false}",
+        "hover": "about",
+        "frameMs": "16.80"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999955,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 1440,
+        "height": 900,
+        "dpr": 1
+      },
+      "drawingBuffer": {
+        "width": 1440,
+        "height": 754
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 30011,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 12005,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 3161,
+          "durationMs": 1.6
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 49,
+          "durationMs": 1.7
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 7474,
+          "durationMs": 1.9
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 892,
+          "durationMs": 0.7
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 176111,
+          "durationMs": 1.8
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.7
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.6
+        }
+      ]
+    },
+    {
+      "profile": "mobile-viewport-emulation",
+      "cache": "cold-new-context",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "0",
+        "inViewport": "true",
+        "readyMs": "205",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.1914896567428495,-0.017003872033905337,0.0032962775572062193],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1572939286366833e-10,1.8626292750942862e-9,-1.8568989238930065e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.024061016192618592,-1.444475831364859e-10,-1.0205576023343776e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000002531593454,4.664085118811647e-11,1.2272262458728818e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9997062162679731,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21041695427249082,0.000024692916050872957,0.000007097439264819467],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.20895459753473422,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.024976366741739364,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997062162679731,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13995887027751625,0.00001848922443551696,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009285794487954767,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9497209054545743],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false},\"calls\":238,\"triangles\":275054,\"geometries\":119,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "182",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":198.81951347200047,\"y\":308.08682065601243},{\"x\":179.84425278616433,\"y\":346.29538469714385},{\"x\":235.10216151338741,\"y\":389.1967808314737},{\"x\":149.79581169170316,\"y\":347.68419206301775},{\"x\":308.8699221156001,\"y\":361.4404122041226},{\"x\":71.29355478766588,\"y\":345.5868653015506}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999952920908546,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.2098323593198363,3.356456310201034e-7,4.384014539693558e-8],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.08319009905747339,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.01740182773313173,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.9999955191157852,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999952920908546,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999934089271965,3.2734438514651806e-7,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.026316207732268577,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499955274863118],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.24679474187690736,0.022805501619897268,-0.005744838444450848],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.12795292198764147,-0.015943297107946133,-0.039916891858505436],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.007601506958471821,3.74751798840309e-9,4.326046188567168e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000007403865398,1.3871859785852259e-8,0.331255532484237],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}",
+        "frameMs": "16.95"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999955,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "drawingBuffer": {
+        "width": 585,
+        "height": 1080
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 30311,
+          "encodedBodyBytes": 30011,
+          "durationMs": 5.5
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 3461,
+          "encodedBodyBytes": 3161,
+          "durationMs": 4.2
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 12305,
+          "encodedBodyBytes": 12005,
+          "durationMs": 4.2
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 349,
+          "encodedBodyBytes": 49,
+          "durationMs": 4.3
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 7774,
+          "encodedBodyBytes": 7474,
+          "durationMs": 4.5
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16728,
+          "encodedBodyBytes": 16428,
+          "durationMs": 9.4
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16528,
+          "encodedBodyBytes": 16228,
+          "durationMs": 5.4
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 106694,
+          "encodedBodyBytes": 106394,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 16976,
+          "encodedBodyBytes": 16676,
+          "durationMs": 31.7
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 1192,
+          "encodedBodyBytes": 892,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 1172544,
+          "encodedBodyBytes": 1172244,
+          "durationMs": 11.6
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 1159428,
+          "encodedBodyBytes": 1159128,
+          "durationMs": 11.6
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 176411,
+          "encodedBodyBytes": 176111,
+          "durationMs": 12.9
+        },
+        {
+          "path": "/island/island.glb",
+          "initiatorType": "fetch",
+          "transferBytes": 4899872,
+          "encodedBodyBytes": 4899572,
+          "durationMs": 6.9
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 13624,
+          "encodedBodyBytes": 13324,
+          "durationMs": 3.5
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 13716,
+          "encodedBodyBytes": 13416,
+          "durationMs": 2.6
+        }
+      ]
+    },
+    {
+      "profile": "mobile-viewport-emulation",
+      "cache": "warm-same-context",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "151",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.19148737679387398,-0.017008006880128514,0.0032970404140979315],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1614102771186967e-10,1.8626389347106555e-9,-1.8625305204566711e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.024061399369153885,-1.5257674515234475e-10,-1.0292686001179132e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000252714119,4.991865558561009e-11,1.2274585795649403e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9997063337579662,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.2104047650896341,0.000024683300557559744,0.0000070944324502132295],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.2088828685649054,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.0249765765178607,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997063337579662,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13995888672611528,0.00001848232660137828,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009290643413123035,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9497210170700678],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false},\"calls\":238,\"triangles\":275054,\"geometries\":119,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "182",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":198.81951347200047,\"y\":308.08682065601243},{\"x\":179.84425278616433,\"y\":346.29538469714385},{\"x\":235.10216151338741,\"y\":389.1967808314737},{\"x\":149.79581169170316,\"y\":347.68419206301775},{\"x\":308.8699221156001,\"y\":361.4404122041226},{\"x\":71.29355478766588,\"y\":345.5868653015506}]",
+        "effects": "{\"active\":null,\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":null,\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999949688736207,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.20795500935904151,3.6137045563581233e-7,4.858853589706708e-8],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.06509399841621868,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.016704009952944472,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,0.9999868202392465,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999949688736207,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999929564230693,3.501747771365283e-7,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.026712122089867375,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499952204299397],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.24708265778111635,0.022691084291407478,-0.005722952200637089],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.12633626208713405,-0.015652201908410324,-0.0394405693922272],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.006448920199722946,7.45797034421859e-9,3.8571051071410704e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000003796660546,1.0558837380825192e-9,0.3105186007541281],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":false,\"selected\":null,\"drawn\":null,\"opacity\":0,\"postprocessing\":false,\"calls\":238,\"triangles\":275054,\"prepared\":true,\"dark\":false}",
+        "frameMs": "16.80"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.799999999999727,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "drawingBuffer": {
+        "width": 585,
+        "height": 1080
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 30011,
+          "durationMs": 2.2
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 12005,
+          "durationMs": 2.5
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 3161,
+          "durationMs": 2.7
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 49,
+          "durationMs": 2.9
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 7474,
+          "durationMs": 3.1
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.6
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 892,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.4
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.4
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 176111,
+          "durationMs": 2.1
+        }
+      ]
+    },
+    {
+      "profile": "mobile-viewport-emulation",
+      "cache": "hover-fountain-warm",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "152",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.1914852427172624,-0.017011877200197183,0.003297753670949026],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1627798849685155e-10,1.8626424889383799e-9,-1.8634755686485703e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.02406177573400838,-1.6037517494023057e-10,-1.0317776418515193e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000002524174435,4.868873392204118e-11,1.2285088719623545e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":\"categories\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0.9999990653558796,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":true,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":\"categories\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9997064512009729,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21039258199362035,0.000024673688683810994,0.0000070914268476247275],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.20881110271157421,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.024976784971595688,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997064512009729,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13995890316813622,0.000018475431270666997,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.009295492070494328,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9497211286409242],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":true,\"selected\":\"Categories\",\"drawn\":\"Categories\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":394,\"triangles\":423870,\"prepared\":true,\"dark\":false},\"calls\":394,\"triangles\":423870,\"geometries\":133,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "214",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":198.81951347200047,\"y\":308.08682065601243},{\"x\":179.84425278616433,\"y\":346.29538469714385},{\"x\":235.10216151338741,\"y\":389.1967808314737},{\"x\":149.79581169170316,\"y\":347.68419206301775},{\"x\":308.8699221156001,\"y\":361.4404122041226},{\"x\":71.29355478766588,\"y\":345.5868653015506}]",
+        "effects": "{\"active\":\"categories\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0.9999999999818509,\"about\":0,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":true,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"categories\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"sniffing\",\"sniff\":0.9999994040247315,\"greeting\":0,\"poses\":{\"Dog_Head\":{\"rotation\":[0.21312653469125434,2.9979977619881776e-8,-1.240385909262831e-9],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.16516645263171123,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[0.023146102723154812,0,0],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999994040247315,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999991656346242,3.842504170051835e-8,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.005713834034580586,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499994338234949],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.23408618106905082,0.024301403881570163,-0.005794221378633472],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.13331241424341092,-0.018783364421281007,-0.04032444114730851],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.01085948276729774,5.580411989671092e-9,4.4794670008878694e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000007336373686,7.95313551821275e-9,0.6374928653024613],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Categories\",\"drawn\":\"Categories\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":394,\"triangles\":423870,\"prepared\":true,\"dark\":false}",
+        "hover": "categories",
+        "frameMs": "16.81"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.700000000000273,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "drawingBuffer": {
+        "width": 585,
+        "height": 1080
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 2.2
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 2.4
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 2.7
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 3.4
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 3.5
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.2
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.8
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.6
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.6
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.2
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.5
+        }
+      ]
+    },
+    {
+      "profile": "mobile-viewport-emulation",
+      "cache": "hover-dog-warm",
+      "root": {
+        "state": "ready",
+        "modelUrl": "/island/island.glb?v=1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+        "modelBytes": "4899572",
+        "buildId": "67826794edc7d8e26cc8",
+        "booted": "true",
+        "inViewport": "true",
+        "loadedBytes": "4899572",
+        "cacheBytes": "4899572",
+        "readyMs": "145",
+        "metrics": "{\"animation\":\"Idle\",\"poses\":{\"Bear_Head\":{\"rotation\":[0.19148737679387398,-0.01700800688012857,0.003297040414097942],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-1.1614102771187517e-10,1.8626389347106555e-9,-1.8625305204567462e-9],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[0.024061399369153892,-1.5257674515245304e-10,-1.0292686001180292e-9],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.1800000252714119,4.991865558565375e-11,1.2274585795649434e-9],\"scale\":[1,1,1]}},\"effects\":{\"active\":\"about\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.9999989487178041,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]},\"activity\":{\"reduced\":false,\"active\":\"about\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"greeting\",\"sniff\":0.000007509860186363913,\"greeting\":0.9999924879337734,\"poses\":{\"Dog_Head\":{\"rotation\":[0.02500139277287409,6.314011263201074e-7,0.08452877185764668],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.7962857627939858,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.01329672400843794,0,-0.03499973707768207],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.679994891794966,-1.0506784659131354],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9997063337579664,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.1399588867261153,0.000018482326601371307,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.0092906434131231,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.949721017070068],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}},\"outline\":{\"active\":true,\"selected\":\"Dog\",\"drawn\":\"Dog\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":366,\"triangles\":413094,\"prepared\":true,\"dark\":false},\"calls\":366,\"triangles\":413094,\"geometries\":119,\"textures\":21,\"dpr\":1.5,\"width\":585,\"height\":1080}",
+        "renderFrames": "214",
+        "cameraMoving": "false",
+        "motion": "full",
+        "cameraPoints": "[{\"x\":198.81951347200047,\"y\":308.08682065601243},{\"x\":179.84425278616433,\"y\":346.29538469714385},{\"x\":235.10216151338741,\"y\":389.1967808314737},{\"x\":149.79581169170316,\"y\":347.68419206301775},{\"x\":308.8699221156001,\"y\":361.4404122041226},{\"x\":71.29355478766588,\"y\":345.5868653015506}]",
+        "effects": "{\"active\":\"about\",\"strength\":{\"library\":0,\"recent\":0,\"categories\":0,\"about\":0.999999999979586,\"tags\":0,\"mail\":0,\"bear\":0,\"rabbit\":0},\"fountainVisible\":false,\"notesVisible\":false,\"lampIntensity\":0,\"reduced\":false,\"pivots\":[\"Library_FeatureBook\",\"Desk_Page\",\"Desk_Lamp\",\"Radio\",\"Plants_Monstera_Foliage\",\"Plants_Sansevieria_Foliage\",\"Plants_Pothos_Foliage\"]}",
+        "activity": "{\"reduced\":false,\"active\":\"about\",\"pivots\":[\"Dog_Head\",\"Dog_Tail\",\"Dog_Ear_L\",\"Dog_Ear_R\",\"Dog_Arm_L\",\"Dog_Eye_L\",\"Dog_Eye_R\",\"Rabbit_Head\",\"Rabbit_Ear_L\",\"Rabbit_Ear_R\",\"Rabbit_Eye_L\",\"Rabbit_Eye_R\",\"Rabbit_WateringCan\"],\"waterVisible\":true,\"dog\":{\"activity\":\"greeting\",\"sniff\":6.871966673042686e-10,\"greeting\":0.9999999993128029,\"poses\":{\"Dog_Head\":{\"rotation\":[0.025000000129289154,3.4572101030616314e-11,0.0609037142577766],\"scale\":[1,1,1]},\"Dog_Tail\":{\"rotation\":[0,0.15923700312088215,0],\"scale\":[1,1,1]},\"Dog_Ear_L\":{\"rotation\":[-0.09995813210355205,0,-0.034999999975948104],\"scale\":[1,1,1]},\"Dog_Arm_L\":{\"rotation\":[0,0.6799999995327061,-1.2075829499183934],\"scale\":[1,1,1]},\"Dog_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}},\"rabbit\":{\"activity\":\"watering\",\"pour\":0.9999994037862936,\"greeting\":0,\"poses\":{\"Rabbit_Head\":{\"rotation\":[0.13999991653008112,3.8441308613523347e-8,0],\"scale\":[1,1,1]},\"Rabbit_Ear_L\":{\"rotation\":[-0.00571884059068945,0,0],\"scale\":[1,1,1]},\"Rabbit_WateringCan\":{\"rotation\":[0,-1.5707963267948966,-0.9499994335969789],\"scale\":[1,1,1]},\"Rabbit_Eye_L\":{\"rotation\":[0,0,0],\"scale\":[1,1,1]}}}}",
+        "poses": "{\"Bear_Head\":{\"rotation\":[0.23408891830979195,0.024301355076874667,-0.0057942800325628974],\"scale\":[1,1,1]},\"Bear_Arm_R\":{\"rotation\":[-0.1333193352693949,-0.018783818614989026,-0.040327280063578316],\"scale\":[1,1,1]},\"Bear_Book\":{\"rotation\":[-0.010864469185693736,5.569236542077008e-9,4.4660561504025076e-11],\"scale\":[1,1,1]},\"Bear_Book_Page\":{\"rotation\":[0.18000007332112342,7.897768800058103e-9,0.637590197278428],\"scale\":[1,1,1]}}",
+        "outline": "{\"active\":true,\"selected\":\"Dog\",\"drawn\":\"Dog\",\"opacity\":0.86,\"postprocessing\":true,\"calls\":366,\"triangles\":413094,\"prepared\":true,\"dark\":false}",
+        "hover": "about",
+        "frameMs": "16.80"
+      },
+      "frameIntervals": {
+        "samples": 180,
+        "medianMs": 16.699999999999818,
+        "p95Ms": 16.700000000000273,
+        "maxMs": 16.800000000000182,
+        "estimatedMedianFps": 59.88023952095874
+      },
+      "viewport": {
+        "width": 390,
+        "height": 844,
+        "dpr": 2
+      },
+      "drawingBuffer": {
+        "width": 585,
+        "height": 1080
+      },
+      "webgl": {
+        "vendor": "Google Inc. (Apple)",
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M3 Max, Unspecified Version)"
+      },
+      "resources": [
+        {
+          "path": "/_astro/ThemeInit.lEN6kfE7.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.7
+        },
+        {
+          "path": "/_astro/global.BNtpZHCA.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.6
+        },
+        {
+          "path": "/_astro/index.BHSZc969.css",
+          "initiatorType": "link",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.8
+        },
+        {
+          "path": "/_astro/TagToken.astro_astro_type_script_index_0_lang.D5CGXbBZ.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 49,
+          "durationMs": 2
+        },
+        {
+          "path": "/_astro/index.astro_astro_type_script_index_0_lang.4X4cfRFc.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 7474,
+          "durationMs": 2.4
+        },
+        {
+          "path": "/island/cover-day.webp",
+          "initiatorType": "img",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/tag-tokens.DjP56O7M.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 892,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/nunito-latin-500-normal.78b3b3a4.EugFkASW.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.1
+        },
+        {
+          "path": "/_astro/nunito-latin-700-normal.0b62b606.Dort48En.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.3
+        },
+        {
+          "path": "/_astro/nunito-latin-900-normal.8b5d13b8.BVB1fGs6.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1.5
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-700-normal.6e0a7691.DoUziBww.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.9
+        },
+        {
+          "path": "/_astro/noto-sans-sc-chinese-simplified-500-normal.d3553b6f.z_irmif2.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 1
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-500-normal.df58f967.JVPArRf3.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.5
+        },
+        {
+          "path": "/_astro/noto-sans-sc-latin-700-normal.11e48442.BzR54Sjf.woff2",
+          "initiatorType": "css",
+          "transferBytes": 300,
+          "encodedBodyBytes": 0,
+          "durationMs": 0.6
+        },
+        {
+          "path": "/_astro/scene.4Ip98zZ7.js",
+          "initiatorType": "script",
+          "transferBytes": 300,
+          "encodedBodyBytes": 176111,
+          "durationMs": 2
+        }
+      ]
+    }
+  ]
+}

@@ -1,37 +1,24 @@
-.tag-word-cloud.tag-word-cloud {
-  --tag-cloud-color-1:#167e75;
-  --tag-cloud-color-2:#a45b37;
-  --tag-cloud-color-3:#527d45;
-  --tag-cloud-color-4:#8b5c9c;
-  --tag-cloud-color-5:#916b1e;
-  --tag-cloud-color-6:#4c7397;
-  --animal-bg-color:var(--island-surface);
-  --animal-text-color:var(--color-ink);
-  --animal-primary-color:var(--color-accent);
-  --animal-border-color-light:var(--island-border);
-  padding:0;
-  border:0;
-  background:transparent;
+.tag-cloud-content { width:100%; max-width:1000px; margin:0 auto; }
+.tag-tools { display:flex; justify-content:center; margin:0 0 24px; }
+.tag-search { display:flex; align-items:center; gap:10px; width:min(360px,100%); min-height:48px; padding:0 16px; border:1.5px solid var(--island-border); border-radius:999px; background:var(--island-surface); color:var(--color-ink-soft); }
+.tag-search:focus-within { outline:3px solid var(--color-accent); outline-offset:3px; }
+#tag-filter { min-width:0; width:100%; height:46px; border:0; background:transparent; color:var(--color-ink); font-size:14px; outline:none; }
+#tag-filter::placeholder { color:var(--color-ink-faint); }
+.tag-word-cloud { position:relative; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 10px; list-style:none; margin:0; padding:16px 0; border:0; background:transparent; }
+.tag-word-cloud > li { display:flex; max-width:100%; margin:0; padding:0; }
+.tag-word-cloud[hidden],.tag-word-cloud > li[hidden] { display:none; }
+.tag-word-cloud .tag-item { align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); }
+.tag-word-cloud .tag-word { font-size:clamp(14px,var(--tag-token-size),39px); font-weight:700; line-height:1.25; overflow-wrap:anywhere; }
+.tag-word-cloud .tag-item:hover { text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:.18em; }
+.tag-cloud-empty { padding:34px 0; text-align:center; color:var(--color-ink-soft); font-size:14px; line-height:1.9; }
+.tag-cloud-empty .blog-button { display:inline-flex; align-items:center; min-height:44px; margin-top:18px; padding:8px 20px; }
+.dark .tag-search { color:var(--color-snow-soft); }
+.dark #tag-filter { color:var(--color-snow); }
+.dark #tag-filter::placeholder { color:var(--color-snow-faint); }
+.dark .tag-search:focus-within { outline-color:var(--color-accent-dark); }
+.dark .tag-cloud-empty { color:var(--color-snow-soft); }
+@media(max-width:640px) {
+  .tag-tools { margin-bottom:18px; }
+  .tag-word-cloud .tag-word { font-size:clamp(14px,var(--tag-token-size),30px); }
 }
-
-.dark .tag-word-cloud {
-  --tag-cloud-color-1:#8fdfc6;
-  --tag-cloud-color-2:#efb58d;
-  --tag-cloud-color-3:#b4dca0;
-  --tag-cloud-color-4:#d4b1e8;
-  --tag-cloud-color-5:#e9ce83;
-  --tag-cloud-color-6:#adcee8;
-  --animal-text-color:var(--color-snow);
-  --animal-primary-color:var(--color-accent-dark);
-}
-
-/* The SSR drawing starts at 640px; constrain it until Chart measures its viewport. */
-.tag-word-cloud > div:first-child > svg { max-width:100%; }
-
-/* Chart has no data-table switch. The page's linked tag list is the full fallback;
-   also suppress the library's overflow note that points to its hidden table. */
-.tag-word-cloud > details,
-.tag-word-cloud > details + div { display:none; }
-
-.tag-word-cloud-tooltip { display:grid; gap:3px; }
-.tag-word-cloud-tooltip strong { font-size:14px; }
+@media(pointer:coarse) { .tag-word-cloud .tag-item { min-height:44px; } }

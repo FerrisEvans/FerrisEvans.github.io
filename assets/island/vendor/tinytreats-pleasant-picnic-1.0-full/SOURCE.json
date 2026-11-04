@@ -1,0 +1,715 @@
+{
+  "pack": "Tiny Treats - Pleasant Picnic 1.0",
+  "author": "Isa Lousberg / Tiny Treats",
+  "sourcePage": "https://tinytreats.itch.io/pleasant-picnic",
+  "repository": "https://github.com/TinyTreats-Game-Assets/Tiny-Treats-Pleasant-Picnic-1.0",
+  "commit": "da50c97a056fe1513413343787f2526ea7f25174",
+  "downloadedArchiveUrl": "https://codeload.github.com/TinyTreats-Game-Assets/Tiny-Treats-Pleasant-Picnic-1.0/zip/refs/heads/main",
+  "archiveSha256": "3334e518342dfb7f913e8563c463a272c8298e0a6718a7eb3262be3899a8fd3e",
+  "license": "CC0-1.0",
+  "licenseFile": "LICENSE.txt",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-11-04",
+  "tier": "free public distribution; no paid source tier purchased",
+  "status": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "files": [
+    {
+      "file": "LICENSE.txt",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/LICENSE.txt",
+      "bytes": 830,
+      "sha256": "4feb9b1c670542f0a4227447ec5941616ad9b73cc4881fad823deeea0b51fea8"
+    },
+    {
+      "file": "grapes_bowl.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/grapes_bowl.bin",
+      "bytes": 17824,
+      "sha256": "2b3974002ccf02b1328ebcc39b39cf6fcbd9a68c2aa2aa9baaa89199c302c422"
+    },
+    {
+      "file": "grapes_bowl.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/grapes_bowl.gltf",
+      "bytes": 3566,
+      "sha256": "7d1847916b58e2a92ac993093041bb549af0cdf4a48b3b36a62463c2636ebb9e"
+    },
+    {
+      "file": "mug.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/mug.bin",
+      "bytes": 11688,
+      "sha256": "1102cbee9c967a8f68149e4fd6e8182830ce48cfdbaac0b4b7b04d14c162cbde"
+    },
+    {
+      "file": "mug.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/mug.gltf",
+      "bytes": 3536,
+      "sha256": "f2d2da150dde26c66b0a691b2556b00d784e977e365aae076e78c330e46bec0a"
+    },
+    {
+      "file": "picnic_basket_square.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/picnic_basket_square.bin",
+      "bytes": 40292,
+      "sha256": "495451dc29881dc3abed2813df730958f7edb235615ac1559f584976f58f5578"
+    },
+    {
+      "file": "picnic_basket_square.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/picnic_basket_square.gltf",
+      "bytes": 11959,
+      "sha256": "b44dc894143e28ab9c0a89cae299d6bc54040d2fe035879bfb769c5b3e0383f3"
+    },
+    {
+      "file": "picnic_blanket_green.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/picnic_blanket_green.bin",
+      "bytes": 18672,
+      "sha256": "266a1d7f14cf3df1ad9a782ec6c87f23a634e212fb664de89366cbe0db6ca139"
+    },
+    {
+      "file": "picnic_blanket_green.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/picnic_blanket_green.gltf",
+      "bytes": 6295,
+      "sha256": "e394995522ab8e1a1bffb6bfa425bf295d2477beb7db9185d94785a2b29d7c3a"
+    },
+    {
+      "file": "pillow_large_green.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/pillow_large_green.bin",
+      "bytes": 5472,
+      "sha256": "cc53cfdfdf100d6b3572333a83c7970f7cb8098704d341ee16121165586dc1b6"
+    },
+    {
+      "file": "pillow_large_green.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/pillow_large_green.gltf",
+      "bytes": 3589,
+      "sha256": "57818c3941b5fe3a75f8f5ad6ceb1e083f1f2e16a28100adfa11b900d2b529f1"
+    },
+    {
+      "file": "pillow_small_blue.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/pillow_small_blue.bin",
+      "bytes": 5472,
+      "sha256": "ec4effd4ca478e8c923a6d0ed764cfce3076ed8addee2ccf463864c7f4bc3b48"
+    },
+    {
+      "file": "pillow_small_blue.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/pillow_small_blue.gltf",
+      "bytes": 3576,
+      "sha256": "ce93ce3118a937590cc0d2f27ddf8c84953f3560b6b3ffcd0abeff673c335443"
+    },
+    {
+      "file": "plate_A.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/plate_A.bin",
+      "bytes": 8544,
+      "sha256": "a1e539ec5caa6c3d84184d7b36adf9e855e5b28cf898c2c94f46fb286da3f523"
+    },
+    {
+      "file": "plate_A.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/plate_A.gltf",
+      "bytes": 3506,
+      "sha256": "3734c3c44c56b5cfc4dd56daa6ee789e07488801788c584ea0988d5155fd6396"
+    },
+    {
+      "file": "radio.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/radio.bin",
+      "bytes": 29684,
+      "sha256": "843921d71240c76e420f2b8fe5a757367bffe3640fe2dde0f6fc2393675f0ff6"
+    },
+    {
+      "file": "radio.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/radio.gltf",
+      "bytes": 5627,
+      "sha256": "d90b0c793dd22d01ae4e1f8e031e61cf199655457c9346e7a9134db6d9e8d73b"
+    },
+    {
+      "file": "sandwich.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/sandwich.bin",
+      "bytes": 22488,
+      "sha256": "5ef4bacb8c93121b2ac7721f1bc99c08b70f67cea966fd8e1c281898b5d7304e"
+    },
+    {
+      "file": "sandwich.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/sandwich.gltf",
+      "bytes": 3554,
+      "sha256": "633b31ee7e7d8f15a71c8998b2628e62b0b8caf76e24c625c992f05f30ec3c30"
+    },
+    {
+      "file": "serving_tray_round.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/serving_tray_round.bin",
+      "bytes": 5824,
+      "sha256": "404bfcd415a4b3b45b59974588809d99d65c3fa6bbb4d8bf863d11ae9d2b230d"
+    },
+    {
+      "file": "serving_tray_round.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/serving_tray_round.gltf",
+      "bytes": 3536,
+      "sha256": "d8f804cff52bd679613ad86ce68fa990a78ba8f6201692026c23c2b2ab29dd82"
+    },
+    {
+      "file": "spoon.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/spoon.bin",
+      "bytes": 10808,
+      "sha256": "d9d573cf781dfa05e7a01dfb47074f16d7ae46db3a2f4023968b5e4fea9bea96"
+    },
+    {
+      "file": "spoon.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/spoon.gltf",
+      "bytes": 3543,
+      "sha256": "8c923910b877ccd212cac6b8e33b3b711daa660e50b8c333a09d585d44e98e32"
+    },
+    {
+      "file": "teapot.bin",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/teapot.bin",
+      "bytes": 20476,
+      "sha256": "7bec69389d0fa58457cdb27d64c3d458accbe0b53fd4292eb289eb458dd04c14"
+    },
+    {
+      "file": "teapot.gltf",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/gltf/teapot.gltf",
+      "bytes": 3545,
+      "sha256": "7bd487c1b6b4df1c5df97270242fc9479ea8b85f7a414b01149834448204842d"
+    },
+    {
+      "file": "tiny_treats_plaid_pattern_green.png",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/Textures/tiny_treats_plaid_pattern_green.png",
+      "bytes": 3408,
+      "sha256": "48d5deaa3752a305da973d66585c40222d4226f074c057b4810b6059815d223e"
+    },
+    {
+      "file": "tiny_treats_texture_1.png",
+      "originalPath": "Tiny-Treats-Pleasant-Picnic-1.0-main/addons/tiny_treats_pleasant_picnic_set/Assets/Textures/tiny_treats_texture_1.png",
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5"
+    }
+  ],
+  "adaptation": "Byte-exact original models, buffers, and image atlas. PNG paths flattened alongside glTF without editing original URI strings. No recoloring or geometry changes.",
+  "selectedModels": [
+    {
+      "file": "grapes_bowl.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 688,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.4,
+        0.4,
+        0.239703
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.200003,
+          -0.2,
+          -1e-06
+        ],
+        "max": [
+          0.199997,
+          0.2,
+          0.239702
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.029",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "mug.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 300,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.55,
+        0.43,
+        0.25
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.212516,
+          -0.215,
+          0
+        ],
+        "max": [
+          0.337484,
+          0.215,
+          0.25
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.032",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "picnic_basket_square.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 1062,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.519021,
+        1.123865,
+        0.680625
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.759512,
+          -0.561931,
+          0
+        ],
+        "max": [
+          0.759509,
+          0.561934,
+          0.680625
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.034",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "picnic_blanket_green.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 456,
+      "materials": 2,
+      "materialNames": [
+        "tiny_treats_plaid_pattern_green",
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_plaid_pattern_green.png",
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        6.000002,
+        4,
+        0.147622
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -3.000001,
+          -1.98258,
+          -0.147622
+        ],
+        "max": [
+          3.000001,
+          2.01742,
+          0
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_plaid_pattern_green",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        },
+        {
+          "name": "tiny_treats_1.035",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "pillow_large_green.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 240,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_plaid_pattern_green"
+      ],
+      "images": [
+        "tiny_treats_plaid_pattern_green.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1,
+        0.5,
+        1
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.5,
+          -0.251225,
+          -0.5
+        ],
+        "max": [
+          0.5,
+          0.248775,
+          0.5
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_plaid_pattern_green.002",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "pillow_small_blue.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 240,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.200062,
+        0.4,
+        0.6
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.600031,
+          -0.202221,
+          -0.3
+        ],
+        "max": [
+          0.600031,
+          0.197779,
+          0.3
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.036",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "plate_A.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 224,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.75,
+        0.75,
+        0.1
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.375,
+          -0.375,
+          0
+        ],
+        "max": [
+          0.375,
+          0.375,
+          0.1
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.039",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "radio.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 830,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.103827,
+        0.655489,
+        0.813116
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.551911,
+          -0.228,
+          -1e-06
+        ],
+        "max": [
+          0.551916,
+          0.427489,
+          0.813115
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.041",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "sandwich.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 676,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.622315,
+        0.624005,
+        0.436187
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.310763,
+          -0.314005,
+          0
+        ],
+        "max": [
+          0.311552,
+          0.31,
+          0.436188
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.042",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "serving_tray_round.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 192,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1,
+        1,
+        0.1
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.5,
+          -0.5,
+          0
+        ],
+        "max": [
+          0.5,
+          0.5,
+          0.1
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.043",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "spoon.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 324,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.217112,
+        0.581954,
+        0.105559
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.108556,
+          -0.152677,
+          -0.069511
+        ],
+        "max": [
+          0.108556,
+          0.429277,
+          0.036049
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.046",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "teapot.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 698,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.91944,
+        0.619712,
+        0.614416
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.46992,
+          -0.309856,
+          0
+        ],
+        "max": [
+          0.44952,
+          0.309856,
+          0.614416
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.047",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    }
+  ],
+  "palette": "Original TinyTreats atlas-driven colors preserved unchanged. BaseColor factors alone do not represent the painted color; see the included PNG atlas and contact sheet.",
+  "textures": [
+    {
+      "file": "tiny_treats_plaid_pattern_green.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 3408,
+      "sha256": "48d5deaa3752a305da973d66585c40222d4226f074c057b4810b6059815d223e"
+    },
+    {
+      "file": "tiny_treats_texture_1.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5"
+    }
+  ]
+}

@@ -1,0 +1,317 @@
+{
+  "pack": "KayKit Forest Nature Pack 1.0 FREE",
+  "sourcePage": "https://kaylousberg.itch.io/kaykit-forest",
+  "downloadUrl": "https://kaylousberg.itch.io/kaykit-forest/purchase",
+  "freeUploadId": "13520330",
+  "author": "Kay Lousberg / KayKit",
+  "license": "CC0-1.0",
+  "licenseFile": "LICENSE.txt",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-11-04",
+  "tier": "free official distribution; no paid Extra or Source files",
+  "archiveBytes": 6435630,
+  "archiveSha256": "2ee83e63bb7695f2d884ec27ddf6fce020789a452e7d5c5b0bbdfc4f6ea1fc8c",
+  "selectionStatus": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "selectedModels": [
+    {
+      "file": "Tree_1_B_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 636,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        4.0068259,
+        3.4454873,
+        4.9296236
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.7895218,
+          -1.7227441,
+          -0.3410368
+        ],
+        "max": [
+          2.2173042,
+          1.7227432,
+          4.5885868
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 636
+    },
+    {
+      "file": "Tree_1_C_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 1364,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        6.6912956,
+        5.7533522,
+        7.8142505
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -2.7458048,
+          -2.876677,
+          -0.3923197
+        ],
+        "max": [
+          3.9454908,
+          2.8766754,
+          7.4219308
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 1364
+    },
+    {
+      "file": "Tree_3_A_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 978,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        3.0931983,
+        3.0931981,
+        3.5065975
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.5521193,
+          -1.5465989,
+          -0.261318
+        ],
+        "max": [
+          1.5410792,
+          1.5465991,
+          3.2452796
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 978
+    },
+    {
+      "file": "Tree_4_A_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 404,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2.0073514,
+        2.0043533,
+        5.274395
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.960008,
+          -0.9846721,
+          -0.3421249
+        ],
+        "max": [
+          1.0473435,
+          1.0196812,
+          4.9322701
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 404
+    },
+    {
+      "file": "Rock_2_C_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 108,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.2952623,
+        1.2952622,
+        1.3262019
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.6476109,
+          -0.6476311,
+          4.05e-05
+        ],
+        "max": [
+          0.6476514,
+          0.6476311,
+          1.3262424
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 108
+    },
+    {
+      "file": "Rock_3_A_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 84,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.9562941,
+        0.8074788,
+        0.8588688
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.5295202,
+          -0.3925787,
+          -0.4653024
+        ],
+        "max": [
+          0.4267739,
+          0.4149001,
+          0.3935664
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 84
+    },
+    {
+      "file": "Grass_1_A_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 44,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.3392552,
+        0.1517701,
+        0.5593414
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.1696239,
+          -0.073386,
+          -0.02
+        ],
+        "max": [
+          0.1696312,
+          0.0783841,
+          0.5393414
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 44
+    },
+    {
+      "file": "Grass_2_A_Color1.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 44,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.1550248,
+        0.2536519,
+        0.9187565
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.0775063,
+          -0.0796046,
+          -0.0312668
+        ],
+        "max": [
+          0.0775185,
+          0.1740474,
+          0.8874897
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 44
+    }
+  ],
+  "files": [
+    {
+      "file": "Grass_1_A_Color1.bin",
+      "bytes": 2056,
+      "sha256": "d293510be3ca4a6062dc305c22a143ba134fc49af65aaba064cc8f8d868d6c6e"
+    },
+    {
+      "file": "Grass_1_A_Color1.gltf",
+      "bytes": 3058,
+      "sha256": "58686904164d636e8731544fbb6911bf1ebc068841fe6c127f0c509b1449212b"
+    },
+    {
+      "file": "Grass_2_A_Color1.bin",
+      "bytes": 2056,
+      "sha256": "07fc84eda0b374b3fd4afed280452f0be21f75c0e53fbf6778d3997c09832a64"
+    },
+    {
+      "file": "Grass_2_A_Color1.gltf",
+      "bytes": 3056,
+      "sha256": "fa822543a17721c40b3386557ed37af6c44fd6d4ce6b4fc16f9187d69cde8fe1"
+    },
+    {
+      "file": "LICENSE.txt",
+      "bytes": 1469,
+      "sha256": "987811fa42c7548ad487324531813b0210ee6d1ebd410089e881820630e3be54"
+    },
+    {
+      "file": "Rock_2_C_Color1.bin",
+      "bytes": 3336,
+      "sha256": "6ec3a29d90b0aed5a4a0be8aaad34e50d9171fcec1d0463ff100564feb2c0e9c"
+    },
+    {
+      "file": "Rock_2_C_Color1.gltf",
+      "bytes": 3054,
+      "sha256": "22ef2dedc006b9a5bffaa2b4f8779face5a92c34e2bb813d1e2904fa7c554cbf"
+    },
+    {
+      "file": "Rock_3_A_Color1.bin",
+      "bytes": 4440,
+      "sha256": "8659daf4bc724f414eda02193bc6a48132b595eef7c62009b7c0a3d93a8aa9b2"
+    },
+    {
+      "file": "Rock_3_A_Color1.gltf",
+      "bytes": 3056,
+      "sha256": "65484de298f09f7ed5bcf781d7febde1a2df4f0f76b8a6396591240963152c88"
+    },
+    {
+      "file": "Tree_1_B_Color1.bin",
+      "bytes": 19016,
+      "sha256": "5d4129bdc6f13a24e076f7fa870c6695dc20491f4820c54153fe9d1d90b40522"
+    },
+    {
+      "file": "Tree_1_B_Color1.gltf",
+      "bytes": 3058,
+      "sha256": "03f4773b06adf252ac8ca0a9bfdc77f315c1f4036b6151796f110b4897e586c5"
+    },
+    {
+      "file": "Tree_1_C_Color1.bin",
+      "bytes": 46296,
+      "sha256": "b5d131c607d96b71583e515a48e28c22b1c67831a0290c850aa32c8980480eed"
+    },
+    {
+      "file": "Tree_1_C_Color1.gltf",
+      "bytes": 3064,
+      "sha256": "ffb1e44646cd8dbe9902dd31bf94e64e1a3de5523d1b1f819acdbef09b42d45f"
+    },
+    {
+      "file": "Tree_3_A_Color1.bin",
+      "bytes": 29740,
+      "sha256": "ea2f20e847bd3bcf748b9f1cf9932abe45967db8dcacfeafaea1f07e3da6a2e9"
+    },
+    {
+      "file": "Tree_3_A_Color1.gltf",
+      "bytes": 3061,
+      "sha256": "a5140f21978004544844df4c2969625724c2c263e74f798716ea9e115216a230"
+    },
+    {
+      "file": "Tree_4_A_Color1.bin",
+      "bytes": 12568,
+      "sha256": "eeb22bdc0ece9941865139476afcaf5dadd8285751321770886d1a065b8512d6"
+    },
+    {
+      "file": "Tree_4_A_Color1.gltf",
+      "bytes": 3061,
+      "sha256": "14f8f50af9f9cf8d2bb488cae15613f9e2ed6ce0002d2aa11721a2efc2ba3010"
+    },
+    {
+      "file": "forest_texture.png",
+      "bytes": 48679,
+      "sha256": "406c01e0ac1d3368fc7b26ff5fb0d3335ba5e48bd19a703540ed92ee3971ea39"
+    }
+  ]
+}

@@ -1,0 +1,6054 @@
+{
+  "schema": 2,
+  "generator": "scripts/island/build_scene.py",
+  "author": "Weijin / original Ferris character and garden composition",
+  "source": "assets/island/island.blend",
+  "asset": "public/island/island.glb",
+  "externalAssets": [
+    {
+      "name": "Tiny Treats - Pretty Park 1.0",
+      "author": "Isa Lousberg / Tiny Treats",
+      "license": "CC0-1.0",
+      "source": "assets/island/vendor/tinytreats-pretty-park-1.0/SOURCE.json",
+      "models": [
+        {
+          "file": "bench.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 396,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            1.31665,
+            1.405944
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -0.6,
+              0
+            ],
+            "max": [
+              1,
+              0.71665,
+              1.405944
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "bird.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 652,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.442206,
+            0.550051,
+            0.440414
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.221701,
+              -0.28261,
+              0
+            ],
+            "max": [
+              0.220504,
+              0.267441,
+              0.440414
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.001",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "bush_large.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 312,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.500432,
+            1.413935,
+            0.759157
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.750214,
+              -0.706967,
+              0
+            ],
+            "max": [
+              0.750218,
+              0.706967,
+              0.759157
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.003",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "cobble_stones.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 448,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.97441,
+            1,
+            0.15
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.487218,
+              -0.505,
+              -0.1
+            ],
+            "max": [
+              0.487192,
+              0.495,
+              0.05
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.004",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_A.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 90,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_B.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 24,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.001",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_C.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 90,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.002",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_D.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 24,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.003",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_E.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 12,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.004",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_F.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 24,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.005",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_G.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 90,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.006",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_H.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 24,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.007",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "floor_grass_sliced_I.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 90,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_grass"
+          ],
+          "images": [
+            "tiny_treats_grass_texture.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            2,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -1,
+              -0.5
+            ],
+            "max": [
+              1,
+              1,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_grass.008",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "flower_A.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 192,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.449063,
+            0.449063,
+            0.138326
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.224531,
+              -0.224531,
+              -0.02
+            ],
+            "max": [
+              0.224532,
+              0.224531,
+              0.118326
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.006",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "flower_B.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 166,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.31112,
+            0.296295,
+            0.110661
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.15556,
+              -0.116669,
+              -0.02
+            ],
+            "max": [
+              0.15556,
+              0.179625,
+              0.090661
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.007",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "fountain.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 1646,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            4,
+            4,
+            1.599999
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.999995,
+              -2,
+              0
+            ],
+            "max": [
+              2.000005,
+              2,
+              1.599999
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.008",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "grass_B.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 208,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.474395,
+            0.513818,
+            0.405424
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.145195,
+              -0.167074,
+              -0.041524
+            ],
+            "max": [
+              0.3292,
+              0.346743,
+              0.363901
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.010",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "hedge_straight.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 232,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2,
+            1.5,
+            1.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1,
+              -0.75,
+              0
+            ],
+            "max": [
+              1,
+              0.75,
+              1.5
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.012",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "hedge_straight_long.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 372,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            4,
+            1.5,
+            1.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -2,
+              -0.75,
+              -0.005908
+            ],
+            "max": [
+              2,
+              0.75,
+              1.494092
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.013",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "street_lantern.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 424,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.93978,
+            0.93978,
+            4.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.469886,
+              -0.46989,
+              -0.2
+            ],
+            "max": [
+              0.469894,
+              0.46989,
+              4.3
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.014",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "tree.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 320,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2.477934,
+            2.365629,
+            3.618354
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.238968,
+              -1.182816,
+              -0.2
+            ],
+            "max": [
+              1.238966,
+              1.182813,
+              3.418354
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.016",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tiny Treats - Pleasant Picnic 1.0",
+      "author": "Isa Lousberg / Tiny Treats",
+      "license": "CC0-1.0",
+      "source": "assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/SOURCE.json",
+      "models": [
+        {
+          "file": "grapes_bowl.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 688,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.4,
+            0.4,
+            0.239703
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.200003,
+              -0.2,
+              -1e-06
+            ],
+            "max": [
+              0.199997,
+              0.2,
+              0.239702
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.029",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "mug.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 300,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.55,
+            0.43,
+            0.25
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.212516,
+              -0.215,
+              0
+            ],
+            "max": [
+              0.337484,
+              0.215,
+              0.25
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.032",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "picnic_basket_square.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 1062,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.519021,
+            1.123865,
+            0.680625
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.759512,
+              -0.561931,
+              0
+            ],
+            "max": [
+              0.759509,
+              0.561934,
+              0.680625
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.034",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "picnic_blanket_green.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 456,
+          "materials": 2,
+          "materialNames": [
+            "tiny_treats_plaid_pattern_green",
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_plaid_pattern_green.png",
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            6.000002,
+            4,
+            0.147622
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -3.000001,
+              -1.98258,
+              -0.147622
+            ],
+            "max": [
+              3.000001,
+              2.01742,
+              0
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_plaid_pattern_green",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            },
+            {
+              "name": "tiny_treats_1.035",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "pillow_large_green.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 240,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_plaid_pattern_green"
+          ],
+          "images": [
+            "tiny_treats_plaid_pattern_green.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1,
+            0.5,
+            1
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.5,
+              -0.251225,
+              -0.5
+            ],
+            "max": [
+              0.5,
+              0.248775,
+              0.5
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_plaid_pattern_green.002",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "pillow_small_blue.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 240,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.200062,
+            0.4,
+            0.6
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.600031,
+              -0.202221,
+              -0.3
+            ],
+            "max": [
+              0.600031,
+              0.197779,
+              0.3
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.036",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "plate_A.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 224,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.75,
+            0.75,
+            0.1
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.375,
+              -0.375,
+              0
+            ],
+            "max": [
+              0.375,
+              0.375,
+              0.1
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.039",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "radio.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 830,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.103827,
+            0.655489,
+            0.813116
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.551911,
+              -0.228,
+              -1e-06
+            ],
+            "max": [
+              0.551916,
+              0.427489,
+              0.813115
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.041",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "sandwich.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 676,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.622315,
+            0.624005,
+            0.436187
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.310763,
+              -0.314005,
+              0
+            ],
+            "max": [
+              0.311552,
+              0.31,
+              0.436188
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.042",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "serving_tray_round.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 192,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1,
+            1,
+            0.1
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.5,
+              -0.5,
+              0
+            ],
+            "max": [
+              0.5,
+              0.5,
+              0.1
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.043",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "spoon.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 324,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.217112,
+            0.581954,
+            0.105559
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.108556,
+              -0.152677,
+              -0.069511
+            ],
+            "max": [
+              0.108556,
+              0.429277,
+              0.036049
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.046",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "teapot.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 698,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.91944,
+            0.619712,
+            0.614416
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.46992,
+              -0.309856,
+              0
+            ],
+            "max": [
+              0.44952,
+              0.309856,
+              0.614416
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.047",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tiny Treats - House Plants 1.0 FREE",
+      "author": "Isa Lousberg / Tiny Treats",
+      "license": "CC0-1.0",
+      "source": "assets/island/vendor/tinytreats-house-plants-1.0/SOURCE.json",
+      "models": [
+        {
+          "file": "cacti_plant_pot_small.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 792,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.990356,
+            0.990356,
+            0.852647
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.495178,
+              -0.495178,
+              0
+            ],
+            "max": [
+              0.495178,
+              0.495178,
+              0.852647
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.052",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "monstera_plant_medium_potted.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 3108,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2.023509,
+            2.223797,
+            2.038444
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.974028,
+              -1.2326,
+              0.000753
+            ],
+            "max": [
+              1.049481,
+              0.991197,
+              2.039196
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.054",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "pothos_plant_small_potted.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 1792,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.720933,
+            0.683293,
+            1.012305
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.473952,
+              -0.436311,
+              -0.218209
+            ],
+            "max": [
+              0.246981,
+              0.246982,
+              0.794095
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.058",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "pots_stacked.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 588,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.528445,
+            0.5,
+            0.784022
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.278446,
+              -0.25,
+              0.000401
+            ],
+            "max": [
+              0.25,
+              0.25,
+              0.784423
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.059",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "pot_A_medium.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 216,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1,
+            1,
+            0.7
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.5,
+              -0.5,
+              0.000753
+            ],
+            "max": [
+              0.5,
+              0.5,
+              0.700753
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.060",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "sansevieria_plant_medium_potted.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 936,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.207307,
+            0.974469,
+            2.243648
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.618004,
+              -0.487235,
+              0.000754
+            ],
+            "max": [
+              0.589303,
+              0.487235,
+              2.244401
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.065",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "shovel.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 296,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.34095,
+            0.195117,
+            0.831052
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.170472,
+              -0.091027,
+              -0.153509
+            ],
+            "max": [
+              0.170478,
+              0.10409,
+              0.677542
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.067",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "succulent_plant_pot_small.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 3386,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.990356,
+            0.990356,
+            0.502453
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.495178,
+              -0.495178,
+              0
+            ],
+            "max": [
+              0.495178,
+              0.495178,
+              0.502453
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.069",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        },
+        {
+          "file": "watering_can_A.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 630,
+          "materials": 1,
+          "materialNames": [
+            "tiny_treats_1"
+          ],
+          "images": [
+            "tiny_treats_texture_1.png"
+          ],
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.9,
+            0.6,
+            0.75
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.297573,
+              -0.3,
+              0.000798
+            ],
+            "max": [
+              0.602427,
+              0.3,
+              0.750798
+            ]
+          },
+          "sourceMaterialProperties": [
+            {
+              "name": "tiny_treats_1.070",
+              "baseColor": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1
+              ],
+              "roughness": 0.5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KayKit Furniture Bits 1.0",
+      "author": "Kay Lousberg / KayKit",
+      "license": "CC0-1.0",
+      "source": "assets/island/vendor/kaykit-furniture-bits-1.0/SOURCE.json",
+      "models": [
+        {
+          "file": "shelf_B_large.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 212,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2.0,
+            0.5000001,
+            0.4000007
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.0,
+              -0.5000001,
+              -0.1000004
+            ],
+            "max": [
+              1.0000001,
+              0.0,
+              0.3000003
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 212
+        },
+        {
+          "file": "table_medium_long.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 168,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            3.0,
+            2.0,
+            1.0
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.5,
+              -1.0,
+              -0.0
+            ],
+            "max": [
+              1.5,
+              1.0,
+              1.0
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 168
+        },
+        {
+          "file": "table_low.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 276,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2.4000001,
+            1.5,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.2,
+              -0.75,
+              0.0
+            ],
+            "max": [
+              1.2,
+              0.75,
+              0.5
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 276
+        },
+        {
+          "file": "chair_B_wood.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 384,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.75,
+            0.8451285,
+            1.2583259
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.3749847,
+              -0.3749999,
+              -0.0
+            ],
+            "max": [
+              0.3750153,
+              0.4701286,
+              1.2583259
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 384
+        },
+        {
+          "file": "chair_stool_wood.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 216,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.75,
+            0.75,
+            0.5
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.3749847,
+              -0.3749999,
+              -0.0
+            ],
+            "max": [
+              0.3750153,
+              0.3750001,
+              0.5
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 216
+        },
+        {
+          "file": "lamp_table.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 392,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.0,
+            1.0,
+            1.0216652
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.5,
+              -0.4999999,
+              -0.0016652
+            ],
+            "max": [
+              0.5,
+              0.5000001,
+              1.02
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 392
+        },
+        {
+          "file": "book_set.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 196,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.78,
+            0.3649999,
+            0.4999999
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.3899991,
+              -0.1875428,
+              -0.2499997
+            ],
+            "max": [
+              0.3900008,
+              0.1774571,
+              0.2500001
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 196
+        },
+        {
+          "file": "book_single.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 68,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.26,
+            0.3649999,
+            0.4999999
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.1299991,
+              -0.1875428,
+              -0.2499997
+            ],
+            "max": [
+              0.1300009,
+              0.1774571,
+              0.2500001
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 68
+        }
+      ]
+    },
+    {
+      "name": "KayKit Forest Nature Pack 1.0 FREE",
+      "author": "Kay Lousberg / KayKit",
+      "license": "CC0-1.0",
+      "source": "assets/island/vendor/kaykit-forest-nature-1.0/SOURCE.json",
+      "models": [
+        {
+          "file": "Tree_1_B_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 636,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            4.0068259,
+            3.4454873,
+            4.9296236
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.7895218,
+              -1.7227441,
+              -0.3410368
+            ],
+            "max": [
+              2.2173042,
+              1.7227432,
+              4.5885868
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 636
+        },
+        {
+          "file": "Tree_1_C_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 1364,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            6.6912956,
+            5.7533522,
+            7.8142505
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -2.7458048,
+              -2.876677,
+              -0.3923197
+            ],
+            "max": [
+              3.9454908,
+              2.8766754,
+              7.4219308
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 1364
+        },
+        {
+          "file": "Tree_3_A_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 978,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            3.0931983,
+            3.0931981,
+            3.5065975
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -1.5521193,
+              -1.5465989,
+              -0.261318
+            ],
+            "max": [
+              1.5410792,
+              1.5465991,
+              3.2452796
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 978
+        },
+        {
+          "file": "Tree_4_A_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 404,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            2.0073514,
+            2.0043533,
+            5.274395
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.960008,
+              -0.9846721,
+              -0.3421249
+            ],
+            "max": [
+              1.0473435,
+              1.0196812,
+              4.9322701
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 404
+        },
+        {
+          "file": "Rock_2_C_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 108,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            1.2952623,
+            1.2952622,
+            1.3262019
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.6476109,
+              -0.6476311,
+              4.05e-05
+            ],
+            "max": [
+              0.6476514,
+              0.6476311,
+              1.3262424
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 108
+        },
+        {
+          "file": "Rock_3_A_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 84,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.9562941,
+            0.8074788,
+            0.8588688
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.5295202,
+              -0.3925787,
+              -0.4653024
+            ],
+            "max": [
+              0.4267739,
+              0.4149001,
+              0.3935664
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 84
+        },
+        {
+          "file": "Grass_1_A_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 44,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.3392552,
+            0.1517701,
+            0.5593414
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.1696239,
+              -0.073386,
+              -0.02
+            ],
+            "max": [
+              0.1696312,
+              0.0783841,
+              0.5393414
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 44
+        },
+        {
+          "file": "Grass_2_A_Color1.gltf",
+          "format": "glTF 2.0 + external BIN/PNG",
+          "triangles": 44,
+          "materials": 1,
+          "animationClips": [],
+          "sourceDimensionsBlenderXYZ": [
+            0.1550248,
+            0.2536519,
+            0.9187565
+          ],
+          "sourceBoundsBlenderXYZ": {
+            "min": [
+              -0.0775063,
+              -0.0796046,
+              -0.0312668
+            ],
+            "max": [
+              0.0775185,
+              0.1740474,
+              0.8874897
+            ]
+          },
+          "importedMeshes": 1,
+          "importedTriangles": 44
+        }
+      ]
+    }
+  ],
+  "assetInstances": [
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_A.gltf",
+      "position": [
+        -4.32,
+        3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_B.gltf",
+      "position": [
+        0.0,
+        3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_C.gltf",
+      "position": [
+        4.32,
+        3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_D.gltf",
+      "position": [
+        -4.32,
+        0.0,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_E.gltf",
+      "position": [
+        0.0,
+        0.0,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_F.gltf",
+      "position": [
+        4.32,
+        0.0,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_G.gltf",
+      "position": [
+        -4.32,
+        -3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_H.gltf",
+      "position": [
+        0.0,
+        -3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "floor_grass_sliced_I.gltf",
+      "position": [
+        4.32,
+        -3.24,
+        -0.05
+      ],
+      "scale": [
+        2.16,
+        1.62,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "furniture",
+      "file": "shelf_B_large.gltf",
+      "position": [
+        -1.0,
+        1.91,
+        0.63
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Library"
+    },
+    {
+      "pack": "furniture",
+      "file": "shelf_B_large.gltf",
+      "position": [
+        -1.0,
+        1.91,
+        1.38
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Library"
+    },
+    {
+      "pack": "furniture",
+      "file": "shelf_B_large.gltf",
+      "position": [
+        -1.0,
+        1.91,
+        2.13
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Library"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_set.gltf",
+      "position": [
+        -1.6,
+        1.86,
+        0.74
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        0.015
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_set.gltf",
+      "position": [
+        -0.37,
+        1.86,
+        0.74
+      ],
+      "scale": [
+        0.61,
+        0.61,
+        0.61
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.025
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_set.gltf",
+      "position": [
+        -1.6,
+        1.86,
+        1.49
+      ],
+      "scale": [
+        0.66,
+        0.66,
+        0.66
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.02
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_set.gltf",
+      "position": [
+        -1.59,
+        1.86,
+        2.24
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "rotation": [
+        0,
+        0,
+        0.015
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_set.gltf",
+      "position": [
+        -0.53,
+        1.86,
+        2.24
+      ],
+      "scale": [
+        0.57,
+        0.57,
+        0.57
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.04
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_single.gltf",
+      "position": [
+        -0.94,
+        1.85,
+        1.49
+      ],
+      "scale": [
+        0.62,
+        0.74,
+        0.9
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Library_FeatureBook"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_single.gltf",
+      "position": [
+        -0.37,
+        1.87,
+        1.49
+      ],
+      "scale": [
+        0.22,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        1.5707963267948966,
+        0.04
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_single.gltf",
+      "position": [
+        -0.35,
+        1.88,
+        1.55
+      ],
+      "scale": [
+        0.22,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        1.5707963267948966,
+        -0.09
+      ],
+      "group": "Library_Books"
+    },
+    {
+      "pack": "plants",
+      "file": "pothos_plant_small_potted.gltf",
+      "position": [
+        0,
+        1.9,
+        3.145
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ],
+      "rotation": [
+        0,
+        0,
+        1.5707963267948966
+      ],
+      "group": "Library",
+      "sourceContactZ": 0
+    },
+    {
+      "pack": "furniture",
+      "file": "table_medium_long.gltf",
+      "position": [
+        -0.85,
+        0.2,
+        0.56
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Noticeboard"
+    },
+    {
+      "pack": "furniture",
+      "file": "chair_B_wood.gltf",
+      "position": [
+        -0.86,
+        1.13,
+        0.56
+      ],
+      "scale": [
+        0.79,
+        0.79,
+        0.79
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.1
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "furniture",
+      "file": "lamp_table.gltf",
+      "position": [
+        -0.1,
+        0.49,
+        1.28
+      ],
+      "scale": [
+        0.44,
+        0.44,
+        0.44
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Desk_Lamp"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_single.gltf",
+      "position": [
+        -1.47,
+        0.32,
+        1.28
+      ],
+      "scale": [
+        0.22,
+        0.76,
+        0.76
+      ],
+      "rotation": [
+        0,
+        1.5707963267948966,
+        0.12
+      ],
+      "group": "Noticeboard"
+    },
+    {
+      "pack": "furniture",
+      "file": "book_single.gltf",
+      "position": [
+        -1.45,
+        0.34,
+        1.338
+      ],
+      "scale": [
+        0.22,
+        0.76,
+        0.76
+      ],
+      "rotation": [
+        0,
+        1.5707963267948966,
+        -0.12
+      ],
+      "group": "Noticeboard"
+    },
+    {
+      "pack": "picnic",
+      "file": "mug.gltf",
+      "position": [
+        -0.27,
+        -0.18,
+        1.301
+      ],
+      "scale": [
+        0.46,
+        0.46,
+        0.46
+      ],
+      "rotation": [
+        0,
+        0,
+        0.36
+      ],
+      "group": "Noticeboard"
+    },
+    {
+      "pack": "plants",
+      "file": "cacti_plant_pot_small.gltf",
+      "position": [
+        -1.64,
+        0.66,
+        1.28
+      ],
+      "scale": [
+        0.28,
+        0.28,
+        0.28
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Noticeboard"
+    },
+    {
+      "pack": "furniture",
+      "file": "chair_stool_wood.gltf",
+      "position": [
+        -1.0,
+        -2.48,
+        0.45
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        1.1
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "plants",
+      "file": "pot_A_medium.gltf",
+      "position": [
+        -1.0,
+        -2.48,
+        1.0
+      ],
+      "scale": [
+        0.56,
+        0.56,
+        0.56
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -1.11,
+        -2.44,
+        1.58
+      ],
+      "scale": [
+        0.78,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -0.92,
+        -2.5,
+        1.65
+      ],
+      "scale": [
+        0.78,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        0,
+        0.7
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -0.98,
+        -2.35,
+        1.6
+      ],
+      "scale": [
+        0.78,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        0,
+        1.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "plants",
+      "file": "watering_can_A.gltf",
+      "position": [
+        5.060400009155273,
+        -2.460322390784668,
+        0.9133634003048096
+      ],
+      "scale": [
+        0.38,
+        0.38,
+        0.38
+      ],
+      "rotation": [
+        0,
+        0,
+        -1.5707963267948966
+      ],
+      "group": "Rabbit_WateringCan"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        4.575,
+        -3.4000000000000004,
+        0.75
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        4.51,
+        -3.365,
+        0.55
+      ],
+      "scale": [
+        0.31,
+        0.31,
+        0.31
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        4.815,
+        -3.0100000000000002,
+        0.78
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        0.65
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        4.75,
+        -2.975,
+        0.55
+      ],
+      "scale": [
+        0.31,
+        0.31,
+        0.31
+      ],
+      "rotation": [
+        0,
+        0,
+        0.45
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.085,
+        -3.3200000000000003,
+        0.8200000000000001
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        1.3
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        5.02,
+        -3.285,
+        0.55
+      ],
+      "scale": [
+        0.31,
+        0.31,
+        0.31
+      ],
+      "rotation": [
+        0,
+        0,
+        0.9
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        5.335000000000001,
+        -2.99,
+        0.75
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        1.9500000000000002
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        5.2700000000000005,
+        -2.955,
+        0.55
+      ],
+      "scale": [
+        0.31,
+        0.31,
+        0.31
+      ],
+      "rotation": [
+        0,
+        0,
+        1.35
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.555000000000001,
+        -3.3600000000000003,
+        0.79
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        2.6
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        5.49,
+        -3.325,
+        0.55
+      ],
+      "scale": [
+        0.31,
+        0.31,
+        0.31
+      ],
+      "rotation": [
+        0,
+        0,
+        1.8
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "fountain.gltf",
+      "position": [
+        2.65,
+        -1.35,
+        0.45
+      ],
+      "scale": [
+        0.71,
+        0.71,
+        0.71
+      ],
+      "rotation": [
+        0,
+        0,
+        0.05
+      ],
+      "group": "Categories"
+    },
+    {
+      "pack": "park",
+      "file": "bench.gltf",
+      "position": [
+        -4.45,
+        0.12,
+        0.45
+      ],
+      "scale": [
+        1.03,
+        1.03,
+        1.03
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.22
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bench.gltf",
+      "position": [
+        2.1,
+        2.65,
+        0.45
+      ],
+      "scale": [
+        0.86,
+        0.86,
+        0.86
+      ],
+      "rotation": [
+        0,
+        0,
+        0.02
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "street_lantern.gltf",
+      "position": [
+        -4.8,
+        1.45,
+        0.45
+      ],
+      "scale": [
+        0.69,
+        0.69,
+        0.69
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "street_lantern.gltf",
+      "position": [
+        3.02,
+        2.75,
+        0.45
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "furniture",
+      "file": "table_low.gltf",
+      "position": [
+        4.13,
+        1.04,
+        0.45
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "monstera_plant_medium_potted.gltf",
+      "position": [
+        5.02,
+        2.3,
+        0.45
+      ],
+      "scale": [
+        0.76,
+        0.76,
+        0.76
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.1
+      ],
+      "group": "Plants_Monstera",
+      "sourceContactZ": 0
+    },
+    {
+      "pack": "plants",
+      "file": "sansevieria_plant_medium_potted.gltf",
+      "position": [
+        3.05,
+        1.86,
+        0.45
+      ],
+      "scale": [
+        0.72,
+        0.72,
+        0.72
+      ],
+      "rotation": [
+        0,
+        0,
+        0.14
+      ],
+      "group": "Plants_Sansevieria",
+      "sourceContactZ": 0
+    },
+    {
+      "pack": "plants",
+      "file": "pothos_plant_small_potted.gltf",
+      "position": [
+        4.94,
+        0.56,
+        0.85
+      ],
+      "scale": [
+        0.61,
+        0.61,
+        0.61
+      ],
+      "rotation": [
+        0,
+        0,
+        1.5707963267948966
+      ],
+      "group": "Plants_Pothos",
+      "sourceContactZ": 0
+    },
+    {
+      "pack": "plants",
+      "file": "succulent_plant_pot_small.gltf",
+      "position": [
+        3.7,
+        1.05,
+        0.85
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "cacti_plant_pot_small.gltf",
+      "position": [
+        4.05,
+        0.67,
+        0.85
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "watering_can_A.gltf",
+      "position": [
+        3.29,
+        0.35,
+        0.45
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ],
+      "rotation": [
+        0,
+        0,
+        0.4
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "pots_stacked.gltf",
+      "position": [
+        4.95,
+        0.3,
+        0.45
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "shovel.gltf",
+      "position": [
+        4.77,
+        0.28,
+        0.45
+      ],
+      "scale": [
+        0.58,
+        0.58,
+        0.58
+      ],
+      "rotation": [
+        3.141592653589793,
+        0.22,
+        -0.22
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "plants",
+      "file": "pot_A_medium.gltf",
+      "position": [
+        3.64,
+        0.28,
+        0.45
+      ],
+      "scale": [
+        0.27,
+        0.27,
+        0.27
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Tags"
+    },
+    {
+      "pack": "picnic",
+      "file": "picnic_blanket_green.gltf",
+      "position": [
+        -3.55,
+        -2.82,
+        0.465
+      ],
+      "scale": [
+        0.46,
+        0.46,
+        0.46
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.12
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "pillow_large_green.gltf",
+      "position": [
+        -4.27,
+        -2.54,
+        0.535
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "rotation": [
+        1.28,
+        0,
+        0.14
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "pillow_small_blue.gltf",
+      "position": [
+        -3.01,
+        -3.35,
+        0.535
+      ],
+      "scale": [
+        0.48,
+        0.48,
+        0.48
+      ],
+      "rotation": [
+        1.38,
+        0,
+        -0.17
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "picnic_basket_square.gltf",
+      "position": [
+        -4.65,
+        -3.27,
+        0.46
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "rotation": [
+        0,
+        0,
+        0.08
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "serving_tray_round.gltf",
+      "position": [
+        -3.52,
+        -2.55,
+        0.54
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "teapot.gltf",
+      "position": [
+        -3.57,
+        -2.54,
+        0.603
+      ],
+      "scale": [
+        0.48,
+        0.48,
+        0.48
+      ],
+      "rotation": [
+        0,
+        0,
+        0.18
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "mug.gltf",
+      "position": [
+        -3.03,
+        -2.64,
+        0.54
+      ],
+      "scale": [
+        0.47,
+        0.47,
+        0.47
+      ],
+      "rotation": [
+        0,
+        0,
+        0.3
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "grapes_bowl.gltf",
+      "position": [
+        -3.92,
+        -2.94,
+        0.54
+      ],
+      "scale": [
+        0.67,
+        0.67,
+        0.67
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "plate_A.gltf",
+      "position": [
+        -3.25,
+        -3.04,
+        0.54
+      ],
+      "scale": [
+        0.55,
+        0.55,
+        0.55
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "sandwich.gltf",
+      "position": [
+        -3.25,
+        -3.04,
+        0.595
+      ],
+      "scale": [
+        0.46,
+        0.46,
+        0.46
+      ],
+      "rotation": [
+        0,
+        0,
+        0.13
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "spoon.gltf",
+      "position": [
+        -3.23,
+        -2.51,
+        0.54
+      ],
+      "scale": [
+        0.42,
+        0.42,
+        0.42
+      ],
+      "rotation": [
+        0,
+        0,
+        0.32
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "furniture",
+      "file": "chair_stool_wood.gltf",
+      "position": [
+        -4.62,
+        -1.76,
+        0.45
+      ],
+      "scale": [
+        0.58,
+        0.58,
+        0.58
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "picnic",
+      "file": "radio.gltf",
+      "position": [
+        -4.62,
+        -1.76,
+        0.74
+      ],
+      "scale": [
+        0.78,
+        0.78,
+        0.78
+      ],
+      "rotation": [
+        0,
+        0,
+        0.12
+      ],
+      "group": "Radio"
+    },
+    {
+      "pack": "forest",
+      "file": "Tree_1_C_Color1.gltf",
+      "position": [
+        -4.45,
+        2.95,
+        0.45
+      ],
+      "scale": [
+        0.53,
+        0.53,
+        0.53
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.16
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Tree_3_A_Color1.gltf",
+      "position": [
+        -5.1,
+        -1.13,
+        0.45
+      ],
+      "scale": [
+        0.71,
+        0.71,
+        0.71
+      ],
+      "rotation": [
+        0,
+        0,
+        0.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Tree_4_A_Color1.gltf",
+      "position": [
+        0.83,
+        3.65,
+        0.45
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.18
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Tree_1_B_Color1.gltf",
+      "position": [
+        4.28,
+        3.19,
+        0.45
+      ],
+      "scale": [
+        0.86,
+        0.86,
+        0.86
+      ],
+      "rotation": [
+        0,
+        0,
+        0.47
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "tree.gltf",
+      "position": [
+        -2.95,
+        3.58,
+        0.45
+      ],
+      "scale": [
+        0.66,
+        0.66,
+        0.66
+      ],
+      "rotation": [
+        0,
+        0,
+        0.2
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "hedge_straight_long.gltf",
+      "position": [
+        -2.5,
+        3.85,
+        0.45
+      ],
+      "scale": [
+        0.7,
+        0.44,
+        0.49
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "hedge_straight_long.gltf",
+      "position": [
+        2.05,
+        3.97,
+        0.45
+      ],
+      "scale": [
+        0.62,
+        0.46,
+        0.5
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "hedge_straight.gltf",
+      "position": [
+        -5.55,
+        1.47,
+        0.45
+      ],
+      "scale": [
+        0.62,
+        0.45,
+        0.45
+      ],
+      "rotation": [
+        0,
+        0,
+        1.5707963267948966
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "hedge_straight.gltf",
+      "position": [
+        5.6,
+        1.57,
+        0.45
+      ],
+      "scale": [
+        0.65,
+        0.42,
+        0.46
+      ],
+      "rotation": [
+        0,
+        0,
+        1.5707963267948966
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        0.02,
+        -3.82,
+        0.46
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.1
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        -0.2,
+        -3.14,
+        0.46
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        0.16
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        -0.15,
+        -2.48,
+        0.46
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        0.22,
+        -1.84,
+        0.46
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.16
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        0.48,
+        -1.08,
+        0.46
+      ],
+      "scale": [
+        0.62,
+        0.62,
+        0.62
+      ],
+      "rotation": [
+        0,
+        0,
+        0.15
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        0.75,
+        -0.3,
+        0.46
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.1
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        1.0,
+        0.56,
+        0.46
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.18
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        1.35,
+        1.27,
+        0.46
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        0.05
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        1.53,
+        1.99,
+        0.46
+      ],
+      "scale": [
+        0.56,
+        0.56,
+        0.56
+      ],
+      "rotation": [
+        0,
+        0,
+        0.13
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        1.15,
+        -2.58,
+        0.46
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.05
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        1.96,
+        -2.83,
+        0.46
+      ],
+      "scale": [
+        0.67,
+        0.67,
+        0.67
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.13
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        3.0,
+        -2.96,
+        0.46
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "rotation": [
+        0,
+        0,
+        0.1
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        -1.15,
+        -3.33,
+        0.46
+      ],
+      "scale": [
+        0.58,
+        0.58,
+        0.58
+      ],
+      "rotation": [
+        0,
+        0,
+        0.13
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "cobble_stones.gltf",
+      "position": [
+        -2.1,
+        -3.63,
+        0.46
+      ],
+      "scale": [
+        0.56,
+        0.56,
+        0.56
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.2
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -5.038806466556119,
+        -3.96056746679817,
+        0.48
+      ],
+      "scale": [
+        0.7190105546128829,
+        0.7190105546128829,
+        0.7190105546128829
+      ],
+      "rotation": [
+        0,
+        0,
+        4.017637065087458
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -4.962141167399348,
+        -3.5506654181654547,
+        0.48
+      ],
+      "scale": [
+        0.8636118154722481,
+        0.8636118154722481,
+        0.8636118154722481
+      ],
+      "rotation": [
+        0,
+        0,
+        1.402474430341393
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -4.992742928225342,
+        -3.9799718983385275,
+        0.48
+      ],
+      "scale": [
+        0.7718918550866973,
+        0.7718918550866973,
+        0.7718918550866973
+      ],
+      "rotation": [
+        0,
+        0,
+        5.60572955116892
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -4.911850474359534,
+        -3.9276177479045407,
+        0.48
+      ],
+      "scale": [
+        0.8019279037172105,
+        0.8019279037172105,
+        0.8019279037172105
+      ],
+      "rotation": [
+        0,
+        0,
+        0.18722145136808954
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -4.922155834898873,
+        -3.931850606590221,
+        0.48
+      ],
+      "scale": [
+        0.8539583976006283,
+        0.8539583976006283,
+        0.8539583976006283
+      ],
+      "rotation": [
+        0,
+        0,
+        0.16673041482941486
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        -4.91,
+        -3.77,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        -5.21,
+        -4.03,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -1.8152696513283657,
+        -3.8676404101728554,
+        0.48
+      ],
+      "scale": [
+        0.8321356461953271,
+        0.8321356461953271,
+        0.8321356461953271
+      ],
+      "rotation": [
+        0,
+        0,
+        3.4239683041988207
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -1.7189331783663844,
+        -3.8427229123684157,
+        0.48
+      ],
+      "scale": [
+        0.9100949306598108,
+        0.9100949306598108,
+        0.9100949306598108
+      ],
+      "rotation": [
+        0,
+        0,
+        5.085801552581783
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -1.7690135255452266,
+        -3.9850557932202513,
+        0.48
+      ],
+      "scale": [
+        0.6759726199322413,
+        0.6759726199322413,
+        0.6759726199322413
+      ],
+      "rotation": [
+        0,
+        0,
+        4.3865391889532726
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -1.5739731484042314,
+        -3.8802315285869375,
+        0.48
+      ],
+      "scale": [
+        0.6533885036168532,
+        0.6533885036168532,
+        0.6533885036168532
+      ],
+      "rotation": [
+        0,
+        0,
+        6.01434711112988
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -1.4069042991658578,
+        -3.6222477576010053,
+        0.48
+      ],
+      "scale": [
+        0.8373413712920807,
+        0.8373413712920807,
+        0.8373413712920807
+      ],
+      "rotation": [
+        0,
+        0,
+        0.6076869178836652
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        -1.6,
+        -3.6599999999999997,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.2
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        -1.9,
+        -3.92,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        0.7
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.2825387093205165,
+        -4.01328953505888,
+        0.48
+      ],
+      "scale": [
+        0.8130421129236922,
+        0.8130421129236922,
+        0.8130421129236922
+      ],
+      "rotation": [
+        0,
+        0,
+        5.071336507646816
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        1.329258699892724,
+        -3.765455146098507,
+        0.48
+      ],
+      "scale": [
+        0.8187346272583618,
+        0.8187346272583618,
+        0.8187346272583618
+      ],
+      "rotation": [
+        0,
+        0,
+        6.11426667042002
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.2983778507543526,
+        -3.957249519910026,
+        0.48
+      ],
+      "scale": [
+        0.9302144841118798,
+        0.9302144841118798,
+        0.9302144841118798
+      ],
+      "rotation": [
+        0,
+        0,
+        5.211303200140635
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        0.9308070456844882,
+        -3.8716446242786633,
+        0.48
+      ],
+      "scale": [
+        0.6364967781160384,
+        0.6364967781160384,
+        0.6364967781160384
+      ],
+      "rotation": [
+        0,
+        0,
+        3.6276105161459014
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.1960232169394143,
+        -3.6253591718655334,
+        0.48
+      ],
+      "scale": [
+        0.6487251116925059,
+        0.6487251116925059,
+        0.6487251116925059
+      ],
+      "rotation": [
+        0,
+        0,
+        1.4319270971053624
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        1.2999999999999998,
+        -3.56,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        1.0,
+        -3.8200000000000003,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        1.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.954577924011385,
+        -1.1078271420700778,
+        0.48
+      ],
+      "scale": [
+        0.7200704971196331,
+        0.7200704971196331,
+        0.7200704971196331
+      ],
+      "rotation": [
+        0,
+        0,
+        1.4626682768289376
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        5.849162733715126,
+        -1.2653738707274775,
+        0.48
+      ],
+      "scale": [
+        0.7532651481620778,
+        0.7532651481620778,
+        0.7532651481620778
+      ],
+      "rotation": [
+        0,
+        0,
+        3.9941231602047
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.978222037096866,
+        -1.0414790011144337,
+        0.48
+      ],
+      "scale": [
+        0.9571956515764979,
+        0.9571956515764979,
+        0.9571956515764979
+      ],
+      "rotation": [
+        0,
+        0,
+        1.3163714974942329
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        5.797080562451513,
+        -1.3551029114764064,
+        0.48
+      ],
+      "scale": [
+        0.6816099133513149,
+        0.6816099133513149,
+        0.6816099133513149
+      ],
+      "rotation": [
+        0,
+        0,
+        4.071726411113859
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.941025067378665,
+        -1.218039670257359,
+        0.48
+      ],
+      "scale": [
+        0.7566039590327531,
+        0.7566039590327531,
+        0.7566039590327531
+      ],
+      "rotation": [
+        0,
+        0,
+        4.581238783952533
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        6.07,
+        -0.97,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.6000000000000001
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        5.7700000000000005,
+        -1.23,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        2.0999999999999996
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.363762279159721,
+        0.07063461077437318,
+        0.48
+      ],
+      "scale": [
+        0.8205019077588727,
+        0.8205019077588727,
+        0.8205019077588727
+      ],
+      "rotation": [
+        0,
+        0,
+        6.217358577830969
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        4.91515907339082,
+        -0.2654501257405951,
+        0.48
+      ],
+      "scale": [
+        0.8993599681566481,
+        0.8993599681566481,
+        0.8993599681566481
+      ],
+      "rotation": [
+        0,
+        0,
+        4.301558202905338
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.071938272735797,
+        0.10463834581441203,
+        0.48
+      ],
+      "scale": [
+        0.7335630973012695,
+        0.7335630973012695,
+        0.7335630973012695
+      ],
+      "rotation": [
+        0,
+        0,
+        1.439151480402673
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        5.059204067785284,
+        0.18644977721336567,
+        0.48
+      ],
+      "scale": [
+        0.9594474971606195,
+        0.9594474971606195,
+        0.9594474971606195
+      ],
+      "rotation": [
+        0,
+        0,
+        1.6822655380619274
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        5.173230749056501,
+        -0.011471687373859951,
+        0.48
+      ],
+      "scale": [
+        0.8559579195061569,
+        0.8559579195061569,
+        0.8559579195061569
+      ],
+      "rotation": [
+        0,
+        0,
+        5.506380194340921
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        5.19,
+        0.27,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.8
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        4.890000000000001,
+        0.009999999999999995,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        2.8
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -3.5044387523479763,
+        3.3742168412237037,
+        0.48
+      ],
+      "scale": [
+        0.7851866669314636,
+        0.7851866669314636,
+        0.7851866669314636
+      ],
+      "rotation": [
+        0,
+        0,
+        2.4858285477958932
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -3.209670425060225,
+        3.2431311562003065,
+        0.48
+      ],
+      "scale": [
+        0.8220925282987342,
+        0.8220925282987342,
+        0.8220925282987342
+      ],
+      "rotation": [
+        0,
+        0,
+        1.6642911703038457
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -3.2196353118067345,
+        3.384739715036589,
+        0.48
+      ],
+      "scale": [
+        0.9432162380968917,
+        0.9432162380968917,
+        0.9432162380968917
+      ],
+      "rotation": [
+        0,
+        0,
+        1.6508542142560376
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -3.2743178997949025,
+        3.1944239946913435,
+        0.48
+      ],
+      "scale": [
+        0.9791135383382397,
+        0.9791135383382397,
+        0.9791135383382397
+      ],
+      "rotation": [
+        0,
+        0,
+        2.509507385578249
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -3.2381135767262483,
+        3.137715965706205,
+        0.48
+      ],
+      "scale": [
+        0.6369618951529045,
+        0.6369618951529045,
+        0.6369618951529045
+      ],
+      "rotation": [
+        0,
+        0,
+        3.2014481220496327
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        -3.08,
+        3.3200000000000003,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        1.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        -3.3800000000000003,
+        3.06,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        3.5
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.6840476907296367,
+        3.381575301507289,
+        0.48
+      ],
+      "scale": [
+        0.905148571170667,
+        0.905148571170667,
+        0.905148571170667
+      ],
+      "rotation": [
+        0,
+        0,
+        0.6889458047642808
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        1.4786896134014345,
+        3.2413416282536978,
+        0.48
+      ],
+      "scale": [
+        0.7573829431423532,
+        0.7573829431423532,
+        0.7573829431423532
+      ],
+      "rotation": [
+        0,
+        0,
+        2.6525093006751965
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.7010037481876343,
+        3.2251005512643656,
+        0.48
+      ],
+      "scale": [
+        0.9695882159409025,
+        0.9695882159409025,
+        0.9695882159409025
+      ],
+      "rotation": [
+        0,
+        0,
+        6.258815220492026
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        1.5027973809679283,
+        3.226652077987045,
+        0.48
+      ],
+      "scale": [
+        0.87945985496967,
+        0.87945985496967,
+        0.87945985496967
+      ],
+      "rotation": [
+        0,
+        0,
+        5.408438377798218
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        1.4151093823348813,
+        3.0444482136081845,
+        0.48
+      ],
+      "scale": [
+        0.7160570683829154,
+        0.7160570683829154,
+        0.7160570683829154
+      ],
+      "rotation": [
+        0,
+        0,
+        4.283312574419749
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_1_A_Color1.gltf",
+      "position": [
+        1.62,
+        3.41,
+        0.45
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        1.2000000000000002
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Grass_2_A_Color1.gltf",
+      "position": [
+        1.32,
+        3.15,
+        0.45
+      ],
+      "scale": [
+        0.52,
+        0.52,
+        0.52
+      ],
+      "rotation": [
+        0,
+        0,
+        4.199999999999999
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_2_C_Color1.gltf",
+      "position": [
+        -5.46,
+        -2.85,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -5.08,
+        2.18,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "rotation": [
+        0,
+        0,
+        0.61
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_2_C_Color1.gltf",
+      "position": [
+        -3.08,
+        3.95,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        1.22
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        1.92,
+        3.72,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        1.83
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_2_C_Color1.gltf",
+      "position": [
+        5.3,
+        2.7,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ],
+      "rotation": [
+        0,
+        0,
+        2.44
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        5.98,
+        -2.28,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.49,
+        0.49,
+        0.49
+      ],
+      "rotation": [
+        0,
+        0,
+        3.05
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_2_C_Color1.gltf",
+      "position": [
+        3.72,
+        -3.63,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "rotation": [
+        0,
+        0,
+        3.66
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        1.52,
+        -4.0,
+        0.41500000000000004
+      ],
+      "scale": [
+        0.48,
+        0.48,
+        0.48
+      ],
+      "rotation": [
+        0,
+        0,
+        4.27
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bush_large.gltf",
+      "position": [
+        -5.38,
+        2.88,
+        0.45
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "rotation": [
+        0,
+        0,
+        0.0
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bush_large.gltf",
+      "position": [
+        -3.52,
+        3.54,
+        0.45
+      ],
+      "scale": [
+        0.61,
+        0.61,
+        0.61
+      ],
+      "rotation": [
+        0,
+        0,
+        0.36
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bush_large.gltf",
+      "position": [
+        4.9,
+        2.94,
+        0.45
+      ],
+      "scale": [
+        0.68,
+        0.68,
+        0.68
+      ],
+      "rotation": [
+        0,
+        0,
+        0.72
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bush_large.gltf",
+      "position": [
+        5.85,
+        -1.7,
+        0.45
+      ],
+      "scale": [
+        0.48,
+        0.48,
+        0.48
+      ],
+      "rotation": [
+        0,
+        0,
+        1.08
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "bird.gltf",
+      "position": [
+        3.42,
+        -2.25,
+        0.79
+      ],
+      "scale": [
+        0.77,
+        0.77,
+        0.77
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.35
+      ],
+      "group": "GardenBird_0"
+    },
+    {
+      "pack": "park",
+      "file": "bird.gltf",
+      "position": [
+        1.66,
+        -3.1,
+        0.45
+      ],
+      "scale": [
+        0.84,
+        0.84,
+        0.84
+      ],
+      "rotation": [
+        0,
+        0,
+        0.2
+      ],
+      "group": "GardenBird_1"
+    },
+    {
+      "pack": "park",
+      "file": "bird.gltf",
+      "position": [
+        -4.6,
+        0.12,
+        1.13
+      ],
+      "scale": [
+        0.73,
+        0.73,
+        0.73
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.2
+      ],
+      "group": "GardenBird_2"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        6.326632341335578,
+        -0.8732009310012787,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        0.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        6.045588615829966,
+        -0.6837741527739917,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        1.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        5.623501310849676,
+        -0.7386595927122854,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        2.3
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        5.569883883876801,
+        -1.105201630554534,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        3.8
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        6.111462168659163,
+        -1.1785327570444413,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        5.2
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "grass_B.gltf",
+      "position": [
+        6.03,
+        -1.0,
+        0.47000000000000003
+      ],
+      "scale": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "rotation": [
+        0,
+        0,
+        0.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        5.78,
+        -0.9099999999999999,
+        0.47500000000000003
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        6.01,
+        -1.04,
+        0.47500000000000003
+      ],
+      "scale": [
+        0.71,
+        0.71,
+        0.71
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.7
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -4.48398941023021,
+        -3.798149010186369,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        0.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -4.778104936922129,
+        -3.622753845161103,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        1.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -5.219824209575921,
+        -3.67357369695582,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        2.3
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -5.275935470361487,
+        -4.012964472735679,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        3.8
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "forest",
+      "file": "Rock_3_A_Color1.gltf",
+      "position": [
+        -4.70916749791483,
+        -4.080863663930038,
+        0.45
+      ],
+      "scale": [
+        0.15,
+        0.18,
+        0.07
+      ],
+      "rotation": [
+        0,
+        0,
+        5.2
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "grass_B.gltf",
+      "position": [
+        -4.8,
+        -3.92,
+        0.47000000000000003
+      ],
+      "scale": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "rotation": [
+        0,
+        0,
+        0.25
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_A.gltf",
+      "position": [
+        -5.05,
+        -3.83,
+        0.47500000000000003
+      ],
+      "scale": [
+        0.63,
+        0.63,
+        0.63
+      ],
+      "rotation": [
+        0,
+        0,
+        0.4
+      ],
+      "group": "Environment"
+    },
+    {
+      "pack": "park",
+      "file": "flower_B.gltf",
+      "position": [
+        -4.82,
+        -3.96,
+        0.47500000000000003
+      ],
+      "scale": [
+        0.71,
+        0.71,
+        0.71
+      ],
+      "rotation": [
+        0,
+        0,
+        -0.7
+      ],
+      "group": "Environment"
+    }
+  ],
+  "bytes": 4899572,
+  "triangles": 135718,
+  "meshes": 114,
+  "drawCalls": 116,
+  "materials": 41,
+  "textures": 15,
+  "animations": [
+    {
+      "name": "Idle",
+      "channels": 8
+    },
+    {
+      "name": "Attention",
+      "channels": 2
+    },
+    {
+      "name": "Wave",
+      "channels": 6
+    }
+  ],
+  "coordinates": {
+    "Blender": "Z up, front -Y",
+    "Three": "Y up, front +Z",
+    "groundHeight": 0.45,
+    "overviewEye": [
+      9,
+      12,
+      15
+    ],
+    "overviewTarget": [
+      0,
+      1.55,
+      0
+    ],
+    "footprint": [
+      12.96,
+      9.72
+    ]
+  },
+  "originalGeometry": [
+    "Ferris bear, glasses, sprout, book, stool and character animation",
+    "reference-led Dog and Rabbit plush friends with packed cloth detail",
+    "joining deck boards, bookshelf frame and dowels, open journal and pencil, coaster, planted soil pockets and connected light cable"
+  ],
+  "characterReferences": [
+    {
+      "file": "assets/island/references/dog-plush.jpg",
+      "sha256": "ccbb00dde64b28ac1687e5a1cb02ca51603f0ccdae30b94510184b379cb28506",
+      "use": "User-provided visual reference for original geometry; not embedded in the runtime asset"
+    },
+    {
+      "file": "assets/island/references/rabbit-plush.jpg",
+      "sha256": "e2b29c334b06af5738768d971adff1ac0aae5ad90f7518355be3629b35fd7e3a",
+      "use": "User-provided visual reference for original geometry; not embedded in the runtime asset"
+    }
+  ],
+  "interactionPivots": [
+    {
+      "name": "Bear_Book",
+      "parent": "Bear_Body",
+      "positionThree": [
+        -2.64672,
+        1.045,
+        2.0404
+      ],
+      "role": "Mixer-owned held book, coordinated with both hands"
+    },
+    {
+      "name": "Bear_Book_Page",
+      "parent": "Bear_Book",
+      "positionThree": [
+        -2.63166,
+        1.03469,
+        2.20729
+      ],
+      "role": "Mixer-owned reading page; local Three +Z raises the right leaf"
+    },
+    {
+      "name": "Library_Books",
+      "parent": "Library",
+      "positionThree": [
+        -1.0,
+        1.49,
+        -1.85
+      ],
+      "role": ""
+    },
+    {
+      "name": "Library_FeatureBook",
+      "parent": "Library_Books",
+      "positionThree": [
+        -0.94,
+        1.49,
+        -1.85
+      ],
+      "role": "pull toward Three local +Z by <=0.16, then return"
+    },
+    {
+      "name": "Desk_Lamp",
+      "parent": "Noticeboard",
+      "positionThree": [
+        -0.1,
+        1.28,
+        -0.49
+      ],
+      "role": ""
+    },
+    {
+      "name": "Desk_OpenBook",
+      "parent": "Noticeboard",
+      "positionThree": [
+        -0.91,
+        1.31,
+        0.18
+      ],
+      "role": ""
+    },
+    {
+      "name": "Desk_Page",
+      "parent": "Desk_OpenBook",
+      "positionThree": [
+        -0.91,
+        1.335,
+        0.18
+      ],
+      "role": "right page hinge: Three local Z, positive up to 1.05 rad"
+    },
+    {
+      "name": "Dog",
+      "parent": null,
+      "positionThree": [
+        -1.05,
+        0.45,
+        1.55
+      ],
+      "role": ""
+    },
+    {
+      "name": "Rabbit",
+      "parent": null,
+      "positionThree": [
+        4.65,
+        0.45,
+        2.1
+      ],
+      "role": ""
+    },
+    {
+      "name": "Rabbit_WateringCanGrip",
+      "parent": "Rabbit_Arm_R",
+      "positionThree": [
+        5.0604,
+        1.1916,
+        2.4024
+      ],
+      "role": ""
+    },
+    {
+      "name": "Dog_FlowerAnchor",
+      "parent": "Environment",
+      "positionThree": [
+        -1.0,
+        1.68,
+        2.39
+      ],
+      "role": "fixed flower crown for host sniffing"
+    },
+    {
+      "name": "Rabbit_WateringCan",
+      "parent": "Rabbit_WateringCanGrip",
+      "positionThree": [
+        5.0604,
+        1.1916,
+        2.4024
+      ],
+      "role": "Three local -Z tilt about hand grip, -0.95 rad points the real nozzle downward",
+      "pour_axis": "z",
+      "pour_angle": -0.95
+    },
+    {
+      "name": "Rabbit_WaterNozzleAnchor",
+      "parent": "Rabbit_WateringCan",
+      "positionThree": [
+        5.0604,
+        1.06904,
+        2.62702
+      ],
+      "role": "measured nozzle face centre; follows can and hand",
+      "flow_axis": [
+        -3.756256816700443e-08,
+        0.5114191770553589,
+        0.8593313694000244
+      ]
+    },
+    {
+      "name": "Rabbit_WaterTargetAnchor",
+      "parent": "Environment",
+      "positionThree": [
+        5.04,
+        0.562,
+        3.07
+      ],
+      "role": "fixed nursery soil surface; water lands here"
+    },
+    {
+      "name": "Fountain_WaterAnchor",
+      "parent": "Categories",
+      "positionThree": [
+        2.65,
+        1.4691,
+        1.35
+      ],
+      "role": "upper water surface; Three +Y up; jets remain within 1.08 radius"
+    },
+    {
+      "name": "Fountain_BasinAnchor",
+      "parent": "Categories",
+      "positionThree": [
+        2.65,
+        0.805,
+        1.35
+      ],
+      "role": "lower water surface; add .005 for ripples"
+    },
+    {
+      "name": "Plants_Monstera",
+      "parent": "Tags",
+      "positionThree": [
+        5.02,
+        0.45,
+        -2.3
+      ],
+      "role": ""
+    },
+    {
+      "name": "Plants_Monstera_Foliage",
+      "parent": "Plants_Monstera",
+      "positionThree": [
+        5.00063,
+        0.8756,
+        -2.39414
+      ],
+      "role": "foliage-only"
+    },
+    {
+      "name": "Plants_Sansevieria",
+      "parent": "Tags",
+      "positionThree": [
+        3.05,
+        0.45,
+        -1.86
+      ],
+      "role": ""
+    },
+    {
+      "name": "Plants_Sansevieria_Foliage",
+      "parent": "Plants_Sansevieria",
+      "positionThree": [
+        3.06023,
+        0.846,
+        -1.86144
+      ],
+      "role": "foliage-only"
+    },
+    {
+      "name": "Plants_Pothos",
+      "parent": "Tags",
+      "positionThree": [
+        4.94,
+        0.85,
+        -0.56
+      ],
+      "role": ""
+    },
+    {
+      "name": "Plants_Pothos_Foliage",
+      "parent": "Plants_Pothos",
+      "positionThree": [
+        4.88225,
+        1.033,
+        -0.62923
+      ],
+      "role": "foliage-only"
+    },
+    {
+      "name": "Radio",
+      "parent": "Mailbox",
+      "positionThree": [
+        -4.62,
+        0.74,
+        1.76
+      ],
+      "role": ""
+    },
+    {
+      "name": "Radio_NoteAnchor",
+      "parent": "Mailbox",
+      "positionThree": [
+        -4.57,
+        1.43,
+        1.76
+      ],
+      "role": "note source; Three +Y up"
+    }
+  ],
+  "sourceLicense": "External assets CC0-1.0 by Isa Lousberg / Tiny Treats and Kay Lousberg / KayKit. Source packages, licenses, hashes and actual mesh origins are retained.",
+  "buildCommand": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python scripts/island/build_scene.py"
+}

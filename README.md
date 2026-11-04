@@ -1,11 +1,12 @@
-# Praxis
+# 未尽
 
 保持好奇，慢慢来。Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 GitHub Pages：<https://ferrisevans.github.io>
 
 ## 技术栈
 
 - **Astro 7** — 静态站点生成，内容用 Markdown 内容集合管理
-- **React islands** — 只为需要交互的组件提供客户端水合
+- **原生 Three.js** — 加载可编辑 Blender 小岛，场景发现内容，HTML 面板提供文章入口
+- **React islands** — 只为需要交互的阅读组件提供客户端水合
 - **Tailwind CSS v4** — 样式采用 CSS-first 配置，入口为 `src/styles/global.css`
 - **Animal Island UI 3** — 使用原库的卡片、飘带、标签、波浪分隔，以及 `naive-icons` 彩色图标；Astro 在构建期渲染这些 React 组件。默认鼠标使用上游原始 SVG，本地字体随组件库打包。
 - **Pagefind** — 构建期生成的静态全文搜索
@@ -15,9 +16,9 @@
 
 ## 页面结构
 
-- `/`：交互雨玻璃首页，提供书房与博客两个入口。
-- `/room/`：交互式书房，资源就绪后自动进入，电视独立控制播放。
-- `/lofi/`：文章首页；后续分页位于 `/page/<n>/`。
+- `/`：以交互式林间阅读庭院为主体的首页；先展示当前主题封面，再自动加载真实 3D。物件承担首页导航，打开真实内容面板。页面不再叠加普通文章列表与分类区；书架提供笔记目录与搜索，书桌提供最近更新与归档。
+- `/notes/`：简洁的笔记目录、搜索与归档入口、真实分类和精选；后续分页位于 `/notes/page/<n>/`。
+- `/island/`、`/room/`：兼容跳转到首页；`/lofi/`、`/page/<n>/` 跳转到对应笔记目录。启用 JavaScript 时保留查询参数与片段，无 JavaScript 时仍可通过静态跳转或链接到达新页。
 - `/posts/<slug>/`：文章详情、目录、评论与相关阅读。
 - `/categories/`、`/tags/`、`/archives/`：分类、标签与时间索引。
 - `/search/`：Pagefind 全文搜索。
@@ -28,7 +29,11 @@
 
 文章纸面最大 880px，桌面内边距 40px，正文约 798px；1440px 以下将旁侧目录折叠进正文，避免压缩阅读宽度。标题与正文使用原库自带的 Nunito / Noto Sans SC 字体，代码保留等宽与独立横向滚动，脚注使用较小字号；图片弹窗相对视口居中。Giscus 在 iframe 就绪与主题变化时同步颜色。
 
-3D 像素字体检查只针对书房固定 UI。文章标题、摘要、标签和草稿不参与子集检查；书房中的动态文章文字使用字体回退，新文章无需维护字体文件。
+首页与阅读页共用同一导航、页脚、品牌、Nunito / Noto Sans SC 字体及明暗主题。导航直接列出首页、笔记、分类、标签、归档、关于，品牌标志始终返回首页。3D 直接置于首页并自动加载，先用当前主题封面展示场景，再平滑切换为交互画面；无需另点“探索”或进入独立场景页。`/notes/` 与文章页仍不加载 3D。标题、简介、分类和标签保持为 HTML，新增中文标题无需修改模型或字体。正常首页以场景和可访问物件导航为主体；完整静态目录只作为加载中、无 JS 或失败时的阅读退路。
+
+「未尽」标识为原创的翻页书本与嫩芽，和作者小熊头像分别使用。`public/brand/island/mark.svg` 是可编辑的单一源文件；修改后运行 `npm run assets:brand`，统一生成各尺寸 PNG、ICO、旧路径 favicon、站点 manifest 和身份记录，避免手工维护多份图标。导航与页脚使用同一中文品牌字标，首页只保留小号介绍和无障碍标题。鼠标样式从共用 `global.css` 引入：全站普通与可点击状态使用原库 SVG，拖动、文本、缩放、尺寸调整和禁用状态保留原生语义；无跟随鼠标的 DOM 动画。
+
+首页庭院支持桌面与窄屏触控，提供可聚焦的物件入口、内容面板、关闭与返回行为。普通滚轮用于继续阅读页面，Ctrl/⌘ + 滚轮用于场景缩放；手机左右拖动环顾，向下滑动阅读。减少动态效果时停用角色循环和大幅镜头过渡；页面隐藏时暂停绘制，离开时释放资源。禁用 JavaScript、无法创建 WebGL 或模型加载失败时，仍可使用静态内容入口。
 
 ## 本地开发
 
@@ -38,10 +43,11 @@
 npm install
 npm run dev       # 开发服务器（搜索索引仅在构建后可用）
 npm run check     # 内容 schema 与 TypeScript 检查
-npm test          # 资源加载、播放、导航、动画与内容回归
+npm test          # 内容、资源缓存、小岛模型和交付契约回归
 npm run audit:deps # 完整依赖树安全检查（含开发依赖）
 npm run build     # 构建到 dist/ 并生成 pagefind 搜索索引
 npm run verify:build # 检查路由、静态链接和 3D 资源清单
+npm run assets:brand # 从 mark.svg 生成全部 favicon、manifest 与品牌记录
 npm run test:authoring # 在临时站点新增一篇 Markdown，验证草稿、发布索引与代码标签（需本机浏览器）
 npm run preview   # 预览构建产物
 ```
@@ -57,9 +63,30 @@ GitHub Pages 的发布源使用 **GitHub Actions**，只发布经过检查的 `d
 不在 CI 重建 Blender 模型或依赖软件 GPU 重新烘焙。`/release.json` 可核对线上版本、提交和模型 build ID。
 
 站点保持 Astro 静态生成。GitHub Pages 没有 SSR 服务器运行时，SSR 也不能承担客户端 WebGL 绘制。
-3D 使用预烘焙光照与反射、分阶段纹理准备、独立视频流及按内容版本的浏览器缓存；
-手机和能力不足的设备仍使用 LO-FI。构建会从发布产物移除源 PNG 和未压缩传输模型，
-源文件留在仓库供复现。这减少发布体积，不代表增加 FPS 或减少本来就不会请求的资源下载。
+3D 使用低面数模型、共享哑光材质、有限实时灯光和按内容哈希验证的浏览器缓存。
+模型及封面在开发阶段生成并校验，CI 只检查已准备好的交付物，不启动 Blender。
+旧写实书房的模型、烘焙贴图、电影和像素字体不随新版交付。
+
+可编辑源文件位于 `assets/island/island.blend`，重复生成脚本是 `scripts/island/build_scene.py`。
+小熊沿用现有头像的圆框眼镜、嫩芽和绿色书本，具有 `Idle`、`Attention`、`Wave` 三段完整分件动画；
+头、躯干、手臂和眼睛各有动画枢轴。原创小熊与角色动画配合已核验来源的 CC0 环境素材，组成开放的林间阅读庭院；采用清单、包内许可、来源与文件哈希见 [素材记录](scripts/island/SOURCES.md)。首轮原型没有外部模型、第二轮仅加入四个野餐道具，这些是历史阶段，不代表当前素材范围。
+
+模型导出后，按以下顺序准备资产。封面必须来自同一版本场景的实际网页渲染：
+
+```bash
+npm run assets:build   # 独立 Blender 后台进程生成 .blend / GLB（默认 macOS Blender 路径）
+npm run assets:model   # 记录模型、生成源、运行时代码和 Three.js 版本
+npm run dev -- --host 127.0.0.1 --port 4327
+# 另一个终端运行：
+BASE_URL=http://127.0.0.1:4327 npm run assets:posters
+npm run assets:check   # 验证模型与封面一致、哈希和资源预算
+```
+
+完整命令、源文件范围和测试迁移见 [资产流程](scripts/island/ASSET_PIPELINE.md)；
+布局、内容映射和验收目标见 [设计记录](docs/island/DESIGN.md)；
+实际浏览器结果及尚未覆盖的设备见 [验证记录](docs/island/QA.md)。
+核心场景资源 5 MB、桌面 60 FPS、目标移动设备 30 FPS 是设计目标，实际结果以验证记录为准；
+浏览器移动模拟不等于真实手机测试。本分支的本地验证不会自动推送、合并或部署。
 
 Astro 7 显式使用 `@astrojs/markdown-remark` 的 Unified 处理器，保留数学、GitHub alert、
 图片缩放、代码高亮及原有 HTML 空格处理。KaTeX 固定为安全版本，并用 npm override
@@ -78,14 +105,14 @@ pubDate: 2026-10-14
 category: programming-language   # 小写字母、数字和连字符组成的 slug
 subcategory: cpp                 # 可选，使用相同的 slug 规则
 tags: [pointer, array]
-pin: false                       # 可选，置顶到首页特色位
+pin: false                       # 可选，置顶到笔记目录精选位
 draft: false                     # true 时只允许本地草稿预览，不生成生产文章
 ---
 ```
 
 分类和子分类可以直接使用新的 slug，无需先修改配置。系统会自动生成默认名称、封面、首页入口和分类页面，并在构建时提醒未注册分类。需要中文名称、定制颜色或子分类显示名时，只需在 `src/data/site.ts` 的 `CATEGORIES` 中添加定制项。
 
-分类与标签只根据公开文章生成。删除或撤回最后一篇相关文章后，相应入口、分类/标签页面、RSS 和搜索索引随构建清理；`CATEGORIES` 中的展示配置可以保留，供以后再次使用。书房精选动画独立保留，原文不存在时自动隐藏阅读链接。
+分类与标签只根据公开文章生成。删除或撤回最后一篇相关文章后，相应入口、分类/标签页面、RSS 和搜索索引随构建清理；`CATEGORIES` 中的展示配置可以保留，供以后再次使用。小岛面板也从同一组公开文章生成；内容增加使用通用目录与分页，不通过堆积模型或手工登记目录扩展。
 
 正文中可用的扩展语法：
 
@@ -123,7 +150,7 @@ public override void _Ready()
 
 设置 `draft: true`，运行 `npm run dev`，从导航的「草稿」或 `/drafts/` 打开文章。草稿详情有明确的预览提示，不进入公开文章列表、分类、标签、RSS 或搜索；`npm run build` 不生成草稿详情与草稿入口。`npm run preview` 预览的是生产产物，因此也不显示草稿。
 
-发布时删除 `draft` 或设为 `false`，将 Markdown 和必要图片推送或合并到 `main`。GitHub Actions 自动构建文章、索引和搜索并部署；不需要登记文章、修改分类配置或重新生成书房字体。`pubDate` 是展示与排序日期，不是定时发布开关。
+发布时删除 `draft` 或设为 `false`，将 Markdown 和必要图片推送或合并到 `main`。GitHub Actions 自动构建文章、索引和搜索并部署；不需要登记文章、修改分类配置或重新生成 3D 模型与字体。`pubDate` 是展示与排序日期，不是定时发布开关。
 
 目录与分类自动生成。普通文章的目录标题来自二、三级标题；新分类默认使用 slug 的可读名称，需要中文名称或定制颜色时才修改 `CATEGORIES`。文章互链使用 `/posts/<slug>/`，不要链接源 `.md` 文件。
 
@@ -136,11 +163,11 @@ src/
 ├── content/blog/      # 文章（Markdown）
 ├── data/site.ts       # 站点元数据 + 分类体系定义
 ├── layouts/           # 页面骨架
-├── components/        # Astro 组件、React islands 与第三方交互组件
-│   ├── kokonutui/     # 雨玻璃组件、生命周期控制器与 WebGL 底层
-│   └── motion-primitives/
+├── components/        # Astro 组件、共享品牌与 React 阅读组件
+├── scripts/island/    # 场景、镜头、角色动画、拾取、HTML 面板与生命周期
+├── utils/             # 共用文章数据、小岛内容适配与资源清单
 ├── pages/             # 路由（文章、分类、标签、归档、关于、搜索、RSS）
-└── styles/            # global.css 入口、prose.css 正文、pagefind.css 搜索
+└── styles/            # global.css / island.css 共用主题、world.css 首页与场景界面
 ```
 
 阅读指南的浏览器回归：先启动 `npm run preview -- --port 4327`，再运行 `npm run test:guides`；可用 `BASE_URL` 指定其他预览地址。

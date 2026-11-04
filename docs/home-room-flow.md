@@ -1,58 +1,53 @@
-# 首页与书房入口
+# 未尽：首页庭院与笔记
 
-首页 `/` 保留雨玻璃 Hero 的结构与两个出口。标语读取与博客相同的
-`SITE.tagline`（当前为「保持好奇，慢慢来」），避免两处文案分叉。Hero 使用独立的
-`HomeHero.astro` 样式作用域，后续首页换皮不依赖博客的视觉系统。
-雨滴、折射、雾气恢复和按住拖动擦拭复用原 `RainGlassBackground` 的
-`RainGlassController`；离开页面释放资源，浏览器返回缓存页面时重新挂载。
-无 WebGL / JavaScript 时保留静态背景和双入口。减少动态效果时保留静态雨滴与擦拭。
-`/lofi/` 使用最新主分支的小岛博客，欢迎区、分类、阅读、搜索和分页均沿用新版。
-该路由仅由 `src/pages/[...page].astro` 生成；旧的 `LofiHero`、React 雨玻璃外壳
-和未使用的 `MagazineToolbar` 已删除，雨玻璃控制器与 shader 保留给首页使用。
+`/` 直接展示交互式林间阅读庭院，没有独立场景入口或“探索小岛”按钮。
+紧凑品牌介绍、阅读入口和全景按钮放在场景上方，画面不再被左侧大幅欢迎区挤压。
+先展示当前主题封面，再自动加载真实 3D 并平滑渐显。首页就是这座小岛：正常状态下
+只展示场景、轻量工具栏和可访问物件导航，不在下方再叠一套文章列表与分类区。
+桌面 Header、轻量栏、舞台和物件导航约占一屏，页脚在其后正常排列。
 
-```mermaid
-flowchart TD
-  Home["首页 /：Hero + 双 CTA"] --> Preload["后台下载书房资源；左下角显示进度"]
-  Home --> Blog["进入博客 /lofi/"]
-  Preload --> Enter["进入书房 /room/"]
-  Enter --> Prepare["复用缓存；继续下载、解码、准备完整场景"]
-  Prepare --> Active["自动进入完整可交互房间"]
-  Active --> TV["自动打开电视；开机动画 / PRESS PLAY"]
-  TV --> Play["点电视或播放按钮开始节目"]
-  Play --> Off["关闭电视：房间继续可交互"]
-  Off --> TV
-```
+Header 直接列出首页、笔记、分类、标签、归档、关于，没有“更多”菜单；手机收起为
+同一套完整导航。品牌始终返回首页。页面共用页脚、字体、主题和原库鼠标 SVG，
+拖动、文本、缩放、尺寸调整与禁用状态仍使用相应原生鼠标，不使用跟随 DOM 动画。
 
-首页的预加载百分比衡量资源下载，不代表 GPU 解码和首帧已完成。提前点进书房
-仍会显示原有加载进度，并在完整场景准备完成后自动进入。首页与书房共用同一
-内容哈希清单和持久资源缓存；缓存受限或被浏览器清理时可以正常重新下载。
-视频按范围请求预热，不把整段影片计入静态资源百分比。
+`/notes/` 使用简洁的笔记标题、文章总数、搜索和归档入口；分类、精选和文章列表均
+来自公开内容。后续分页位于 `/notes/page/<n>/`。笔记目录与文章页不加载 3D。
 
-电视的开机提示只控制电视内容，不阻止拖动视角、物件交互或页面导航。
-声音继续由 SOUND 独立开关控制，首次访问默认关闭。减少动态效果设置会跳过
-开机动画，保留播放提示；媒体播放被浏览器限制时保留播放按钮供重试。
+庭院的书架、书桌、喷泉、小熊、植物角与收音机分别打开全部笔记、最近更新、分类、
+关于与指南、标签、订阅与联系。书架面板另含搜索入口，书桌面板含归档入口，
+笔记、分类、标签、归档和关于均能通过场景内容到达。物件和对应 DOM 链接打开同一个原生 HTML dialog，
+正文进入既有文章页。面板内的“回到全景”、关闭、Escape 与浏览器历史保留返回语义。
+桌面侧边面板、手机底部面板为场景保留可见区域。普通滚轮继续阅读页面，Ctrl/⌘ +
+滚轮缩放场景；手机左右拖动环顾、向下滑动阅读。无 JS、无 WebGL 或加载失败时，
+完整静态目录照常可读；该目录在正常场景就绪后隐藏，同一组内容移入打开的面板。
 
-`/room/` 可直接访问、刷新，房内 `#work`、`#posts` 等深链继续生效。
-页面左上角标识返回首页，阅读链接进入博客。窄窗口和不支持 WebGL 2 的设备
-沿用阅读版降级，提供博客出口。无 JavaScript 时首页两个链接仍可使用。
+旧 `/island/` 与 `/room/` 跳转到 `/`；`/lofi/` 与 `/page/<n>/` 跳转到笔记目录。
+JavaScript 跳转保留查询参数和片段；无 JavaScript 时提供静态跳转与普通链接，
+不承诺保留查询参数和片段。文章 URL 不变，面包屑返回笔记目录；别名使用目标
+canonical 并从 sitemap 排除。
 
-## 验证
+文章、分类和标签只来自公开 Markdown。新增、撤回或删除内容后，由同一构建更新
+首页面板、阅读索引和搜索，不需要登记模型、文字贴图或字体子集。
 
-常规检查：`npm test`、`npm run check`、`npm run build`、
-`npm run verify:build`、`npm run test:browser`。
+站点标识以 `public/brand/island/mark.svg` 为单一可编辑源；`npm run assets:brand`
+生成 favicon、ICO、manifest 与兼容路径，作者小熊头像保持独立。当前环境由已核验
+来源的 CC0 素材组合，配合原创小熊与动画；精确采用清单见素材记录。早期纯原创
+原型与第二轮四个野餐道具均为历史阶段，不能替代当前素材声明。
 
-完整 3D 流程需要支持硬件 WebGL 的浏览器。在生产预览启动后运行：
+设计与验收见 [`island/DESIGN.md`](island/DESIGN.md)，资产流程见
+[`../scripts/island/ASSET_PIPELINE.md`](../scripts/island/ASSET_PIPELINE.md)，
+旧实现的恢复位置及测试迁移见 [`island/migration.md`](island/migration.md)。
 
 ```sh
+npm test
+npm run check
+npm run build
+npm run verify:build
 BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:room-flow
-BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:rain-glass
+BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:browser
+BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:guides
+BROWSER_CHANNEL=chrome npm run test:authoring
 ```
 
-可将 `SMOKE_SCREENSHOT_DIR` 指向已忽略的 `.room-build/home-room-flow/` 保存证据。
-该脚本覆盖首页预加载和缓存复用、提前进入、失败重试、电视反复开关、深链刷新、
-返回首页与博客，以及窄屏和 WebGL 不可用的降级。
-雨玻璃脚本用真实拖拽和截图像素比较验证擦雾、雨滴动画、返回首页后的恢复与静态降级。
-
-首页保留独立的雨玻璃视觉，不额外引入 UI 依赖；新版博客继续使用 `animal-island-ui`。
-入口功能改动与美术资源更新分别开发，在 v1.3.21 统一发布；同版纳入窗帘侧缝细化、
-材质 shader 重复注入修复，以及资源构建 `9cb7fb5a86c49163`。
+`test:room-flow` 保留兼容脚本名，当前验证的是首页交互场景与统一博客阅读路径。封面捕获使用 `/?capture=1`。
+浏览器自动化中的移动端是尺寸与触摸模拟；实际手机与 Safari 的验证需单独记录。

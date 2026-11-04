@@ -1,15 +1,17 @@
-const BLOG_NAME = 'Praxis';
+const BLOG_NAME = '未尽';
+const BRAND_VERSION = 'weijin-2';
 const AUTHOR_NAME = 'Ferris';
 const BLOG_INTRO = '记录编程语言、游戏开发与人工智能的学习、实践和思考。';
 
 export const SITE = {
   title: BLOG_NAME,
+  brandVersion: BRAND_VERSION,
   tagline: '保持好奇，慢慢来',
   description: `${BLOG_NAME} 是 ${AUTHOR_NAME} 的个人博客。${BLOG_INTRO}`,
   intro: BLOG_INTRO,
   author: AUTHOR_NAME,
   email: 'ferris.evans@outlook.com',
-  avatar: '/brand/island/ferris-avatar.png?v=1',
+  avatar: `/brand/island/ferris-dog-avatar.png?v=${BRAND_VERSION}`,
   github: 'https://github.com/FerrisEvans',
   twitter: 'https://twitter.com/ferrisgeek',
   postsPerPage: 9,

@@ -11,6 +11,12 @@ and the selection colors in `src/styles/island-cursor.css` are from Animal Islan
 
 The SVG geometry, colors, stroke, dimensions, and hotspot are unchanged. This
 site serves the SVG as a local file instead of an inline data URL. The CSS is
-scoped to the blog and fine pointing devices; text inputs and disabled controls
-retain their native semantic cursors. No React runtime or animated cursor overlay
-is used.
+shared by all site layouts on fine pointing devices. Default and pointer states
+use the same original artwork; text, disabled, grab/grabbing, zoom and resize
+states retain their native semantic cursors. No React runtime or animated cursor
+overlay is used.
+
+The organic bordered tooltip outline in `src/scripts/island/tooltip.ts` is
+adapted from the installed Animal Island UI 3.0.0 `Tooltip/Tooltip.js`, with the
+same organic path and bordered-tail treatment. Its DOM positioning is adapted
+for canvas object picking; the complete upstream MIT license also applies.

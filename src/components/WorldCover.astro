@@ -1,0 +1,26 @@
+---
+interface Props { id?: string; class?: string; posterVersion: string; alt?: string; decorative?: boolean; }
+const { id, class: className, posterVersion, alt = '', decorative = false } = Astro.props;
+const day = `/island/cover-day.webp?v=${posterVersion}`;
+const night = `/island/cover-night.webp?v=${posterVersion}`;
+// The inline selector chooses one network URL before layout. No-JS gets the
+// ordinary daytime image below; the tiny local placeholder costs no request.
+const placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1440" height="1200"/%3E';
+---
+<picture id={id} class={className} data-theme-cover aria-hidden={decorative ? 'true' : undefined}>
+  <img data-world-image data-day-src={day} data-night-src={night} src={placeholder} width="1440" height="1200" alt={decorative ? '' : alt} fetchpriority="high" />
+  <noscript><style>[data-world-image] { display:none !important; }</style><img src={day} width="1440" height="1200" alt={decorative ? '' : alt} fetchpriority="high" /></noscript>
+</picture>
+<script is:inline>
+  (function () {
+    var picture = document.currentScript.previousElementSibling;
+    var image = picture && picture.querySelector('[data-world-image]');
+    if (!image) return;
+    function selectImage() {
+      var source = document.documentElement.classList.contains('dark') ? image.dataset.nightSrc : image.dataset.daySrc;
+      if (image.getAttribute('src') !== source) image.setAttribute('src', source);
+    }
+    selectImage();
+    window.addEventListener('theme-changed', selectImage);
+  })();
+</script>

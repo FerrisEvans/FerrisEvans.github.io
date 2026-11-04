@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="232" height="84" viewBox="0 0 232 84" role="img" aria-label="未尽"><title>未尽 · 书芽与原创中文字标</title><g transform="translate(1 12) rotate(-4 32 32)">
+
+  <!-- A book left open: the mint cover stays visible below the cream pages. -->
+  <g stroke="#76543b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 29C17 26 25 28 32 33C39 28 47 26 56 29V51C47 49 39 51 32 57C25 51 17 49 8 51Z" fill="#8bc4a8"/>
+    <path d="M10 24C18 21 26 24 32 29C38 24 46 21 54 24V46C46 44 38 47 32 52C26 47 18 44 10 46Z" fill="#fff7e7"/>
+    <path d="M32 30V51" fill="none" stroke-width="2.7"/>
+    <!-- Two unequal leaves continue the open crease upward. -->
+    <path d="M32 29C31 23 33 18 37 14" fill="none"/>
+    <path d="M32 23C25 23 20 17 21 10C28 10 33 15 32 23Z" fill="#8bc4a8"/>
+    <path d="M33 20C33 12 39 7 47 7C47 15 41 21 33 20Z" fill="#8bc4a8"/>
+  </g>
+</g>
+
+  <!-- Each closed contour is drawn for this identity; no font outlines or text. -->
+  <g class="weijin-lettering" fill="#76543b">
+    <!-- 未: a short upper bar, a wider lower bar, and a gently leaning trunk. -->
+    <path d="M94 17C105 16 118 17 129 15C133 15 136 17 136 21C136 24 133 26 130 26L94 28C90 28 88 26 88 23C88 20 90 18 94 17Z"/>
+    <path d="M84 35C102 34 121 35 139 32C143 32 146 34 146 38C146 42 143 44 139 45C121 47 101 46 84 47C80 47 78 45 78 41C78 38 80 36 84 35Z"/>
+    <path d="M108 10C108 6 110 4 114 4C118 4 120 7 120 11L118 69C118 73 116 76 112 76C108 76 106 73 106 69Z"/>
+    <path d="M106 39C109 36 113 36 116 39C118 42 116 46 113 50C105 59 96 66 86 72C82 74 78 73 76 70C74 67 76 63 80 61C90 55 99 48 106 39Z"/>
+    <path d="M116 39C119 37 123 39 125 42C131 51 137 57 145 62C149 65 151 68 148 72C146 75 142 75 138 72C129 66 120 57 114 48C112 44 113 41 116 39Z"/>
+    <!-- 尽: a rounded 尺 enclosure, open falling strokes and two separate ink drops. -->
+    <path d="M167 10C180 9 196 10 209 8C213 8 216 11 216 15L214 33C214 37 211 39 207 39L168 40C164 40 162 38 162 35C162 32 164 30 168 29L204 29L205 19L167 21C163 21 160 19 160 16C160 13 163 11 167 10Z"/>
+    <path d="M165 14C169 14 171 17 171 21L170 32C169 41 165 49 160 54C157 57 153 57 150 54C148 51 149 48 152 45C157 39 159 30 159 21C159 17 161 14 165 14Z"/>
+    <path d="M184 33C187 30 191 31 194 35C200 42 208 47 219 50C223 51 226 54 224 58C223 62 219 63 215 61C202 57 193 51 184 42C181 39 181 35 184 33Z"/>
+    <path d="M178 48C182 48 187 51 191 54C194 57 194 60 191 62C188 64 185 62 182 60L175 56C172 54 174 49 178 48Z"/>
+    <path d="M173 65C178 65 184 68 189 72C192 74 192 78 189 80C187 82 184 81 181 79L170 74C167 72 169 66 173 65Z"/>
+  </g>
+</svg>

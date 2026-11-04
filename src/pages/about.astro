@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import IslandBrand from '../components/IslandBrand.astro';
 import { SITE } from '../data/site';
 import { ABOUT, aboutGreeting } from '../data/room-about';
 import { ABOUT_GUIDES } from '../data/about-guides';
@@ -13,11 +14,11 @@ const principles = ABOUT.principles;
     <header class="about-title">
       <p class="island-eyebrow">来自 {SITE.author} 的一封信</p>
       <h1 class="island-heading">关于作者与博客</h1>
-      <p class="island-lead">{SITE.title} 是 {SITE.author} 的个人博客，一个存放实践、问题和好奇心的地方。</p>
+      <p class="island-lead"><IslandBrand inline /> 是 {SITE.author} 的个人博客，一个存放实践、问题和好奇心的地方。</p>
     </header>
 
     <section class="island-panel profile-note" aria-labelledby="profile-heading">
-      <div class="profile-photo"><img src={SITE.avatar} alt={`${SITE.author} 的个人头像`} width="112" height="112" /></div>
+      <div class="profile-photo"><img src={SITE.avatar} alt={`${SITE.author} 的黑色小狗卡通头像`} width="112" height="112" /></div>
       <div class="profile-copy">
         <h2 id="profile-heading">{aboutGreeting(SITE.author)}</h2>
         <p>{ABOUT.intro}</p>
@@ -119,3 +120,5 @@ const principles = ABOUT.principles;
   @media (max-width:800px) { .about-note-grid, .guide-card-grid { grid-template-columns:1fr; } }
   @media (max-width:639px) { .profile-note { flex-direction:column; padding:25px; gap:22px; } .profile-copy h2 { font-size:22px; } .principles-note, .practice-note { padding-inline:23px; } }
 </style>
+
+<style>.profile-photo img { object-fit:cover; object-position:center; }</style>

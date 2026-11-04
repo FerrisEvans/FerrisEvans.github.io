@@ -1,0 +1,319 @@
+{
+  "pack": "KayKit Furniture Bits 1.0",
+  "sourcePage": "https://kaylousberg.itch.io/furniture-bits",
+  "repository": "https://github.com/KayKit-Game-Assets/KayKit-Furniture-Bits-1.0",
+  "commit": "96d5930a8dbdb363409bbc2d3341718b00e17c9c",
+  "downloadUrl": "https://codeload.github.com/KayKit-Game-Assets/KayKit-Furniture-Bits-1.0/zip/96d5930a8dbdb363409bbc2d3341718b00e17c9c",
+  "author": "Kay Lousberg / KayKit",
+  "license": "CC0-1.0",
+  "licenseFile": "LICENSE.txt",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-11-04",
+  "tier": "free official distribution; no paid Extra or Source files",
+  "archiveBytes": 683587,
+  "archiveSha256": "84be044ad8aa6d7b2e5e6e01ce6f2cc97133c07c04f9de7d98dc2677a0234242",
+  "selectionStatus": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "selectedModels": [
+    {
+      "file": "shelf_B_large.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 212,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2.0,
+        0.5000001,
+        0.4000007
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.0,
+          -0.5000001,
+          -0.1000004
+        ],
+        "max": [
+          1.0000001,
+          0.0,
+          0.3000003
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 212
+    },
+    {
+      "file": "table_medium_long.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 168,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        3.0,
+        2.0,
+        1.0
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.5,
+          -1.0,
+          -0.0
+        ],
+        "max": [
+          1.5,
+          1.0,
+          1.0
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 168
+    },
+    {
+      "file": "table_low.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 276,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2.4000001,
+        1.5,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -1.2,
+          -0.75,
+          0.0
+        ],
+        "max": [
+          1.2,
+          0.75,
+          0.5
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 276
+    },
+    {
+      "file": "chair_B_wood.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 384,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.75,
+        0.8451285,
+        1.2583259
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.3749847,
+          -0.3749999,
+          -0.0
+        ],
+        "max": [
+          0.3750153,
+          0.4701286,
+          1.2583259
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 384
+    },
+    {
+      "file": "chair_stool_wood.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 216,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.75,
+        0.75,
+        0.5
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.3749847,
+          -0.3749999,
+          -0.0
+        ],
+        "max": [
+          0.3750153,
+          0.3750001,
+          0.5
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 216
+    },
+    {
+      "file": "lamp_table.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 392,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.0,
+        1.0,
+        1.0216652
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.5,
+          -0.4999999,
+          -0.0016652
+        ],
+        "max": [
+          0.5,
+          0.5000001,
+          1.02
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 392
+    },
+    {
+      "file": "book_set.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 196,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.78,
+        0.3649999,
+        0.4999999
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.3899991,
+          -0.1875428,
+          -0.2499997
+        ],
+        "max": [
+          0.3900008,
+          0.1774571,
+          0.2500001
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 196
+    },
+    {
+      "file": "book_single.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 68,
+      "materials": 1,
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.26,
+        0.3649999,
+        0.4999999
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.1299991,
+          -0.1875428,
+          -0.2499997
+        ],
+        "max": [
+          0.1300009,
+          0.1774571,
+          0.2500001
+        ]
+      },
+      "importedMeshes": 1,
+      "importedTriangles": 68
+    }
+  ],
+  "archiveCommitVerifiedFromZipComment": "96d5930a8dbdb363409bbc2d3341718b00e17c9c",
+  "files": [
+    {
+      "file": "LICENSE.txt",
+      "bytes": 827,
+      "sha256": "cd675f2adc31eb5fedaedc1072d8ddc27b917f523682f0561837c03dc56393cb"
+    },
+    {
+      "file": "book_set.bin",
+      "bytes": 11576,
+      "sha256": "3aa3fcc774b46c7ffe2b1a3109bf006749163bbb392cfca930b34bfba4b67853"
+    },
+    {
+      "file": "book_set.gltf",
+      "bytes": 3051,
+      "sha256": "437bfaba3f3413a0b825627a1cb905765a191f4708be51838c9b60c8132cbe61"
+    },
+    {
+      "file": "book_single.bin",
+      "bytes": 3992,
+      "sha256": "0aa0921f471184039e85488a80041a0b4aee6f68589ad53077eea03f4659d66c"
+    },
+    {
+      "file": "book_single.gltf",
+      "bytes": 3056,
+      "sha256": "7b86695b060681fc6de8ac70fc1f24b870edcaf84bfe4ed98b7e706ae594d464"
+    },
+    {
+      "file": "chair_B_wood.bin",
+      "bytes": 18240,
+      "sha256": "223864f633ba3c5fb06e239a907b5f379fe0a3ad4f5c5fff2577e97ef0f6250d"
+    },
+    {
+      "file": "chair_B_wood.gltf",
+      "bytes": 3059,
+      "sha256": "7a19685725e1878f960e0ce724eaffc9a2a5fe36c0496608dd5328aa73290f03"
+    },
+    {
+      "file": "chair_stool_wood.bin",
+      "bytes": 10832,
+      "sha256": "59ebde1791f6c46b6f3880cbe5632e44b123466a1bc7d2d2f3008da9a2a492ac"
+    },
+    {
+      "file": "chair_stool_wood.gltf",
+      "bytes": 3052,
+      "sha256": "b1670bee678ab5920ad8ef3a6fb7c6146054bb7b859798f86aaac96be5765f35"
+    },
+    {
+      "file": "furniturebits_texture.png",
+      "bytes": 15605,
+      "sha256": "de62db37a80d1801c3d9eb674890ae04b04469e0c149481a51fa250562c628dc"
+    },
+    {
+      "file": "lamp_table.bin",
+      "bytes": 12816,
+      "sha256": "c3d4cc2fea09cfb3037b9ece861abf6126cae3226858f18de37bd8cf87a06145"
+    },
+    {
+      "file": "lamp_table.gltf",
+      "bytes": 3029,
+      "sha256": "7cc2e9f24145551bfc919247e74a414bbd40bc2fde1fb9a1ac33e16cb9d0497b"
+    },
+    {
+      "file": "shelf_B_large.bin",
+      "bytes": 10104,
+      "sha256": "30bbd1a44054d02245bd7388d7143c5f676928d4e293a93f9fd442479afd4840"
+    },
+    {
+      "file": "shelf_B_large.gltf",
+      "bytes": 3047,
+      "sha256": "438921fdd044014a02f4e77e4b02205222d83cec3632db2eb8dad50173b24d5c"
+    },
+    {
+      "file": "table_low.bin",
+      "bytes": 12408,
+      "sha256": "e9f604c5676bfa974d6d1bf45757a11d298ac40e8e7981be29d249936c8339cd"
+    },
+    {
+      "file": "table_low.gltf",
+      "bytes": 2990,
+      "sha256": "3bf202a3ee70ee95943c26419bd5f540353a16b8b6a0b41449746f85c3319a2a"
+    },
+    {
+      "file": "table_medium_long.bin",
+      "bytes": 9328,
+      "sha256": "b436c4b982a7defac5310f6ca17bf387f24c8c9b843e035c09d23094ace9b788"
+    },
+    {
+      "file": "table_medium_long.gltf",
+      "bytes": 2987,
+      "sha256": "e3ba8f08ce5964d602cde13ecba2b837f90b3ed22d092e28fa489f3c216e2488"
+    }
+  ]
+}

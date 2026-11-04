@@ -1,0 +1,527 @@
+{
+  "pack": "Tiny Treats - House Plants 1.0 FREE",
+  "author": "Isa Lousberg / Tiny Treats",
+  "sourcePage": "https://tinytreats.itch.io/house-plants",
+  "downloadRoute": "https://tinytreats.itch.io/house-plants/purchase -> No thanks, just take me to the downloads -> Free Download",
+  "downloadedFilename": "Tiny_Treats_House_Plants_1.0_FREE.zip",
+  "archiveSha256": "32d20c7079de63eebd16f95b9d683e0d8095ecc09988f26fba565374c8deb62d",
+  "license": "CC0-1.0",
+  "licenseFile": "LICENSE.txt",
+  "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "retrieved": "2026-11-04",
+  "tier": "FREE; no paid source tier purchased",
+  "status": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "files": [
+    {
+      "file": "LICENSE.txt",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/License.txt",
+      "bytes": 879,
+      "sha256": "c7119a2df64ce5296f81d77f1517374f28bd91592291ac196431a3912f761422"
+    },
+    {
+      "file": "cacti_plant_pot_small.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/cacti_plant_pot_small.bin",
+      "bytes": 33552,
+      "sha256": "3b832faa3329ba11fb9aa2076c782a61ef5875d4b796883dd43ca801198e9c48"
+    },
+    {
+      "file": "cacti_plant_pot_small.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/cacti_plant_pot_small.gltf",
+      "bytes": 3575,
+      "sha256": "fa45301233d68bf70a4031b37d47a37f9df261ce90817cd2742c8ea78c10db1d"
+    },
+    {
+      "file": "monstera_plant_medium_potted.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/monstera_plant_medium_potted.bin",
+      "bytes": 103480,
+      "sha256": "fd6fc6b3d0919bfec8f9da76a1fc5b8c949883230ce46829e26663d528710c25"
+    },
+    {
+      "file": "monstera_plant_medium_potted.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/monstera_plant_medium_potted.gltf",
+      "bytes": 3619,
+      "sha256": "28d3d8d13ab0064b2e2235350ab61b65db1bda55d19b6d7ec40138b478516ce1"
+    },
+    {
+      "file": "pot_A_medium.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pot_A_medium.bin",
+      "bytes": 10480,
+      "sha256": "8ced2128ab041105d9fad3d9b64d3987cacbcf895110cb0aebdbcb3db7039b8e"
+    },
+    {
+      "file": "pot_A_medium.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pot_A_medium.gltf",
+      "bytes": 3531,
+      "sha256": "4fb97820818c52eda5b5841cbf26539a19a572f7509e3895281bedddde25a690"
+    },
+    {
+      "file": "pothos_plant_small_potted.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pothos_plant_small_potted.bin",
+      "bytes": 69024,
+      "sha256": "5ac66a6160c6ecea77a0f5a8d42c3aaa82468973fe4e6c7dfc0aabc900771c9a"
+    },
+    {
+      "file": "pothos_plant_small_potted.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pothos_plant_small_potted.gltf",
+      "bytes": 3612,
+      "sha256": "5fd853f05d1b70f34d5fa3fe8271fc9a3933407d0f39af1a824c145e6c2473b2"
+    },
+    {
+      "file": "pots_stacked.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pots_stacked.bin",
+      "bytes": 29640,
+      "sha256": "bac94a3da9003870e207ef82ff18417eb0fb32644c393513b56bb68cb95f7a93"
+    },
+    {
+      "file": "pots_stacked.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/pots_stacked.gltf",
+      "bytes": 3537,
+      "sha256": "2e3bd593f903810e6bb3f1cd075f2918635a7cf701ce008ae501f068a0377c25"
+    },
+    {
+      "file": "sansevieria_plant_medium_potted.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/sansevieria_plant_medium_potted.bin",
+      "bytes": 39280,
+      "sha256": "f64d73ec99ce4d7dd58aca27922561577d47dcd14c6cbeb7e643cb2652d8b7b3"
+    },
+    {
+      "file": "sansevieria_plant_medium_potted.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/sansevieria_plant_medium_potted.gltf",
+      "bytes": 3628,
+      "sha256": "d2691dd267b1559a0136285a394f536c93e65f5a34fe5e90b9e81125fb8baefd"
+    },
+    {
+      "file": "shovel.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/shovel.bin",
+      "bytes": 9936,
+      "sha256": "c638474075464f4c374069add069830a3506dfe56c34c744bf95d521328dbedf"
+    },
+    {
+      "file": "shovel.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/shovel.gltf",
+      "bytes": 3545,
+      "sha256": "683093ca79433a5833438e5074ba0c0bd8d7048d67eae7c86f7ae7592d8bf851"
+    },
+    {
+      "file": "succulent_plant_pot_small.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/succulent_plant_pot_small.bin",
+      "bytes": 163260,
+      "sha256": "811d3b81cd5d712e57a70f50c865def1d1652b4858fa5cb4e8934f4a6ee48d6d"
+    },
+    {
+      "file": "succulent_plant_pot_small.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/succulent_plant_pot_small.gltf",
+      "bytes": 3595,
+      "sha256": "abc513708545f5b611f0a113b4335bc914428a509bb86dfecca9ddf30c51529f"
+    },
+    {
+      "file": "tiny_treats_texture_1.png",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/fbx/tiny_treats_texture_1.png",
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5"
+    },
+    {
+      "file": "watering_can_A.bin",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/watering_can_A.bin",
+      "bytes": 20484,
+      "sha256": "4da6b1056aaf06ae413d3a7bfc185d3c68a950ca082734d74a32c563894a4aaa"
+    },
+    {
+      "file": "watering_can_A.gltf",
+      "originalPath": "Tiny_Treats_House_Plants_1.0_FREE/Assets/gltf/watering_can_A.gltf",
+      "bytes": 3571,
+      "sha256": "817185a454c447a7bb26f91dbbe9fc342853113f67b17c2dd348f41b60690a21"
+    }
+  ],
+  "adaptation": "Byte-exact original models, buffers and texture. Original relative glTF URI strings preserved; dependencies flattened alongside models. No color or geometry modifications.",
+  "selectedModels": [
+    {
+      "file": "cacti_plant_pot_small.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 792,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.990356,
+        0.990356,
+        0.852647
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.495178,
+          -0.495178,
+          0
+        ],
+        "max": [
+          0.495178,
+          0.495178,
+          0.852647
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.052",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "monstera_plant_medium_potted.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 3108,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        2.023509,
+        2.223797,
+        2.038444
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.974028,
+          -1.2326,
+          0.000753
+        ],
+        "max": [
+          1.049481,
+          0.991197,
+          2.039196
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.054",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "pothos_plant_small_potted.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 1792,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.720933,
+        0.683293,
+        1.012305
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.473952,
+          -0.436311,
+          -0.218209
+        ],
+        "max": [
+          0.246981,
+          0.246982,
+          0.794095
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.058",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "pots_stacked.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 588,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.528445,
+        0.5,
+        0.784022
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.278446,
+          -0.25,
+          0.000401
+        ],
+        "max": [
+          0.25,
+          0.25,
+          0.784423
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.059",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "pot_A_medium.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 216,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1,
+        1,
+        0.7
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.5,
+          -0.5,
+          0.000753
+        ],
+        "max": [
+          0.5,
+          0.5,
+          0.700753
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.060",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "sansevieria_plant_medium_potted.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 936,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        1.207307,
+        0.974469,
+        2.243648
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.618004,
+          -0.487235,
+          0.000754
+        ],
+        "max": [
+          0.589303,
+          0.487235,
+          2.244401
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.065",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "shovel.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 296,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.34095,
+        0.195117,
+        0.831052
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.170472,
+          -0.091027,
+          -0.153509
+        ],
+        "max": [
+          0.170478,
+          0.10409,
+          0.677542
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.067",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "succulent_plant_pot_small.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 3386,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.990356,
+        0.990356,
+        0.502453
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.495178,
+          -0.495178,
+          0
+        ],
+        "max": [
+          0.495178,
+          0.495178,
+          0.502453
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.069",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    },
+    {
+      "file": "watering_can_A.gltf",
+      "format": "glTF 2.0 + external BIN/PNG",
+      "triangles": 630,
+      "materials": 1,
+      "materialNames": [
+        "tiny_treats_1"
+      ],
+      "images": [
+        "tiny_treats_texture_1.png"
+      ],
+      "animationClips": [],
+      "sourceDimensionsBlenderXYZ": [
+        0.9,
+        0.6,
+        0.75
+      ],
+      "sourceBoundsBlenderXYZ": {
+        "min": [
+          -0.297573,
+          -0.3,
+          0.000798
+        ],
+        "max": [
+          0.602427,
+          0.3,
+          0.750798
+        ]
+      },
+      "sourceMaterialProperties": [
+        {
+          "name": "tiny_treats_1.070",
+          "baseColor": [
+            0.800000011920929,
+            0.800000011920929,
+            0.800000011920929,
+            1
+          ],
+          "roughness": 0.5
+        }
+      ]
+    }
+  ],
+  "palette": "Original TinyTreats atlas-driven colors preserved unchanged. BaseColor factors alone do not represent the painted color; see the included PNG atlas and contact sheet.",
+  "textures": [
+    {
+      "file": "tiny_treats_texture_1.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 20974,
+      "sha256": "31e5c7c81bfba644a59797b1907519592c7728d4af98a705449975dd929482e5"
+    }
+  ]
+}

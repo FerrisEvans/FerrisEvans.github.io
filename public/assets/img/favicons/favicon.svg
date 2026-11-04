@@ -1,6 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" role="img" aria-label="Praxis H4 Grid Seal" shape-rendering="crispEdges">
-<title>Praxis H4 Grid Seal</title>
-<rect width="16" height="16" fill="#1f1c18"/>
-<path d="M2 2h1v1h-1z M2 3h1v1h-1z M2 4h1v1h-1z M2 6h1v1h-1z M2 7h1v1h-1z M2 8h1v1h-1z M2 10h1v1h-1z M2 11h1v1h-1z M2 12h1v1h-1z M3 2h1v1h-1z M3 3h1v1h-1z M3 4h1v1h-1z M3 6h1v1h-1z M3 7h1v1h-1z M3 8h1v1h-1z M3 10h1v1h-1z M3 11h1v1h-1z M3 12h1v1h-1z M4 2h1v1h-1z M4 3h1v1h-1z M4 4h1v1h-1z M4 6h1v1h-1z M4 7h1v1h-1z M4 8h1v1h-1z M4 10h1v1h-1z M4 11h1v1h-1z M4 12h1v1h-1z M6 2h1v1h-1z M6 3h1v1h-1z M6 4h1v1h-1z M6 10h1v1h-1z M6 11h1v1h-1z M6 12h1v1h-1z M7 2h1v1h-1z M7 3h1v1h-1z M7 4h1v1h-1z M7 10h1v1h-1z M7 11h1v1h-1z M7 12h1v1h-1z M8 2h1v1h-1z M8 3h1v1h-1z M8 4h1v1h-1z M8 10h1v1h-1z M8 11h1v1h-1z M8 12h1v1h-1z M10 2h1v1h-1z M10 3h1v1h-1z M10 4h1v1h-1z M10 6h1v1h-1z M10 7h1v1h-1z M10 8h1v1h-1z M11 2h1v1h-1z M11 3h1v1h-1z M11 4h1v1h-1z M11 6h1v1h-1z M11 7h1v1h-1z M11 8h1v1h-1z M12 2h1v1h-1z M12 3h1v1h-1z M12 4h1v1h-1z M12 6h1v1h-1z M12 7h1v1h-1z M12 8h1v1h-1z" fill="#ece3d2"/>
-<path d="M6 6h1v1h-1z M6 7h1v1h-1z M6 8h1v1h-1z M7 6h1v1h-1z M7 7h1v1h-1z M7 8h1v1h-1z M8 6h1v1h-1z M8 7h1v1h-1z M8 8h1v1h-1z" fill="#966325"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="未尽：翻开的书与嫩芽">
+  <title>未尽：翻开的书与嫩芽</title>
+  <!-- A book left open: the mint cover stays visible below the cream pages. -->
+  <g stroke="#76543b" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 29C17 26 25 28 32 33C39 28 47 26 56 29V51C47 49 39 51 32 57C25 51 17 49 8 51Z" fill="#8bc4a8"/>
+    <path d="M10 24C18 21 26 24 32 29C38 24 46 21 54 24V46C46 44 38 47 32 52C26 47 18 44 10 46Z" fill="#fff7e7"/>
+    <path d="M32 30V51" fill="none" stroke-width="2.7"/>
+    <!-- Two unequal leaves continue the open crease upward. -->
+    <path d="M32 29C31 23 33 18 37 14" fill="none"/>
+    <path d="M32 23C25 23 20 17 21 10C28 10 33 15 32 23Z" fill="#8bc4a8"/>
+    <path d="M33 20C33 12 39 7 47 7C47 15 41 21 33 20Z" fill="#8bc4a8"/>
+  </g>
 </svg>

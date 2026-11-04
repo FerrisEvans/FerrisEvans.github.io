@@ -1,0 +1,14 @@
+---
+import { Tag } from 'animal-island-ui';
+import '../styles/tag-token.css';
+import { initialTagTokenColor } from '../scripts/tag-tokens';
+interface Props { name: string; href: string; count?: number; class?: string; }
+const { name, href, count, class: className } = Astro.props;
+---
+<a href={href} class:list={['tag-token', className]} data-tag-token={name} data-token-color={initialTagTokenColor(name)} aria-label={count === undefined ? name : `${name}，${count} 篇笔记`}>
+  <Tag variant="soft" size="large" className="tag-token-body"><span class="tag-token-content"><span class="tag-token-name">{name}</span>{count !== undefined && <span class="tag-token-count" aria-hidden="true">{count}</span>}</span></Tag>
+</a>
+<script>
+  import { initializeTagTokenColors } from '../scripts/tag-tokens';
+  initializeTagTokenColors();
+</script>

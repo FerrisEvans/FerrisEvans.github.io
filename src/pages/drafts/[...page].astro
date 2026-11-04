@@ -24,7 +24,7 @@ const drafts = (await getPosts({ includeDrafts: true })).filter((post) => post.d
         {drafts.map((post) => <PostListItem post={post} showTags />)}
       </ul>
     ) : <p class="island-panel drafts-empty">还没有草稿。在文章头部设置 <code>draft: true</code> 后，就能在这里预览。</p>}
-    <a class="drafts-back" href="/lofi/">返回文章列表</a>
+    <a class="drafts-back" href="/notes/">返回文章列表</a>
   </div>
 </Base>
 

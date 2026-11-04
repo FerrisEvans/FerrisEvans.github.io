@@ -53,6 +53,9 @@ jobs:
       - name: Install browser for production smoke tests
         run: npx playwright install --with-deps chromium
 
+      - name: Verify visible outlines and resource cleanup
+        run: npm run test:outline
+
       - name: Verify production reading and fallback paths
         run: |
           npm run preview -- --host 127.0.0.1 --port 4327 > "$RUNNER_TEMP/preview.log" 2>&1 &
@@ -60,7 +63,7 @@ jobs:
           trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
           preview_ready=0
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://127.0.0.1:4327/lofi/ > /dev/null; then
+            if curl --fail --silent http://127.0.0.1:4327/notes/ > /dev/null; then
               preview_ready=1
               break
             fi
@@ -71,6 +74,7 @@ jobs:
             exit 1
           fi
           npm run test:browser
+          npm run test:room-flow
           npm run test:guides
           npm run test:authoring
 

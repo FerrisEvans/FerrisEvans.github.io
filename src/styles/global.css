@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./prose.css";
 @import "./pagefind.css";
+@import "./island-cursor.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 

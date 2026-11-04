@@ -1,0 +1,29 @@
+/* Keep Animal Island UI Tag's soft capsule geometry. Light colors follow its
+ * official palette; amber text is darker for normal-size text contrast. */
+.tag-token { --token-bg:#e0f2f1; --token-ink:#00695c; display:inline-flex; max-width:100%; border-radius:999px; text-decoration:none; transition:transform .18s ease; }
+.tag-token[data-token-color="pink"] { --token-bg:#fce4ec; --token-ink:#c2185b; }
+.tag-token[data-token-color="purple"] { --token-bg:#f3e5f5; --token-ink:#7b1fa2; }
+.tag-token[data-token-color="blue"] { --token-bg:#e6f0ff; --token-ink:#1565c0; }
+.tag-token[data-token-color="teal"] { --token-bg:#e0f2f1; --token-ink:#00695c; }
+.tag-token[data-token-color="green"] { --token-bg:#e8f5e9; --token-ink:#2e7d32; }
+.tag-token[data-token-color="red"] { --token-bg:#ffebee; --token-ink:#c62828; }
+.tag-token[data-token-color="brown"] { --token-bg:#efebe9; --token-ink:#4e342e; }
+.tag-token[data-token-color="amber"] { --token-bg:#fff8e1; --token-ink:#8a5a00; }
+.dark .tag-token[data-token-color="pink"] { --token-bg:#4c303c; --token-ink:#ffc4d9; }
+.dark .tag-token[data-token-color="purple"] { --token-bg:#44334e; --token-ink:#e6c5f2; }
+.dark .tag-token[data-token-color="blue"] { --token-bg:#2f4056; --token-ink:#bfdcff; }
+.dark .tag-token[data-token-color="teal"] { --token-bg:#25493f; --token-ink:#a6edda; }
+.dark .tag-token[data-token-color="green"] { --token-bg:#354931; --token-ink:#c5eab8; }
+.dark .tag-token[data-token-color="red"] { --token-bg:#533634; --token-ink:#ffc8c0; }
+.dark .tag-token[data-token-color="brown"] { --token-bg:#493c33; --token-ink:#eed9c5; }
+.dark .tag-token[data-token-color="amber"] { --token-bg:#4b4128; --token-ink:#f6df9c; }
+.tag-token .tag-token-body { max-width:100%; height:auto; min-height:40px; padding:9px 15px; border:1.5px solid transparent; border-radius:999px; background:var(--token-bg); color:var(--token-ink); font-size:var(--tag-token-size,14px); font-weight:700; line-height:1.35; white-space:normal; transition:background-color .18s,color .18s; }
+.tag-token-content { display:inline-flex; align-items:center; gap:.55em; min-width:0; }
+.tag-token-name { overflow-wrap:anywhere; }
+.tag-token-count { flex:none; font-size:.65em; font-weight:750; font-variant-numeric:tabular-nums; }
+.tag-token:hover { transform:translateY(-2px); }
+.tag-token:active { transform:translateY(0); }
+.tag-token:focus-visible { outline:3px solid var(--color-accent); outline-offset:4px; }
+.dark .tag-token:focus-visible { outline-color:var(--color-accent-dark); }
+@media(pointer:coarse) { .tag-token .tag-token-body { min-height:44px; } }
+@media(prefers-reduced-motion:reduce) { .tag-token,.tag-token .tag-token-body { transition:none; } .tag-token:hover { transform:none; } }

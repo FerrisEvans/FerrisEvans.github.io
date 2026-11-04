@@ -1,0 +1,106 @@
+{
+  "reason": "Superseded model previews and locally retained interaction recording are excluded from the Git release; source bear model and clips remain. Current UI screenshots and character geometry proofs are retained.",
+  "files": [
+    {
+      "path": "docs/island/previews/candidates-tinytreats-park.png",
+      "bytes": 1143837,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/candidates-tinytreats-park.png"
+    },
+    {
+      "path": "docs/island/previews/candidates-tinytreats-picnic.png",
+      "bytes": 1239979,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/candidates-tinytreats-picnic.png"
+    },
+    {
+      "path": "docs/island/previews/candidates-tinytreats-plants.png",
+      "bytes": 1345681,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/candidates-tinytreats-plants.png"
+    },
+    {
+      "path": "docs/island/previews/scene-blender-overview.png",
+      "bytes": 1991102,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/scene-blender-overview.png"
+    },
+    {
+      "path": "docs/island/previews/scene-library.png",
+      "bytes": 1740131,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/scene-library.png"
+    },
+    {
+      "path": "docs/island/previews/scene-plants.png",
+      "bytes": 1671705,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/scene-plants.png"
+    },
+    {
+      "path": "docs/island/previews/scene-picnic.png",
+      "bytes": 1664474,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/scene-picnic.png"
+    },
+    {
+      "path": "docs/island/previews/room-categories.png",
+      "bytes": 568188,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/room-categories.png"
+    },
+    {
+      "path": "docs/island/previews/room-desktop.png",
+      "bytes": 368026,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/room-desktop.png"
+    },
+    {
+      "path": "docs/island/previews/room-mobile.png",
+      "bytes": 113709,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/room-mobile.png"
+    },
+    {
+      "path": "docs/island/previews/room-overview.png",
+      "bytes": 298926,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/room-overview.png"
+    },
+    {
+      "path": "docs/island/previews/room-mobile-about.png",
+      "bytes": 173981,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/room-mobile-about.png"
+    },
+    {
+      "path": "docs/island/previews/island-mobile.png",
+      "bytes": 117496,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/island-mobile.png"
+    },
+    {
+      "path": "docs/island/previews/island-overview.png",
+      "bytes": 311041,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/island-overview.png"
+    },
+    {
+      "path": "docs/island/previews/weijin-home.png",
+      "bytes": 315472,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/weijin-home.png"
+    },
+    {
+      "path": "docs/island/previews/greybox.png",
+      "bytes": 357578,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/greybox.png"
+    },
+    {
+      "path": "docs/island/previews/bear-reading.png",
+      "bytes": 545392,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/bear-reading.png"
+    },
+    {
+      "path": "docs/island/previews/bear-wave.png",
+      "bytes": 543288,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/bear-wave.png"
+    },
+    {
+      "path": "docs/island/previews/bear-animation.webm",
+      "bytes": 1109002,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/bear-animation.webm"
+    },
+    {
+      "path": "docs/island/previews/garden-interaction.webm",
+      "bytes": 7383650,
+      "archive": "/Users/ferris/.codex/visualizations/2026/11/04/01a1a5fa-4f70-7a91-af23-4f584e4c27e7/island-review-archive/garden-interaction.webm"
+    }
+  ],
+  "bytes": 23002658
+}

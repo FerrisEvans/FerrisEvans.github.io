@@ -72,7 +72,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
   <div class="island-page reading-page">
     {isDraft && <aside class="draft-preview" aria-label="草稿预览" data-pagefind-ignore><strong>草稿预览 · 仅本地可见</strong><p>准备发布时，将文章头部的 <code>draft</code> 改为 <code>false</code>。</p><a href="/drafts/">返回草稿列表</a></aside>}
     <nav aria-label="面包屑" class="reading-breadcrumb">
-      <a href="/lofi/"><Icon name="book" size={16} /> 文章</a>
+      <a href="/notes/"><Icon name="book" size={16} /> 文章</a>
       <span aria-hidden="true">/</span>
       <a href={`/categories/${cat.slug}/`}>{cat.label}</a>
       {sub && <><span aria-hidden="true">/</span><span>{sub}</span></>}

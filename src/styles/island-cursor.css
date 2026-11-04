@@ -1,14 +1,16 @@
 /* Animal Island UI's default cursor artwork and hotspot, MIT (guokaigdg, 2026).
  * Source and complete license: public/vendor/animal-island-ui/NOTICE.md.
- * Keep this scoped to the blog so the immersive room keeps its own controls. */
-.blog-body {
+ * Shared by every layout; native interaction cursors remain meaningful. */
+:root {
   --animal-cursor-img: url('/cursors/animal-island-default.svg');
   --animal-cursor-hotspot: 8 5;
+  --animal-cursor-default: var(--animal-cursor-img) var(--animal-cursor-hotspot), default;
+  --animal-cursor-pointer: var(--animal-cursor-img) var(--animal-cursor-hotspot), pointer;
   --animal-selection-bg: #e9c46a;
   --animal-selection-fg: #2b2620;
 }
 
-.blog-body ::selection {
+::selection {
   background: var(--animal-selection-bg);
   color: var(--animal-selection-fg);
 }
@@ -16,17 +18,28 @@
 /* The original is a native cursor, not a drawn element following the mouse.
  * Touch/coarse-pointer devices never receive cursor behavior. */
 @media (hover: hover) and (pointer: fine) {
-  .blog-body,
-  .blog-body * {
-    cursor: var(--animal-cursor-img) var(--animal-cursor-hotspot), default !important;
+  html,
+  body,
+  dialog,
+  dialog::backdrop,
+  .cursor-default,
+  [style*='cursor: default'] {
+    cursor: var(--animal-cursor-default) !important;
   }
 
-  /* Keep caret and disabled-state feedback without changing selection itself. */
-  .blog-body :is(input:not([type]), input[type='text'], input[type='search'], input[type='email'], input[type='password'], input[type='number'], input[type='tel'], input[type='url'], textarea, [contenteditable='true']) {
+  /* Match actual controls, not every descendant: grab/grabbing, text, zoom,
+   * resize and other explicit cursor semantics must survive the theme. */
+  html :where(a[href], button, summary, select, label[for], [role='button'], [role='link'], [role='tab'], input[type='button'], input[type='submit'], input[type='reset'], input[type='checkbox'], input[type='radio'], .cursor-pointer, [class*='animal-card-hoverable-'], [style*='cursor: pointer']):not(:where(.image-zoom, [class*='cursor-']:not(.cursor-pointer), [style*='cursor:']:not([style*='cursor: pointer']))) {
+    cursor: var(--animal-cursor-pointer) !important;
+  }
+
+  html :is(input:not([type]), input[type='text'], input[type='search'], input[type='email'], input[type='password'], input[type='number'], input[type='tel'], input[type='url'], textarea, [contenteditable='true'], .cursor-text) {
     cursor: text !important;
   }
 
-  .blog-body :is([disabled], [aria-disabled='true']) {
+  html :is([disabled], [aria-disabled='true'], .cursor-not-allowed) {
     cursor: not-allowed !important;
   }
+
+  #island-scene canvas { cursor:inherit; }
 }
