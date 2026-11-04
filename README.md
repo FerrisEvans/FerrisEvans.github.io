@@ -1,13 +1,13 @@
 # Praxis
 
-Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 GitHub Pages：<https://ferrisevans.github.io>
+保持好奇，慢慢来。Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 GitHub Pages：<https://ferrisevans.github.io>
 
 ## 技术栈
 
 - **Astro 7** — 静态站点生成，内容用 Markdown 内容集合管理
 - **React islands** — 只为需要交互的组件提供客户端水合
 - **Tailwind CSS v4** — 样式采用 CSS-first 配置，入口为 `src/styles/global.css`
-- **Motion Primitives / Kokonut UI** — 标题过渡与雨玻璃交互，组件源码保存在项目内
+- **Animal Island UI 3** — 使用原库的卡片、飘带、标签、波浪分隔，以及 `naive-icons` 彩色图标；Astro 在构建期渲染这些 React 组件。默认鼠标使用上游原始 SVG，本地字体随组件库打包。
 - **Pagefind** — 构建期生成的静态全文搜索
 - **KaTeX** — 数学公式（仅 `math: true` 的文章加载）
 - **Giscus** — 评论区（GitHub Discussions 驱动）
@@ -20,6 +20,14 @@ Ferris 的个人博客，基于 [Astro](https://astro.build) 构建，部署在 
 - `/posts/<slug>/`：文章详情、目录、评论与相关阅读。
 - `/categories/`、`/tags/`、`/archives/`：分类、标签与时间索引。
 - `/search/`：Pagefind 全文搜索。
+
+## 博客视觉与阅读布局
+
+博客使用 `src/styles/island.css` 的顶部导航与卡通小岛布局，不保留左侧栏；手机端使用折叠菜单，禁用 JavaScript 时保留原生导航链接。默认浅色，尊重保存的明暗偏好。分类、标签、归档、分页、RSS、搜索与原文章 URL 保持兼容。
+
+文章纸面最大 880px，桌面内边距 40px，正文约 798px；1440px 以下将旁侧目录折叠进正文，避免压缩阅读宽度。标题与正文使用原库自带的 Nunito / Noto Sans SC 字体，代码保留等宽与独立横向滚动，脚注使用较小字号；图片弹窗相对视口居中。Giscus 在 iframe 就绪与主题变化时同步颜色。
+
+3D 像素字体检查只扫描书房实际使用的共享组件（`Brand`、`LegacyWorkerRecovery`），博客的新文案不应扩大书房字体子集。
 
 ## 本地开发
 

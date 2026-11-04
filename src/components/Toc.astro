@@ -1,5 +1,6 @@
 ---
 import type { MarkdownHeading } from 'astro';
+import Icon from './Icon.astro';
 
 interface Props {
   headings: MarkdownHeading[];
@@ -12,12 +13,12 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
 
 {
   toc.length > 0 && (
-    <nav aria-label="目录" class="text-sm">
-      {showTitle && <p class="eyebrow mb-4">On this page / 目录</p>}
-      <ul class="space-y-1.5">
+    <nav aria-label="目录" class="notebook-toc">
+      {showTitle && <div class="toc-title"><Icon name="book" size={19} /><span>这篇笔记的书签</span></div>}
+      <ul class="toc-items">
         {toc.map((heading) => (
-          <li class={heading.depth === 3 ? 'pl-4' : ''}>
-            <a href={`#${heading.slug}`} class="toc-link py-1 pl-3 leading-5">
+          <li class={heading.depth === 3 ? 'toc-nested' : ''}>
+            <a href={`#${heading.slug}`} class="toc-link">
               {heading.text}
             </a>
           </li>
@@ -26,3 +27,15 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
     </nav>
   )
 }
+
+<style>
+  .toc-title { display:flex; align-items:center; gap:8px; margin-bottom:18px; color:var(--color-accent); font-size:12px; font-weight:650; }
+  .toc-items { display:grid; gap:4px; }
+  .toc-nested { padding-left:10px; }
+  .toc-link { border:0; border-radius:10px; padding:8px 11px; font-size:11px; line-height:1.7; transition:background .15s,color .15s; overflow-wrap:anywhere; }
+  .toc-link:hover { background:var(--color-paper-subtle); }
+  .toc-link.active { background:var(--color-paper-subtle); color:var(--color-accent); }
+  .toc-nested .toc-link { font-size:10px; }
+  :global(.dark) .toc-title, :global(.dark) .toc-link.active { color:var(--color-accent-dark); }
+  :global(.dark) .toc-link:hover, :global(.dark) .toc-link.active { background:var(--color-night-subtle); }
+</style>

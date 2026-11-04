@@ -1,7 +1,9 @@
 ---
+import { Card } from 'animal-island-ui';
 import CategoryBadge from './CategoryBadge.astro';
 import TagChip from './TagChip.astro';
-import { formatDate, postUrl, type Post } from '../utils/posts';
+import Icon from './Icon.astro';
+import { formatDate, postUrl, readingTime, type Post } from '../utils/posts';
 
 interface Props {
   post: Post;
@@ -11,36 +13,46 @@ interface Props {
 
 const { post, headingLevel = 2, showTags = false } = Astro.props;
 const Heading = headingLevel === 3 ? 'h3' : 'h2';
+const patterns = { 'programming-language': 'app-pink', 'data-structures': 'app-yellow', 'game-dev': 'app-teal', ai: 'purple' } as const;
+const pattern = patterns[post.data.category as keyof typeof patterns] ?? 'default';
 ---
 
-<li class="group relative py-6">
-  <div class="grid gap-3 sm:grid-cols-[7.5rem_minmax(0,1fr)_auto] sm:gap-x-6">
-    <time datetime={post.data.pubDate.toISOString()} class="font-mono text-xs leading-6 text-ink-faint dark:text-snow-faint sm:pt-1">
-      {formatDate(post.data.pubDate)}
-    </time>
-    <div class="min-w-0">
-      <Heading class="pr-6 font-serif text-xl font-semibold leading-snug sm:pr-0">
-        <a href={postUrl(post)} class="transition-colors after:absolute after:inset-0 after:z-[1] after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
-          {post.data.title}
-        </a>
-      </Heading>
-      {post.data.description && (
-        <p class="mt-2 line-clamp-2 max-w-2xl text-sm leading-6 text-ink-soft dark:text-snow-soft">{post.data.description}</p>
-      )}
-      {showTags ? (
-        post.data.tags.length > 0 && (
-          <div class="mt-3 flex flex-wrap gap-x-3 gap-y-1">
-            {post.data.tags.map((tag) => <TagChip tag={tag} />)}
-          </div>
-        )
-      ) : (
-        <div class="mt-3">
-          <CategoryBadge category={post.data.category} />
-        </div>
-      )}
-    </div>
-    <span aria-hidden="true" class="absolute right-0 top-7 text-lg text-ink-faint transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent dark:text-snow-faint dark:group-hover:text-accent-dark sm:static sm:self-center">
-      →
-    </span>
+<li class="note-list-item"><Card pattern={pattern} hoverable className="note-entry">
+  <div class="entry-meta">
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+    <span><Icon name="clock" size={14} />{readingTime(post)} 分钟</span>
   </div>
-</li>
+  <Heading class="entry-title"><a href={postUrl(post)}>{post.data.title}</a></Heading>
+  {post.data.description && <p class="entry-description">{post.data.description}</p>}
+  <div class="entry-bottom">
+    <div class="entry-labels">
+      {showTags && post.data.tags.length > 0
+        ? post.data.tags.map((tag) => <TagChip tag={tag} />)
+        : <CategoryBadge category={post.data.category} />}
+    </div>
+    <span class="entry-arrow" aria-hidden="true"><Icon name="arrow-right" size={18} /></span>
+  </div>
+</Card></li>
+
+<style>
+  .note-list-item { min-width: 0; display: flex; }
+  .note-list-item :global(.note-entry) { position: relative; display: flex; flex-direction: column; min-width: 0; width: 100%; padding: 28px; border-radius: 28px; color: var(--color-ink); }
+  .entry-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; color: var(--color-ink-soft); font-size: 12px; font-weight: 600; }
+  .entry-meta > span { display: inline-flex; align-items: center; gap: 5px; }
+  .entry-title { margin-top: 20px; font-size: 21px; line-height: 1.55; font-weight: 800; letter-spacing: .01em; overflow-wrap: anywhere; }
+  .entry-title a::after { position: absolute; z-index: 1; inset: 0; border-radius: 28px; content: ''; }
+  .entry-title a:hover { color: var(--color-accent); }
+  .entry-title a:focus-visible { outline: none; }
+  .note-list-item:has(.entry-title a:focus-visible) { outline: 3px solid var(--color-accent); outline-offset: 4px; border-radius: 28px; }
+  .entry-description { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-top: 12px; margin-bottom: 24px; color: var(--color-ink-soft); font-size: 14px; font-weight: 500; line-height: 1.9; }
+  .entry-bottom { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 18px; border-top: 2px dashed #a28a5c33; }
+  .entry-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .entry-arrow { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 50%; background: #fffbe7c9; color: #794f27; }
+  :global(.dark) .note-list-item :global(.note-entry) { background-color: #40382c; border-color: #776449; background-image: radial-gradient(#e4c88e17 1.4px, transparent 1.4px); background-size: 14px 14px; color: var(--color-snow); }
+  :global(.dark) .entry-meta, :global(.dark) .entry-description { color: var(--color-snow-soft); }
+  :global(.dark) .entry-bottom { border-color: #dfbd7840; }
+  :global(.dark) .entry-arrow { color: #f1d495; background: #5c4d32; }
+  :global(.dark) .entry-title a:hover { color: var(--color-accent-dark); }
+  :global(.dark) .note-list-item:has(.entry-title a:focus-visible) { outline-color: var(--color-accent-dark); }
+  @media (max-width: 640px) { .note-list-item :global(.note-entry) { padding: 24px; } .entry-title { font-size: 20px; } }
+</style>

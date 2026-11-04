@@ -1,6 +1,8 @@
 ---
+import { Card, Title } from 'animal-island-ui';
 import Base from '../layouts/Base.astro';
 import CategoryBadge from '../components/CategoryBadge.astro';
+import Icon from '../components/Icon.astro';
 import { getPosts, postUrl, type Post } from '../utils/posts';
 
 const posts = await getPosts();
@@ -25,40 +27,97 @@ const years = [...byYear.entries()]
 ---
 
 <Base title="归档">
-  <div class="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-12">
-      <p class="eyebrow">Archive / 时间索引</p>
-      <h1 class="page-title">归档</h1>
-      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {posts.length} 篇文章，按时间倒序排列。</p>
+  <div class="island-page">
+    <header class="archive-intro">
+      <span class="page-decoration"><Icon name="archive" size={52} /></span>
+      <h1><Title color="app-yellow" size="large">时光收藏夹</Title></h1>
+      <p class="island-lead">共 {posts.length} 篇文章。那些认真做过的小事，都好好收在这里。</p>
     </header>
-
-    {
-      years.map(({ year, months }) => (
-        <section class="mb-14">
-          <h2 class="mb-8 font-serif text-5xl font-medium tracking-tight text-ink/25 dark:text-snow/25">{year}</h2>
-          {months.map(({ month, posts: list }) => (
-            <div class="mb-9">
-              <h3 class="mb-4 font-serif text-lg font-bold text-ink-soft dark:text-snow-soft">{month} 月</h3>
-              <ul class="relative space-y-5 border-l border-line pl-6 dark:border-line-dark">
-                {list.map((post) => (
-                  <li class="group relative">
-                    <span class="absolute -left-[1.72rem] top-2 h-2.5 w-2.5 rounded-full border-2 border-paper bg-accent dark:border-night dark:bg-accent-dark" />
-                    <div class="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-                      <time datetime={post.data.pubDate.toISOString()} class="text-sm tabular-nums text-ink-faint dark:text-snow-faint">
-                        {String(post.data.pubDate.getUTCDate()).padStart(2, '0')} 日
-                      </time>
-                      <a href={postUrl(post)} class="font-medium transition-colors after:absolute after:inset-0 after:content-[''] group-hover:text-accent dark:group-hover:text-accent-dark">
-                        {post.data.title}
-                      </a>
-                      <CategoryBadge category={post.data.category} />
-                    </div>
-                  </li>
-                ))}
-              </ul>
+    <div class="archive-layout">
+      <nav aria-label="按年份浏览" class="year-index">
+        <p><Icon name="archive" size={17} />归档年份</p>
+        {years.map(({ year, months }) => (
+          <a href={`#year-${year}`}>
+            <span>{year}</span>
+            <span>{months.reduce((total, month) => total + month.posts.length, 0)} 篇</span>
+          </a>
+        ))}
+      </nav>
+      <div class="archive-ledger">
+        {years.map(({ year, months }) => (
+          <section class="archive-year" aria-labelledby={`year-${year}`}>
+            <div class="year-heading">
+              <h2 id={`year-${year}`}><Icon name="leaf" size={28} />{year} 年</h2>
+              <span>{months.length} 个月的记录</span>
             </div>
-          ))}
-        </section>
-      ))
-    }
+            {months.map(({ month, posts: list }) => (
+              <section class="month-block" aria-labelledby={`month-${year}-${month}`}><Card pattern="app-yellow" className="month-sheet">
+                <div class="month-heading">
+                  <h3 id={`month-${year}-${month}`}><Icon name="calendar" size={19} /><span>{String(month).padStart(2, '0')}</span>月</h3>
+                  <span>{list.length} 篇</span>
+                </div>
+                <ul>
+                  {list.map((post) => (
+                    <li class="archive-entry">
+                      <time datetime={post.data.pubDate.toISOString()} aria-label={`${year}年${month}月${post.data.pubDate.getUTCDate()}日`}>
+                        <span>{String(post.data.pubDate.getUTCDate()).padStart(2, '0')}</span><span>日</span>
+                      </time>
+                      <div>
+                        <a href={postUrl(post)} class="archive-title">{post.data.title}</a>
+                        <div class="archive-category"><CategoryBadge category={post.data.category} /></div>
+                      </div>
+                      <span class="archive-arrow" aria-hidden="true"><Icon name="arrow-right" size={17} /></span>
+                    </li>
+                  ))}
+                </ul>
+              </Card></section>
+            ))}
+          </section>
+        ))}
+      </div>
+    </div>
   </div>
 </Base>
+
+<style>
+  .archive-intro { margin-bottom: 36px; text-align: center; }
+  .page-decoration { display: inline-flex; color: var(--color-accent); margin-bottom: 14px; transform: rotate(-7deg); }
+  .archive-intro h1 { margin-bottom: 22px; }
+  .archive-layout { max-width: 960px; margin-inline: auto; }
+  .year-index { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 36px; padding: 20px 24px; border: 2px dashed #ccb992; border-radius: 26px; background: var(--color-paper-elev); }
+  .year-index > p { display: flex; align-items: center; gap: 8px; margin-right: 8px; font-size: 14px; font-weight: 700; color: var(--color-ink-soft); }
+  .year-index a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 46px; padding: 10px 20px; border: 2px solid #b7decf; border-radius: 50px; background: #dff3df; }
+  .year-index a:hover { border-color: var(--color-accent); color: var(--color-accent); transform: translateY(-2px); }
+  .year-index a > span:first-child { font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .year-index a > span:last-child { font-size: 12px; color: var(--color-ink-soft); }
+  .archive-year + .archive-year { margin-top: 42px; }
+  .year-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+  .year-heading h2 { display: flex; align-items: center; gap: 11px; font-size: 28px; font-weight: 800; scroll-margin-top: 115px; }
+  .year-heading > span { font-size: 13px; color: var(--color-ink-soft); }
+  .month-block :global(.month-sheet) { padding: 26px 30px 10px; border-radius: 28px; color: var(--color-ink); }
+  .month-block + .month-block { margin-top: 22px; }
+  .month-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 20px; border-bottom: 2px dashed #cdb97b66; }
+  .month-heading h3 { display: flex; align-items: center; gap: 8px; color: #794f27; font-size: 15px; font-weight: 700; }
+  .month-heading h3 > span { margin-left: 5px; font-size: 24px; font-weight: 800; }
+  .month-heading > span { padding: 4px 12px; background: #fffbe7; border-radius: 50px; font-size: 13px; color: #725d42; font-weight: 700; }
+  .month-block ul { list-style: none; }
+  .archive-entry { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr) 24px; gap: 18px; align-items: center; padding: 22px 0; }
+  .archive-entry + .archive-entry { border-top: 2px dashed #cfba8c4d; }
+  .archive-entry time { display: flex; flex-direction: column; align-items: center; padding: 9px 4px; border: 2px solid #d9c58d; border-radius: 17px; background: #fffbe7; color: #794f27; }
+  .archive-entry time > span:first-child { font-size: 22px; line-height: 1.2; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .archive-entry time > span:last-child { margin-top: 3px; font-size: 11px; font-weight: 700; }
+  .archive-title { font-size: 17px; font-weight: 700; line-height: 1.65; overflow-wrap: anywhere; }
+  .archive-title::after { position: absolute; z-index: 1; inset: 0; border-radius: 18px; content: ''; }
+  .archive-title:hover { color: var(--color-accent); }
+  .archive-category { margin-top: 9px; }
+  .archive-arrow { color: #794f27; }
+  :global(.dark) .year-index { background: var(--color-night-elev); border-color: var(--color-line-dark); }
+  :global(.dark) .year-index > p, :global(.dark) .year-index a > span:last-child, :global(.dark) .year-heading > span { color: var(--color-snow-soft); }
+  :global(.dark) .year-index a { background: #374b3f; border-color: #617964; }
+  :global(.dark) .year-index a:hover { border-color: var(--color-accent-dark); color: var(--color-accent-dark); }
+  :global(.dark) .month-block :global(.month-sheet) { background-color: #463e2b; border-color: #7f6d47; background-image: radial-gradient(#e4c88e17 1.4px, transparent 1.4px); background-size: 14px 14px; color: var(--color-snow); }
+  :global(.dark) .month-heading, :global(.dark) .archive-entry + .archive-entry { border-color: #b7985852; }
+  :global(.dark) .month-heading h3, :global(.dark) .archive-arrow, :global(.dark) .archive-title:hover { color: var(--color-accent-dark); }
+  :global(.dark) .archive-entry time, :global(.dark) .month-heading > span { background: #5b4c2e; border-color: #927b4d; color: #f5dfa9; }
+  @media (max-width: 640px) { .year-index { padding: 20px; gap: 10px; } .year-index > p { flex-basis: 100%; margin-bottom: 3px; } .year-index a { gap: 13px; padding-inline: 16px; } .month-block :global(.month-sheet) { padding: 22px 20px 6px; } .archive-entry { gap: 12px; grid-template-columns: 42px minmax(0, 1fr) 18px; } .archive-title { font-size: 15px; } .year-heading h2 { font-size: 25px; } }
+</style>

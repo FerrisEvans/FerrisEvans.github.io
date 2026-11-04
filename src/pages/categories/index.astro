@@ -1,39 +1,64 @@
 ---
+import { Card, Title } from 'animal-island-ui';
 import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
 import { categoriesFor } from '../../data/site';
 import { getPosts } from '../../utils/posts';
 
 const posts = await getPosts();
 const categories = categoriesFor(posts.map((post) => post.data.category));
 const countOf = (slug: string) => posts.filter((post) => post.data.category === slug).length;
+const icons: Record<string, string> = { 'programming-language': 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' };
+
+const patterns = ['app-pink', 'app-yellow', 'app-teal', 'purple'] as const;
 ---
 
 <Base title="分类">
-  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
-    <header class="page-header mb-10">
-      <p class="eyebrow">Categories / 知识地图</p>
-      <h1 class="page-title">分类</h1>
-      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {categories.length} 个分类，{posts.length} 篇文章。</p>
+  <div class="island-page">
+    <header class="collection-header">
+      <span class="page-decoration"><Icon name="grid" size={52} /></span>
+      <h1><Title color="app-yellow" size="large">分类小天地</Title></h1>
+      <p class="island-lead">{categories.length} 个分类，{posts.length} 篇实践笔记。挑一个喜欢的方向，开始逛逛吧。</p>
     </header>
-    <div class="grid gap-x-10 border-b border-line dark:border-line-dark sm:grid-cols-2">
-      {
-        categories.map((cat, index) => (
-          <a href={`/categories/${cat.slug}/`} class="group border-t border-line py-7 dark:border-line-dark">
-            <div class="flex items-center justify-between gap-4">
-              <span class="flex items-center gap-3 font-mono text-xs text-ink-faint dark:text-snow-faint">
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <span style={`color: ${cat.accent};`}>{cat.mark}</span>
-              </span>
-              <span class="text-xs text-ink-faint dark:text-snow-faint">{countOf(cat.slug)} 篇</span>
+    <div class="folder-grid">
+      {categories.map((cat, index) => (
+        <a href={`/categories/${cat.slug}/`} class="category-link">
+          <Card pattern={patterns[index % patterns.length]} hoverable className="category-card">
+            <div class="folder-top">
+              <span class="folder-symbol"><Icon name={icons[cat.slug] ?? 'book'} size={58} /></span>
+              <span class="folder-count">{countOf(cat.slug)} 篇笔记</span>
             </div>
-            <h2 class="mt-4 flex items-center justify-between gap-4 font-serif text-2xl font-semibold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">
-              {cat.label}
-              <span aria-hidden="true" class="font-sans text-base font-normal text-ink-faint transition-all group-hover:translate-x-1 group-hover:text-accent dark:text-snow-faint dark:group-hover:text-accent-dark">→</span>
-            </h2>
-            <p class="mt-3 max-w-md text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
-          </a>
-        ))
-      }
+            <h2>{cat.label}</h2>
+            <p>{cat.description}</p>
+            <span class="folder-bottom"><span>进去看看</span><Icon name="arrow-right" size={24} /></span>
+          </Card>
+        </a>
+      ))}
     </div>
+    <p class="collection-footnote"><Icon name="tag" size={24} />想找得更具体一些？<a href="/tags/">翻翻标签收集册 <Icon name="arrow-right" size={18} /></a></p>
   </div>
 </Base>
+
+<style>
+  .collection-header { margin-bottom: 38px; text-align: center; }
+  .page-decoration { display: inline-flex; color: var(--color-accent); margin-bottom: 14px; transform: rotate(-7deg); }
+  .collection-header h1 { margin: 0 0 22px; }
+  .folder-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .category-link { display: flex; min-width: 0; border-radius: 28px; }
+  .category-link :global(.category-card) { display: flex; flex-direction: column; width: 100%; padding: 32px; border-radius: 28px; color: var(--color-ink); }
+  .folder-top, .folder-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .folder-symbol { display: grid; place-items: center; width: 88px; height: 88px; border-radius: 32px 26px 34px 28px; background: #fffbeaab; color: #794f27; transform: rotate(-5deg); }
+  .folder-count { padding: 8px 15px; border-radius: 50px; background: #fffbeac9; font-size: 13px; font-weight: 700; color: #725d42; }
+  h2 { margin-top: 24px; font-size: 26px; font-weight: 800; letter-spacing: .01em; }
+  .category-link p { max-width: 32em; margin-top: 12px; margin-bottom: 28px; color: var(--color-ink-soft); font-size: 15px; font-weight: 500; line-height: 1.9; }
+  .folder-bottom { margin-top: auto; padding-top: 20px; border-top: 2px dashed #947b5533; font-size: 15px; font-weight: 700; }
+  .collection-footnote { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 36px; font-size: 14px; line-height: 1.8; color: var(--color-ink-soft); }
+  .collection-footnote a { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; color: var(--color-accent); }
+  :global(.dark) .category-link :global(.category-card) { background-color: #40392e; border-color: #73624c; color: var(--color-snow); background-image: radial-gradient(#ebc59015 1.4px, transparent 1.4px); background-size: 14px 14px; }
+  :global(.dark) .category-link p, :global(.dark) .collection-footnote { color: var(--color-snow-soft); }
+  :global(.dark) .folder-symbol { background: #5a4a35; color: #f2d49c; }
+  :global(.dark) .folder-count { background: #5a4a35; color: #f2dfbf; }
+  :global(.dark) .folder-bottom { border-color: #d9bf8d38; }
+  :global(.dark) .collection-footnote a { color: var(--color-accent-dark); }
+  @media (max-width: 640px) { .folder-grid { grid-template-columns: 1fr; gap: 22px; } .category-link :global(.category-card) { padding: 26px; } .folder-symbol { width: 76px; height: 76px; } h2 { font-size: 23px; } }
+</style>

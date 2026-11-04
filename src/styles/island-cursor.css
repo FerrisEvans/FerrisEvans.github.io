@@ -1,0 +1,32 @@
+/* Animal Island UI's default cursor artwork and hotspot, MIT (guokaigdg, 2026).
+ * Source and complete license: public/vendor/animal-island-ui/NOTICE.md.
+ * Keep this scoped to the blog so the immersive room keeps its own controls. */
+.blog-body {
+  --animal-cursor-img: url('/cursors/animal-island-default.svg');
+  --animal-cursor-hotspot: 8 5;
+  --animal-selection-bg: #e9c46a;
+  --animal-selection-fg: #2b2620;
+}
+
+.blog-body ::selection {
+  background: var(--animal-selection-bg);
+  color: var(--animal-selection-fg);
+}
+
+/* The original is a native cursor, not a drawn element following the mouse.
+ * Touch/coarse-pointer devices never receive cursor behavior. */
+@media (hover: hover) and (pointer: fine) {
+  .blog-body,
+  .blog-body * {
+    cursor: var(--animal-cursor-img) var(--animal-cursor-hotspot), default !important;
+  }
+
+  /* Keep caret and disabled-state feedback without changing selection itself. */
+  .blog-body :is(input:not([type]), input[type='text'], input[type='search'], input[type='email'], input[type='password'], input[type='number'], input[type='tel'], input[type='url'], textarea, [contenteditable='true']) {
+    cursor: text !important;
+  }
+
+  .blog-body :is([disabled], [aria-disabled='true']) {
+    cursor: not-allowed !important;
+  }
+}

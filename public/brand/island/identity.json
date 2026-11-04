@@ -1,0 +1,19 @@
+{
+  "name": "Praxis",
+  "concept": "rounded-p-sprout",
+  "tagline": "保持好奇，慢慢来",
+  "source": "Original SVG geometry; mint cushion badge, cream P, sunshine sprout, warm brown outline.",
+  "component": "src/components/IslandBrand.astro",
+  "faviconRoot": "/brand/island/",
+  "faviconFallbacks": [
+    "/favicon.ico",
+    "/favicon.svg"
+  ],
+  "cacheVersion": "praxis-island-1",
+  "palette": {
+    "mint": "#8edac6",
+    "cream": "#fff9e8",
+    "sunshine": "#f7cd67",
+    "ink": "#725d42"
+  }
+}

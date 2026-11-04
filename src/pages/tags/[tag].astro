@@ -1,7 +1,9 @@
 ---
 import type { GetStaticPaths } from 'astro';
+import { Title } from 'animal-island-ui';
 import Base from '../../layouts/Base.astro';
 import PostListItem from '../../components/PostListItem.astro';
+import Icon from '../../components/Icon.astro';
 import { getPosts, type Post } from '../../utils/posts';
 
 export const getStaticPaths = (async () => {
@@ -23,19 +25,31 @@ const { tag, posts } = Astro.props as { tag: string; posts: Post[] };
 ---
 
 <Base title={`标签 · ${tag}`}>
-  <div class="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-14">
-    <nav aria-label="面包屑" class="mb-6 flex items-center gap-2 text-sm text-ink-faint dark:text-snow-faint">
-      <a href="/tags/" class="transition-colors hover:text-ink dark:hover:text-snow">标签</a>
-      <span>/</span>
-      <span class="text-ink-soft dark:text-snow-soft">#{tag}</span>
-    </nav>
-    <header class="page-header mb-10">
-      <p class="eyebrow">Tag / 标签</p>
-      <h1 class="page-title">#{tag}</h1>
-      <p class="mt-3 text-ink-soft dark:text-snow-soft">共 {posts.length} 篇文章。</p>
+  <div class="island-page">
+    <a href="/tags/" class="back-link"><Icon name="arrow-left" size={17} />全部标签</a>
+    <header class="tag-heading">
+      <span class="tag-stamp"><Icon name="tag" size={52} /></span>
+      <p class="tag-caption">标签收集册</p>
+      <h1><Title color="app-yellow" size="middle">{tag}</Title></h1>
+      <p class="island-lead">沿着这个关键词，找到了 {posts.length} 篇笔记。</p>
     </header>
-    <ul class="divide-y divide-line border-y border-line dark:divide-line-dark dark:border-line-dark">
+    <ul class="tag-notes">
       {posts.map((post) => <PostListItem post={post} />)}
     </ul>
   </div>
 </Base>
+
+<style>
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 22px; padding: 8px 16px; border-radius: 50px; background: var(--color-paper-elev); color: var(--color-ink-soft); font-size: 14px; font-weight: 700; }
+  .back-link:hover { color: var(--color-accent); }
+  .tag-heading { position: relative; padding: 26px 120px 35px 0; }
+  .tag-caption { margin-bottom: 18px; font-size: 14px; font-weight: 700; color: var(--color-ink-soft); }
+  .tag-stamp { position: absolute; top: 22px; right: 4px; display: grid; place-items: center; width: 96px; height: 96px; border: 2px dashed #d59499; border-radius: 34px 28px 36px 30px; transform: rotate(8deg); color: #794f27; background: #ffe1e4; }
+  .tag-heading h1 { overflow-wrap: anywhere; margin-bottom: 22px; }
+  .tag-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; list-style: none; }
+  :global(.dark) .back-link { background: var(--color-night-elev); }
+  :global(.dark) .back-link, :global(.dark) .tag-caption { color: var(--color-snow-soft); }
+  :global(.dark) .back-link:hover { color: var(--color-accent-dark); }
+  :global(.dark) .tag-stamp { background: #553e3a; color: #f2c4b1; border-color: #96716b; }
+  @media (max-width: 640px) { .tag-notes { grid-template-columns: 1fr; } .tag-heading { padding-right: 0; padding-top: 0; } .tag-stamp { display: none; } }
+</style>

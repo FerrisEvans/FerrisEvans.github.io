@@ -1,19 +1,20 @@
 ---
 import { SITE } from '../data/site';
+import Icon from './Icon.astro';
 
 const g = SITE.giscus;
 ---
 
-<section class="mt-14 border-t border-line pt-8 dark:border-line-dark">
-  <div class="mb-6 flex items-center justify-between gap-4">
-    <div class="flex items-center gap-2.5">
-      <svg class="h-5 w-5 text-accent dark:text-accent-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-      <h2 class="font-serif text-lg font-semibold">讨论与评论</h2>
+<section id="comments" aria-labelledby="comments-heading" class="comments-note">
+  <div class="comments-header">
+    <span class="comments-icon"><Icon name="message" size={24} /></span>
+    <div>
+      <p class="island-eyebrow">聊一聊</p>
+      <h2 id="comments-heading">讨论与评论</h2>
     </div>
-    <span class="hidden font-mono text-xs text-ink-faint dark:text-snow-faint sm:inline">Powered by Giscus</span>
+    <span class="comments-provider">Giscus</span>
   </div>
+  <p class="comments-intro">问题、发现，或者另一种解法，都欢迎记在这里。</p>
   <div class="giscus"></div>
   <script
     is:inline
@@ -35,14 +36,26 @@ const g = SITE.giscus;
 </section>
 
 <script is:inline>
+  var readyGiscusFrames = new WeakSet();
+  var sentGiscusThemes = new WeakMap();
   function syncGiscusTheme() {
     var iframe = document.querySelector('iframe.giscus-frame');
     if (!iframe) return;
     var theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
     iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
+    if (readyGiscusFrames.has(iframe)) sentGiscusThemes.set(iframe, theme);
   }
 
   window.addEventListener('theme-changed', syncGiscusTheme);
+  // A lazy iframe can finish loading before its app installs the config listener.
+  // Its first message is the readiness signal; deduplicate to avoid resize loops.
+  window.addEventListener('message', function (event) {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (event.origin !== 'https://giscus.app' || !iframe || event.source !== iframe.contentWindow || !event.data?.giscus) return;
+    readyGiscusFrames.add(iframe);
+    var theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    if (sentGiscusThemes.get(iframe) !== theme) syncGiscusTheme();
+  });
   var watchedGiscusFrames = new WeakSet();
   function watchGiscusFrame() {
     var iframe = document.querySelector('iframe.giscus-frame');
@@ -59,3 +72,15 @@ const g = SITE.giscus;
     watchGiscusFrame();
   }
 </script>
+
+<style>
+  .comments-note { margin-top:34px; scroll-margin-top:100px; }
+  .comments-header { display:flex; align-items:center; gap:13px; }
+  .comments-icon { display:grid; place-items:center; width:46px; height:46px; flex-shrink:0; border-radius:16px; background:var(--color-paper-subtle); color:var(--color-accent); }
+  .comments-header h2 { margin-top:3px; font-size:20px; font-weight:700; }
+  .comments-provider { margin-left:auto; font-size:10px; color:var(--color-ink-faint); }
+  .comments-intro { font-size:12px; line-height:1.8; color:var(--color-ink-soft); margin:17px 0 24px; }
+  :global(.dark) .comments-icon { background:var(--color-night-subtle); color:var(--color-accent-dark); }
+  :global(.dark) .comments-provider { color:var(--color-snow-faint); }
+  :global(.dark) .comments-intro { color:var(--color-snow-soft); }
+</style>

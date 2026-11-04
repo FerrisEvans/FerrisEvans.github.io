@@ -1,34 +1,42 @@
 ---
 import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
 ---
 
 <Base title="页面不存在">
-  <section class="mx-auto flex max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6">
-    <div class="w-full border-y border-line py-12 dark:border-line-dark sm:py-16">
-      <span class="font-mono text-xs font-semibold tracking-[0.16em] text-accent dark:text-accent-dark">
-        ERROR // 404 NOT FOUND
-      </span>
-      <p class="mt-4 font-mono text-7xl font-bold tracking-tighter text-ink/15 sm:text-8xl dark:text-snow/15">
-        404
-      </p>
-      <h1 class="mt-2 font-serif text-2xl font-bold sm:text-3xl">这一页走丢了</h1>
-      <p class="mx-auto mt-3 max-w-md text-sm leading-7 text-ink-soft dark:text-snow-soft">
-        你访问的页面不存在，或者已经被移动。也许它正在某个循环里等待下一次迭代。
-      </p>
-      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <a
-          href="/"
-          class="inline-flex items-center gap-2 rounded-md bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-ink/85 dark:bg-snow dark:text-night dark:hover:bg-snow/85"
-        >
-          回到首页
-        </a>
-        <a
-          href="/search/"
-          class="inline-flex items-center gap-2 rounded-md border border-line px-5 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-accent/50 hover:text-accent dark:border-line-dark dark:text-snow-soft dark:hover:border-accent-dark/50 dark:hover:text-accent-dark"
-        >
-          搜索文章
-        </a>
+  <div class="island-page lost-page">
+    <section class="island-panel lost-note">
+      <span class="lost-icon"><Icon name="leaf" size={38} /></span>
+      <p class="island-eyebrow">A LITTLE DETOUR</p>
+      <p class="lost-number" aria-hidden="true">404</p>
+      <h1>这张笔记走丢了</h1>
+      <p class="lost-description">你访问的页面不存在，或者已经被移动。<br />沿着下面的小路，继续逛逛吧。</p>
+      <div class="lost-actions">
+        <a href="/lofi/" class="back-to-notes"><Icon name="book" size={18} />回到笔记</a>
+        <a href="/search/"><Icon name="search" size={18} />搜索文章</a>
       </div>
-    </div>
-  </section>
+      <a href="/" class="back-to-room"><Icon name="home" size={15} />回到书房<Icon name="arrow-right" size={14} /></a>
+    </section>
+  </div>
 </Base>
+
+<style>
+  .lost-page { max-width:880px; padding-block:60px; }
+  .lost-note { padding:48px 24px; text-align:center; }
+  .lost-icon { display:grid; place-items:center; width:76px; height:76px; border-radius:26px; background:var(--color-paper-subtle); color:var(--color-accent); margin:0 auto 24px; transform:rotate(-8deg); }
+  .lost-number { font-size:100px; line-height:1.2; font-weight:800; letter-spacing:-.07em; color:var(--color-accent); opacity:.25; margin:8px 0; }
+  .lost-note h1 { font-size:28px; font-weight:700; }
+  .lost-description { margin-top:17px; font-size:13px; line-height:1.9; color:var(--color-ink-soft); }
+  .lost-actions { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:28px; }
+  .lost-actions a { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:11px 18px; border:1px solid var(--color-line); border-radius:14px; font-size:13px; transition:transform .15s; }
+  .lost-actions a:hover { transform:translateY(-2px); }
+  .lost-actions .back-to-notes { background:var(--color-accent); color:var(--color-paper-elev); border-color:var(--color-accent); }
+  .back-to-room { display:inline-flex; align-items:center; gap:7px; margin-top:30px; font-size:11px; color:var(--color-ink-faint); }
+  :global(.dark) .lost-icon { background:var(--color-night-subtle); color:var(--color-accent-dark); }
+  :global(.dark) .lost-number { color:var(--color-accent-dark); }
+  :global(.dark) .lost-description { color:var(--color-snow-soft); }
+  :global(.dark) .lost-actions a { border-color:var(--color-line-dark); }
+  :global(.dark) .lost-actions .back-to-notes { background:var(--color-accent-dark); border-color:var(--color-accent-dark); color:var(--color-night); }
+  :global(.dark) .back-to-room { color:var(--color-snow-faint); }
+  @media (max-width:639px) { .lost-page { padding-block:30px; } .lost-note { padding:34px 20px; } .lost-note h1 { font-size:23px; } }
+</style>

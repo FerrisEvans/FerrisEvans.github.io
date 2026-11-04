@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="Praxis 萌芽标识">
+  <title>Praxis 萌芽标识</title>
+  <path d="M15 5C25 2 44 2 53 8C62 14 62 31 59 45C57 57 44 62 29 60C14 61 4 53 3 39C1 24 4 9 15 5Z" fill="#8edac6" stroke="#725d42" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M20 18C20 16.3 21.3 15 23 15H33C43 15 48 20 48 28C48 36.2 42.8 41 33 41H29V48C29 50.3 27.3 52 24.5 52C21.7 52 20 50.3 20 48ZM29 24V32H33C36.9 32 39 30.6 39 28C39 25.4 36.9 24 33 24Z" fill="#fff9e8" fill-rule="evenodd" stroke="#725d42" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M43 17C44 10.5 48.5 8.5 54 9.5C53.7 15 49.4 19.1 43 17Z" fill="#f7cd67" stroke="#725d42" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M41 20L48.5 13.5" stroke="#725d42" stroke-width="2" stroke-linecap="round"/>
+</svg>

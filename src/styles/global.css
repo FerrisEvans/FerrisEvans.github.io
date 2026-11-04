@@ -5,30 +5,30 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-sans: "Nunito", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-serif: "Songti SC", "Noto Serif SC", STSong, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
-  --color-paper: #f1ebdf;
-  --color-paper-elev: #faf6ed;
-  --color-paper-subtle: #e8dfd0;
-  --color-ink: #2d2923;
-  --color-ink-soft: #655d52;
-  --color-ink-faint: #6f6556;
-  --color-line: #d5c9b6;
-  --color-accent: #8f5e22;
+  --color-paper: #f8f8f0;
+  --color-paper-elev: #fffbee;
+  --color-paper-subtle: #f0e8d8;
+  --color-ink: #794f27;
+  --color-ink-soft: #725d42;
+  --color-ink-faint: #79674e;
+  --color-line: #e4d7b8;
+  --color-accent: #087f77;
 
-  --color-night: #0f151a;
-  --color-night-elev: #151d23;
-  --color-night-subtle: #12191f;
-  --color-snow: #ece3d2;
-  --color-snow-soft: #b2a795;
-  --color-snow-faint: #958a78;
-  --color-line-dark: #2e3538;
-  --color-accent-dark: #d6a45f;
+  --color-night: #303b32;
+  --color-night-elev: #3c493d;
+  --color-night-subtle: #344035;
+  --color-snow: #fff5df;
+  --color-snow-soft: #e2d7bd;
+  --color-snow-faint: #cbbf9f;
+  --color-line-dark: #667054;
+  --color-accent-dark: #8fdfc6;
 
-  --color-background: light-dark(#faf6ed, #151d23);
-  --color-border: light-dark(#d5c9b6, #2e3538);
+  --color-background: light-dark(#fffbee, #3c493d);
+  --color-border: light-dark(#e4d7b8, #667054);
 }
 
 @view-transition {
@@ -50,6 +50,7 @@ html {
 
 body {
   @apply bg-paper text-ink font-sans antialiased dark:bg-night dark:text-snow;
+  font-weight: 500;
   transition: background-color 180ms ease, color 180ms ease;
 }
 
