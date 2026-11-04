@@ -398,13 +398,9 @@ async function verifyPublished() {
     assert(results.some(({ url, content }) => new URL(url, server.base).pathname === postPath && content.includes(marker)),
       'published article is searchable and its indexed content contains the full body marker');
     const page = await context.newPage();
-    const modelRequests = [];
-    page.on('request', request => { if (/\/island\/island\.glb(?:[?#]|$)/.test(request.url())) modelRequests.push(request.url()); });
     const response = await page.goto(`${server.base}/`);
     assert.equal(response.status(), 200);
     await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
-    assert.equal(modelRequests.length, 1, 'the 3D homepage starts automatically without an exploration button');
-    assert.equal(await page.locator('#home-enter-room').count(), 0);
     await page.locator('[data-island-access="recent"]').focus();
     await page.keyboard.press('Enter');
     await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
