@@ -56,7 +56,7 @@ async function assertVisibleTitle(page, pattern) {
 
 async function assertStaticEntrances(page) {
   const sceneRequests = [];
-  const watch = request => { if (/\/island\/.*\.glb(?:[?#]|$)/.test(request.url())) sceneRequests.push(request.url()); };
+  const watch = request => { if (/\/island\/.*\.glb(?:\.bin)?(?:[?#]|$)/.test(request.url())) sceneRequests.push(request.url()); };
   page.on('request', watch);
   await page.goto(url('/'));
   await page.waitForTimeout(500);
@@ -157,7 +157,7 @@ try {
   await page.waitForURL(url('/about/'));
   const currentAvatar = page.locator('.profile-photo img');
   await currentAvatar.evaluate(image => image.decode());
-  assert.match(await currentAvatar.getAttribute('src'), /\/ferris-dog-avatar\.png(?:\?|$)/, 'about uses the current generated dog avatar');
+  assert.match(await currentAvatar.getAttribute('src'), /\/ferris-dog-avatar\.webp(?:\?|$)/, 'about uses the current generated dog avatar');
   assert.match(await currentAvatar.getAttribute('alt'), /卡通/, 'the illustration is described as a cartoon, not the reference photograph');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');

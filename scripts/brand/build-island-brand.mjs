@@ -21,6 +21,20 @@ await writeFile(join(island, 'logo.svg'), logo);
 const avatarPath = join(island, 'ferris-avatar.png');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const avatarBefore = hash(await readFile(avatarPath));
+// Keep the full generated PNG as an authoring source, outside the public tree.
+// The square delivery copy preserves the composition and transparent background.
+const dogSourceFile = 'assets/brand/ferris-dog-avatar.png';
+const dogSourcePath = join(root, dogSourceFile);
+const dogSource = await readFile(dogSourcePath);
+const dogSourceMeta = await sharp(dogSource).metadata();
+const dogSourceHash = hash(dogSource);
+const dogDeliveryFile = 'ferris-dog-avatar.webp';
+const dogEncoding = { width: 512, height: 512, fit: 'inside', withoutEnlargement: true, quality: 88, effort: 6 };
+const dogDelivery = await sharp(dogSource)
+  .resize(dogEncoding.width, dogEncoding.height, { fit: dogEncoding.fit, withoutEnlargement: dogEncoding.withoutEnlargement })
+  .webp({ quality: dogEncoding.quality, effort: dogEncoding.effort }).toBuffer();
+const dogDeliveryMeta = await sharp(dogDelivery).metadata();
+await writeFile(join(island, dogDeliveryFile), dogDelivery);
 const siteSource = await readFile(join(root, 'src/data/site.ts'), 'utf8');
 const currentAvatarFile = siteSource.match(/avatar:\s*`\/brand\/island\/([^?`]+)/)?.[1];
 if (!currentAvatarFile || currentAvatarFile.includes('/')) throw new Error('Current author avatar must name a local brand file.');
@@ -66,6 +80,8 @@ const identity = {
   sourceSha256: { mark: hash(source), lettering: hash(lettering), logo: hash(logo) }, pngSizes: [16, 32, 48, 96, 180, 192, 512], icoSizes: [16, 32, 48, 96, 256],
   avatar: {
     current: { file: currentAvatarFile, role: 'Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar', provenance: 'docs/island/avatar-generation.md', sha256: hash(currentAvatar) },
+    dogSource: { file: dogSourceFile, format: dogSourceMeta.format, bytes: dogSource.length, width: dogSourceMeta.width, height: dogSourceMeta.height, sha256: dogSourceHash },
+    dogDelivery: { file: dogDeliveryFile, format: dogDeliveryMeta.format, bytes: dogDelivery.length, width: dogDeliveryMeta.width, height: dogDeliveryMeta.height, sha256: hash(dogDelivery), encoding: dogEncoding },
     retainedBear: { file: 'ferris-avatar.png', role: 'Retained previous bear illustration and style reference', sha256: avatarBefore },
   },
 };
@@ -110,4 +126,5 @@ if (process.argv.includes('--preview')) {
   } finally { await browser.close(); }
 }
 if (hash(await readFile(avatarPath)) !== avatarBefore) throw new Error('Author avatar unexpectedly changed.');
-console.log('未尽 brand regenerated: custom Chinese path lettering + book/sprout logo; 7 PNG sizes and 5-frame ICO from the simple icon. Retained bear portrait unchanged.');
+if (hash(await readFile(dogSourcePath)) !== dogSourceHash) throw new Error('Generated dog avatar source unexpectedly changed.');
+console.log(`未尽 brand regenerated: custom Chinese path lettering + book/sprout logo; 7 PNG sizes and 5-frame ICO from the simple icon; 512px dog avatar ${dogDelivery.length} bytes. Original dog source and retained bear portrait unchanged.`);

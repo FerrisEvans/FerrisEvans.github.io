@@ -4,17 +4,16 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { basename, dirname, resolve } from 'node:path';
 
-const binary = readFileSync(new URL('../../public/island/island.glb', import.meta.url));
+const binary = readFileSync(new URL('../../assets/island/island.glb', import.meta.url));
 const report = JSON.parse(readFileSync(new URL('../../public/island/model-report.json', import.meta.url), 'utf8'));
 const document = JSON.parse(binary.subarray(20, 20 + binary.readUInt32LE(12)).toString());
 
-test('delivered island is a self-contained glTF binary with an honest size and mesh report', () => {
+test('authored island is a self-contained glTF binary with an honest size and mesh report', () => {
   assert.equal(binary.readUInt32LE(0), 0x46546c67);
   assert.equal(binary.readUInt32LE(4), 2);
   assert.equal(binary.readUInt32LE(8), binary.length);
   assert.equal(binary.readUInt32LE(16), 0x4e4f534a);
   assert.equal(report.bytes, binary.length);
-  assert(binary.length <= 5_000_000, 'core model stays inside the initial transfer budget');
   assert.equal(report.materials, document.materials.length);
   assert.equal(report.meshes, document.meshes.length);
   assert.equal(report.drawCalls, document.meshes.reduce((total, mesh) => total + mesh.primitives.length, 0));

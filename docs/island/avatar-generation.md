@@ -6,9 +6,28 @@ The dog photograph supplied by the user guides identity; the retained bear
 avatar guides the established bold-outline illustration style. The 3D dog and
 rabbit continue to use the original plush photographs as modeling references.
 
-Selected output: `public/brand/island/ferris-dog-avatar.png` (transparent PNG).
+Selected original: `assets/brand/ferris-dog-avatar.png` (1254 × 1254 transparent PNG).
+Its bytes are unchanged from the selected generated image; it is retained as an
+authoring source outside the public directory, not downloaded by visitors.
+The public avatar is `public/brand/island/ferris-dog-avatar.webp` (512 × 512),
+derived without cropping or changing the illustration's composition.
 The preceding textured draft was not selected. The retained bear avatar remains
 at `public/brand/island/ferris-avatar.png` as a historical character/style source.
+
+## Delivery derivative
+
+`npm run assets:brand` reproducibly creates the WebP with Sharp: fit inside
+512 × 512, no enlargement, quality 88, effort 6, with transparency retained.
+The 88 px homepage avatar and 112 px about-page avatar use this same delivery
+file through `SITE.avatar`; the original PNG is no longer published.
+
+- Original: **1,460,585 bytes**, SHA-256 `27a9057a6b8d52cea21f804b91816962aa35e34ca3e344ed2e5f6b15f3702e79`.
+- Delivery: **27,364 bytes**, SHA-256 `72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5`.
+- Transfer reduction for this image: **98.13%**. WebP is a smaller display derivative, not a lossless replacement for the original.
+
+`public/brand/island/identity.json` records both files, dimensions, encoding
+settings and hashes. The generator verifies that neither the dog original nor
+the retained bear illustration was altered.
 
 ## Final prompt
 

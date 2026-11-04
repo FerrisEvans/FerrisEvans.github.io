@@ -4,6 +4,7 @@ import {
   Scene, SRGBColorSpace, ACESFilmicToneMapping, Vector3, WebGLRenderer,
 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 import { createNavigation } from './navigation';
 import { createAnimation } from './animation';
 import { createEffects } from './effects';
@@ -46,7 +47,12 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
   let model: Group;
   let clips: import('three').AnimationClip[] = [];
   try {
-    const parsed = new GLTFLoader().parseAsync(bytes, '/island/').then(gltf => {
+    // Cache/verify the compact transport, then decode only for this live scene.
+    const parsed = new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip')))
+      .arrayBuffer().then(binary => {
+        if (disposed || signal.aborted) throw new DOMException('Aborted', 'AbortError');
+        return new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).parseAsync(binary, '/island/');
+      }).then(gltf => {
       // Parsing has no AbortSignal API. A result arriving after navigation must
       // still release its decoded textures rather than outlive the abandoned page.
       if (disposed || signal.aborted) { releaseObjectResources(gltf.scene); throw new DOMException('Aborted', 'AbortError'); }
@@ -156,7 +162,7 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
       point.project(camera);
       return { x: (point.x + 1) / 2 * host.clientWidth, y: (1 - point.y) / 2 * host.clientHeight };
     },
-    metrics() { return { animation: animation.state(), poses: animation.poses(), effects: effects.state(), activity: activity.state(), outline: outline.state(), calls: outline.state().calls, triangles: outline.state().triangles, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, dpr: renderer.getPixelRatio(), width: renderer.domElement.width, height: renderer.domElement.height }; },
+    metrics() { return { homeFrame: navigation.homeFrame, animation: animation.state(), poses: animation.poses(), effects: effects.state(), activity: activity.state(), outline: outline.state(), calls: outline.state().calls, triangles: outline.state().triangles, geometries: renderer.info.memory.geometries, textures: renderer.info.memory.textures, dpr: renderer.getPixelRatio(), width: renderer.domElement.width, height: renderer.domElement.height }; },
     dispose,
 
   };

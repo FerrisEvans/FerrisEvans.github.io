@@ -56,12 +56,12 @@ bpy.ops.object.select_all(action='DESELECT')
 for obj in scene.objects:
     if obj.type not in {'LIGHT', 'CAMERA'}:
         obj.select_set(True)
-bpy.ops.export_scene.gltf(filepath=str(OUT / 'island.glb'), export_format='GLB', use_selection=True,
+bpy.ops.export_scene.gltf(filepath=str(SOURCE / 'island.glb'), export_format='GLB', use_selection=True,
     export_cameras=False, export_lights=False, export_animations=True,
     export_animation_mode='NLA_TRACKS', export_force_sampling=True,
     export_frame_range=False, export_extras=True, export_yup=True,
     export_materials='EXPORT', export_image_format='AUTO')
-raw = (OUT / 'island.glb').read_bytes()
+raw = (SOURCE / 'island.glb').read_bytes()
 gltf = json.loads(raw[20:20 + struct.unpack_from('<I', raw, 12)[0]])
 triangles = sum(gltf['accessors'][p['indices']]['count'] // 3 for m in gltf.get('meshes', []) for p in m['primitives'])
 external = []
@@ -72,7 +72,8 @@ for key, provenance in PROVENANCE.items():
         'models': [item for item in provenance['selectedModels'] if item['file'] in used]})
 report = {
     'schema': 2, 'generator': 'scripts/island/build_scene.py', 'author': 'Weijin / original Ferris character and garden composition',
-    'source': 'assets/island/island.blend', 'asset': 'public/island/island.glb',
+    'source': 'assets/island/island.blend', 'asset': 'assets/island/island.glb',
+    'delivery': 'public/island/island.glb.bin',
     'externalAssets': external, 'assetInstances': INSTANCES,
     'bytes': len(raw), 'triangles': triangles, 'meshes': len(gltf.get('meshes', [])),
     'drawCalls': sum(len(m['primitives']) for m in gltf.get('meshes', [])),

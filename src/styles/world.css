@@ -33,10 +33,12 @@ html:has(body.world-home) { width:100%; height:100%; overflow:hidden; }
 .island-stage { position:relative; isolation:isolate; overflow:hidden; width:100%; height:100%; margin:0; background:var(--color-paper); }
 #island-scene { position:absolute; inset:0; z-index:1; cursor:grab; }
 #island-scene:active { cursor:grabbing !important; }
-#island-scene canvas { display:block; width:100%; height:100%; touch-action:none; opacity:0; transition:opacity .45s ease; }
+#island-scene canvas { display:block; width:100%; height:100%; touch-action:none; opacity:0; }
 #island-root[data-state="ready"] #island-scene canvas { opacity:1; }
-#island-poster { position:absolute; inset:0; z-index:2; display:block; pointer-events:none; transition:opacity .45s ease; }
-#island-poster img { width:100%; height:100%; object-fit:contain; }
+#island-poster { position:absolute; inset:0; z-index:2; display:block; overflow:hidden; container-type:size; pointer-events:none; transition:opacity .45s ease; }
+/* The cover and live camera fit the same authored rectangle. Only surplus
+   paper margin can leave the stage; intrinsic image proportions stay intact. */
+#island-poster img { position:absolute; left:50%; top:50%; display:block; width:min(calc(100cqw * var(--world-cover-width,1)),calc(100cqh * var(--world-cover-height,1.2))); max-width:none; height:auto; transform:translate(-50%,-50%); }
 #island-root[data-state="ready"] #island-poster { opacity:0; }
 .world-small-button { display:inline-flex; gap:7px; align-items:center; justify-content:center; min-height:42px; padding:10px 16px; font-size:11px; }
 .island-loading { position:absolute; z-index:3; left:50%; bottom:48px; transform:translateX(-50%); width:max-content; max-width:calc(100% - 40px); text-align:center; background:var(--island-surface); border:1px solid var(--island-border); border-radius:18px; padding:14px 22px; box-shadow:0 4px 20px #3f4e3210; }
@@ -156,15 +158,6 @@ body:has(#island-root[data-capture]) > :is(.site-header,.island-footer,.footer-w
 }
 
 #island-root[data-capture] :is(.island-loading,#island-directory,#island-dialog,#island-hint,.island-access-target) { display:none !important; }
-
-/* Animal Island UI's bordered island tooltip: organic paper outline + tail. */
-#island-hint { --tooltip-fill:#f7f3df; --tooltip-line:#c4b89e; position:absolute; z-index:12; width:max-content; max-width:240px; padding:14px 22px; color:#725d42; font-size:13px; font-weight:800; line-height:1.55; pointer-events:none; filter:drop-shadow(0 4px 14px #794f2724); transform-origin:50% 100%; }
-#island-hint svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
-#island-hint path { fill:var(--tooltip-fill); stroke:var(--tooltip-line); stroke-width:2; stroke-linejoin:round; }
-#island-hint span { position:relative; white-space:nowrap; }
-#island-hint::after { content:''; position:absolute; left:var(--tail-left,50%); bottom:-5px; width:10px; height:10px; transform:translateX(-50%) rotate(45deg); border-right:2px solid var(--tooltip-line); border-bottom:2px solid var(--tooltip-line); border-radius:2px; background:var(--tooltip-fill); }
-#island-hint[data-placement="bottom"]::after { top:-5px; bottom:auto; transform:translateX(-50%) rotate(225deg); }
-.dark #island-hint { --tooltip-fill:#465943; --tooltip-line:#a8b78c; color:#fff5df; }
 
 .island-author img { object-fit:cover; object-position:center; }
 

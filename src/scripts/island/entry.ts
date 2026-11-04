@@ -120,6 +120,9 @@ function mountIsland() {
       panels.enhanced(true);
       if (panels.selected) viewer.navigate(panels.selected, true, elapsed);
       invalidate();
+      // A single-model load skips preload(); trim only its older cached
+      // revisions after readiness, without delaying the scene or rereading it.
+      void resources.prune();
     } catch (error) { if (current === generation && !signal.aborted) fail(error); }
   }
   retry.addEventListener('click', () => void start(), { signal });

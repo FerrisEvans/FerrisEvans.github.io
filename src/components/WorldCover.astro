@@ -1,15 +1,29 @@
 ---
+import manifest from '../../public/island/manifest.json';
 interface Props { id?: string; class?: string; posterVersion: string; alt?: string; decorative?: boolean; }
 const { id, class: className, posterVersion, alt = '', decorative = false } = Astro.props;
 const day = `/island/cover-day.webp?v=${posterVersion}`;
 const night = `/island/cover-night.webp?v=${posterVersion}`;
+const posters = (manifest as { posters?: {
+  framing?: { halfWidth: number; halfHeight: number };
+  files?: Record<string, { width: number; height: number }>;
+} }).posters;
+const { width = 1440, height = 1200 } = posters?.files?.['cover-day.webp'] ?? {};
+const imageRatio = width / height;
+const frame = posters?.framing;
+const modelRatio = frame && Number.isFinite(frame.halfWidth) && Number.isFinite(frame.halfHeight)
+  && frame.halfWidth > 0 && frame.halfHeight > 0
+  ? frame.halfWidth / frame.halfHeight : imageRatio;
+// Match the live orthographic fit rather than fitting the photograph's extra
+// paper margins. Both axes use one scale, so the island is never stretched.
+const fitStyle = `--world-cover-width:${Math.max(1, imageRatio / modelRatio)};--world-cover-height:${Math.max(modelRatio, imageRatio)};`;
 // The inline selector chooses one network URL before layout. No-JS gets the
 // ordinary daytime image below; the tiny local placeholder costs no request.
-const placeholder = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="1440" height="1200"/%3E';
+const placeholder = `data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"/%3E`;
 ---
-<picture id={id} class={className} data-theme-cover aria-hidden={decorative ? 'true' : undefined}>
-  <img data-world-image data-day-src={day} data-night-src={night} src={placeholder} width="1440" height="1200" alt={decorative ? '' : alt} fetchpriority="high" />
-  <noscript><style>[data-world-image] { display:none !important; }</style><img src={day} width="1440" height="1200" alt={decorative ? '' : alt} fetchpriority="high" /></noscript>
+<picture id={id} class={className} style={fitStyle} data-theme-cover aria-hidden={decorative ? 'true' : undefined}>
+  <img data-world-image data-day-src={day} data-night-src={night} src={placeholder} width={width} height={height} alt={decorative ? '' : alt} fetchpriority="high" />
+  <noscript><style>[data-world-image] { display:none !important; }</style><img src={day} width={width} height={height} alt={decorative ? '' : alt} fetchpriority="high" /></noscript>
 </picture>
 <script is:inline>
   (function () {

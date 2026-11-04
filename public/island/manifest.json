@@ -1,13 +1,15 @@
 {
   "schemaVersion": 1,
-  "buildId": "807b94c2c541cf43cc74",
+  "buildId": "131f13588c10cbe7fe95",
   "model": {
-    "file": "island.glb",
-    "bytes": 4899572,
-    "sha256": "1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683"
+    "file": "island.glb.bin",
+    "encoding": "gzip",
+    "bytes": 1890820,
+    "sha256": "d646296a514837648ba6cab05ceadc621d87ab3cb420b3091c9f38c7dbb9e513"
   },
   "sources": {
     "assets/island/island.blend": "5c3595f5edcb9c11855e5ca8f6411de4a549077bcacb4c1ba31f2647296437dc",
+    "assets/island/island.glb": "1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
     "assets/island/references/dog-plush.jpg": "ccbb00dde64b28ac1687e5a1cb02ca51603f0ccdae30b94510184b379cb28506",
     "assets/island/references/rabbit-plush.jpg": "e2b29c334b06af5738768d971adff1ac0aae5ad90f7518355be3629b35fd7e3a",
     "assets/island/vendor/kaykit-forest-nature-1.0/Grass_1_A_Color1.bin": "d293510be3ca4a6062dc305c22a143ba134fc49af65aaba064cc8f8d868d6c6e",
@@ -145,30 +147,36 @@
     "assets/island/vendor/tinytreats-pretty-park-1.0/tree.gltf": "bdf34d136c163a47c5e2c87f74e731eab9b43f3d4ee84468f2b2f37fdc9dcaa7",
     "scripts/island/build_scene.py": "f74ba4c02b3f700198c913c97ce449622a1fed4439fd9116fbeabd3601494ac5",
     "scripts/island/character.py": "52bff007cd5cf553700f01edac5d374bc6aca63d769ad844a425a66770eedf46",
-    "scripts/island/export_scene.py": "4c0d367c2016a3e1f627746c2dd6c5e43a150fd16724a250542ee8dbceb30168",
+    "scripts/island/export_scene.py": "4f2881681074149c7ce30aa7341d36a6d8e24cdc3a27f6eaa70c68ebf5bebe55",
     "scripts/island/friends.py": "cb94c64aa71e606a7658a5ad566758293d7206986caaa77b269b640018ef21a5",
     "scripts/island/geometry.py": "ff8d42649c1b2f0b09a57d2943933ef62d11bf6f677e307abbc91627a82afc01",
+    "scripts/island/pack-model.mjs": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
     "scripts/island/render_friends.py": "7d360031492bb80f1b03068779ee8810218d610f11f07a41dd9ec22140d28bf2",
     "scripts/island/render_friends_motion.py": "8a69becf4f12d9ac924f511fa22b6f8303b14bf04ae64755ba4236050046d39c",
     "scripts/island/vendor.py": "52704220260e9334c62aca5d41f0617bc64a29833992331cbf64bb34cee8ea37",
     "src/scripts/island/activity.ts": "af6580f03f53f0cbc56ce302ccbae9fe027461fa76b06273b0c8437bdb4da7d0",
     "src/scripts/island/animation.ts": "3cc0f6d0694b272d645d3e0c99157b8b1e9164567b63b5ae7f655afe8cbcb110",
     "src/scripts/island/effects.ts": "1d490507a241b1f1182664787e1f73fe7273d60b6b20ad1e82dffa8b4610e25d",
-    "src/scripts/island/entry.ts": "460274ce4adc9fa8026d27a284d151776abb3e82a88acd6e5b23f2b15131d39d",
-    "src/scripts/island/navigation.ts": "f92bbac5d619a85f639658c50315d3bc842eb005e7053556dba1dc5944676c50",
+    "src/scripts/island/entry.ts": "00f1c79506a41eef8000cc99df3f77260286a3af872a0b018aa0a5c472e5074d",
+    "src/scripts/island/navigation.ts": "087f353425410757a508c2b8b190aa7e99e3e931ebc56d696349c485e088a4f3",
     "src/scripts/island/outline.ts": "b1f6c868fe0ef8e0b56be67dc66b1f9f610e5150dc1163a4d874665d22ad2cb5",
     "src/scripts/island/panels.ts": "56fb1a20546e5c330683f17b584655458b2f9951dd3c171dc80e75a0b24850f1",
     "src/scripts/island/picking.ts": "4a12b3ff40c3110aa1486b26bf7f658d998e90e75cee1d898fa1da6ce64e7a35",
     "src/scripts/island/resources.ts": "d87c5cb084b365519e9ea4e74102f73aebb84eba864867787620272ffbb11b08",
-    "src/scripts/island/scene.ts": "a91412fc30b4e525618be75f3045224fc3ed212ff1bfe47bfed826100cc9a914",
-    "src/scripts/island/tooltip.ts": "42ba47429ec0468b47055cf41f4a7f04d22f2bdba961c4ef020279820f311618",
+    "src/scripts/island/scene.ts": "178f603652e431b55f4bbec28d9f008100f94e61ee84d08b5b46a338619e5188",
+    "src/scripts/island/tooltip.ts": "f45339e4bc766841c3591beda029bae2e5f7560aeb3e06b3b2704deef7aa3c88",
     "src/scripts/island/types.ts": "52e6926c4221a9fcf2eb95cc7b1bafb182595e73c480d14082f277ac2131fa3c",
-    "src/styles/world.css": "a51622b620ebba5bffceacbeedcb039e4204fa12caf45ea2c5afef192b385783"
+    "src/styles/island-tooltip.css": "bfbe3d6cc67d66906ce9fa73e878e51dd7a62d17cddf9a3a929a6ca9472c7b98",
+    "src/styles/world.css": "22b13faeab673fc9ede735c3f300ed75d4436fff44709038c1809046d83e498b"
   },
   "threeVersion": "0.186.1",
   "posters": {
-    "buildId": "807b94c2c541cf43cc74",
+    "buildId": "131f13588c10cbe7fe95",
     "renderer": "Three.js / browser WebGL",
+    "framing": {
+      "halfWidth": 7.672116566861505,
+      "halfHeight": 5.564765414955635
+    },
     "files": {
       "cover-day.webp": {
         "bytes": 106394,

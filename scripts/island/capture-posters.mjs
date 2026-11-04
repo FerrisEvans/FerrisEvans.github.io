@@ -14,6 +14,7 @@ assert.equal((await modelManifest()).buildId, manifest.buildId, 'Seal model/rend
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome' });
 const directory = await mkdtemp(join(tmpdir(), 'praxis-island-posters-'));
 const files = {};
+let framing;
 try {
   for (const [file, [width, height]] of Object.entries(posterSizes)) {
     const theme = file.includes('night') ? 'dark' : 'light';
@@ -26,6 +27,12 @@ try {
     await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
     const buildId = await page.locator('#island-root').getAttribute('data-build-id');
     assert.equal(buildId, manifest.buildId, 'The rendered page must use the exact model/source build being sealed.');
+    const homeFrame = await page.locator('#island-root').evaluate(root => JSON.parse(root.dataset.metrics).homeFrame);
+    assert(homeFrame && Number.isFinite(homeFrame.halfWidth) && homeFrame.halfWidth > 0
+      && Number.isFinite(homeFrame.halfHeight) && homeFrame.halfHeight > 0,
+    'The runtime must provide its authored home fit for responsive poster framing.');
+    if (framing) assert.deepEqual(homeFrame, framing, 'All poster variants must use the same home framing.');
+    else framing = homeFrame;
     await page.evaluate(() => document.fonts.ready);
     // A newly sealed manifest can trigger one development reload. Add capture
     // chrome suppression only after the matching renderer has become ready.
@@ -45,7 +52,7 @@ try {
   assert.equal((await modelManifest()).buildId, manifest.buildId, 'Sources changed during capture; refusing mixed poster delivery.');
   // All captures must succeed before any public poster is replaced.
   for (const file of Object.keys(files)) await rename(join(directory, file), join('public/island', file));
-  manifest.posters = { buildId: manifest.buildId, renderer: 'Three.js / browser WebGL', files };
+  manifest.posters = { buildId: manifest.buildId, renderer: 'Three.js / browser WebGL', framing, files };
   await writeFile('public/island/manifest.json', JSON.stringify(manifest, null, 2) + '\n');
   console.log(`Captured day, night and sharing images from browser build ${manifest.buildId}.`);
 } finally {

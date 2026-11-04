@@ -1,4 +1,4 @@
-.tag-cloud-content { width:100%; max-width:1000px; margin:0 auto; }
+.tag-cloud-content { position:relative; width:100%; max-width:1000px; margin:0 auto; }
 .tag-tools { display:flex; justify-content:center; margin:0 0 24px; }
 .tag-search { display:flex; align-items:center; gap:10px; width:min(360px,100%); min-height:48px; padding:0 16px; border:1.5px solid var(--island-border); border-radius:999px; background:var(--island-surface); color:var(--color-ink-soft); }
 .tag-search:focus-within { outline:3px solid var(--color-accent); outline-offset:3px; }
@@ -7,9 +7,12 @@
 .tag-word-cloud { position:relative; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 10px; list-style:none; margin:0; padding:16px 0; border:0; background:transparent; }
 .tag-word-cloud > li { display:flex; max-width:100%; margin:0; padding:0; }
 .tag-word-cloud[hidden],.tag-word-cloud > li[hidden] { display:none; }
-.tag-word-cloud .tag-item { align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); }
+.tag-word-cloud .tag-item { position:relative; align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); transform:translateY(var(--cloud-lift,0px)) scale(var(--cloud-scale,1)); transform-origin:center; transition:none; text-decoration:none; }
 .tag-word-cloud .tag-word { font-size:clamp(14px,var(--tag-token-size),39px); font-weight:700; line-height:1.25; overflow-wrap:anywhere; }
-.tag-word-cloud .tag-item:hover { text-decoration:underline; text-decoration-thickness:1.5px; text-underline-offset:.18em; }
+.tag-word-cloud .tag-item:hover,.tag-word-cloud .tag-item:active { text-decoration:none; }
+.tag-word-cloud[data-magnifying="true"] .tag-item { will-change:transform; }
+.tag-word-cloud .tag-item[data-cloud-active="true"] { filter:brightness(.86); }
+.dark .tag-word-cloud .tag-item[data-cloud-active="true"] { filter:brightness(1.14); }
 .tag-cloud-empty { padding:34px 0; text-align:center; color:var(--color-ink-soft); font-size:14px; line-height:1.9; }
 .tag-cloud-empty .blog-button { display:inline-flex; align-items:center; min-height:44px; margin-top:18px; padding:8px 20px; }
 .dark .tag-search { color:var(--color-snow-soft); }

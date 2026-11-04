@@ -1,4 +1,4 @@
-import { Mesh, OrthographicCamera, Vector2, Vector3, type Object3D } from 'three';
+import { Mesh, OrthographicCamera, Spherical, Vector2, Vector3, type Object3D } from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import type { IslandView } from './types';
 
@@ -14,10 +14,11 @@ export function createNavigation(camera: OrthographicCamera, element: HTMLElemen
   element.style.touchAction = 'none';
   controls.enablePan = false;
   controls.enableDamping = false;
-  controls.minAzimuthAngle = -.18;
-  controls.maxAzimuthAngle = .95;
-  controls.minPolarAngle = .72;
-  controls.maxPolarAngle = 1.12;
+  // An open island can be viewed from every side; keep the camera above ground.
+  controls.minAzimuthAngle = -Infinity;
+  controls.maxAzimuthAngle = Infinity;
+  controls.minPolarAngle = .42;
+  controls.maxPolarAngle = 1.35;
   controls.minZoom = .85;
   controls.maxZoom = 2.2;
   controls.rotateSpeed = .4;
@@ -86,9 +87,19 @@ export function createNavigation(camera: OrthographicCamera, element: HTMLElemen
     if (!moving) return false;
     elapsed = Math.min(duration, elapsed + Math.max(0, dt));
     const t = ease(elapsed / duration);
+    const startOrbit = new Spherical().setFromVector3(from.offset);
+    const endOrbit = new Spherical().setFromVector3(to.offset);
+    const turn = Math.atan2(Math.sin(endOrbit.theta - startOrbit.theta), Math.cos(endOrbit.theta - startOrbit.theta));
+    // Return around the island on the shortest arc. Linear Cartesian offsets
+    // would pass through the target when closing from the opposite side.
+    const offset = new Vector3().setFromSphericalCoords(
+      startOrbit.radius + (endOrbit.radius - startOrbit.radius) * t,
+      startOrbit.phi + (endOrbit.phi - startOrbit.phi) * t,
+      startOrbit.theta + turn * t,
+    );
     apply({
       target: from.target.clone().lerp(to.target, t),
-      offset: from.offset.clone().lerp(to.offset, t),
+      offset,
       span: from.span + (to.span - from.span) * t,
       zoom: from.zoom + (to.zoom - from.zoom) * t,
       shift: from.shift.clone().lerp(to.shift, t),
@@ -102,6 +113,7 @@ export function createNavigation(camera: OrthographicCamera, element: HTMLElemen
   camera.position.copy(home).add(homeOffset); controls.target.copy(home); controls.update();
   return {
     controls, go, update,
+    homeFrame: { halfWidth: fitX, halfHeight: fitY },
     resize(w: number, h: number) {
       const current = snapshot(); width = Math.max(1, w); height = Math.max(1, h);
       current.span = spanFor(selected); current.shift = shiftFor(selected); apply(current);

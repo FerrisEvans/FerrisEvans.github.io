@@ -15,9 +15,12 @@ async function fixture(t) {
   for (const [file, bytes] of Object.entries({
     'scripts/island/build_scene.py': 'original scene source',
     'assets/island/island.blend': 'editable Blender source',
-    'public/island/island.glb': 'delivered model',
+    'assets/island/island.glb': 'authored glTF source',
+    'scripts/island/pack-model.mjs': 'lossless delivery packer',
+    'public/island/island.glb.bin': 'delivered model',
     'src/scripts/island/scene.ts': 'rendering source',
     'src/styles/world.css': 'capture framing source',
+    'src/styles/island-tooltip.css': 'shared tooltip styles',
     'node_modules/three/package.json': '{"version":"0.186.1"}',
   })) await write(file, bytes);
   return { root, write };
@@ -27,7 +30,7 @@ test('geometry, authoring source and renderer changes invalidate the same scene 
   const { root, write } = await fixture(t);
   const baseline = await modelManifest(root);
   await verifyManifest(baseline, root, { modelOnly: true });
-  for (const file of ['public/island/island.glb', 'scripts/island/build_scene.py', 'assets/island/island.blend', 'src/scripts/island/scene.ts', 'src/styles/world.css']) {
+  for (const file of ['public/island/island.glb.bin', 'scripts/island/build_scene.py', 'assets/island/island.blend', 'src/scripts/island/scene.ts', 'src/styles/world.css']) {
     const original = await readFile(join(root, file));
     await write(file, `changed ${file}`);
     await assert.rejects(verifyManifest(baseline, root, { modelOnly: true }), /sources changed/);
@@ -70,7 +73,7 @@ test('publication requires byte-exact day, night and sharing captures of that bu
   const { root, write } = await fixture(t);
   const manifest = await modelManifest(root);
   await assert.rejects(verifyManifest(manifest, root), /posters belong/);
-  manifest.posters = { buildId: manifest.buildId, files: {} };
+  manifest.posters = { buildId: manifest.buildId, framing: { halfWidth: 7, halfHeight: 5 }, files: {} };
   for (const [file, [width, height]] of Object.entries(posterSizes)) {
     await write(`public/island/${file}`, `captured image ${file}`);
     manifest.posters.files[file] = { ...await fileRecord(join(root, 'public/island', file)), width, height };
@@ -82,7 +85,7 @@ test('publication requires byte-exact day, night and sharing captures of that bu
 
 test('the initial core resource budget is enforced before deployment', async t => {
   const { root, write } = await fixture(t);
-  await write('public/island/island.glb', Buffer.alloc(5_000_001));
+  await write('public/island/island.glb.bin', Buffer.alloc(5_000_001));
   await assert.rejects(verifyManifest(await modelManifest(root), root, { modelOnly: true }), /5 MB/);
 });
 

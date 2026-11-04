@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "source": "assets/island/island.glb",
+  "sourceSha256": "1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+  "packerSha256": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
+  "file": "island.glb.bin",
+  "sourceBytes": 4899572,
+  "bytes": 1890820,
+  "packedBytes": 3182360,
+  "sha256": "d646296a514837648ba6cab05ceadc621d87ab3cb420b3091c9f38c7dbb9e513",
+  "packedSha256": "78426d1dcec986da29c94bbcc7307e36aad5f99d20331c6307bf3c82137d58d4",
+  "compression": "gzip",
+  "extension": "EXT_meshopt_compression",
+  "textureExtension": "EXT_texture_webp",
+  "integrity": {
+    "nodesExact": true,
+    "attributesAndWindingExact": true,
+    "animationValuesExact": true,
+    "materialsEquivalent": true,
+    "imagePixelsExact": true,
+    "quantization": false,
+    "reordered": false
+  },
+  "nodes": 182,
+  "meshes": 114,
+  "materials": 41,
+  "animations": [
+    {
+      "name": "Idle",
+      "channels": 8
+    },
+    {
+      "name": "Attention",
+      "channels": 2
+    },
+    {
+      "name": "Wave",
+      "channels": 6
+    }
+  ],
+  "images": [
+    {
+      "name": "tiny_treats_texture_1",
+      "sourceBytes": 20167,
+      "bytes": 16948,
+      "width": 1024,
+      "height": 1024,
+      "pixelsSha256": "4e0021c56ed025a6aa8d010d5832c4ddcbe4f98d7412b989b80306b0edd01a9b",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Terry_normal",
+      "sourceBytes": 210680,
+      "bytes": 161716,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "2e93c0631e0c586ef54ebfe1cfac3a1c194ee5ffd4e498cb6afbbbaed13c4d11",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Weave_normal",
+      "sourceBytes": 125629,
+      "bytes": 84138,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "0898fb581089b10dc8ef3eb90fd3f34d38f8429010e3ebc879e982fb12483ab0",
+      "pixelsExact": true
+    },
+    {
+      "name": "forest_texture",
+      "sourceBytes": 48679,
+      "bytes": 8742,
+      "width": 1024,
+      "height": 1024,
+      "pixelsSha256": "149ed3e703ad4f31a9ad647393c8bfcf017bea01e962e473b7e430a514585d9a",
+      "pixelsExact": true
+    },
+    {
+      "name": "tiny_treats_texture_1",
+      "sourceBytes": 20974,
+      "bytes": 18718,
+      "width": 1024,
+      "height": 1024,
+      "pixelsSha256": "5051bc3d1ae33ac730eb77f23485302eeca8be67918d820ea195048bef63eb7f",
+      "pixelsExact": true
+    },
+    {
+      "name": "tiny_treats_grass_texture",
+      "sourceBytes": 10306,
+      "bytes": 3848,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "636924bc68ae402180146112d495adf0da040898ae06ddef29d8942b7e2913d3",
+      "pixelsExact": true
+    },
+    {
+      "name": "furniturebits_texture",
+      "sourceBytes": 15605,
+      "bytes": 11958,
+      "width": 1024,
+      "height": 1024,
+      "pixelsSha256": "e0e635d254d59185bedca3fc78f1cfc9710a77309f834770573d9cbd9cac8862",
+      "pixelsExact": true
+    },
+    {
+      "name": "tiny_treats_plaid_pattern_green",
+      "sourceBytes": 3408,
+      "bytes": 666,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "9a7fdcc44c697d60dbf37b67883a7e019ddc986a3de4848c842c8485cb515e05",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Rabbit_floral_weave",
+      "sourceBytes": 140777,
+      "bytes": 12686,
+      "width": 512,
+      "height": 512,
+      "pixelsSha256": "3fc1fa97c4883f75569f4a2dd1b16c9f82587fe4530aa97c3e59bb7969d04ce7",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Cord_normal",
+      "sourceBytes": 26853,
+      "bytes": 1976,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "05a6344082138061ee540f060c85ea40c7392376d4758f28f5354b27a9c4719a",
+      "pixelsExact": true
+    }
+  ]
+}

@@ -132,6 +132,8 @@ export class RoomAssets {
     if (revision) parsed.searchParams.set('v', revision);
     return parsed.pathname + parsed.search + parsed.hash;
   }
+  /** Trim owned revisions without reading or hashing any asset again. */
+  prune() { return this.disposed ? Promise.resolve() : this.cache.prune(); }
   async preload() {
     // The model unlocks decoding, material setup and native media buffering.
     // Do not divide its connection bandwidth among every atlas at startup.
@@ -142,7 +144,7 @@ export class RoomAssets {
     const result=await Promise.all(Array.from({length:Math.min(4,files.length)},async()=>{
       while(next<files.length)await this.read(files[next++].url);
     }));
-    await this.cache.prune();return result;
+    await this.prune();return result;
   }
   get cacheStats(){return {...this.stats};}
   get activeRequests(){return this.active;}

@@ -45,10 +45,34 @@
   ],
   "avatar": {
     "current": {
-      "file": "ferris-dog-avatar.png",
+      "file": "ferris-dog-avatar.webp",
       "role": "Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar",
       "provenance": "docs/island/avatar-generation.md",
+      "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5"
+    },
+    "dogSource": {
+      "file": "assets/brand/ferris-dog-avatar.png",
+      "format": "png",
+      "bytes": 1460585,
+      "width": 1254,
+      "height": 1254,
       "sha256": "27a9057a6b8d52cea21f804b91816962aa35e34ca3e344ed2e5f6b15f3702e79"
+    },
+    "dogDelivery": {
+      "file": "ferris-dog-avatar.webp",
+      "format": "webp",
+      "bytes": 27364,
+      "width": 512,
+      "height": 512,
+      "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5",
+      "encoding": {
+        "width": 512,
+        "height": 512,
+        "fit": "inside",
+        "withoutEnlargement": true,
+        "quality": 88,
+        "effort": 6
+      }
     },
     "retainedBear": {
       "file": "ferris-avatar.png",
