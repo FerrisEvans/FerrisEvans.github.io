@@ -4,18 +4,21 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Praxis UI A · Warm Newsprint — locked 2026-11-03.
+ * Title serif is for post and card titles only. Never for the Praxis wordmark.
+ */
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  --font-serif: "Songti SC", "Noto Serif SC", STSong, serif;
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-serif: "Noto Serif SC", "Songti SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
-  --color-paper: #f1ebdf;
-  --color-paper-elev: #fbf7ee;
-  --color-paper-subtle: #e8dfd0;
-  --color-ink: #2d2923;
-  --color-ink-soft: #655d52;
-  --color-ink-faint: #6f6556;
-  --color-line: #d5c9b6;
+  --color-paper: #ebe4d6;
+  --color-paper-elev: #f5efe3;
+  --color-paper-subtle: #e0d5c4;
+  --color-ink: #1f1c18;
+  --color-ink-soft: #5c554c;
+  --color-ink-faint: #7a7266;
+  --color-line: #cfc3b0;
   --color-accent: #966325;
   --color-accent-soft: #d6a45f;
   --color-hero-fg: #ece3d2;
@@ -27,11 +30,20 @@
   --color-snow: #ece3d2;
   --color-snow-soft: #b8ab96;
   --color-snow-faint: #988b77;
-  --color-line-dark: #3a352d;
+  --color-line-dark: #2a333c;
   --color-accent-dark: #d6a45f;
 
-  --color-background: light-dark(#fbf7ee, #1a222a);
-  --color-border: light-dark(#d5c9b6, #3a352d);
+  --color-background: light-dark(#f5efe3, #1a222a);
+  --color-border: light-dark(#cfc3b0, #2a333c);
+
+  --text-body: 17px;
+  --text-body--line-height: 1.75;
+  --text-nav: 14px;
+  --text-card-title: 1.3rem;
+  --text-card-title--line-height: 1.35;
+  --text-featured-title: 1.85rem;
+  --text-featured-title--line-height: 1.25;
+  --leading-body: 1.75;
 }
 
 @view-transition {
@@ -40,6 +52,7 @@
 
 :root {
   color-scheme: light;
+  --measure: 40ch;
 }
 
 :root.dark {
@@ -52,7 +65,7 @@ html {
 }
 
 body {
-  @apply bg-paper text-ink font-sans antialiased dark:bg-night dark:text-snow;
+  @apply bg-paper text-ink font-sans text-body antialiased dark:bg-night dark:text-snow;
   background-image:
     radial-gradient(circle at 8% -10%, rgb(150 99 37 / 0.08), transparent 28rem),
     radial-gradient(circle at 92% 4%, rgb(112 132 114 / 0.08), transparent 30rem);
@@ -137,7 +150,23 @@ button {
 }
 
 .page-title {
-  @apply mt-3 font-serif text-4xl font-bold tracking-[-0.025em] sm:text-5xl;
+  @apply mt-3 font-sans text-4xl font-bold tracking-[-0.025em] sm:text-5xl;
+}
+
+/* Latest notes: shared hairlines instead of floating gaps. */
+.latest-list {
+  border-top: 1px solid var(--color-line);
+  border-left: 1px solid var(--color-line);
+}
+
+.dark .latest-list {
+  border-top-color: var(--color-line-dark);
+  border-left-color: var(--color-line-dark);
+}
+
+/* Comments label stays UI sans. Giscus.astro is unchanged. */
+section:has(.giscus) h2 {
+  font-family: var(--font-sans);
 }
 
 .tape-link {

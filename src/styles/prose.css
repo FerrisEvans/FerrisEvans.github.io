@@ -1,7 +1,8 @@
 /* ---------- prose ---------- */
 
 .prose-custom {
-  @apply font-serif text-[1.0625rem] leading-8 text-ink dark:text-snow;
+  @apply font-sans text-body text-ink dark:text-snow;
+  max-width: var(--measure);
   overflow-wrap: break-word;
 }
 

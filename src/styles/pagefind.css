@@ -49,5 +49,6 @@
 
 #pagefind-search .pagefind-ui__result-title {
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: var(--text-card-title);
+  line-height: 1.35;
 }

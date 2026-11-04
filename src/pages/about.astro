@@ -15,7 +15,7 @@ const zen = ABOUT.zen.lines;
         <img src={SITE.avatar} alt={SITE.author} width="72" height="72" class="h-18 w-18 rounded-full border border-line object-cover shadow-sm dark:border-line-dark" />
         <div>
           <p class="eyebrow">About / 关于</p>
-          <h1 class="mt-3 font-serif text-4xl font-bold tracking-tight">{aboutGreeting(SITE.author)}</h1>
+          <h1 class="mt-3 font-sans text-4xl font-bold tracking-tight">{aboutGreeting(SITE.author)}</h1>
           <p class="mt-4 max-w-2xl leading-8 text-ink-soft dark:text-snow-soft">
             {ABOUT.intro}
           </p>
@@ -41,7 +41,7 @@ const zen = ABOUT.zen.lines;
               <span class="font-mono text-xs text-ink-faint dark:text-snow-faint">0{index + 1}</span>
               <span class="font-mono text-sm" style={`color: ${cat.accent};`}>{cat.mark}</span>
             </div>
-            <h3 class="mt-4 font-serif text-lg font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
+            <h3 class="mt-4 font-sans text-lg font-bold transition-colors group-hover:text-accent dark:group-hover:text-accent-dark">{cat.label}</h3>
             <p class="mt-2 text-sm leading-6 text-ink-soft dark:text-snow-soft">{cat.description}</p>
           </a>
         ))}
@@ -50,7 +50,7 @@ const zen = ABOUT.zen.lines;
 
     <section aria-labelledby="principles-heading" class="mt-14">
       <p class="eyebrow">Notes to self</p>
-      <h2 id="principles-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">一些相信的事</h2>
+      <h2 id="principles-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">一些相信的事</h2>
       <ol class="mt-5 sm:grid sm:grid-cols-2 sm:gap-x-10">
         {principles.map((principle, index) => (
           <li class="flex gap-4 border-t border-line py-4 dark:border-line-dark">
@@ -63,7 +63,7 @@ const zen = ABOUT.zen.lines;
 
     <section aria-labelledby="quotes-heading" class="mt-14">
       <p class="eyebrow">On practice</p>
-      <h2 id="quotes-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">{ABOUT.practice.title}</h2>
+      <h2 id="quotes-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">{ABOUT.practice.title}</h2>
       <blockquote class="mt-6 border-l-2 border-accent/50 pl-5 text-[0.9375rem] leading-8 text-ink-soft dark:border-accent-dark/50 dark:text-snow-soft">
         {ABOUT.practice.quotes.map((quote, index) => <p class={index > 0 ? 'mt-4' : undefined}>{quote}</p>)}
         <footer class="mt-4 font-mono text-xs text-ink-faint dark:text-snow-faint">{ABOUT.practice.attribution}</footer>
