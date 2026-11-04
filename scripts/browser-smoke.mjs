@@ -18,8 +18,7 @@ async function screenshot(page, name) {
 }
 
 async function assertVisibleTitle(page) {
-  const title = page.getByRole('heading', { level: 1 });
-  assert.match(await title.innerText(), /Praxis/);
+  const title = page.getByRole('heading', { level: 1, name: /Praxis/ });
   const invisible = await title.evaluate((heading) =>
     [heading, ...heading.querySelectorAll('*')].some((element) => {
       const style = getComputedStyle(element);

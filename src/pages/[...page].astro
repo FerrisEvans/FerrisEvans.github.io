@@ -3,6 +3,7 @@ import type { GetStaticPaths } from 'astro';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Pagination from '../components/Pagination.astro';
+import Brand from '../components/Brand.astro';
 import LofiHero from '../components/LofiHero';
 import { categoriesFor, SITE, type CategoryDef } from '../data/site';
 import { getPosts, type Post } from '../utils/posts';
@@ -57,7 +58,11 @@ const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
       isFirst && (
         <>
           <header class="mt-6 sm:mt-10">
-            <LofiHero client:load tagline={SITE.tagline} intro={SITE.intro} />
+            <LofiHero client:load tagline={SITE.tagline} intro={SITE.intro}>
+              <span slot="title" class="inline-flex justify-center text-[#ece3d2]" style="--brand-accent: #d6a45f">
+                <Brand size="hero" />
+              </span>
+            </LofiHero>
           </header>
           <nav aria-label="按分类浏览" class="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {categories.map((cat, index) => (

@@ -52,7 +52,7 @@ const content = {
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-brand="magazine-lofi" data-brand-version="praxis-5">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -71,12 +71,12 @@ const content = {
     <meta name="twitter:image" content={shareImage} />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.title} RSS`} href="/rss.xml" />
     <title>{SITE.title}</title>
-    <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=praxis-3" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png?v=praxis-3" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png?v=praxis-3" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png?v=praxis-3" />
-    <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=praxis-3" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=praxis-3" />
+    <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=praxis-5" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png?v=praxis-5" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png?v=praxis-5" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png?v=praxis-5" />
+    <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=praxis-5" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=praxis-5" />
     <LegacyWorkerRecovery />
   </head>
   <body>
@@ -92,7 +92,7 @@ const content = {
         <p id="sound-note" class="sr-only">声音由独立开关控制，初次访问默认关闭。</p>
       </div>
       <header>
-        <a href="/" class="name" aria-label={`${SITE.title} 首页`}><Brand /></a>
+        <a href="/" class="name" aria-label={`${SITE.title} 首页`} style="--brand-accent: #d6a45f"><Brand size="nav" /></a>
         <span class="stage">{SITE.title.toUpperCase()}</span>
         <nav id="room-navigation" aria-label="网站导航">
           <a href="#home" data-room-view="home">HOME</a>
