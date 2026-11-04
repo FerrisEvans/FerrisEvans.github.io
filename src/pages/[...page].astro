@@ -107,7 +107,7 @@ const wallCategories = isFirst ? categoriesForWall(categories, categoryCounts, {
       <div class="mb-6 flex items-end justify-between gap-4">
         <div>
           <p class="eyebrow">{isFirst ? 'Latest notes' : 'All notes'}</p>
-          <h2 id="latest-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">
+          <h2 id="latest-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">
             {isFirst ? '最近更新' : `文章列表 · 第 ${page.currentPage} 页`}
           </h2>
         </div>
@@ -116,7 +116,7 @@ const wallCategories = isFirst ? categoriesForWall(categories, categoryCounts, {
           <span aria-hidden="true">→</span>
         </a>
       </div>
-      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+      <div class="latest-list grid sm:grid-cols-2 lg:grid-cols-3">
         {grid.map((post) => <PostCard post={post} variant="default" />)}
       </div>
     </section>

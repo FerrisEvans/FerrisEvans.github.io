@@ -154,7 +154,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
         {related.length > 0 && (
           <section aria-labelledby="related-heading" class="mt-16 border-t border-line pt-10 dark:border-line-dark">
             <p class="eyebrow">Related notes</p>
-            <h2 id="related-heading" class="mt-2 font-serif text-2xl font-bold tracking-tight">继续阅读</h2>
+            <h2 id="related-heading" class="mt-2 font-sans text-2xl font-bold tracking-tight">继续阅读</h2>
             <div class="mt-5 grid gap-3 sm:grid-cols-3">
               {related.map((item) => (
                 <a href={postUrl(item)} class="group rounded-xl border border-line bg-paper-elev p-4 transition-colors hover:border-accent/40 dark:border-line-dark dark:bg-night-elev dark:hover:border-accent-dark/40">

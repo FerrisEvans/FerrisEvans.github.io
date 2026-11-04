@@ -46,7 +46,7 @@ for (const key of orderedKeys) {
       <CardCover category={category.slug} class="aspect-[16/9] sm:aspect-[3/1]" />
       <div class="p-6 sm:p-8">
         <p class="eyebrow">Category / 分类</p>
-        <h1 class="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">{category.label}</h1>
+        <h1 class="mt-2 font-sans text-3xl font-bold tracking-tight sm:text-4xl">{category.label}</h1>
         <p class="mt-3 text-sm leading-7 text-ink-soft dark:text-snow-soft">{category.description} · 共 {posts.length} 篇</p>
         {category.configured === false && (
           <p class="mt-3 text-sm text-accent dark:text-accent-soft">未配置 · 在 site.ts 的 CATEGORIES 补全显示名</p>
@@ -57,7 +57,7 @@ for (const key of orderedKeys) {
     {
       groups.map((group) => (
         <section class="mb-12">
-          <h2 class="mb-5 flex items-center gap-3 font-serif text-xl font-bold">
+          <h2 class="mb-5 flex items-center gap-3 font-sans text-xl font-bold">
             {group.label}
             <span class="text-sm font-normal text-ink-faint dark:text-snow-faint">{group.posts.length} 篇</span>
           </h2>

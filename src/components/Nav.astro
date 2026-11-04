@@ -34,7 +34,7 @@ const isActive = (href: string) => {
             href={link.href}
             aria-current={isActive(link.href) ? 'page' : undefined}
             class:list={[
-              'rounded-full px-3.5 py-1.5 text-sm transition-all duration-200',
+              'rounded-full px-3.5 py-1.5 text-nav transition-all duration-200',
               isActive(link.href)
                 ? 'bg-accent/10 font-medium text-accent shadow-sm dark:bg-accent-dark/10 dark:text-accent-dark'
                 : 'text-ink-soft hover:bg-ink/[0.035] hover:text-ink dark:text-snow-soft dark:hover:bg-white/[0.05] dark:hover:text-snow',
@@ -87,7 +87,7 @@ const isActive = (href: string) => {
               href={link.href}
               aria-current={isActive(link.href) ? 'page' : undefined}
               class:list={[
-                'flex min-h-11 items-center rounded-lg px-3 text-sm transition-colors',
+                'flex min-h-11 items-center rounded-lg px-3 text-nav transition-colors',
                 isActive(link.href)
                   ? 'bg-ink/[0.055] font-medium text-ink dark:bg-white/[0.08] dark:text-snow'
                   : 'text-ink-soft hover:bg-ink/[0.035] hover:text-ink dark:text-snow-soft dark:hover:bg-white/[0.05] dark:hover:text-snow',
