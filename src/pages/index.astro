@@ -1,5 +1,50 @@
 ---
-// Share the existing room page; /room/ remains a compatible bookmarked entry.
-import Room from './room.astro';
+import HomeHero from '../components/HomeHero.astro';
+import LegacyWorkerRecovery from '../components/LegacyWorkerRecovery.astro';
+import { SITE } from '../data/site';
+import { getRoomAssetManifest } from '../utils/room-assets';
+
+const { files, assetVersion, posterVersion } = getRoomAssetManifest();
+const canonical = new URL('/', Astro.site);
+const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
 ---
-<Room />
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style is:inline>@view-transition { navigation: auto; }</style>
+    <title>{SITE.title} — {SITE.tagline}</title>
+    <meta name="description" content={SITE.description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:title" content={`${SITE.title} — ${SITE.tagline}`} />
+    <meta property="og:description" content={SITE.description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={shareImage} />
+    <link rel="icon" type="image/svg+xml" href="/assets/img/favicons/favicon.svg?v=praxis-6" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png?v=praxis-6" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png?v=praxis-6" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png?v=praxis-6" />
+    <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico?v=praxis-6" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png?v=praxis-6" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.title} RSS`} href="/rss.xml" />
+    <LegacyWorkerRecovery />
+  </head>
+  <body>
+    <HomeHero posterVersion={posterVersion} assetVersion={assetVersion} />
+    <script id="room-assets" type="application/json" set:html={JSON.stringify(files)} />
+    <script>
+      import { preloadHomeRoom } from '../scripts/home-preload';
+      preloadHomeRoom();
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(body) { margin: 0; background: #181d1c; }
+</style>

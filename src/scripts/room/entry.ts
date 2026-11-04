@@ -27,7 +27,6 @@ export async function mountRoom() {
   const host = document.querySelector<HTMLElement>('#scene')!;
   const osd = document.querySelector<HTMLElement>('#osd')!;
   const osdCanvas = document.querySelector<HTMLCanvasElement>('#osd-canvas')!;
-  const enter = document.querySelector<HTMLButtonElement>('#enter-room')!;
   const sound = document.querySelector<HTMLButtonElement>('#sound')!;
   const next = document.querySelector<HTMLButtonElement>('#next-channel')!;
   const standby = document.querySelector<HTMLButtonElement>('#standby')!;
@@ -125,7 +124,7 @@ export async function mountRoom() {
   };
   function setState(value: State, message: string) {
     timing.mark('state.'+value,{visibility:document.visibilityState});
-    if((value==='ready'||value==='fallback')&&(params.has('debug')||['localhost','127.0.0.1'].includes(location.hostname))){
+    if((value==='ready'||value==='active'||value==='fallback')&&(params.has('debug')||['localhost','127.0.0.1'].includes(location.hostname))){
       const output=document.querySelector<HTMLScriptElement>('#room-load-timings')??document.createElement('script');
       output.id='room-load-timings';output.type='application/json';output.textContent=JSON.stringify(timing.snapshot());
       if(!output.isConnected)document.body.append(output);
@@ -134,7 +133,6 @@ export async function mountRoom() {
     room.dataset.state = value;
     status.setAttribute('aria-live', value === 'loading' ? 'off' : 'polite');
     status.textContent = message;
-    enter.disabled = value !== 'ready';
     next.disabled = value !== 'active';
     standby.disabled = value !== 'active' && value !== 'entering';
     progress.hidden = value !== 'loading' && value !== 'preparing';
@@ -162,6 +160,9 @@ export async function mountRoom() {
     }
     const homePlaying=room.dataset.homeProgram==='playing';
     if(homePlaying!==lastHomePlaying){homePlay.textContent=homePlaying?'暂停节目':'播放节目';homePlay.setAttribute('aria-pressed',String(homePlaying));lastHomePlaying=homePlaying;}
+    homePlay.setAttribute('aria-label',room.dataset.homeProgram==='blocked'?'重新播放电视节目':'播放 / 暂停电视节目');
+    standby.textContent=room.dataset.television==='off'?'打开电视':'关闭电视';
+    standby.setAttribute('aria-pressed',String(room.dataset.television==='on'));
     if(room.dataset.inspection!==lastInspection){lastInspection=room.dataset.inspection;if(lastInspection==='window')revealWindowControls();else{clearTimeout(windowHintTimer);delete room.dataset.windowControls;}}
     if (state === 'entering' && reveal === 1) {
       setState('active', '拖动环顾 · C 电脑 / N 记事本 / Z 电视');
@@ -279,32 +280,19 @@ export async function mountRoom() {
       }
     } finally { sound.disabled = false; syncSound(); resumeLoop(); }
   }, { signal });
-  enter.addEventListener('click', () => {
-    if (state !== 'ready' || !viewer) return;
+  function enterRoom() {
+    if (!viewer) return;
     start = performance.now();
-    room.dataset.channel = 'home';
-    viewer.setProgram('home');
-    setState('entering', '进入场景…');
-    audio.tone(true);
+    setState('entering', '进入书房…');
+    viewer.startTelevision(isReduced(), captureMode === 'reading');
     if (isReduced()) start -= 650;
     resumeLoop();
-  }, { signal });
-  function returnToStandby() {
-    if (state !== 'active' && state !== 'entering') return;
-    stopLoop();
-    staticUntil = 0;
-    inspectionFocus=returnFocus=null;restoreFocus=false;
-    selectView('home');
-    if(location.hash!=='#home')history.replaceState({...history.state,roomPage:page},'','#home');
-    viewer?.standby();
-    audio.mute();syncSound();
-    osdTitle = 'PRESS PLAY';
-    osdDetail = 'CLICK TO ENTER';
-    setState('ready', '画面已就绪 · 点击电视或按 Tab 选择后进入');
-    drawOSD();
-    enter.focus({ preventScroll: true });
   }
-  standby.addEventListener('click', returnToStandby, { signal });
+  standby.addEventListener('click', () => {
+    if (state !== 'active' && state !== 'entering') return;
+    viewer?.action('power');
+    resumeLoop();
+  }, { signal });
   document.addEventListener('keydown', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat) return;
     const contentInteractive=state==='active'&&!viewer?.inspectionActive&&!viewer?.cameraMoving;
@@ -334,7 +322,7 @@ export async function mountRoom() {
     if(state==='active'&&viewer?.escape()){event.preventDefault();resumeLoop();return;}
     if (state === 'active' && view !== 'home') {
       navigate('home'); navLinks[0]?.focus({ preventScroll: true });
-    } else returnToStandby();
+    }
   }, { signal });
   next.addEventListener('click', () => {
     if (state !== 'active' || !viewer) return;
@@ -459,13 +447,11 @@ export async function mountRoom() {
     performance.mark('room-ready');
     performance.measure('room-load-to-ready','room-load-start','room-ready');
     progress.setAttribute('aria-valuenow', '100');
-    osdTitle = 'PRESS PLAY';
-    osdDetail = 'CLICK TO ENTER';
-    setState('ready', '画面已就绪 · 点击电视或按 Tab 选择后进入');
-    drawOSD();
+    // Poster capture retains the blank TV used by the loading artwork. Normal
+    // routes enter immediately; only the television asks for a play gesture.
+    if (captureMode === 'poster') setState('ready', '画面已就绪');
+    else enterRoom();
     resize();
-    // Asset capture uses the same entry path, with static Home and sound off.
-    if (captureMode === 'reading') enter.click();
   } catch (error) {
     fail('场景加载失败。可以重试，或直接进入 LO-FI 阅读博客。', error);
   }

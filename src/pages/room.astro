@@ -5,43 +5,10 @@ import { ABOUT } from '../data/room-about';
 import '../styles/room-fallback.css';
 import { SITE, categoryOf } from '../data/site';
 import { getPosts, postUrl } from '../utils/posts';
-import { existsSync, readFileSync } from 'node:fs';
-import { createHash } from 'node:crypto';
-import { resolve } from 'node:path';
-import { roomMediaChunks } from '../utils/room-media';
-const assetRoot = resolve('public');
-type AtlasFiles = { albedo: string; orm: string; normal: string; entry?:{orm?:string;normal?:string}; opacity?:string; cutout?:boolean; alphaTest?:number; room: { file: string; preview?:string }; tv: { file: string;preview?:string }; lampOff?: {file:string} };
-const manifest: { buildId?:string; model?: string; reflection?:{file:string}; city?: string; homeFilm?:string; atlases: Record<string, AtlasFiles> } = JSON.parse(readFileSync(resolve(assetRoot, 'room/materials/manifest.json'), 'utf8'));
-const posterVersion = manifest.buildId ?? '18';
-const urls = ['/room/materials/' + (manifest.model ?? 'study.glb'), '/room/materials/manifest.json', manifest.city ?? '/room/city-night-v1.png', '/room/fonts/VT323-Regular.ttf','/fonts/room-pixel-zh.woff2'];
-if(manifest.reflection)urls.push('/room/materials/'+manifest.reflection.file);
-const streamUrls=new Set<string>();
-if(manifest.homeFilm){const film=JSON.parse(readFileSync(resolve(assetRoot,'.'+manifest.homeFilm),'utf8'));urls.push(manifest.homeFilm,film.video,film.poster,film.light);streamUrls.add(film.video);}
-for (const atlas of Object.values(manifest.atlases)) {
-  for (const file of [atlas.albedo, atlas.orm, atlas.normal, ...Object.values(atlas.entry??{}), atlas.room.file, ...(atlas.room.preview?[atlas.room.preview]:[]), atlas.tv.file,...(atlas.tv.preview?[atlas.tv.preview]:[]), ...(atlas.lampOff ? [atlas.lampOff.file] : []),...(atlas.opacity?[atlas.opacity]:[])]) urls.push('/room/materials/' + file);
-}
-const deferredUrls = new Set(Object.values(manifest.atlases).flatMap(atlas => [
-  ...(atlas.lampOff ? ['/room/materials/' + atlas.lampOff.file] : []),
-  ...(atlas.room.preview ? ['/room/materials/' + atlas.room.file] : []),
-  ...(atlas.tv.preview ? ['/room/materials/' + atlas.tv.file] : []),
-  ...(atlas.entry?.normal ? ['/room/materials/' + atlas.normal] : []),
-  ...(atlas.entry?.orm ? ['/room/materials/' + atlas.orm] : []),
-]));
-// Each file owns its cache identity: a new font or post must not invalidate
-// unchanged models and textures. The aggregate identifies the page for diagnostics.
-const files = [...new Set(urls)].map(url => {
-  const bytes = readFileSync(resolve(assetRoot, '.' + url));
-  const stream=streamUrls.has(url);
-  return { url, bytes:bytes.length, sha256:createHash('sha256').update(bytes).digest('hex'), ...(stream?roomMediaChunks(bytes):{}), deferred:deferredUrls.has(url), stream, priority:url===urls[0]?'high':undefined };
-});
-const assetDigest = createHash('sha256');
-for (const file of [...files].sort((a,b)=>a.url.localeCompare(b.url))) {
-  assetDigest.update(file.url).update('\0').update(file.sha256).update('\0');
-}
-const assetVersion = assetDigest.digest('hex').slice(0, 20);
-const hasPoster = existsSync(resolve(assetRoot, 'room/loading.jpg'));
+import { getRoomAssetManifest } from '../utils/room-assets';
+const { files, assetVersion, posterVersion, hasPoster } = getRoomAssetManifest();
 const posts = await getPosts();
-const canonical = new URL('/', Astro.site);
+const canonical = new URL('/room/', Astro.site);
 const description = `${SITE.title}：Ferris 的编程语言、游戏开发与 AI 笔记。`;
 const shareImage = new URL(`/room/share.jpg?v=${posterVersion}`, Astro.site);
 const content = {
@@ -56,7 +23,8 @@ const content = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content={Astro.url.pathname.startsWith('/room') ? 'noindex,follow' : 'index,follow'} />
+    <style is:inline>@view-transition { navigation: auto; }</style>
+    <meta name="robots" content="noindex,follow" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
@@ -88,7 +56,6 @@ const content = {
       </picture>}
       <div id="osd">
         <canvas id="osd-canvas" width="768" height="576" aria-hidden="true"></canvas>
-        <button id="enter-room" type="button" aria-label="进入场景" aria-describedby="sound-note" disabled><span class="sr-only">进入场景</span></button>
         <p id="sound-note" class="sr-only">声音由独立开关控制，初次访问默认关闭。</p>
       </div>
       <header>
@@ -136,7 +103,7 @@ const content = {
       <nav id="room-actions" aria-label="场景操作">
         <button id="back-home" type="button">← 返回桌面</button>
         <button id="next-channel" type="button" disabled>下一盒录像带</button>
-        <button id="standby" type="button" disabled>待机</button>
+        <button id="standby" type="button" aria-label="电视电源" aria-pressed="false" disabled>打开电视</button>
         <button id="home-play" type="button" data-room-action="home-play" aria-pressed="false">播放节目</button>
         <button id="sound" type="button" aria-pressed="false" aria-label="开启雨声与交互声音">SOUND OFF</button>
         <select id="tv-channel" aria-label="电视测试画面" disabled>
@@ -162,7 +129,6 @@ const content = {
 
 <style>
   /* Match the existing article pages so Back can restore a BFCache document without an opt-in mismatch. */
-  @view-transition { navigation: auto; }
   :global(::view-transition-old(root)), :global(::view-transition-new(root)) { animation-duration: 120ms; }
   :global(*) { box-sizing: border-box; }
   :global([hidden]) { display: none !important; }
@@ -208,8 +174,6 @@ const content = {
   #poster img { display: block; width: 100%; height: auto; }
   #osd { position: absolute; top: 0; left: 0; width: 768px; height: 576px; transform-origin: 0 0; border-radius: 30px; overflow: hidden; }
   #osd canvas { display: block; width: 100%; height: 100%; }
-  #enter-room { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; border: none; border-radius: inherit; background: transparent; opacity: 1; }
-  #enter-room:focus-visible { outline: 6px solid #f5d696; outline-offset: -24px; }
   #room[data-state='entering'] #poster { opacity: 0; transition: opacity 650ms ease; }
   #room[data-state='active'] #poster { opacity: 0; }
   #room:is([data-state='entering'], [data-state='active']) #osd { opacity: 0; pointer-events: none; }
@@ -219,7 +183,8 @@ const content = {
   #room:not([data-state='active']) #room-navigation, #room:not([data-state='active']) #back-home,
   #room[data-view='home'] #back-home, #room:not([data-view='home']) #next-channel { display: none; }
   #home-play { display:none; }
-  #room[data-state='active'][data-motion='reduced'][data-view='home'][data-tv-source='home'][data-television='on']:not([data-inspection='cd']):not([data-inspection='calculator']) #home-play {display:inline-flex;}
+  #room[data-state='active'][data-television='on']:is([data-tv-startup='booting'],[data-tv-startup='prompt']) #home-play,
+  #room[data-state='active'][data-tv-source='home'][data-television='on']:is([data-home-program='blocked'],[data-motion='reduced']):not([data-inspection='cd']):not([data-inspection='calculator']) #home-play {display:inline-flex;}
   #room[data-state='active'] .stage { display: none; }
   #room:not([data-study]) :is(#tv-channel, #toggle-guides, .detail) { display: none; }
   #room[data-study] :is(#poster, #osd, #sound, #next-channel, #standby, #progress) { display: none; }

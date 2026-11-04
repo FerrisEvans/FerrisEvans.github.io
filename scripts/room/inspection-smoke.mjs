@@ -31,10 +31,10 @@ const data=()=>page.locator('#room').evaluate(element=>({...element.dataset}));
 async function record(name){checks.push({name,data:await data(),hash:new URL(page.url()).hash,status:await page.locator('#status').textContent()});await page.screenshot({path:join(output,name+'.png')});}
 try{
   await page.goto(new URL('/room/?debug=1#home',base).href);
-  await page.waitForFunction(()=>document.querySelector('#room')?.dataset.state==='ready',null,{timeout:180000});
+  await page.waitForFunction(()=>document.querySelector('#room')?.dataset.state==='active',null,{timeout:180000});
   assert.equal((await data()).interactionsReady,'true');assert.equal((await data()).lightingDetails,'full');
   entered=true;
-  await page.locator('#enter-room').click();await settle();
+  await settle();
 
   await page.keyboard.press('l');assert.equal((await data()).lamp,'off');assert.equal((await data()).lampLoading,undefined);
   await page.keyboard.press('l');assert.equal((await data()).lamp,'on');await settle();
@@ -111,11 +111,14 @@ try{
   await page.waitForTimeout(500);assert.equal((await data()).view,'home');assert.equal(new URL(page.url()).hash,'#home');
   await record('pager-escape-cancel');
 
-  // Real app navigation + standby creates adjacent HOME history entries.
+  // TV power must preserve the room view and interactivity. Create adjacent
+  // HOME entries explicitly to keep exercising delayed-action cancellation.
   await navigate('about');await page.locator('#standby').click();
-  await page.waitForFunction(()=>document.querySelector('#room').dataset.state==='ready');
-  assert.equal(new URL(page.url()).hash,'#home');
-  await page.locator('#enter-room').click();await settle();
+  assert.equal((await data()).state,'active');
+  assert.equal((await data()).television,'off');
+  assert.equal(new URL(page.url()).hash,'#about');
+  await page.locator('#standby').click();await navigate('home');await settle();
+  await page.evaluate(()=>history.pushState({...history.state},'','#home'));
   await page.evaluate(async()=>{
     const changed=new Promise(resolve=>addEventListener('popstate',resolve,{once:true}));
     // Same task guarantees Back occurs within the intentional 260 ms delay.
@@ -126,6 +129,6 @@ try{
   assert.match(await page.locator('#status').textContent(),/拖动环顾/);
   await record('pager-same-hash-back-cancel');
   assert.deepEqual(lateVisualRequests,[],'all scene materials must be ready before interaction');
-  assert.deepEqual(errors,[]);console.log('PASS: preloaded interactions, leaf picking, computer resume, inspection controls, N/TV return, standby and delayed history cancellation');
+  assert.deepEqual(errors,[]);console.log('PASS: preloaded interactions, leaf picking, computer resume, inspection controls, N/TV return, television power and delayed history cancellation');
 }catch(error){await page.screenshot({path:join(output,'failure.png')}).catch(()=>{});throw error;}
 finally{await writeFile(join(output,'evidence.json'),JSON.stringify({errors,lateVisualRequests,checks},null,2));await browser.close();}
