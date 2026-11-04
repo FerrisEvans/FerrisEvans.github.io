@@ -7,7 +7,9 @@ import { chromium } from 'playwright';
 
 const base = process.env.BASE_URL ?? 'http://127.0.0.1:4327';
 const output = process.env.SMOKE_SCREENSHOT_DIR;
-const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined });
+const softwareWebGL = process.env.ISLAND_SOFTWARE_WEBGL === '1';
+const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined,
+  args: softwareWebGL ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : undefined });
 const contexts = [], errors = [], evidence = [], cameraJourneys = [], effectChecks = [], activityChecks = [];
 let passed = false;
 const url = path => new URL(path, base).href;
@@ -38,7 +40,13 @@ async function ready(page) {
   });
 }
 async function record(page, name) {
-  evidence.push({ name, url: page.url(), viewport: page.viewportSize(), data: await data(page), browser: browser.version(), emulated: true });
+  const webgl = await page.evaluate(() => {
+    const gl = document.querySelector('#island-scene canvas')?.getContext('webgl2');
+    const debug = gl?.getExtension('WEBGL_debug_renderer_info');
+    return debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : null;
+  });
+  if (softwareWebGL && webgl) assert.match(webgl, /SwiftShader/i, 'the opt-in CI reproduction uses actual software WebGL');
+  evidence.push({ name, url: page.url(), viewport: page.viewportSize(), data: await data(page), browser: browser.version(), emulated: true, webgl });
   if (output) {
     await mkdir(output, { recursive: true });
     await page.screenshot({ path: join(output, `${name}.png`) });
@@ -69,6 +77,22 @@ const cameraPoints = page => page.locator('#island-root').evaluate(root =>
 function projectedDistance(a, b) {
   return Math.max(...a.map((point, index) => Math.hypot(point[0] - b[index][0], point[1] - b[index][1])));
 }
+async function waitForCamera(page, expected) {
+  // The runtime bounds simulation dt. On software WebGL, 900 ms of wall time
+  // need not finish a camera tween. Cross two rendered frames before trusting
+  // cameraMoving so an old false value cannot satisfy the new navigation.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.waitForFunction(expected => {
+    const root = document.querySelector('#island-root');
+    const points = JSON.parse(root.dataset.cameraPoints);
+    return root.dataset.cameraMoving === 'false' && points.every((point, index) =>
+      Math.hypot(point.x - expected[index][0], point.y - expected[index][1]) < 1);
+  }, expected, { timeout: 30_000 });
+}
+async function waitForCameraChange(page, before, distance) {
+  await page.waitForFunction(({ before, distance }) => JSON.parse(document.querySelector('#island-root').dataset.cameraPoints)
+    .some((point, index) => Math.hypot(point.x - before[index][0], point.y - before[index][1]) > distance), { before, distance });
+}
 async function cameraJourney(page, selector, keyboard = false) {
   await page.evaluate(selector => {
     const sample = () => JSON.parse(document.querySelector('#island-root').dataset.cameraPoints).map(point => [point.x, point.y]);
@@ -80,7 +104,7 @@ async function cameraJourney(page, selector, keyboard = false) {
       trace.samples.push(sample());
       function next() {
         trace.samples.push(sample());
-        if (trace.samples.length >= 71) trace.done = true;
+        if (trace.samples.length >= 71 && document.querySelector('#island-root').dataset.cameraMoving === 'false') trace.done = true;
         else requestAnimationFrame(next);
       }
       requestAnimationFrame(next);
@@ -140,10 +164,10 @@ try {
   const sceneBounds = await page.locator('#island-scene canvas').boundingBox();
   assert(sceneBounds);
   await page.mouse.move(sceneBounds.x + sceneBounds.width * .5, sceneBounds.y + sceneBounds.height * .65);
-  await page.mouse.wheel(0, -240); await page.waitForTimeout(150);
+  await page.mouse.wheel(0, -240); await waitForCameraChange(page, originalOverview, 8);
   assert(projectedDistance(await cameraPoints(page), originalOverview) > 8, 'ordinary wheel directly zooms the fixed scene without a modifier');
   assert.equal(await page.evaluate(() => scrollY), 0, 'scene wheel does not scroll the document');
-  await openPanel(page, 'about'); await page.locator('#island-close').click(); await page.waitForTimeout(900);
+  await openPanel(page, 'about'); await page.locator('#island-close').click(); await waitForCamera(page, originalOverview);
   assert(projectedDistance(await cameraPoints(page), originalOverview) < 1, 'closing content restores the authored overview after free zoom');
   console.log('PASS: fixed one-screen homepage has no numeric markers or reset controls; ordinary wheel zooms');
 
@@ -208,7 +232,11 @@ try {
         if (!point) continue;
         for (let dy = -8; dy <= 100; dy += 8) for (let dx = -64; dx <= 64; dx += 8) sample(rect.x + point.x + dx, rect.y + point.y + dy);
       }
-      return Object.fromEntries(Object.entries(candidates).map(([view, points]) => [view, points[Math.floor(points.length / 2)]]));
+      return Object.fromEntries(Object.entries(candidates).map(([view, points]) => {
+        const center = points.reduce((sum, point) => ({ x: sum.x + point.x / points.length, y: sum.y + point.y / points.length }), { x: 0, y: 0 });
+        return [view, points.reduce((nearest, point) => Math.hypot(point.x - center.x, point.y - center.y)
+          < Math.hypot(nearest.x - center.x, nearest.y - center.y) ? point : nearest)];
+      }));
     });
   }
   const hits = await meshHits(page);
@@ -255,13 +283,15 @@ try {
     await page.mouse.click(hits[view].x, hits[view].y);
     await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
     assert.equal((await data(page)).view, view, `${view} mesh opens matching content`);
-    await page.keyboard.press('Escape'); await page.waitForTimeout(900);
+    await page.keyboard.press('Escape'); await waitForCamera(page, originalOverview);
     assert.equal((await data(page)).hover, '', 'closing a pointer-picked mesh does not restart its hover effect');
     assert(await page.locator('#island-scene').evaluate(scene => document.activeElement === scene), 'closing a pointer-picked mesh restores focus to the scene');
   }
   for (const target of ['bear', 'rabbit']) {
-    assert(hits[target], `${target} has an actual visible mesh hit`);
-    await page.mouse.move(hits[target].x, hits[target].y);
+    // Their authored poses keep moving while earlier destinations are tested.
+    const hit = (await meshHits(page))[target];
+    assert(hit, `${target} has an actual visible mesh hit in its current pose`);
+    await page.mouse.move(hit.x, hit.y);
     await page.waitForFunction(target => {
       const root = document.querySelector('#island-root'), outline = JSON.parse(root.dataset.outline), activity = JSON.parse(root.dataset.activity);
       return root.dataset.hover === target && outline.postprocessing && outline.opacity > .5
@@ -276,7 +306,7 @@ try {
     assert.notDeepEqual(poseBefore, poseAfter, `${target} hover has actual articulated movement`);
     activityChecks.push({ mode: 'companion-hover', target, before: poseBefore, after: poseAfter, outline: await outlineState(page) });
     const beforeUrl = page.url();
-    await page.mouse.click(hits[target].x, hits[target].y);
+    await page.mouse.click(hit.x, hit.y);
     assert.equal(page.url(), beforeUrl, `${target} does not change the location hash`);
     assert.equal(await page.locator('#island-dialog').evaluate(dialog => dialog.open), false, `${target} has no content panel`);
     await page.mouse.move(5, 5);
@@ -301,14 +331,16 @@ try {
   const companion = hits.about;
   await page.mouse.move(companion.x, companion.y); await page.mouse.down();
   await page.mouse.move(companion.x + 70, companion.y + 20, { steps: 6 }); await page.mouse.up();
+  await waitForCameraChange(page, originalOverview, 1);
   assert.equal(await page.locator('#island-dialog').evaluate(dialog => dialog.open), false, 'orbit drag does not activate its mesh');
   assert(projectedDistance(await cameraPoints(page), originalOverview) > 1, 'dragging visibly orbits the scene');
-  await openPanel(page, 'about'); await page.locator('#island-close').click(); await page.waitForTimeout(900);
+  await openPanel(page, 'about'); await page.locator('#island-close').click(); await waitForCamera(page, originalOverview);
   console.log('PASS: six content meshes navigate, two companions only react, three idle activities move real nodes, and silhouettes settle cleanly');
 
   await page.mouse.move(sceneBounds.x + sceneBounds.width * .65, sceneBounds.y + sceneBounds.height * .7); await page.mouse.down();
   await page.mouse.move(sceneBounds.x + sceneBounds.width * .45, sceneBounds.y + sceneBounds.height * .75, { steps: 8 }); await page.mouse.up();
-  await page.mouse.wheel(0, -400); await page.waitForTimeout(150);
+  const beforeWheel = await cameraPoints(page);
+  await page.mouse.wheel(0, -400); await waitForCameraChange(page, beforeWheel, 1);
   const opening = await cameraJourney(page, '[data-island-access="about"]', true);
   assertSmoothJourney(opening, 'open content after orbit and zoom');
   const panelCloseJourney = await cameraJourney(page, '#island-close');
@@ -325,15 +357,15 @@ try {
     assert(await dialog.evaluate(element => element.contains(document.activeElement)), 'dialog takes focus');
     await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('#island-dialog')?.open);
     assert(await trigger.evaluate(element => document.activeElement === element), 'close restores the hidden native keyboard trigger');
-    await page.waitForTimeout(900);
+    await waitForCamera(page, originalOverview);
   }
   await openPanel(page, 'tags');
   const tokenColors = await page.locator('#island-panel [data-tag-token]').evaluateAll(tokens => tokens.map(token => token.dataset.tokenColor));
   assert(tokenColors.length > 0, 'keyword panel uses the shared soft tag tokens');
-  await page.locator('#island-close').click(); await page.waitForTimeout(900); await openPanel(page, 'tags');
+  await page.locator('#island-close').click(); await waitForCamera(page, originalOverview); await openPanel(page, 'tags');
   const nextColors = await page.locator('#island-panel [data-tag-token]').evaluateAll(tokens => tokens.map(token => token.dataset.tokenColor));
   assert.notDeepEqual(nextColors, tokenColors, 'every keyword-panel opening refreshes its color assignment');
-  await page.keyboard.press('Escape'); await page.waitForTimeout(900);
+  await page.keyboard.press('Escape'); await waitForCamera(page, originalOverview);
   await openPanel(page, 'recent'); await page.goBack();
   await page.waitForFunction(() => !document.querySelector('#island-dialog')?.open);
   await page.goForward(); await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
@@ -389,7 +421,7 @@ try {
   await touchSession.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y, id: 1 }] });
   for (const delta of [10, 25, 45, 65]) await touchSession.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x, y: y - delta, id: 1 }] });
   await touchSession.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-  await mobile.waitForTimeout(150);
+  await waitForCameraChange(mobile, mobileBeforeDrag, 1);
   assert(projectedDistance(await cameraPoints(mobile), mobileBeforeDrag) > 1, 'single-finger vertical dragging rotates the fixed scene');
   assert.equal(await mobile.evaluate(() => scrollY), 0, 'touch does not create outer document scrolling');
   assert.equal(await mobile.locator('#island-dialog').evaluate(dialog => dialog.open), false, 'touch orbit does not open a panel');
@@ -397,9 +429,9 @@ try {
   await touchSession.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x - 30, y, id: 1 }, { x: x + 30, y, id: 2 }] });
   for (const delta of [40, 50, 65]) await touchSession.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x - delta, y, id: 1 }, { x: x + delta, y, id: 2 }] });
   await touchSession.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); await touchSession.detach();
-  await mobile.waitForTimeout(150);
+  await waitForCameraChange(mobile, beforePinch, 1);
   assert(projectedDistance(await cameraPoints(mobile), beforePinch) > 1, 'standard two-finger separation zooms the real scene');
-  await openPanel(mobile, 'about'); await mobile.locator('#island-close').tap(); await mobile.waitForTimeout(900);
+  await openPanel(mobile, 'about'); await mobile.locator('#island-close').tap(); await waitForCamera(mobile, mobileBeforeDrag);
   assert(projectedDistance(await cameraPoints(mobile), mobileBeforeDrag) < 1, 'closing returns to the mobile overview after orbit and pinch');
   const mobileHits = await meshHits(mobile); assert(mobileHits.about, 'mobile about companion has a real mesh hit');
   for (const target of ['bear', 'rabbit']) {
@@ -415,7 +447,7 @@ try {
   const close = await mobile.locator('#island-close').boundingBox();
   assert(close && close.x >= 0 && close.y >= 0 && close.x + close.width <= 391 && close.y + close.height <= 845, 'X remains inside the viewport');
   await record(mobile, 'island-mobile-panel');
-  await mobile.goBack(); await mobile.waitForTimeout(900);
+  await mobile.goBack(); await waitForCamera(mobile, mobileBeforeDrag);
   assert.equal(await mobile.locator('#island-dialog').evaluate(dialog => dialog.open), false, 'Back closes a directly tapped mesh panel');
   assert.equal((await data(mobile)).hover, '', 'touch close does not create a synthetic hovered object');
   assert(await mobile.locator('#island-scene').evaluate(scene => document.activeElement === scene), 'touch panel restores scene focus');
@@ -551,7 +583,7 @@ try {
 } finally {
   if (output) {
     await mkdir(output, { recursive: true });
-    await writeFile(join(output, 'island-flow-evidence.json'), JSON.stringify({ capturedAt: new Date().toISOString(), passed, evidence, cameraJourneys, effectChecks, activityChecks, errors }, null, 2) + '\n');
+    await writeFile(join(output, 'island-flow-evidence.json'), JSON.stringify({ capturedAt: new Date().toISOString(), softwareWebGL, passed, evidence, cameraJourneys, effectChecks, activityChecks, errors }, null, 2) + '\n');
   }
   await Promise.all(contexts.map(context => context.close().catch(() => {})));
   await browser.close();
