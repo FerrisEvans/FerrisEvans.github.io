@@ -30,8 +30,8 @@ canonical 并从 sitemap 排除。
 首页面板、阅读索引和搜索，不需要登记模型、文字贴图或字体子集。
 
 站点标识以 `public/brand/island/mark.svg` 为单一可编辑源；`npm run assets:brand`
-生成 favicon、ICO、manifest 与兼容路径，作者小熊头像保持独立。当前环境由已核验
-来源的 CC0 素材组合，配合原创小熊与动画；精确采用清单见素材记录。早期纯原创
+生成 favicon、ICO、manifest 与兼容路径，作者卡通小狗头像保持独立。当前环境由已核验
+来源的 CC0 素材组合，配合小狗、小兔、小熊与动画；精确采用清单见素材记录。早期纯原创
 原型与第二轮四个野餐道具均为历史阶段，不能替代当前素材声明。
 
 设计与验收见 [`island/DESIGN.md`](island/DESIGN.md)，资产流程见
@@ -43,11 +43,10 @@ npm test
 npm run check
 npm run build
 npm run verify:build
-BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:room-flow
 BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:browser
 BASE_URL=http://127.0.0.1:4327 BROWSER_CHANNEL=chrome npm run test:guides
 BROWSER_CHANNEL=chrome npm run test:authoring
 ```
 
-`test:room-flow` 保留兼容脚本名，当前验证的是首页交互场景与统一博客阅读路径。封面捕获使用 `/?capture=1`。
+按维护者要求，已删除专门的 3D 动画、眨眼、镜头轨迹和描边浏览器验收及其发布步骤；场景通过实际浏览器检查。历史验收记录保留为历史证据。封面捕获使用 `/?capture=1`。
 浏览器自动化中的移动端是尺寸与触摸模拟；实际手机与 Safari 的验证需单独记录。

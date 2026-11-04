@@ -53,9 +53,6 @@ jobs:
       - name: Install browser for production smoke tests
         run: npx playwright install --with-deps chromium
 
-      - name: Verify visible outlines and resource cleanup
-        run: npm run test:outline
-
       - name: Verify production reading and fallback paths
         run: |
           npm run preview -- --host 127.0.0.1 --port 4327 > "$RUNNER_TEMP/preview.log" 2>&1 &
@@ -74,7 +71,6 @@ jobs:
             exit 1
           fi
           npm run test:browser
-          npm run test:room-flow
           npm run test:guides
           npm run test:authoring
 
