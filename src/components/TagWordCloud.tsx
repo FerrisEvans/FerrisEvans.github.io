@@ -44,7 +44,7 @@ function CloudWord({ tag, hidden, position, size, pointer, active, enabled, radi
  * The links and their normal tab order stay in the same DOM throughout. */
 function packWords(words: Word[], width: number): CloudLayout | null {
   if (!words.length || width < 1 || words.length > 160) return null;
-  const spread = magnification(width) + .05, gap = width < 600 ? 8 : 12;
+  const spread = width < 600 ? 1.25 : 1.5, gap = width < 600 ? 8 : 12;
   const ranked = [...words].sort((a, b) => b.count - a.count || b.width - a.width || a.name.localeCompare(b.name));
   const min = Math.sqrt(Math.min(...ranked.map(word => word.count)));
   const max = Math.sqrt(Math.max(...ranked.map(word => word.count)));
