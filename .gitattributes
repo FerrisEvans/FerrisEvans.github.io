@@ -17,4 +17,4 @@
 
 # Preserve the exact upstream bytes verified by SOURCE.json and the asset seal.
 # Licenses retain their original whitespace as well as their original wording.
-public/assets/island/vendor/** -text -whitespace
+public/island/vendor/** -text -whitespace

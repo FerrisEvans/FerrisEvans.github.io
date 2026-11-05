@@ -7,8 +7,23 @@ import { fromHtml } from 'hast-util-from-html';
 import { readArticles, translationErrors } from './i18n-contract.mjs';
 
 const distDir = path.resolve('dist');
-for (const directory of ['assets/brand', 'assets/island', 'assets/lib']) {
-  assert(!fs.existsSync(path.join(distDir, directory)), `Authoring or retired assets must not be published: ${directory}`);
+for (const source of ['assets', 'vendor', 'island/island.blend', 'island/island.glb', 'brand/ferris-avatar.png', 'brand/ferris-dog-avatar.png', 'brand/identity.json']) {
+  assert(!fs.existsSync(path.join(distDir, source)), `Authoring or retired assets must not be published: ${source}`);
+}
+// Every third-party license must survive source pruning without byte changes.
+const vendorSource = path.resolve('public/island/vendor');
+const vendorOutput = path.join(distDir, 'island/vendor');
+assert.deepEqual(fs.readdirSync(vendorOutput).sort(), fs.readdirSync(vendorSource).sort());
+for (const pack of fs.readdirSync(vendorSource)) {
+  const notices = fs.readdirSync(path.join(vendorSource, pack))
+    .filter(file => ['LICENSE.txt', 'NOTICE.md'].includes(file)).sort();
+  assert(notices.includes('LICENSE.txt'), `Missing upstream license: ${pack}`);
+  assert.deepEqual(fs.readdirSync(path.join(vendorOutput, pack)).sort(), notices,
+    `Only licenses and notices may be published for ${pack}`);
+  for (const file of notices) {
+    assert(fs.readFileSync(path.join(vendorSource, pack, file)).equals(fs.readFileSync(path.join(vendorOutput, pack, file))),
+      `Published license differs from upstream: ${pack}/${file}`);
+  }
 }
 const requiredFiles = [
   'index.html',

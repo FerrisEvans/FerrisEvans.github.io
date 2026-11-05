@@ -23,7 +23,7 @@ const spring = { mass: .2, stiffness: 180, damping: 18, restDelta: .001, restSpe
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
 // two-dimensional cloud. Source:
 // https://github.com/magicuidesign/magicui/blob/58ee1feebc504a660c00087b369da511e913477e/apps/www/registry/magicui/dock.tsx
-// MIT license: public/vendor/magic-ui/LICENSE.txt.
+// MIT license: public/island/vendor/magic-ui/LICENSE.txt.
 // Native links move with their text; the selected word pins its current offset.
 function CloudWord({ locale, tag, hidden, position, size, plan, active, enabled, live }: {
   locale: Locale; tag: Tag; hidden: boolean; position?: Placement; size: number;

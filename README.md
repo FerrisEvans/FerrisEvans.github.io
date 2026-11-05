@@ -74,4 +74,6 @@ scripts/    素材工具、构建校验和测试
 
 只有修改模型或其渲染代码时才需要按顺序运行 `npm run assets:build`、`npm run assets:model`、`npm run assets:posters` 和 `npm run assets:check`。详细命令见 [素材流程](scripts/island/ASSET_PIPELINE.md)，模型来源与许可见 [素材记录](scripts/island/SOURCES.md)。本地预览和性能报告放在被 Git 忽略的 `.room-build/`。
 
-品牌图标源文件是 `public/brand/mark.svg`；`npm run assets:brand` 生成实际使用的图标和头像，身份记录保存在 `public/assets/brand/identity.json`。第三方许可继续保留在 `public/vendor/` 和对应素材目录。
+品牌原图、图标、头像和身份记录统一保存在 `public/brand/`。`npm run assets:brand` 从 SVG 和 PNG 原图生成网站使用的图标与 WebP 头像；构建时排除两张原始头像 PNG 和 `identity.json`，只发布网站使用的文件。
+
+小岛的 Blender 原稿、原始模型和网站使用的模型、封面统一保存在 `public/island/`。第三方模型素材与 UI 组件许可统一放在 `public/island/vendor/`，按上游项目保留独立目录。构建时排除原稿、未压缩模型和第三方原始素材，保留网站资源以及各项目的 `LICENSE.txt`、`NOTICE.md`。

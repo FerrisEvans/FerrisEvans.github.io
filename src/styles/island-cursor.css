@@ -1,5 +1,5 @@
 /* Animal Island UI's default cursor artwork and hotspot, MIT (guokaigdg, 2026).
- * Source and complete license: public/vendor/animal-island-ui/NOTICE.md.
+ * Source and complete license: public/island/vendor/animal-island-ui/NOTICE.md.
  * Shared by every layout; native interaction cursors remain meaningful. */
 :root {
   --animal-cursor-img: url('/cursors/animal-island-default.svg');

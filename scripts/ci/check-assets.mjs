@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { verifyManifest, fileRecord } from '../island/manifest.mjs';
 const manifest = JSON.parse(await readFile('public/island/manifest.json', 'utf8'));
 const transport = JSON.parse(await readFile('public/island/transport.json', 'utf8'));
-assert.equal(transport.sourceSha256, (await fileRecord('public/assets/island/island.glb')).sha256, 'Repack the changed source model.');
+assert.equal(transport.sourceSha256, (await fileRecord('public/island/island.glb')).sha256, 'Repack the changed source model.');
 assert.equal(transport.packerSha256, (await fileRecord('scripts/island/pack-model.mjs')).sha256, 'Repack with the current model packer.');
 assert.equal(transport.sha256, manifest.model.sha256, 'Model transport and manifest must match.');
 assert.equal(transport.bytes, manifest.model.bytes, 'Model transport byte count must match.');

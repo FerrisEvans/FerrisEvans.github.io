@@ -4,12 +4,18 @@ The homepage directly loads a forest reading courtyard assembled from official
 CC0 KayKit Forest/Furniture and Tiny Treats Park/Plants/Picnic sources, with the
 original bear and its coordinated animation. HTML panels supply the site content.
 `build_scene.py` and its Python modules are the reproducible authoring source;
-`public/assets/island/island.blend` is editable. Its complete uncompressed export is
-`public/assets/island/island.glb`. These authoring directories are excluded from the production output by `scripts/ci/prune-source-assets.mjs`. Model provenance and mesh statistics
+`public/island/island.blend` is editable. Its complete uncompressed export is
+`public/island/island.glb`. These two authoring files and original vendor
+models, textures and source inventories are excluded from production by
+`scripts/ci/prune-source-assets.mjs`; vendor licenses and notices remain published.
+Model provenance and mesh statistics
 live beside the exported model in `public/island/model-report.json`.
 Original vendor glTF/BIN/PNG files, licenses and provenance hashes are preserved
-under `public/assets/island/vendor/`; both the Blender
+under `public/island/vendor/`; both the Blender
 generator and publication source seal check them. No paid source was used.
+The same vendor directory also preserves the separate MIT licenses and notices
+for Animal Island UI (cursor and tooltip), Naive Icons (navigation and signs),
+and Magic UI (tag cloud). These are UI dependencies, not CC0 model packs.
 
 1. Run Blender in a **separate background process**, never replace an open file:
    `npm run assets:build` (the macOS application path is explicit in this script).
@@ -44,7 +50,7 @@ pruning of older revisions of the owned model path, retaining current + previous
 Other cache paths are untouched. The raw authoring GLB is never published.
 
 The generated avatar follows the same source/delivery separation: its original
-PNG is in `public/assets/brand/`, while `npm run assets:brand` generates a 512px WebP for
+PNG is in `public/brand/`, while `npm run assets:brand` generates a 512px WebP for
 the site's 88–112px avatar displays. Neither the original art nor its source hash
 changes during optimization.
 
@@ -58,7 +64,7 @@ homepage, while `/island/` and `/room/` are compatibility redirects. `/island/`
 remains the static asset directory. The physical signs use the same book, grid
 and tag icons as the navigation, so the model and captured posters are shared
 between languages. The upstream MIT notice is retained under
-`public/vendor/naive-icons/`. Homepage model loading
+`public/island/vendor/naive-icons/`. Homepage model loading
 is automatic, and unavailable JavaScript/WebGL retains the poster and directory.
 
 The export retains `extras.vendorAssets` on imported/merged geometry. Model

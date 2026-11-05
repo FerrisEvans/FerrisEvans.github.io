@@ -50,7 +50,7 @@
       "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5"
     },
     "dogSource": {
-      "file": "public/assets/brand/ferris-dog-avatar.png",
+      "file": "public/brand/ferris-dog-avatar.png",
       "format": "png",
       "bytes": 1460585,
       "width": 1254,
@@ -74,7 +74,7 @@
       }
     },
     "retainedBear": {
-      "file": "public/assets/brand/ferris-avatar.png",
+      "file": "public/brand/ferris-avatar.png",
       "role": "Retained previous bear illustration and style reference",
       "sha256": "667ab09099ff72ad12f9c5ec7da64a2bf33207ba0092f856b273a47431f138b3"
     }

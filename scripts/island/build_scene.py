@@ -10,9 +10,8 @@ from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'public/island'
-SOURCE = ROOT / 'public/assets/island'
+SOURCE = OUT
 OUT.mkdir(parents=True, exist_ok=True)
-SOURCE.mkdir(parents=True, exist_ok=True)
 random.seed(26)
 bpy.ops.object.select_all(action='SELECT')
 bpy.ops.object.delete(use_global=False)

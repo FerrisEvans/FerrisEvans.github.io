@@ -21,7 +21,7 @@ separated along existing connected islands for leaf-only motion, preserving
 all source faces and UVs. Trailing plants use the pot foot as their support
 point and sit at a shelf/table edge so their leaves can hang naturally.
 
-The existing `public/assets/brand/ferris-avatar.png` is a repository visual
+The existing `public/brand/ferris-avatar.png` is a repository visual
 reference. This project makes no new claim about its upstream authorship.
 
 ## Adopted packages
@@ -35,11 +35,11 @@ No paid Extra/Source tier, paid Blender file or purchase was used.
 
 | Package / official source | Author | Exported source models | Scene use | Versioned evidence |
 | --- | --- | ---: | --- | --- |
-| [Tiny Treats - Pretty Park 1.0](https://tinytreats.itch.io/pretty-park) | Isa Lousberg / Tiny Treats | 21 | Modular grass ground, fountain, benches, lanterns, birds, hedges, cobbles, flowers and one tree. | [SOURCE.json](../../public/assets/island/vendor/tinytreats-pretty-park-1.0/SOURCE.json), [LICENSE.txt](../../public/assets/island/vendor/tinytreats-pretty-park-1.0/LICENSE.txt) |
-| [Tiny Treats - Pleasant Picnic 1.0](https://tinytreats.itch.io/pleasant-picnic) | Isa Lousberg / Tiny Treats | 12 | Picnic blanket, cushions, basket, tea service, food and the radio. | [SOURCE.json](../../public/assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/SOURCE.json), [LICENSE.txt](../../public/assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/LICENSE.txt) |
-| [Tiny Treats - House Plants 1.0 FREE](https://tinytreats.itch.io/house-plants) | Isa Lousberg / Tiny Treats | 9 | Complete potted plants, pots, watering can and shovel around the potting table, desk and bookcase. | [SOURCE.json](../../public/assets/island/vendor/tinytreats-house-plants-1.0/SOURCE.json), [LICENSE.txt](../../public/assets/island/vendor/tinytreats-house-plants-1.0/LICENSE.txt) |
-| [KayKit Furniture Bits 1.0](https://kaylousberg.itch.io/furniture-bits) | Kay Lousberg / KayKit | 8 | Bookcase shelves and books, writing desk, chair, table lamp, potting table and radio stool. | [SOURCE.json](../../public/assets/island/vendor/kaykit-furniture-bits-1.0/SOURCE.json), [LICENSE.txt](../../public/assets/island/vendor/kaykit-furniture-bits-1.0/LICENSE.txt) |
-| [KayKit Forest Nature Pack 1.0 FREE](https://kaylousberg.itch.io/kaykit-forest) | Kay Lousberg / KayKit | 8 | Four canopy trees, rocks and grass clusters framing the clearing. | [SOURCE.json](../../public/assets/island/vendor/kaykit-forest-nature-1.0/SOURCE.json), [LICENSE.txt](../../public/assets/island/vendor/kaykit-forest-nature-1.0/LICENSE.txt) |
+| [Tiny Treats - Pretty Park 1.0](https://tinytreats.itch.io/pretty-park) | Isa Lousberg / Tiny Treats | 21 | Modular grass ground, fountain, benches, lanterns, birds, hedges, cobbles, flowers and one tree. | [SOURCE.json](../../public/island/vendor/tinytreats-pretty-park-1.0/SOURCE.json), [LICENSE.txt](../../public/island/vendor/tinytreats-pretty-park-1.0/LICENSE.txt) |
+| [Tiny Treats - Pleasant Picnic 1.0](https://tinytreats.itch.io/pleasant-picnic) | Isa Lousberg / Tiny Treats | 12 | Picnic blanket, cushions, basket, tea service, food and the radio. | [SOURCE.json](../../public/island/vendor/tinytreats-pleasant-picnic-1.0-full/SOURCE.json), [LICENSE.txt](../../public/island/vendor/tinytreats-pleasant-picnic-1.0-full/LICENSE.txt) |
+| [Tiny Treats - House Plants 1.0 FREE](https://tinytreats.itch.io/house-plants) | Isa Lousberg / Tiny Treats | 9 | Complete potted plants, pots, watering can and shovel around the potting table, desk and bookcase. | [SOURCE.json](../../public/island/vendor/tinytreats-house-plants-1.0/SOURCE.json), [LICENSE.txt](../../public/island/vendor/tinytreats-house-plants-1.0/LICENSE.txt) |
+| [KayKit Furniture Bits 1.0](https://kaylousberg.itch.io/furniture-bits) | Kay Lousberg / KayKit | 8 | Bookcase shelves and books, writing desk, chair, table lamp, potting table and radio stool. | [SOURCE.json](../../public/island/vendor/kaykit-furniture-bits-1.0/SOURCE.json), [LICENSE.txt](../../public/island/vendor/kaykit-furniture-bits-1.0/LICENSE.txt) |
+| [KayKit Forest Nature Pack 1.0 FREE](https://kaylousberg.itch.io/kaykit-forest) | Kay Lousberg / KayKit | 8 | Four canopy trees, rocks and grass clusters framing the clearing. | [SOURCE.json](../../public/island/vendor/kaykit-forest-nature-1.0/SOURCE.json), [LICENSE.txt](../../public/island/vendor/kaykit-forest-nature-1.0/LICENSE.txt) |
 
 Each `SOURCE.json` retains the official download route, author, free tier,
 archive SHA-256, exact revision where supplied, original paths and per-file
@@ -64,7 +64,7 @@ blend back into reading without leaving the page halfway through a turn.
 
 ### Tiny Treats - Pretty Park 1.0
 
-Source directory: `public/assets/island/vendor/tinytreats-pretty-park-1.0/`.
+Source directory: `public/island/vendor/tinytreats-pretty-park-1.0/`.
 
 | Source model | Source triangles | Materials |
 | --- | ---: | ---: |
@@ -92,7 +92,7 @@ Source directory: `public/assets/island/vendor/tinytreats-pretty-park-1.0/`.
 
 ### Tiny Treats - Pleasant Picnic 1.0
 
-Source directory: `public/assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/`.
+Source directory: `public/island/vendor/tinytreats-pleasant-picnic-1.0-full/`.
 
 | Source model | Source triangles | Materials |
 | --- | ---: | ---: |
@@ -111,7 +111,7 @@ Source directory: `public/assets/island/vendor/tinytreats-pleasant-picnic-1.0-fu
 
 ### Tiny Treats - House Plants 1.0 FREE
 
-Source directory: `public/assets/island/vendor/tinytreats-house-plants-1.0/`.
+Source directory: `public/island/vendor/tinytreats-house-plants-1.0/`.
 
 | Source model | Source triangles | Materials |
 | --- | ---: | ---: |
@@ -127,7 +127,7 @@ Source directory: `public/assets/island/vendor/tinytreats-house-plants-1.0/`.
 
 ### KayKit Furniture Bits 1.0
 
-Source directory: `public/assets/island/vendor/kaykit-furniture-bits-1.0/`.
+Source directory: `public/island/vendor/kaykit-furniture-bits-1.0/`.
 
 | Source model | Source triangles | Materials |
 | --- | ---: | ---: |
@@ -142,7 +142,7 @@ Source directory: `public/assets/island/vendor/kaykit-furniture-bits-1.0/`.
 
 ### KayKit Forest Nature Pack 1.0 FREE
 
-Source directory: `public/assets/island/vendor/kaykit-forest-nature-1.0/`.
+Source directory: `public/island/vendor/kaykit-forest-nature-1.0/`.
 
 | Source model | Source triangles | Materials |
 | --- | ---: | ---: |
@@ -192,7 +192,7 @@ From the repository root with Blender 5.2 or a compatible version installed:
 ```
 
 The standalone process reads `geometry.py`, `character.py`, `friends.py`, `vendor.py` and
-`export_scene.py`, then writes `public/assets/island/island.blend`,
+`export_scene.py`, then writes `public/island/island.blend`,
 `public/island/island.glb` and `public/island/model-report.json`. It does not
 access an interactive Blender document or download assets. Add `-- --render`
 to create `/tmp/weijin-rebuild/garden-preview.png` for modeling review. This

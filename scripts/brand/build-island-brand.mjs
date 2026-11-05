@@ -8,23 +8,22 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const island = join(root, 'public/brand');
-const brandSources = join(root, 'public/assets/brand');
-const source = await readFile(join(island, 'mark.svg'));
-const lettering = await readFile(join(island, 'lettering.svg'));
+const brandDirectory = join(root, 'public/brand');
+const source = await readFile(join(brandDirectory, 'mark.svg'));
+const lettering = await readFile(join(brandDirectory, 'lettering.svg'));
 for (const master of [source, lettering]) {
   if (/<(?:text|image|foreignObject)\b/i.test(master.toString())) throw new Error('Brand masters must remain pure, editable SVG geometry.');
 }
 const geometry = bytes => bytes.toString().replace(/^.*?<svg\b[^>]*>/s, '').replace(/<\/svg>\s*$/, '').replace(/<title>.*?<\/title>/s, '');
 const logo = `<svg xmlns="http://www.w3.org/2000/svg" width="232" height="84" viewBox="0 0 232 84" role="img" aria-label="未尽"><title>未尽 · 书芽与原创中文字标</title><g transform="translate(1 12) rotate(-4 32 32)">${geometry(source)}</g>${geometry(lettering)}</svg>\n`.replace(/[ \t]+$/gm, '');
-await writeFile(join(island, 'logo.svg'), logo);
-const bearSourceFile = 'public/assets/brand/ferris-avatar.png';
+await writeFile(join(brandDirectory, 'logo.svg'), logo);
+const bearSourceFile = 'public/brand/ferris-avatar.png';
 const avatarPath = join(root, bearSourceFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const avatarBefore = hash(await readFile(avatarPath));
 // Keep the full generated PNG as an authoring source, excluded from production output.
 // The square delivery copy preserves the composition and transparent background.
-const dogSourceFile = 'public/assets/brand/ferris-dog-avatar.png';
+const dogSourceFile = 'public/brand/ferris-dog-avatar.png';
 const dogSourcePath = join(root, dogSourceFile);
 const dogSource = await readFile(dogSourcePath);
 const dogSourceMeta = await sharp(dogSource).metadata();
@@ -35,16 +34,16 @@ const dogDelivery = await sharp(dogSource)
   .resize(dogEncoding.width, dogEncoding.height, { fit: dogEncoding.fit, withoutEnlargement: dogEncoding.withoutEnlargement })
   .webp({ quality: dogEncoding.quality, effort: dogEncoding.effort }).toBuffer();
 const dogDeliveryMeta = await sharp(dogDelivery).metadata();
-await writeFile(join(island, dogDeliveryFile), dogDelivery);
+await writeFile(join(brandDirectory, dogDeliveryFile), dogDelivery);
 const siteSource = await readFile(join(root, 'src/data/site.ts'), 'utf8');
 const currentAvatarFile = siteSource.match(/avatar:\s*`\/brand\/([^?`]+)/)?.[1];
 if (!currentAvatarFile || currentAvatarFile.includes('/')) throw new Error('Current author avatar must name a local brand file.');
-const currentAvatar = await readFile(join(island, currentAvatarFile));
+const currentAvatar = await readFile(join(brandDirectory, currentAvatarFile));
 const sizes = [16, 32, 48, 96, 180, 192, 256, 512];
 const png = new Map();
 for (const size of sizes) png.set(size, await sharp(source, { density: 384 }).resize(size, size).png().toBuffer());
-for (const size of [16, 32, 96, 192, 512]) await writeFile(join(island, `favicon-${size}x${size}.png`), png.get(size));
-await writeFile(join(island, 'apple-touch-icon.png'), png.get(180));
+for (const size of [16, 32, 96, 192, 512]) await writeFile(join(brandDirectory, `favicon-${size}x${size}.png`), png.get(size));
+await writeFile(join(brandDirectory, 'apple-touch-icon.png'), png.get(180));
 await writeFile(join(root, 'public/favicon.svg'), source);
 
 /** ICO supports embedded PNG frames. Width/height zero encodes 256 pixels. */
@@ -78,7 +77,7 @@ const identity = {
     retainedBear: { file: bearSourceFile, role: 'Retained previous bear illustration and style reference', sha256: avatarBefore },
   },
 };
-await writeFile(join(brandSources, 'identity.json'), JSON.stringify(identity, null, 2) + '\n');
+await writeFile(join(brandDirectory, 'identity.json'), JSON.stringify(identity, null, 2) + '\n');
 await writeFile(join(root, 'public/site.webmanifest'), JSON.stringify({
   name: '未尽', short_name: '未尽', description: '保持好奇，慢慢来。', lang: 'zh-CN',
   start_url: '/', display: 'browser', background_color: '#fff7e7', theme_color: '#8bc4a8',
