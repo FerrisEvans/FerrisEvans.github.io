@@ -9,7 +9,7 @@ Ferris 的个人博客，使用 Astro 构建，发布到 [GitHub Pages](https://
 - **[posts/zh/](posts/zh/)**：中文博文；**[posts/en/](posts/en/)**：英文博文。
 - **[posts/img/](posts/img/)**：中英文共用的博文配图。Markdown 都写 `![说明](../img/文件名.png)`。
 
-相对图片由 Astro 构建处理，编辑器也能直接预览。`public/assets/lib` 仅保留指向 `posts/img/` 的兼容链接，旧图片网址继续可用；原图只维护一份。
+相对图片由 Astro 构建处理，编辑器也能直接预览。博文和写作指南共用 `posts/img/`，不再保留旧的 `/assets/lib/` 图片地址。
 
 文章示例：[中文](posts/zh/markdown-writing-guide.md) / [English](posts/en/markdown-writing-guide.md)。
 新文章的文件头：
@@ -56,11 +56,12 @@ npm run preview             # 预览 dist/ 中的生产版本
 ```text
 posts/      博文和配图：zh/ 中文、en/ 英文、img/ 共用图片
 src/        页面、组件、样式、站点配置和浏览器代码
-public/     网站直接发布的图标、模型、封面及许可
-assets/     3D 和品牌制作原稿、第三方素材来源
-scripts/    可重复使用的素材生成、打包和封面工具
-ci/         构建校验、翻译完整性检查和发布记录
-tests/     单元测试、浏览器测试和模型验证工具
+public/     网站资源；assets/ 保存素材原稿，构建时排除原稿目录
+scripts/    素材工具、构建校验和测试
+├── brand/  品牌素材生成
+├── island/ 3D 素材生成、打包和封面工具
+├── ci/     构建校验、翻译完整性检查和发布记录
+└── tests/  单元测试、浏览器测试和模型验证工具
 ```
 
 `src/content/pages/` 是网站的写作指南，不是博文。`src/data/site.ts` 管理标题、简介、头像和分类；`src/i18n/` 管理界面翻译。
@@ -73,4 +74,4 @@ tests/     单元测试、浏览器测试和模型验证工具
 
 只有修改模型或其渲染代码时才需要按顺序运行 `npm run assets:build`、`npm run assets:model`、`npm run assets:posters` 和 `npm run assets:check`。详细命令见 [素材流程](scripts/island/ASSET_PIPELINE.md)，模型来源与许可见 [素材记录](scripts/island/SOURCES.md)。本地预览和性能报告放在被 Git 忽略的 `.room-build/`。
 
-品牌图标源文件是 `public/brand/island/mark.svg`；`npm run assets:brand` 生成实际使用的图标和头像，身份记录保存在 `assets/brand/identity.json`。第三方许可继续保留在 `public/vendor/` 和对应素材目录。
+品牌图标源文件是 `public/brand/island/mark.svg`；`npm run assets:brand` 生成实际使用的图标和头像，身份记录保存在 `public/assets/brand/identity.json`。第三方许可继续保留在 `public/vendor/` 和对应素材目录。

@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { Group, Object3D, Scene } from 'three';
-import { createActivity } from '../../src/scripts/island/activity.ts';
-import { releaseObjectResources } from '../../src/scripts/island/resources.ts';
+import { createActivity } from '../../../src/scripts/island/activity.ts';
+import { releaseObjectResources } from '../../../src/scripts/island/resources.ts';
 
 function fixture(t, flowAxis = [0, -1, 0]) {
   const root = new Group(), scene = new Scene(); scene.add(root);

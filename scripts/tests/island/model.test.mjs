@@ -4,8 +4,8 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { basename, dirname, resolve } from 'node:path';
 
-const binary = readFileSync(new URL('../../assets/island/island.glb', import.meta.url));
-const report = JSON.parse(readFileSync(new URL('../../public/island/model-report.json', import.meta.url), 'utf8'));
+const binary = readFileSync(new URL('../../../public/assets/island/island.glb', import.meta.url));
+const report = JSON.parse(readFileSync(new URL('../../../public/island/model-report.json', import.meta.url), 'utf8'));
 const document = JSON.parse(binary.subarray(20, 20 + binary.readUInt32LE(12)).toString());
 
 test('authored island is a self-contained glTF binary with an honest size and mesh report', () => {
@@ -82,7 +82,7 @@ test('every adopted source model is licensed, hash-verified and present in expor
   const reported = new Set();
   const packs = new Set();
   for (const asset of report.externalAssets ?? []) {
-    assert.match(asset.source, /^assets\/island\/vendor\/[^/]+\/SOURCE\.json$/);
+    assert.match(asset.source, /^public\/assets\/island\/vendor\/[^/]+\/SOURCE\.json$/);
     const folder = dirname(asset.source), pack = basename(folder);
     const source = JSON.parse(readFileSync(resolve(folder, 'SOURCE.json'), 'utf8'));
     assert.equal(asset.license, source.license);

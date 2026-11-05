@@ -4,11 +4,11 @@ The homepage directly loads a forest reading courtyard assembled from official
 CC0 KayKit Forest/Furniture and Tiny Treats Park/Plants/Picnic sources, with the
 original bear and its coordinated animation. HTML panels supply the site content.
 `build_scene.py` and its Python modules are the reproducible authoring source;
-`assets/island/island.blend` is editable. Its complete uncompressed export is
-`assets/island/island.glb`, outside the public delivery directory. Model provenance and mesh statistics
+`public/assets/island/island.blend` is editable. Its complete uncompressed export is
+`public/assets/island/island.glb`. These authoring directories are excluded from the production output by `scripts/ci/prune-source-assets.mjs`. Model provenance and mesh statistics
 live beside the exported model in `public/island/model-report.json`.
 Original vendor glTF/BIN/PNG files, licenses and provenance hashes are preserved
-under `assets/island/vendor/`; both the Blender
+under `public/assets/island/vendor/`; both the Blender
 generator and publication source seal check them. No paid source was used.
 
 1. Run Blender in a **separate background process**, never replace an open file:
@@ -44,7 +44,7 @@ pruning of older revisions of the owned model path, retaining current + previous
 Other cache paths are untouched. The raw authoring GLB is never published.
 
 The generated avatar follows the same source/delivery separation: its original
-PNG is in `assets/brand/`, while `npm run assets:brand` generates a 512px WebP for
+PNG is in `public/assets/brand/`, while `npm run assets:brand` generates a 512px WebP for
 the site's 88–112px avatar displays. Neither the original art nor its source hash
 changes during optimization.
 
@@ -68,10 +68,10 @@ alone is not sufficient proof that a model appears in the delivered scene.
 
 ## Test migration
 
-The default suite preserves shared publishing contracts (`tests/content.test.mjs`)
-and used binary loader/cache/timing contracts (`tests/room/assets.test.mjs` and
+The default suite preserves shared publishing contracts (`scripts/tests/content.test.mjs`)
+and used binary loader/cache/timing contracts (`scripts/tests/room/assets.test.mjs` and
 `load-timings.test.mjs`). Island-specific asset seals and interaction tests are
-under `tests/island/`. Markdown, guides and search retain their existing tests.
+under `scripts/tests/island/`. Markdown, guides and search retain their existing tests.
 
 The removed shape-specific tests are recoverable at Git commit `08844b2`:
 fixed CRT/VHS model names, reflective/baked materials, paper deformation,

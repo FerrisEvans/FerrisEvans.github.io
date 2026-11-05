@@ -9,7 +9,7 @@ import { loadTS } from './load-typescript.mjs';
 const { createEffects } = loadTS(resolve('src/scripts/island/effects.ts'));
 
 test('the actual feature book clears its shelf throughout hover, release and reduced motion', async t => {
-  const document = await new NodeIO().registerExtensions(ALL_EXTENSIONS).read(resolve('assets/island/island.glb'));
+  const document = await new NodeIO().registerExtensions(ALL_EXTENSIONS).read(resolve('public/assets/island/island.glb'));
   const source = document.getRoot().listNodes().find(node => node.getName() === 'Library_FeatureBook');
   assert(source, 'the independently moving book pivot survives export');
   const pivotWorld = new Matrix4().fromArray(source.getWorldMatrix());

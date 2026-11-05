@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "source": "assets/island/island.glb",
+  "source": "public/assets/island/island.glb",
   "sourceSha256": "967f20d4dec520cf500f5bcc9dc84f726cf1400c21fae7478c6bdc54745a22d1",
-  "packerSha256": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
+  "packerSha256": "292042f29c7698cead3509638cfaad3ce1b5418b1d6cc64a97ec348f19f0e666",
   "file": "island.glb.bin",
   "sourceBytes": 5172860,
   "bytes": 2011348,

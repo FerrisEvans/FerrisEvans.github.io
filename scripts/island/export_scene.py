@@ -68,11 +68,11 @@ external = []
 for key, provenance in PROVENANCE.items():
     used = {item['file'] for item in INSTANCES if item['pack'] == key}
     external.append({'name': provenance['pack'], 'author': provenance['author'], 'license': provenance['license'],
-        'source': 'assets/island/vendor/' + PACKS[key] + '/SOURCE.json',
+        'source': 'public/assets/island/vendor/' + PACKS[key] + '/SOURCE.json',
         'models': [item for item in provenance['selectedModels'] if item['file'] in used]})
 report = {
     'schema': 2, 'generator': 'scripts/island/build_scene.py', 'author': 'Elsewhere / original Ferris character and garden composition',
-    'source': 'assets/island/island.blend', 'asset': 'assets/island/island.glb',
+    'source': 'public/assets/island/island.blend', 'asset': 'public/assets/island/island.glb',
     'delivery': 'public/island/island.glb.bin',
     'externalAssets': external, 'assetInstances': INSTANCES,
     'bytes': len(raw), 'triangles': triangles, 'meshes': len(gltf.get('meshes', [])),

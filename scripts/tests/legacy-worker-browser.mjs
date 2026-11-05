@@ -7,8 +7,8 @@ import ts from 'typescript';
 
 // The replacement must leave all requests on the network while clearing only
 // retired caches owned by this site.
-const retirementWorker=await readFile(new URL('../src/scripts/retirement-worker.js',import.meta.url),'utf8');
-const recovery=ts.transpileModule(await readFile(new URL('../src/scripts/legacy-worker.ts',import.meta.url),'utf8'),{
+const retirementWorker=await readFile(new URL('../../src/scripts/retirement-worker.js',import.meta.url),'utf8');
+const recovery=ts.transpileModule(await readFile(new URL('../../src/scripts/legacy-worker.ts',import.meta.url),'utf8'),{
   compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022},
 }).outputText+'\nvoid retireLegacyWorker();';
 

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BoxGeometry, Group, Mesh, MeshBasicMaterial, OrthographicCamera, Vector3 } from 'three';
-import { createNavigation } from '../../src/scripts/island/navigation.ts';
+import { createNavigation } from '../../../src/scripts/island/navigation.ts';
 
 // Real Three camera/OrbitControls math, with only the event target supplied by
 // Node. Browser tests separately exercise actual drag, wheel, history and focus.

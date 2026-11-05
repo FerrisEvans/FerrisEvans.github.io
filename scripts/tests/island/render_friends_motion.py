@@ -1,7 +1,7 @@
 """Prove runtime-local glTF joint axes on the independently rendered friends.
 
-Run tests/island/render_friends.py first, then:
-Blender --background --factory-startup --python tests/island/render_friends_motion.py
+Run scripts/tests/island/render_friends.py first, then:
+Blender --background --factory-startup --python scripts/tests/island/render_friends_motion.py
 Only writes
 /tmp/weijin-friends/motion-*.png. Three local XYZ rotations are conjugated back
 to Blender coordinates, so these are the same poses as the runtime will apply.

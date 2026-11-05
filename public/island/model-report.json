@@ -2,15 +2,15 @@
   "schema": 2,
   "generator": "scripts/island/build_scene.py",
   "author": "Elsewhere / original Ferris character and garden composition",
-  "source": "assets/island/island.blend",
-  "asset": "assets/island/island.glb",
+  "source": "public/assets/island/island.blend",
+  "asset": "public/assets/island/island.glb",
   "delivery": "public/island/island.glb.bin",
   "externalAssets": [
     {
       "name": "Tiny Treats - Pretty Park 1.0",
       "author": "Isa Lousberg / Tiny Treats",
       "license": "CC0-1.0",
-      "source": "assets/island/vendor/tinytreats-pretty-park-1.0/SOURCE.json",
+      "source": "public/assets/island/vendor/tinytreats-pretty-park-1.0/SOURCE.json",
       "models": [
         {
           "file": "bench.gltf",
@@ -900,7 +900,7 @@
       "name": "Tiny Treats - Pleasant Picnic 1.0",
       "author": "Isa Lousberg / Tiny Treats",
       "license": "CC0-1.0",
-      "source": "assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/SOURCE.json",
+      "source": "public/assets/island/vendor/tinytreats-pleasant-picnic-1.0-full/SOURCE.json",
       "models": [
         {
           "file": "grapes_bowl.gltf",
@@ -1424,7 +1424,7 @@
       "name": "Tiny Treats - House Plants 1.0 FREE",
       "author": "Isa Lousberg / Tiny Treats",
       "license": "CC0-1.0",
-      "source": "assets/island/vendor/tinytreats-house-plants-1.0/SOURCE.json",
+      "source": "public/assets/island/vendor/tinytreats-house-plants-1.0/SOURCE.json",
       "models": [
         {
           "file": "cacti_plant_pot_small.gltf",
@@ -1810,7 +1810,7 @@
       "name": "KayKit Furniture Bits 1.0",
       "author": "Kay Lousberg / KayKit",
       "license": "CC0-1.0",
-      "source": "assets/island/vendor/kaykit-furniture-bits-1.0/SOURCE.json",
+      "source": "public/assets/island/vendor/kaykit-furniture-bits-1.0/SOURCE.json",
       "models": [
         {
           "file": "shelf_B_large.gltf",
@@ -2026,7 +2026,7 @@
       "name": "KayKit Forest Nature Pack 1.0 FREE",
       "author": "Kay Lousberg / KayKit",
       "license": "CC0-1.0",
-      "source": "assets/island/vendor/kaykit-forest-nature-1.0/SOURCE.json",
+      "source": "public/assets/island/vendor/kaykit-forest-nature-1.0/SOURCE.json",
       "models": [
         {
           "file": "Tree_1_B_Color1.gltf",

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { fromHtml } from 'hast-util-from-html';
-import config from '../astro.config.mjs';
+import config from '../../astro.config.mjs';
 
 const { processor, ...sharedOptions } = config.markdown;
 const renderer = await processor.createRenderer(sharedOptions);

@@ -21,7 +21,7 @@ const hash=body=>createHash('sha256').update(body).digest('hex');
 export async function verifyRoomAssetCache(){
   const modules=new Map();
   for(const name of ['assets','asset-cache']){
-    const source=await readFile(new URL(`../../src/scripts/room/${name}.ts`,import.meta.url),'utf8');
+    const source=await readFile(new URL(`../../../src/scripts/room/${name}.ts`,import.meta.url),'utf8');
     modules.set(name,ts.transpileModule(source,{
       compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022},
     }).outputText);

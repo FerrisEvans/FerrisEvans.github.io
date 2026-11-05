@@ -6,7 +6,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
-const root = fileURLToPath(new URL('../', import.meta.url));
+const root = fileURLToPath(new URL('../../', import.meta.url));
 const require = createRequire(import.meta.url);
 // js-yaml is already present in the locked Astro toolchain; no new dependency.
 const yaml = require('js-yaml');

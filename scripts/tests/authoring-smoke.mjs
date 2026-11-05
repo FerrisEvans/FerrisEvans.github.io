@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { fromHtml } from 'hast-util-from-html';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 // macOS exposes /var through /private/var; use one canonical root for Vite IDs.
 const temporary = await realpath(await mkdtemp(join(tmpdir(), 'praxis-authoring-')));
 const fixtureId = randomUUID().slice(0, 8);
@@ -465,7 +465,7 @@ async function verifyPublished() {
 
 try {
   const original = await snapshot(root);
-  await Promise.all(['src', 'posts', 'public', 'scripts', 'ci', 'tests', 'assets/island', 'astro.config.mjs', 'package.json', 'package-lock.json', 'tsconfig.json'].map((path) =>
+  await Promise.all(['src', 'posts', 'public', 'scripts', 'astro.config.mjs', 'package.json', 'package-lock.json', 'tsconfig.json'].map((path) =>
     cp(join(root, path), join(temporary, path), { recursive: true, verbatimSymlinks: true })));
   await symlink(join(root, 'node_modules'), join(temporary, 'node_modules'), 'dir');
   assert.deepEqual(await snapshot(temporary), original);

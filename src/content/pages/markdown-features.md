@@ -115,14 +115,14 @@ This is *emphasis*. 星号本身写成 \*。
 ```markdown
 [返回关于作者](/zh/about/)
 
-![检索增强生成的流程示意图](/assets/lib/rag.jpeg)
+![检索增强生成的流程示意图](../../../posts/img/rag.jpeg)
 ```
 
 **效果**
 
 [返回关于作者](/zh/about/)
 
-![检索增强生成的流程示意图](/assets/lib/rag.jpeg)
+![检索增强生成的流程示意图](../../../posts/img/rag.jpeg)
 
 图片语法属于基础 Markdown；本站额外提供独立图片的图注和放大阅读效果。
 

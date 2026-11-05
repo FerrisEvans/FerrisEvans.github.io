@@ -10,7 +10,7 @@ from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'public/island'
-SOURCE = ROOT / 'assets/island'
+SOURCE = ROOT / 'public/assets/island'
 OUT.mkdir(parents=True, exist_ok=True)
 SOURCE.mkdir(parents=True, exist_ok=True)
 random.seed(26)

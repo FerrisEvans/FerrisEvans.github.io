@@ -1,6 +1,6 @@
 """Independent reference-character proof; does not mutate the garden or delivery.
 
-Blender --background --factory-startup --python tests/island/render_friends.py
+Blender --background --factory-startup --python scripts/tests/island/render_friends.py
 Output: /tmp/weijin-friends/{front,three-quarter,top,side,back}.png and friends.blend.
 """
 import bpy
@@ -10,7 +10,7 @@ import struct
 from pathlib import Path
 from mathutils import Vector
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 OUT = Path('/tmp/weijin-friends')
 OUT.mkdir(parents=True, exist_ok=True)
 bpy.ops.object.select_all(action='SELECT')

@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import katex from 'katex';
 import { fromHtml } from 'hast-util-from-html';
-import rehypeReading from '../src/plugins/rehype-reading.mjs';
-import config from '../astro.config.mjs';
+import rehypeReading from '../../src/plugins/rehype-reading.mjs';
+import config from '../../astro.config.mjs';
 
 // Exercise the configured processor, including its plugin and option resolution.
 const { processor, ...sharedOptions } = config.markdown;

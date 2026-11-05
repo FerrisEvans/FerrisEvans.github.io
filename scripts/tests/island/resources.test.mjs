@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BoxGeometry, Group, Mesh, MeshStandardMaterial, Texture } from 'three';
-import { releaseObjectResources } from '../../src/scripts/island/resources.ts';
+import { releaseObjectResources } from '../../../src/scripts/island/resources.ts';
 
 test('shared imported maps, decoded images and cloned source materials are released once', () => {
   const released = { geometry: 0, source: 0, clone: 0, texture: 0, image: 0 };

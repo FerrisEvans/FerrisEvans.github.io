@@ -4,9 +4,9 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import ts from 'typescript';
 
-const source = readFileSync(new URL('../../src/scripts/room/assets.ts', import.meta.url), 'utf8');
+const source = readFileSync(new URL('../../../src/scripts/room/assets.ts', import.meta.url), 'utf8');
 const compilerOptions = { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 };
-const cacheSource = readFileSync(new URL('../../src/scripts/room/asset-cache.ts', import.meta.url), 'utf8');
+const cacheSource = readFileSync(new URL('../../../src/scripts/room/asset-cache.ts', import.meta.url), 'utf8');
 const cacheModule = 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(cacheSource, { compilerOptions }).outputText).toString('base64');
 const js = ts.transpileModule(source, { compilerOptions }).outputText.replace("'./asset-cache'", JSON.stringify(cacheModule));
 const { RoomAssets } = await import('data:text/javascript;base64,' + Buffer.from(js).toString('base64'));

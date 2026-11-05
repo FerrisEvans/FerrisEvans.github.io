@@ -9,7 +9,7 @@ import sharp from 'sharp';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const island = join(root, 'public/brand/island');
-const brandSources = join(root, 'assets/brand');
+const brandSources = join(root, 'public/assets/brand');
 const source = await readFile(join(island, 'mark.svg'));
 const lettering = await readFile(join(island, 'lettering.svg'));
 for (const master of [source, lettering]) {
@@ -18,13 +18,13 @@ for (const master of [source, lettering]) {
 const geometry = bytes => bytes.toString().replace(/^.*?<svg\b[^>]*>/s, '').replace(/<\/svg>\s*$/, '').replace(/<title>.*?<\/title>/s, '');
 const logo = `<svg xmlns="http://www.w3.org/2000/svg" width="232" height="84" viewBox="0 0 232 84" role="img" aria-label="未尽"><title>未尽 · 书芽与原创中文字标</title><g transform="translate(1 12) rotate(-4 32 32)">${geometry(source)}</g>${geometry(lettering)}</svg>\n`.replace(/[ \t]+$/gm, '');
 await writeFile(join(island, 'logo.svg'), logo);
-const bearSourceFile = 'assets/brand/ferris-avatar.png';
+const bearSourceFile = 'public/assets/brand/ferris-avatar.png';
 const avatarPath = join(root, bearSourceFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const avatarBefore = hash(await readFile(avatarPath));
-// Keep the full generated PNG as an authoring source, outside the public tree.
+// Keep the full generated PNG as an authoring source, excluded from production output.
 // The square delivery copy preserves the composition and transparent background.
-const dogSourceFile = 'assets/brand/ferris-dog-avatar.png';
+const dogSourceFile = 'public/assets/brand/ferris-dog-avatar.png';
 const dogSourcePath = join(root, dogSourceFile);
 const dogSource = await readFile(dogSourcePath);
 const dogSourceMeta = await sharp(dogSource).metadata();

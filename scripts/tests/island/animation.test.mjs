@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { AnimationClip, Group, NumberKeyframeTrack, Object3D } from 'three';
-import { createAnimation } from '../../src/scripts/island/animation.ts';
+import { createAnimation } from '../../../src/scripts/island/animation.ts';
 
 // Real Three mixer/property bindings, with small authored tracks so the tests
 // can distinguish animation state labels from actual articulated movement.

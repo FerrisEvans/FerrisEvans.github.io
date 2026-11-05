@@ -28,8 +28,8 @@ export async function modelManifest(root = process.cwd()) {
     'scripts/island/build_scene.py',
     ...await sourceFiles(resolve(root, 'scripts/island'), name => name.endsWith('.py'))
       .then(files => files.map(file => relative(root, file)).filter(file => file !== 'scripts/island/build_scene.py')),
-    'assets/island/island.blend',
-    'assets/island/island.glb',
+    'public/assets/island/island.blend',
+    'public/assets/island/island.glb',
     'scripts/island/pack-model.mjs',
     'src/styles/world.css',
     'src/styles/island-tooltip.css',
@@ -37,7 +37,7 @@ export async function modelManifest(root = process.cwd()) {
     // Seal their actual bytes, so a dependency update cannot keep old posters.
     ...['book', 'grid', 'tag'].map(icon => `node_modules/naive-icons/svg/${icon}.svg`),
     ...await sourceFiles(resolve(root, 'src/scripts/island')).then(files => files.map(file => relative(root, file))),
-    ...await sourceFiles(resolve(root, 'assets/island/vendor'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),
+    ...await sourceFiles(resolve(root, 'public/assets/island/vendor'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),
   ].sort();
   const sources = Object.fromEntries(await Promise.all(sourcePaths.map(async path =>
     [path, sha256(await readFile(resolve(root, path)))])));

@@ -15,7 +15,7 @@ import sharp from 'sharp';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const [sourceArg, outputArg, reportArg] = process.argv.slice(2);
-const sourcePath = sourceArg ? resolve(sourceArg) : resolve(root, 'assets/island/island.glb');
+const sourcePath = sourceArg ? resolve(sourceArg) : resolve(root, 'public/assets/island/island.glb');
 const outputPath = outputArg ? resolve(outputArg) : resolve(root, 'public/island/island.glb.bin');
 const reportPath = reportArg ? resolve(reportArg) : resolve(root, 'public/island/transport.json');
 const sha256 = value => createHash('sha256').update(value).digest('hex');

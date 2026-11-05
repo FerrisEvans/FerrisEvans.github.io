@@ -115,14 +115,14 @@ Write links as `[text](URL)` and images as `![alternative text](URL)`. Alternati
 ```markdown
 [Back to About](/en/about/)
 
-![A diagram of the retrieval-augmented generation workflow](/assets/lib/rag.jpeg)
+![A diagram of the retrieval-augmented generation workflow](../../../../posts/img/rag.jpeg)
 ```
 
 **Result**
 
 [Back to About](/en/about/)
 
-![A diagram of the retrieval-augmented generation workflow](/assets/lib/rag.jpeg)
+![A diagram of the retrieval-augmented generation workflow](../../../../posts/img/rag.jpeg)
 
 Image syntax is part of basic Markdown. This site additionally provides captions and a zoomed view for standalone images.
 

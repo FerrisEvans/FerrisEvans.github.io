@@ -7,6 +7,9 @@ import { fromHtml } from 'hast-util-from-html';
 import { readArticles, translationErrors } from './i18n-contract.mjs';
 
 const distDir = path.resolve('dist');
+for (const directory of ['assets/brand', 'assets/island', 'assets/lib']) {
+  assert(!fs.existsSync(path.join(distDir, directory)), `Authoring or retired assets must not be published: ${directory}`);
+}
 const requiredFiles = [
   'index.html',
   'en/index.html',

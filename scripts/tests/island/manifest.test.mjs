@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
-import { modelManifest, verifyManifest, fileRecord, posterSizes } from '../../scripts/island/manifest.mjs';
+import { modelManifest, verifyManifest, fileRecord, posterSizes } from '../../island/manifest.mjs';
 
 async function fixture(t) {
   const root = await mkdtemp(join(tmpdir(), 'island-seals-'));
@@ -14,8 +14,8 @@ async function fixture(t) {
   };
   for (const [file, bytes] of Object.entries({
     'scripts/island/build_scene.py': 'original scene source',
-    'assets/island/island.blend': 'editable Blender source',
-    'assets/island/island.glb': 'authored glTF source',
+    'public/assets/island/island.blend': 'editable Blender source',
+    'public/assets/island/island.glb': 'authored glTF source',
     'scripts/island/pack-model.mjs': 'lossless delivery packer',
     'public/island/island.glb.bin': 'delivered model',
     'src/scripts/island/scene.ts': 'rendering source',
@@ -33,7 +33,7 @@ test('geometry, authoring source and renderer changes invalidate the same scene 
   const { root, write } = await fixture(t);
   const baseline = await modelManifest(root);
   await verifyManifest(baseline, root, { modelOnly: true });
-  for (const file of ['public/island/island.glb.bin', 'scripts/island/build_scene.py', 'assets/island/island.blend', 'src/scripts/island/scene.ts', 'src/styles/world.css']) {
+  for (const file of ['public/island/island.glb.bin', 'scripts/island/build_scene.py', 'public/assets/island/island.blend', 'src/scripts/island/scene.ts', 'src/styles/world.css']) {
     const original = await readFile(join(root, file));
     await write(file, `changed ${file}`);
     await assert.rejects(verifyManifest(baseline, root, { modelOnly: true }), /sources changed/);
@@ -100,10 +100,10 @@ test('the initial core resource budget is enforced before deployment', async t =
 test('adopted vendor geometry, textures and their license/provenance participate in the source seal', async t => {
   const { root, write } = await fixture(t);
   const files = ['prop.gltf', 'prop.bin', 'palette.png', 'LICENSE.txt', 'SOURCE.json'];
-  for (const file of files) await write(`assets/island/vendor/example/${file}`, `pinned ${file}`);
+  for (const file of files) await write(`public/assets/island/vendor/example/${file}`, `pinned ${file}`);
   const manifest = await modelManifest(root);
-  for (const file of files) assert(manifest.sources[`assets/island/vendor/example/${file}`]);
+  for (const file of files) assert(manifest.sources[`public/assets/island/vendor/example/${file}`]);
   await verifyManifest(manifest, root, { modelOnly: true });
-  await write('assets/island/vendor/example/LICENSE.txt', 'changed license');
+  await write('public/assets/island/vendor/example/LICENSE.txt', 'changed license');
   await assert.rejects(verifyManifest(manifest, root, { modelOnly: true }), /sources changed/);
 });

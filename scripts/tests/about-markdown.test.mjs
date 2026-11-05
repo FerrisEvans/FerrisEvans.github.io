@@ -2,13 +2,14 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fromHtml } from 'hast-util-from-html';
-import config from '../astro.config.mjs';
+import config from '../../astro.config.mjs';
 
 const { processor, ...options } = config.markdown;
 const renderer = await processor.createRenderer(options);
-const markdown = readFileSync(new URL('../src/content/pages/markdown-features.md', import.meta.url), 'utf8')
+const fileURL = new URL('../../src/content/pages/markdown-features.md', import.meta.url);
+const markdown = readFileSync(fileURL, 'utf8')
   .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
-const rendered = await renderer.render(markdown);
+const rendered = await renderer.render(markdown, { fileURL });
 const nodes = [];
 const visit = node => {
   if (node.type === 'element') nodes.push(node);
@@ -82,12 +83,17 @@ test('guide formulas, footnote round trips and heading links have real rendered 
   assert.equal(nodes.filter(node => node.tagName === 'kbd').length, 4);
   assert(nodes.some(node => node.tagName === 'sub' && textContent(node) === '2'));
   assert(nodes.some(node => node.tagName === 'sup' && textContent(node) === '2'));
-  assert(nodes.some(node => node.tagName === 'img' && node.properties.src === '/assets/lib/rag.jpeg' && node.properties.alt === '检索增强生成的流程示意图'));
+  assert.deepEqual(rendered.metadata.localImagePaths, ['../../../posts/img/rag.jpeg']);
+  assert(nodes.some(node => {
+    if (node.tagName !== 'img' || !node.properties.__astro_image_) return false;
+    const image = JSON.parse(node.properties.__astro_image_);
+    return image.src === '../../../posts/img/rag.jpeg' && image.alt === '检索增强生成的流程示意图';
+  }));
   assert(nodes.some(node => node.tagName === 'a' && node.properties.href === '/zh/about/writing/'));
 });
 
 test('the English syntax guide preserves rendered features and localizes reader-facing labels', async () => {
-  const fileURL = new URL('../src/content/pages/en/markdown-features.md', import.meta.url);
+  const fileURL = new URL('../../src/content/pages/en/markdown-features.md', import.meta.url);
   const source = readFileSync(fileURL, 'utf8').replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
   const english = await renderer.render(source, { fileURL });
   const elements = [];
