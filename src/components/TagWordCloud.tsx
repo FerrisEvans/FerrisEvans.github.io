@@ -2,41 +2,49 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'motion/react';
 import { initialTagTokenColor, randomizeTagTokens } from '../scripts/tag-tokens';
 import { createIslandTooltip } from '../scripts/island/tooltip';
+import { solveAvoidance } from '../scripts/tag-cloud-avoidance';
 import '../styles/tag-token.css';
 import '../styles/tag-word-cloud.css';
 
 type Tag = { name: string; count: number; href: string };
 interface TagWordCloudProps { tags: Tag[]; }
-type Word = { name: string; count: number; width: number; height: number };
-type Placement = { x: number; y: number; width: number; height: number };
+type Word = { name: string; count: number; width: number; height: number; textWidth: number; textHeight: number };
+type Placement = { x: number; y: number; width: number; height: number; textWidth: number; textHeight: number };
 type Box = Placement & { name: string };
 type CloudLayout = { height: number; width: number; positions: Record<string, Placement> };
 type Point = { x: number; y: number } | null;
+type Selection = { id: string; x: number; y: number } | null;
+type WordMotion = { x: number; y: number; scale: number };
+type LiveWords = Map<string, { x: MotionValue<number>; y: MotionValue<number>; scale: MotionValue<number> }>;
 const magnification = (width: number) => width < 600 ? 1.3 : 1.9;
+const spring = { mass: .2, stiffness: 180, damping: 18, restDelta: .001, restSpeed: .01 };
 
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
 // two-dimensional cloud. See docs/tag-cloud-motion.md for source and license.
-// The link remains a fixed hit target; only its non-interactive text scales.
-function CloudWord({ tag, hidden, position, size, pointer, active, enabled, radius, growth }: {
+// Native links move with their text; the selected word pins its current offset.
+function CloudWord({ tag, hidden, position, size, plan, active, enabled, live }: {
   tag: Tag; hidden: boolean; position?: Placement; size: number;
-  pointer: MotionValue<Point>; active: MotionValue<string | null>;
-  enabled: boolean; radius: number; growth: number;
+  plan: MotionValue<Record<string, WordMotion>>; active: MotionValue<Selection>;
+  enabled: boolean; live: LiveWords;
 }) {
-  const target = useTransform(() => {
-    const point = pointer.get(), selected = active.get();
-    if (!enabled || hidden) return 1;
-    if (!position) return selected === tag.name ? 1 + growth : 1;
-    if (!point) return 1;
-    const distance = Math.hypot(point.x - position.x - position.width / 2,
-      (point.y - position.y - position.height / 2) * 1.2);
-    return distance < radius ? 1 + (1 + Math.cos(Math.PI * distance / radius)) / 2 * growth : 1;
-  });
-  const scale = useSpring(target, { mass: .2, stiffness: 180, damping: 18, restDelta: .001, restSpeed: .01 });
-  return <li data-word={tag.name} hidden={hidden} style={position ? { position: 'absolute', left: position.x, top: position.y, width: position.width, height: position.height } : undefined}>
+  const scaleTarget = useTransform(plan, value => value[tag.name]?.scale ?? 1);
+  const xTarget = useTransform(plan, value => value[tag.name]?.x ?? 0);
+  const yTarget = useTransform(plan, value => value[tag.name]?.y ?? 0);
+  const scale = useSpring(scaleTarget, spring), x = useSpring(xTarget, spring), y = useSpring(yTarget, spring);
+  const zIndex = useTransform(active, value => value?.id === tag.name ? 2 : 0);
+  useEffect(() => {
+    live.set(tag.name, { x, y, scale });
+    const unsubscribe = active.on('change', selected => {
+      // Stop residual spring velocity when a moving neighbor becomes selected.
+      if (selected?.id === tag.name) { x.jump(selected.x); y.jump(selected.y); }
+    });
+    return () => { unsubscribe(); live.delete(tag.name); };
+  }, [tag.name, live, active, x, y, scale]);
+  return <motion.li data-word={tag.name} hidden={hidden} style={{ ...(position ? { position: 'absolute', left: position.x, top: position.y, width: position.width, height: position.height } : {}), x: enabled ? x : 0, y: enabled ? y : 0, zIndex }}>
     <a className="tag-token tag-item" href={tag.href} data-count={tag.count} data-tag={tag.name.toLowerCase()} data-tag-token={tag.name} data-token-color={initialTagTokenColor(tag.name)} aria-label={`${tag.name}，${tag.count} 篇笔记`} style={{ '--tag-token-size': `${size}px` } as CSSProperties}>
       <motion.span className="tag-word" style={{ scale: enabled ? scale : 1 }}>{tag.name}</motion.span>
     </a>
-  </li>;
+  </motion.li>;
 }
 
 /** Count controls both font size and distance from the center. Reserved space
@@ -64,14 +72,14 @@ function packWords(words: Word[], width: number): CloudLayout | null {
         const y = (height - h) / 2 + Math.sin(angle) * radius * height / 2;
         if (x < 8 || y < 8 || x + w > width - 8 || y + h > height - 8) continue;
         if (placed.some(box => x < box.x + box.width && x + w > box.x && y < box.y + box.height && y + h > box.y)) continue;
-        placed.push({ name: word.name, width: w, height: h, x, y }); found = true; break;
+        placed.push({ name: word.name, width: w, height: h, x, y, textWidth: word.textWidth, textHeight: word.textHeight }); found = true; break;
       }
       if (!found) break;
     }
     if (placed.length === words.length) {
       const top = Math.min(...placed.map(word => word.y));
       const bottom = Math.max(...placed.map(word => word.y + word.height));
-      return { width, height: Math.ceil(bottom - top + 32), positions: Object.fromEntries(placed.map(word => [word.name, { x: Math.round(word.x), y: Math.round(word.y - top + 16), width: word.width, height: word.height }])) };
+      return { width, height: Math.ceil(bottom - top + 32), positions: Object.fromEntries(placed.map(word => [word.name, { x: Math.round(word.x), y: Math.round(word.y - top + 16), width: word.width, height: word.height, textWidth: word.textWidth, textHeight: word.textHeight }])) };
     }
   }
   return null; // Natural, weighted wrapping remains usable for unusually long collections.
@@ -85,13 +93,35 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
   const [query, setQuery] = useState('');
   const [layout, setLayout] = useState<CloudLayout | null>(null);
   const pointer = useMotionValue<Point>(null);
-  const active = useMotionValue<string | null>(null);
+  const active = useMotionValue<Selection>(null);
+  const live = useRef<LiveWords>(new Map());
   const [motionEnabled, setMotionEnabled] = useState(false);
   const normalized = query.trim().toLowerCase();
   const visibleCount = tags.filter(tag => tag.name.toLowerCase().includes(normalized)).length;
   const min = Math.sqrt(Math.min(...tags.map(tag => tag.count), Infinity));
   const max = Math.sqrt(Math.max(...tags.map(tag => tag.count), 0));
   const fontSize = (count: number) => max > min ? 14 + (Math.sqrt(count) - min) / (max - min) * 25 : 20;
+  const plan = useTransform((): Record<string, WordMotion> => {
+    const point = pointer.get(), selected = active.get();
+    if (!motionEnabled || !point) return {};
+    const radius = Math.min(220, Math.max(150, (layout?.width ?? 800) * .25));
+    const growth = magnification(layout?.width ?? 800) - 1;
+    if (!layout) return selected ? { [selected.id]: { x: 0, y: 0, scale: 1 + growth } } : {};
+    const items = Object.entries(layout.positions).map(([id, p]) => {
+      const x = p.x + p.width / 2 + (selected?.id === id ? selected.x : 0);
+      const y = p.y + p.height / 2 + (selected?.id === id ? selected.y : 0);
+      const distance = Math.hypot(point.x - x, (point.y - y) * 1.2);
+      return { id, x, y, width: p.textWidth, height: p.textHeight,
+        scale: distance < radius ? 1 + (1 + Math.cos(Math.PI * distance / radius)) / 2 * growth : 1 };
+    });
+    const offsets = solveAvoidance(items, selected?.id ?? null, layout);
+    return Object.fromEntries(items.map(item => {
+      const p = layout.positions[item.id], offset = offsets[item.id];
+      return [item.id, { scale: item.scale,
+        x: selected?.id === item.id ? selected.x : Math.max(-p.x, Math.min(layout.width - p.x - p.width, offset?.x ?? 0)),
+        y: selected?.id === item.id ? selected.y : Math.max(-p.y, Math.min(layout.height - p.y - p.height, offset?.y ?? 0)) }];
+    }));
+  });
 
   useEffect(() => {
     if (root.current) randomizeTagTokens(root.current);
@@ -114,7 +144,8 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
           const link = item.querySelector('a')!, word = item.querySelector<HTMLElement>('.tag-word')!;
           // Measure the unscaled text once, never the reserved hit area.
           return { name: item.dataset.word!, count: Number(link.dataset.count), width: word.offsetWidth + 12,
-            height: Math.max(word.offsetHeight + 8, matchMedia('(pointer: coarse)').matches ? 44 : 36) };
+            height: Math.max(word.offsetHeight + 8, matchMedia('(pointer: coarse)').matches ? 44 : 36),
+            textWidth: word.offsetWidth, textHeight: word.offsetHeight };
         });
         const next = packWords(words, width);
         setLayout(previous => JSON.stringify(previous) === JSON.stringify(next) ? previous : next);
@@ -138,6 +169,7 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
     let hovered: HTMLAnchorElement | null = null, focused: HTMLAnchorElement | null = null;
     let shown: HTMLAnchorElement | null = null, hideTimer = 0;
+    let lastPoint: Point = null;
     const preference = () => setMotionEnabled(!reduced.matches && fine.matches);
     preference();
 
@@ -148,24 +180,50 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
         hideTimer = window.setTimeout(() => { hint.hide(); shown = null; }, 100);
         return;
       }
-      active.set(link.parentElement!.dataset.word ?? null);
       if (shown === link) return;
       const rect = link.getBoundingClientRect(), bounds = host!.getBoundingClientRect();
-      // Fixed link geometry anchors the tooltip; scaling text cannot move it.
+      // The selected link is pinned at its current animated position.
       // Do not replay the shared popup animation when the count changes.
       hint.show(`${link.dataset.count} 篇笔记`, rect.left + rect.width / 2 - bounds.left, rect.top - bounds.top, true);
       shown = link;
     }
+    function select(link: HTMLAnchorElement | null) {
+      const id = link?.parentElement?.dataset.word;
+      if (!id) active.set(null);
+      else if (active.get()?.id !== id) {
+        const current = live.current.get(id);
+        active.set({ id, x: current?.x.get() ?? 0, y: current?.y.get() ?? 0 });
+      }
+      showHint(link);
+    }
+    function insideSelected(point: Exclude<Point, null>) {
+      const selected = active.get(), p = selected && layout?.positions[selected.id];
+      if (!selected || !p) return false;
+      const scale = live.current.get(selected.id)?.scale.get() ?? 1;
+      // Hold the selected native link across its full visible text extent.
+      // Neighbor animation alone cannot steal the stationary pointer.
+      return Math.abs(point.x - p.x - p.width / 2 - selected.x) <= Math.max(p.width, p.textWidth * scale) / 2
+        && Math.abs(point.y - p.y - p.height / 2 - selected.y) <= Math.max(p.height, p.textHeight * scale) / 2;
+    }
     function move(event: PointerEvent) {
-      if (event.pointerType === 'touch' || !fine.matches) return;
+      if (event.pointerType === 'touch' || !fine.matches || event.buttons) return;
       const rect = element!.getBoundingClientRect();
-      pointer.set({ x: event.clientX - rect.left, y: event.clientY - rect.top });
+      const point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+      if (lastPoint && Math.hypot(point.x - lastPoint.x, point.y - lastPoint.y) < .1) return;
+      lastPoint = point;
+      pointer.set(point);
       focused = null;
+      const candidate = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('.tag-item') : null;
+      const link = hovered && insideSelected(point) ? hovered : candidate;
+      if (hovered !== link) { hovered = link; select(link); }
+    }
+    function press(event: PointerEvent) {
+      if (event.pointerType === 'touch' || !fine.matches) return;
       const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('.tag-item') : null;
-      if (hovered !== link) { hovered = link; active.set(link?.parentElement?.dataset.word ?? null); showHint(link); }
+      if (link) { hovered = link; focused = null; select(link); }
     }
     function leave() {
-      hovered = null;
+      hovered = null; lastPoint = null;
       if (!focused) { pointer.set(null); active.set(null); showHint(null); }
     }
     function focus(event: FocusEvent) {
@@ -173,12 +231,14 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
       if (!(link instanceof HTMLAnchorElement) || !link.matches('.tag-item:focus-visible')) return;
       focused = link; hovered = null;
       const item = link.parentElement!;
-      pointer.set({ x: item.offsetLeft + item.offsetWidth / 2, y: item.offsetTop + item.offsetHeight / 2 });
-      showHint(link);
+      select(link);
+      const selected = active.get();
+      pointer.set({ x: item.offsetLeft + item.offsetWidth / 2 + (selected?.x ?? 0), y: item.offsetTop + item.offsetHeight / 2 + (selected?.y ?? 0) });
     }
     function blur() { focused = null; if (!hovered) { pointer.set(null); active.set(null); showHint(null); } }
     // Native links handle click, touch, Tab and Enter. No directional-key mode.
     element.addEventListener('pointermove', move);
+    element.addEventListener('pointerdown', press);
     element.addEventListener('pointerleave', leave);
     element.addEventListener('focusin', focus);
     element.addEventListener('focusout', blur);
@@ -187,13 +247,14 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
     return () => {
       clearTimeout(hideTimer); hint.dispose(); pointer.set(null); active.set(null);
       element.removeEventListener('pointermove', move);
+      element.removeEventListener('pointerdown', press);
       element.removeEventListener('pointerleave', leave);
       element.removeEventListener('focusin', focus);
       element.removeEventListener('focusout', blur);
       reduced.removeEventListener('change', preference);
       fine.removeEventListener('change', preference);
     };
-  }, [layout, query, tags, tooltipId, pointer, active]);
+  }, [layout, query, tags, tooltipId, pointer, active, motionEnabled]);
 
   return (
     <div className="tag-cloud-content" ref={root}>
@@ -206,9 +267,8 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
       </div>}
       <ul className="tag-word-cloud" aria-label="标签词云" ref={cloud} hidden={visibleCount === 0} data-packed={Boolean(layout)} style={layout ? { height: layout.height } : undefined}>
         {tags.map(tag => <CloudWord key={tag.name} tag={tag} hidden={!tag.name.toLowerCase().includes(normalized)}
-          position={layout?.positions[tag.name]} size={fontSize(tag.count)} pointer={pointer} active={active}
-          enabled={motionEnabled} radius={Math.min(220, Math.max(150, (layout?.width ?? 800) * .25))}
-          growth={magnification(layout?.width ?? 800) - 1} />)}
+          position={layout?.positions[tag.name]} size={fontSize(tag.count)} plan={plan} active={active}
+          enabled={motionEnabled} live={live.current} />)}
       </ul>
       {visibleCount === 0 && <div id="tag-empty" className="tag-cloud-empty">
         <p>{tags.length ? '没有匹配的标签。换个关键词，再找找看。' : '标签还在慢慢收集，先翻开一篇笔记吧。'}</p>
