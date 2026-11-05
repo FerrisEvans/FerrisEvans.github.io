@@ -23,6 +23,7 @@ const shareImage = new URL(`/island/share.jpg?v=${posterVersion}`, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style is:inline>@view-transition { navigation: auto; }</style>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
