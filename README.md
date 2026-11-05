@@ -16,12 +16,15 @@
 
 ## 页面结构
 
-- `/`：以交互式林间阅读庭院为主体的首页；先展示当前主题封面，再自动加载真实 3D。物件承担首页导航，打开真实内容面板。页面不再叠加普通文章列表与分类区；书架提供笔记目录与搜索，书桌提供最近更新与归档。
-- `/notes/`：简洁的笔记目录、搜索与归档入口、真实分类和精选；后续分页位于 `/notes/page/<n>/`。
-- `/island/`、`/room/`：兼容跳转到首页；`/lofi/`、`/page/<n>/` 跳转到对应笔记目录。启用 JavaScript 时保留查询参数与片段，无 JavaScript 时仍可通过静态跳转或链接到达新页。
-- `/posts/<slug>/`：文章详情、目录、评论与相关阅读。
-- `/categories/`、`/tags/`、`/archives/`：分类、标签与时间索引。
-- `/search/`：Pagefind 全文搜索。
+- `/`：默认进入 `/en/`；英语和中文分别使用 `/en/`、`/zh/`，路径决定语言。
+- `/<locale>/`：交互式林间阅读庭院；物件使用通用图标，悬浮/键盘提示按当前语言显示。书架提供笔记目录与搜索，书桌提供最近更新与归档。
+- `/<locale>/notes/`：笔记目录、分类和精选；分页位于 `/<locale>/notes/page/<n>/`。
+- `/<locale>/posts/<translationKey>/`：文章详情、目录、评论与相关阅读。中英文通过稳定的 `translationKey` 配对。
+- `/<locale>/categories/`、`tags/`、`archives/`：按当前语言生成的分类、标签和时间索引。
+- `/<locale>/search/`：只搜索当前语言；`/<locale>/rss.xml` 提供独立订阅。
+- 旧的无语言前缀 URL 跳转到对应中文页面；旧 `/rss.xml` 保留中文订阅。旧 `/island/`、`/room/` 进入 `/zh/`，`/lofi/` 进入 `/zh/notes/`。跳转保留查询参数与片段，并提供无 JavaScript 的静态跳转和链接。
+
+页面提供自指 canonical、互相对应的 `hreflang` 和指向英文的 `x-default`。两种语言的文章共用原 URL 对应的 Giscus Discussion，不拆分评论。语言切换保留当前文章、查询参数与片段；翻译后的标题锚点可能不同，切换语言后以目标文章为准。
 
 ## 博客视觉与阅读布局
 
@@ -29,9 +32,9 @@
 
 文章纸面最大 880px，桌面内边距 40px，正文约 798px；1440px 以下将旁侧目录折叠进正文，避免压缩阅读宽度。标题与正文使用原库自带的 Nunito / Noto Sans SC 字体，代码保留等宽与独立横向滚动，脚注使用较小字号；图片弹窗相对视口居中。Giscus 在 iframe 就绪与主题变化时同步颜色。
 
-首页与阅读页共用同一导航、页脚、品牌、Nunito / Noto Sans SC 字体及明暗主题。导航直接列出首页、笔记、分类、标签、归档、关于，品牌标志始终返回首页。3D 直接置于首页并自动加载，先用当前主题封面展示场景，再平滑切换为交互画面；无需另点“探索”或进入独立场景页。`/notes/` 与文章页仍不加载 3D。标题、简介、分类和标签保持为 HTML，新增中文标题无需修改模型或字体。正常首页以场景和可访问物件导航为主体；完整静态目录只作为加载中、无 JS 或失败时的阅读退路。
+首页与阅读页共用同一导航、页脚、品牌、Nunito / Noto Sans SC 字体及明暗主题。桌面导航只显示图标，悬浮和键盘聚焦时显示当前语言的 tooltip；手机展开菜单显示文字。品牌标志始终返回当前语言首页。3D 直接置于首页并自动加载，先用当前主题封面展示场景，再平滑切换为交互画面；无需另点“探索”或进入独立场景页。`/notes/` 与文章页仍不加载 3D。标题、简介、分类和标签保持为 HTML，新增中文标题无需修改模型或字体。正常首页以场景和可访问物件导航为主体；完整静态目录只作为加载中、无 JS 或失败时的阅读退路。
 
-「未尽」标识为原创的翻页书本与嫩芽，和作者小熊头像分别使用。`public/brand/island/mark.svg` 是可编辑的单一源文件；修改后运行 `npm run assets:brand`，统一生成各尺寸 PNG、ICO、旧路径 favicon、站点 manifest 和身份记录，避免手工维护多份图标。导航与页脚使用同一中文品牌字标，首页只保留小号介绍和无障碍标题。鼠标样式从共用 `global.css` 引入：全站普通与可点击状态使用原库 SVG，拖动、文本、缩放、尺寸调整和禁用状态保留原生语义；无跟随鼠标的 DOM 动画。
+「未尽」标识为原创的翻页书本与嫩芽，和作者小狗头像分别使用。`public/brand/island/mark.svg` 是可编辑的单一源文件；修改后运行 `npm run assets:brand`，统一生成各尺寸 PNG、ICO、旧路径 favicon、站点 manifest 和身份记录，避免手工维护多份图标。导航与页脚保留共用书本嫩芽标志，中文使用「未尽」SVG 字标，英文使用 Weijin 字标，首页只保留小号介绍和无障碍标题。鼠标样式从共用 `global.css` 引入：全站普通与可点击状态使用原库 SVG，拖动、文本、缩放、尺寸调整和禁用状态保留原生语义；无跟随鼠标的 DOM 动画。
 
 首页庭院支持桌面与窄屏触控，提供可聚焦的物件入口、内容面板、关闭与返回行为。普通滚轮用于继续阅读页面，Ctrl/⌘ + 滚轮用于场景缩放；手机左右拖动环顾，向下滑动阅读。减少动态效果时停用角色循环和大幅镜头过渡；页面隐藏时暂停绘制，离开时释放资源。禁用 JavaScript、无法创建 WebGL 或模型加载失败时，仍可使用静态内容入口。
 
@@ -43,12 +46,14 @@
 npm install
 npm run dev       # 开发服务器（搜索索引仅在构建后可用）
 npm run check     # 内容 schema 与 TypeScript 检查
+npm run check:translations # 检查正式文章的中英文配对
 npm test          # 内容、资源缓存、小岛模型和交付契约回归
 npm run audit:deps # 完整依赖树安全检查（含开发依赖）
 npm run build     # 构建到 dist/ 并生成 pagefind 搜索索引
 npm run verify:build # 检查路由、静态链接和 3D 资源清单
 npm run assets:brand # 从 mark.svg 生成全部 favicon、manifest 与品牌记录
-npm run test:authoring # 在临时站点新增一篇 Markdown，验证草稿、发布索引与代码标签（需本机浏览器）
+npm run test:authoring # 临时站点验证草稿、缺失译文阻断、双语发布/删除及阅读工具
+npm run test:i18n-browser # 双语路由、切换、搜索、SEO、共享评论、窄屏与无 JS 回归
 npm run preview   # 预览构建产物
 ```
 
@@ -59,7 +64,7 @@ npm run preview   # 预览构建产物
 ## 发布与 3D 资源
 
 GitHub Pages 的发布源使用 **GitHub Actions**，只发布经过检查的 `dist/`。
-流水线运行依赖审计、TypeScript、完整单元测试、资源 hash 检查、链接检查和真实浏览器阅读路径回归，
+流水线运行中英文配对检查、依赖审计、TypeScript、完整单元测试、资源 hash 检查、链接检查和真实浏览器阅读路径回归，
 不在 CI 重建 Blender 模型或依赖软件 GPU 重新烘焙。`/release.json` 可核对线上版本、提交和模型 build ID。
 
 站点保持 Astro 静态生成。GitHub Pages 没有 SSR 服务器运行时，SSR 也不能承担客户端 WebGL 绘制。
@@ -95,20 +100,24 @@ Astro 7 显式使用 `@astrojs/markdown-remark` 的 Unified 处理器，保留�
 
 ## 写文章
 
-在 `src/content/blog/` 新建 `<slug>.md`（slug 决定 URL：`/posts/<slug>/`，大小写敏感）：
+同一篇文章分别保存在 `src/content/blog/zh/<key>.md` 和 `src/content/blog/en/<key>.md`。文件名仅用于组织，稳定的 `translationKey` 决定 URL（大小写敏感），两份文件必须相同；`locale` 分别为 `zh` 和 `en`。
 
 ```yaml
 ---
+locale: zh                       # 英文文件使用 en
+translationKey: cpp_pointer01    # 中英文共用，发布后保持稳定
 title: 文章标题
 description: 一句话摘要，用于卡片和 SEO
 pubDate: 2026-10-14
-category: programming-language   # 小写字母、数字和连字符组成的 slug
-subcategory: cpp                 # 可选，使用相同的 slug 规则
-tags: [pointer, array]
+category: programming-language   # 使用语言无关的分类 ID
+subcategory: cpp                 # 可选
+tags: [pointer, array]            # 两语言使用相同标签 ID
 pin: false                       # 可选，置顶到笔记目录精选位
-draft: false                     # true 时只允许本地草稿预览，不生成生产文章
+draft: true                      # 先写草稿，两份都准备好后同时改为 false
 ---
 ```
+
+英文稿翻译标题、摘要、正文、图片说明和必要的代码注释，保留技术标识、代码语义和外部来源。中英文正文是否同步由作者维护，不做语义或版本一致性拦截。
 
 分类和子分类可以直接使用新的 slug，无需先修改配置。系统会自动生成默认名称、封面、首页入口和分类页面，并在构建时提醒未注册分类。需要中文名称、定制颜色或子分类显示名时，只需在 `src/data/site.ts` 的 `CATEGORIES` 中添加定制项。
 
@@ -148,25 +157,26 @@ public override void _Ready()
 
 ### 草稿预览与发布
 
-设置 `draft: true`，运行 `npm run dev`，从导航的「草稿」或 `/drafts/` 打开文章。草稿详情有明确的预览提示，不进入公开文章列表、分类、标签、RSS 或搜索；`npm run build` 不生成草稿详情与草稿入口。`npm run preview` 预览的是生产产物，因此也不显示草稿。
+设置 `draft: true`，运行 `npm run dev`，从导航的「草稿」或 `/zh/drafts/`、`/en/drafts/` 打开文章。草稿详情有明确的预览提示，不进入公开文章列表、分类、标签、RSS 或搜索；`npm run build` 不生成草稿详情与草稿入口。`npm run preview` 预览的是生产产物，因此也不显示草稿。
 
-发布时删除 `draft` 或设为 `false`，将 Markdown 和必要图片推送或合并到 `main`。GitHub Actions 自动构建文章、索引和搜索并部署；不需要登记文章、修改分类配置或重新生成 3D 模型与字体。`pubDate` 是展示与排序日期，不是定时发布开关。
+发布时将两份文章的 `draft` 同时删除或设为 `false`，运行 `npm run check:translations`。任意非草稿文章必须有且只有一个已发布的另一语言版本；缺失译文、重复配对或另一版本仍为草稿都会阻止测试、构建和 CI。两份都是草稿时可以暂缺其中一份。检查通过后将 Markdown 和必要图片推送或合并到 `main`。GitHub Actions 自动构建文章、索引和搜索并部署；不需要登记文章、修改分类配置或重新生成 3D 模型与字体。`pubDate` 是展示与排序日期，不是定时发布开关。
 
-目录与分类自动生成。普通文章的目录标题来自二、三级标题；新分类默认使用 slug 的可读名称，需要中文名称或定制颜色时才修改 `CATEGORIES`。文章互链使用 `/posts/<slug>/`，不要链接源 `.md` 文件。
+目录与分类自动生成。普通文章的目录标题来自二、三级标题；新分类默认使用 slug 的可读名称，需要中文名称或定制颜色时才修改 `CATEGORIES`。文章互链可以使用 `/posts/<translationKey>/`，构建时自动加上当前语言前缀；不要链接源 `.md` 文件。图片与共享资源不加语言前缀。
 
-「关于作者」的三张阅读卡片分别进入 `/about/python-zen/`、`/about/writing/` 和 `/about/markdown/`。写作约定维护在 `src/content/pages/writing-guide.md`，语法与效果对照维护在 `src/content/pages/markdown-features.md`。三页共用独立阅读布局、目录和文章阅读工具，不进入博客分类或 RSS；可被站内搜索检索。可直接复用的完整文章样例是 `src/content/blog/markdown-writing-guide.md`。
+「关于作者」的三张阅读卡片分别进入 `/about/python-zen/`、`/about/writing/` 和 `/about/markdown/`。写作约定维护在 `src/content/pages/writing-guide.md`，语法与效果对照维护在 `src/content/pages/markdown-features.md`。三页共用独立阅读布局、目录和文章阅读工具，不进入博客分类或 RSS；可被站内搜索检索。英文指南维护在 `src/content/pages/en/`。可直接复用的完整文章样例是 `src/content/blog/zh/markdown-writing-guide.md` 与 `src/content/blog/en/markdown-writing-guide.md`。
 
 ## 目录结构
 
 ```
 src/
-├── content/blog/      # 文章（Markdown）
+├── content/blog/      # zh/ 与 en/ 配对文章（Markdown）
+├── i18n/              # 语言、文案、链接与标签显示名
 ├── data/site.ts       # 站点元数据 + 分类体系定义
 ├── layouts/           # 页面骨架
 ├── components/        # Astro 组件、共享品牌与 React 阅读组件
 ├── scripts/island/    # 场景、镜头、角色动画、拾取、HTML 面板与生命周期
 ├── utils/             # 共用文章数据、小岛内容适配与资源清单
-├── pages/             # 路由（文章、分类、标签、归档、关于、搜索、RSS）
+├── pages/[locale]/    # 两种语言的页面与 RSS；pages/ 另保留旧 URL 跳转
 └── styles/            # global.css / island.css 共用主题、world.css 首页与场景界面
 ```
 

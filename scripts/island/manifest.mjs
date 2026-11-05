@@ -33,6 +33,9 @@ export async function modelManifest(root = process.cwd()) {
     'scripts/island/pack-model.mjs',
     'src/styles/world.css',
     'src/styles/island-tooltip.css',
+    // The physical sign textures are the same upstream SVGs as the site nav.
+    // Seal their actual bytes, so a dependency update cannot keep old posters.
+    ...['book', 'grid', 'tag'].map(icon => `node_modules/naive-icons/svg/${icon}.svg`),
     ...await sourceFiles(resolve(root, 'src/scripts/island')).then(files => files.map(file => relative(root, file))),
     ...await sourceFiles(resolve(root, 'assets/island/vendor'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),
     ...await sourceFiles(resolve(root, 'assets/island/references'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),

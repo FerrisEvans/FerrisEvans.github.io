@@ -1,2 +1,3 @@
-/** Canonical article index routes, shared by generation, pagination and aliases. */
-export const notesPageUrl = (page: number) => page === 1 ? '/notes/' : `/notes/page/${page}/`;
+import { type Locale } from '../i18n';
+/** Canonical language-specific article indexes. */
+export const notesPageUrl = (page: number, locale: Locale = 'en') => page === 1 ? `/${locale}/notes/` : `/${locale}/notes/page/${page}/`;

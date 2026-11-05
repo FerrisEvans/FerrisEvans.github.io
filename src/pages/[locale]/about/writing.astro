@@ -1,0 +1,12 @@
+---
+import { locales, getLocale } from '../../../i18n';
+export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
+const locale = getLocale(Astro.url.pathname);
+import Guide from '../../../layouts/Guide.astro';
+import * as zh from '../../../content/pages/writing-guide.md';
+import * as en from '../../../content/pages/en/writing-guide.md';
+const { Content, frontmatter, getHeadings } = locale === 'en' ? en : zh;
+---
+<Guide title={frontmatter.title} description={frontmatter.description} headings={getHeadings()} hasMath={frontmatter.hasMath === true}>
+  <Content />
+</Guide>

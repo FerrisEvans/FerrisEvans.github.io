@@ -23,7 +23,7 @@ try {
     const page = await context.newPage();
     const failures = [];
     page.on('pageerror', error => failures.push(String(error)));
-    await page.goto(new URL('/?capture=1', base).href);
+    await page.goto(new URL('/en/?capture=1', base).href);
     await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
     const buildId = await page.locator('#island-root').getAttribute('data-build-id');
     assert.equal(buildId, manifest.buildId, 'The rendered page must use the exact model/source build being sealed.');

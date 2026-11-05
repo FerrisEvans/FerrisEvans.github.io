@@ -3,6 +3,7 @@ import { SITE } from '../data/site';
 import logo from '../../public/brand/island/logo.svg?raw';
 import lettering from '../../public/brand/island/lettering.svg?raw';
 import mark from '../../public/brand/island/mark.svg?raw';
+import { getLocale, t } from '../i18n';
 interface Props {
   tagline?: boolean;
   compact?: boolean;
@@ -10,14 +11,26 @@ interface Props {
   class?: string;
 }
 const { tagline = false, compact = false, inline = false, class: className } = Astro.props;
+const locale = getLocale(Astro.url.pathname);
+const brandName = t(locale, SITE.title, 'Weijin');
+const brandTagline = t(locale, SITE.tagline, 'Stay curious. Take your time.');
+const decorative = (svg: string) => svg.replace(/role="img"/g, 'aria-hidden="true"').replace(/ aria-label="[^"]*"/g, '');
 ---
 <span class:list={['island-brand-identity', { 'island-brand-inline': inline, 'island-brand-compact': compact }, className]}>
-  <Fragment set:html={inline ? lettering : compact ? mark : logo} />
-  {tagline && <span class="island-brand-tagline">{SITE.tagline}</span>}
+  <span class:list={['island-brand-art', { 'island-brand-english': locale === 'en' }]} role="img" aria-label={brandName}>
+    {locale === 'en' ? <>
+      {!inline && <Fragment set:html={decorative(mark)} />}
+      {(inline || !compact) && <span class="island-brand-wordmark" aria-hidden="true">Weijin</span>}
+    </> : <Fragment set:html={decorative(inline ? lettering : compact ? mark : logo)} />}
+  </span>
+  {tagline && <span class="island-brand-tagline">{brandTagline}</span>}
 </span>
 <style>
   .island-brand-identity { display:inline-flex; flex-direction:column; align-items:flex-start; flex-shrink:0; gap:3px; vertical-align:middle; line-height:1; }
   .island-brand-identity :global(svg) { display:block; width:auto; height:44px; overflow:visible; }
+  .island-brand-art { display:inline-flex; align-items:center; gap:7px; }
+  .island-brand-wordmark { font:900 27px/1.1 var(--font-display,sans-serif); letter-spacing:-.045em; color:#76543b; }
+  :global(.dark) .island-brand-wordmark { color:#fff3db; }
   .island-brand-identity :global(.weijin-lettering) { fill:#76543b; }
   .island-brand-tagline { padding-left:2px; font-family:var(--font-sans,sans-serif); font-size:10px; line-height:1.5; letter-spacing:.06em; color:var(--color-ink-soft,#827157); white-space:nowrap; }
   :global(.dark) .island-brand-identity :global(.weijin-lettering) { fill:#fff3db; }
@@ -25,5 +38,13 @@ const { tagline = false, compact = false, inline = false, class: className } = A
   :global(.island-footer) .island-brand-identity :global(svg) { height:36px; }
   .island-brand-inline { display:inline-flex; vertical-align:-.38em; margin-inline:.08em; }
   .island-brand-inline :global(svg) { height:1.65em; }
+  .island-brand-inline .island-brand-wordmark { font-size:1.15em; }
+  :global(.island-footer) .island-brand-wordmark { font-size:23px; }
+  :global(.world-home > .island-footer) .island-brand-wordmark { font-size:20px; }
   @media(max-width:480px) { .island-brand-identity:not(.island-brand-inline) :global(svg) { height:40px; } :global(.island-footer) .island-brand-identity :global(svg) { height:34px; } }
+  @media(max-width:480px) {
+    :global(.site-header) .island-brand-identity .island-brand-art :global(svg) { height:32px; }
+    :global(.site-header) .island-brand-art { gap:5px; }
+    :global(.site-header) .island-brand-wordmark { font-size:23px; }
+  }
 </style>

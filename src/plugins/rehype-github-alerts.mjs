@@ -18,14 +18,14 @@ function firstTextNode(node) {
   return null;
 }
 
-function visit(node) {
+function visit(node, english) {
   if (node.type === 'element' && node.tagName === 'blockquote') {
-    transform(node);
+    transform(node, english);
   }
-  for (const child of node.children ?? []) visit(child);
+  for (const child of node.children ?? []) visit(child, english);
 }
 
-function transform(blockquote) {
+function transform(blockquote, english) {
   const firstP = blockquote.children?.find((c) => c.type === 'element' && c.tagName === 'p');
   const text = firstTextNode(firstP);
   if (!text) return;
@@ -56,10 +56,10 @@ function transform(blockquote) {
     type: 'element',
     tagName: 'p',
     properties: { className: ['markdown-alert-title'] },
-    children: [{ type: 'text', value: LABELS[type] ?? match[1] }],
+    children: [{ type: 'text', value: english ? match[1] : LABELS[type] ?? match[1] }],
   });
 }
 
 export default function rehypeGithubAlerts() {
-  return (tree) => visit(tree);
+  return (tree, file = {}) => visit(tree, /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en');
 }

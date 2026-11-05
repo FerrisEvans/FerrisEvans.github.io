@@ -1,21 +1,23 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 ---
 
-<Base title="页面不存在">
+<Base alternates={false} title={t(locale, "页面不存在")}>
   <div class="island-page lost-page">
     <section class="island-panel lost-note">
       <span class="lost-icon"><Icon name="leaf" size={38} /></span>
       <p class="island-eyebrow">A LITTLE DETOUR</p>
       <p class="lost-number" aria-hidden="true">404</p>
-      <h1>这张笔记走丢了</h1>
-      <p class="lost-description">你访问的页面不存在，或者已经被移动。<br />沿着下面的小路，继续逛逛吧。</p>
+      <h1>{t(locale, "这张笔记走丢了")}</h1>
+      <p class="lost-description">{t(locale, "你访问的页面不存在，或者已经被移动。")}<br />{t(locale, "沿着下面的小路，继续逛逛吧。")}</p>
       <div class="lost-actions">
-        <a href="/notes/" class="back-to-notes blog-button blog-button--primary"><Icon name="book" size={18} />回到笔记</a>
-        <a href="/search/" class="blog-button"><Icon name="search" size={18} />搜索文章</a>
+        <a href={localizePath("/notes/", locale)} class="back-to-notes blog-button blog-button--primary"><Icon name="book" size={18} />{t(locale, "回到笔记")}</a>
+        <a href={localizePath("/search/", locale)} class="blog-button"><Icon name="search" size={18} />{t(locale, "搜索文章")}</a>
       </div>
-      <a href="/" class="back-to-room"><Icon name="home" size={15} />回到首页<Icon name="arrow-right" size={14} /></a>
+      <a href={localizePath("/", locale)} class="back-to-room"><Icon name="home" size={15} />{t(locale, "回到首页")}<Icon name="arrow-right" size={14} /></a>
     </section>
   </div>
 </Base>

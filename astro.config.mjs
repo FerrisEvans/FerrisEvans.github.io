@@ -12,6 +12,7 @@ import rehypeCrossReferenceTargets from './src/plugins/rehype-cross-reference-ta
 import rehypeKatex from 'rehype-katex';
 import rehypeGithubAlerts from './src/plugins/rehype-github-alerts.mjs';
 import rehypeReading from './src/plugins/rehype-reading.mjs';
+import rehypeLocalizedLinks from './src/plugins/rehype-localized-links.mjs';
 import rehypeMathMetadata from './src/plugins/rehype-math-metadata.mjs';
 import rehypeCodeGroup from 'rehype-code-group';
 import { codeLineNumbers } from './src/plugins/code-line-numbers.mjs';
@@ -64,7 +65,8 @@ const pagefindDevelopment = {
 export default defineConfig({
   site: 'https://ferrisevans.github.io',
   compressHTML: true,
-  integrations: [sitemap({ filter: page => !/^\/(?:lofi|room|island)\/$|^\/page\/\d+\/$/.test(new URL(page).pathname) }), react()],
+  i18n: { locales: ['en', 'zh'], defaultLocale: 'en', routing: 'manual' },
+  integrations: [sitemap({ filter: page => /^\/(en|zh)\//.test(new URL(page).pathname) && !/\/(drafts|page)\//.test(new URL(page).pathname) }), react()],
   vite: {
     // The component library imports CSS modules that Astro must bundle for SSR.
     resolve: { noExternal: ['animal-island-ui'] },
@@ -80,7 +82,7 @@ export default defineConfig({
     processor: unified({
       gfm: true,
       remarkPlugins: [remarkMath, remarkDirective, remarkCrossReferences],
-      rehypePlugins: [rehypeGithubAlerts, rehypeReading, rehypeKatex, rehypeMathMetadata, [rehypeCodeGroup, { assets: 'none', diagnostics: 'error' }], rehypeCrossReferenceTargets],
+      rehypePlugins: [rehypeLocalizedLinks, rehypeGithubAlerts, rehypeReading, rehypeKatex, rehypeMathMetadata, [rehypeCodeGroup, { assets: 'none', diagnostics: 'error' }], rehypeCrossReferenceTargets],
     }),
     shikiConfig: {
       transformers: [codeLineNumbers],

@@ -58,17 +58,17 @@ async function assertStaticEntrances(page) {
   const sceneRequests = [];
   const watch = request => { if (/\/island\/.*\.glb(?:\.bin)?(?:[?#]|$)/.test(request.url())) sceneRequests.push(request.url()); };
   page.on('request', watch);
-  await page.goto(url('/'));
+  await page.goto(url('/zh/'));
   await page.waitForTimeout(500);
   page.off('request', watch);
   assert.deepEqual(sceneRequests, [], 'disabled or blocked JavaScript leaves the static courtyard cover and reading links usable');
   assert.equal(await page.getByRole('heading', { level: 1, name: /未尽/ }).count(), 1, 'homepage retains an accessible name without a visible title overlay');
   assert.equal(await page.locator('#island-root').count(), 1, 'the actual courtyard belongs to the homepage');
   assert.equal(await page.locator('#home-enter-room').count(), 0, 'there is no separate exploration gateway');
-  const readingLink = page.locator('#island-directory a[href="/notes/"]').first();
+  const readingLink = page.locator('#island-directory a[href="/zh/notes/"]').first();
   assert(await readingLink.isVisible(), 'the static fallback directory exposes the reading route');
   await readingLink.click();
-  await page.waitForURL(url('/notes/'));
+  await page.waitForURL(url('/zh/notes/'));
   await assertVisibleTitle(page, /^笔记$/);
 }
 
@@ -82,7 +82,7 @@ try {
   await assertStaticEntrances(noJsPage);
   await screenshot(noJsPage, 'lofi-no-js');
   const fallbackNav = noJsPage.locator('.no-script-navigation');
-  for (const path of ['/notes/', '/categories/', '/tags/', '/archives/', '/about/', '/']) {
+  for (const path of ['/zh/notes/', '/zh/categories/', '/zh/tags/', '/zh/archives/', '/zh/about/', '/zh/']) {
     const link = fallbackNav.locator(`a[href="${path}"]`);
     assert(await link.isVisible(), `navigation to ${path} must be available without JavaScript`);
     if (noJsPage.url() !== url(path)) {
@@ -108,35 +108,36 @@ try {
   if (pageOnly) await context.route('**/island/*.glb*', route => route.abort());
   await context.route('https://giscus.app/**', (route) => route.abort());
   const page = await context.newPage();
-  const primaryNavigation = ['/', '/notes/', '/categories/', '/tags/', '/archives/', '/about/'];
-  for (const path of ['/', '/notes/', '/tags/', '/archives/', '/about/', '/posts/agent_dev_tutorial/']) {
+  const primaryNavigation = ['/zh/', '/zh/notes/', '/zh/categories/', '/zh/tags/', '/zh/archives/', '/zh/about/'];
+  for (const path of ['/zh/', '/zh/notes/', '/zh/tags/', '/zh/archives/', '/zh/about/', '/zh/posts/agent_dev_tutorial/']) {
     await page.goto(url(path));
     await page.locator('.site-header').waitFor({ state: 'visible' });
     assert.equal(await page.locator('.site-header').count(), 1, `${path} uses the shared site header`);
     const brands = page.locator('.island-brand-identity');
     assert(await brands.count() >= 2, 'header and footer share the actual SVG logo');
     for (const brand of await brands.all()) {
-      assert.equal(await brand.locator('svg[aria-label="未尽"]').count(), 1);
+      assert.equal(await brand.getByRole('img', { name: '未尽', exact: true }).count(), 1, 'the shared wordmark has one accessible brand name');
+      assert.equal(await brand.locator('svg[aria-hidden="true"]').count(), 1, 'decorative vector geometry does not announce the brand twice');
       assert.equal(await brand.locator('svg text, .island-brand-name').count(), 0, 'the visible wordmark is custom geometry, not ordinary font text');
       assert(await brand.locator('.weijin-lettering path').count() > 0, 'the wordmark contains editable vector geometry');
     }
 
-    assert.equal(await page.locator('.site-header > .nav-bar > .island-brand').getAttribute('href'), '/', 'the brand always returns to the actual homepage');
+    assert.equal(await page.locator('.site-header > .nav-bar > .island-brand').getAttribute('href'), '/zh/', 'the brand always returns to the actual homepage');
     assert.deepEqual(await page.locator('.desktop-navigation > a').evaluateAll(links => links.map(link => link.getAttribute('href'))), primaryNavigation, 'primary routes and ordering are consistent across experiences');
     assert.equal(await page.locator('.desktop-navigation details').count(), 0, 'all six primary destinations are directly visible');
     for (const selector of ['body', '.desktop-navigation > a']) {
       assert.match(await page.locator(selector).first().evaluate(element => getComputedStyle(element).cursor), /animal-island-default\.svg/, `${path} shares the native theme cursor`);
     }
   }
-  for (const [legacy, current] of [['/lofi/', '/notes/'], ['/page/1/', '/notes/'], ['/page/2/', '/notes/page/2/'], ['/room/', '/'], ['/island/', '/']]) {
+  for (const [legacy, current] of [['/lofi/', '/zh/notes/'], ['/page/1/', '/zh/notes/'], ['/page/2/', '/zh/notes/page/2/'], ['/room/', '/zh/'], ['/island/', '/zh/']]) {
     await page.goto(url(`${legacy}?source=legacy-check#about`));
     await page.waitForURL(url(`${current}?source=legacy-check#about`));
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), new URL(current, 'https://ferrisevans.github.io').href);
   }
   console.log('PASS: six direct shared navigation links, canonical homepage/notes routes and legacy aliases preserve query/hash');
-  await page.goto(url('/notes/page/2/'));
+  await page.goto(url('/zh/notes/page/2/'));
   await page.getByRole('link', { name: '上一页', exact: true }).click();
-  await page.waitForURL(url('/notes/'));
+  await page.waitForURL(url('/zh/notes/'));
   console.log('PASS: notes pagination returns from page 2 to the canonical article list');
   if (await page.evaluate(() => document.documentElement.classList.contains('dark'))) {
     await page.locator('#theme-toggle').click();
@@ -154,7 +155,7 @@ try {
   assert.equal(await menu.evaluate((element) => document.activeElement === element), true);
   await menu.click();
   await page.locator('#mobile-menu').getByRole('link', { name: '关于', exact: true }).click();
-  await page.waitForURL(url('/about/'));
+  await page.waitForURL(url('/zh/about/'));
   const currentAvatar = page.locator('.profile-photo img');
   await currentAvatar.evaluate(image => image.decode());
   assert.match(await currentAvatar.getAttribute('src'), /\/ferris-dog-avatar\.webp(?:\?|$)/, 'about uses the current generated dog avatar');
@@ -162,7 +163,7 @@ try {
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');
 
-  await page.goto(url('/tags/'));
+  await page.goto(url('/zh/tags/'));
   await page.locator('astro-island:not([ssr]) .tag-word-cloud').waitFor();
   const cloudMarks = page.locator('.tag-word-cloud .tag-item');
   assert(await cloudMarks.count() > 0, 'tag word cloud uses published article tags');
@@ -201,7 +202,7 @@ try {
   const focusedHref = await page.locator('.tag-word-cloud .tag-item:focus').getAttribute('href');
   assert(focusedHref && focusedHref !== tagLinks[0], 'native Tab reaches the next ordinary tag link');
   await page.keyboard.press('Enter'); await page.waitForURL(url(focusedHref));
-  await page.goto(url('/tags/'));
+  await page.goto(url('/zh/tags/'));
   await page.locator('astro-island:not([ssr]) .tag-word-cloud').waitFor();
   const firstColor = await cloudMarks.first().getAttribute('data-token-color');
   await page.reload();
@@ -225,7 +226,7 @@ try {
   console.log('PASS: tag filtering handles matches, empty results, and keyboard-friendly reset');
 
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto(url('/posts/agent_dev_tutorial/'));
+  await page.goto(url('/zh/posts/agent_dev_tutorial/'));
   const reading = await page.evaluate(() => {
     const prose = document.querySelector('.prose-custom');
     return {
@@ -322,14 +323,14 @@ try {
   console.log('PASS: mobile code retains its formatting, scrolls to the end, and copies without decorative line numbers');
 
   await page.setViewportSize({ width: 1536, height: 900 });
-  await page.goto(url('/posts/agent_dev_tutorial/'));
+  await page.goto(url('/zh/posts/agent_dev_tutorial/'));
   await page.evaluate(() => scrollTo({ top: 1200, behavior: 'instant' }));
   const toc = await page.locator('.toc-scroll').boundingBox();
   assert(toc && toc.y >= 80 && toc.y <= 110, 'desktop article directory must remain visible beside the reading sheet');
   await screenshot(page, 'article-toc');
   console.log('PASS: desktop article directory remains visible while scrolling');
 
-  await page.goto(url('/posts/cpp_pointer01/'));
+  await page.goto(url('/zh/posts/cpp_pointer01/'));
   const formula = page.locator('.katex').first();
   await formula.waitFor({ state: 'visible' });
   assert.equal(await page.locator('.katex-error').count(), 0);
@@ -337,11 +338,11 @@ try {
   assert(await page.evaluate(async () => (await document.fonts.load('16px KaTeX_Main')).length > 0), 'math fonts must load from the production CSS');
   console.log('PASS: production math includes KaTeX styling and loaded fonts');
 
-  await page.goto(url('/search/'));
+  await page.goto(url('/zh/search/'));
   await page.locator('.pagefind-ui__search-input').fill('指针');
   await page.locator('.pagefind-ui__result').first().waitFor({ state: 'visible' });
   const result = await page.locator('.pagefind-ui__result-link').first().getAttribute('href');
-  assert(new URL(result, base).pathname.startsWith('/posts/'), 'search results must link to articles');
+  assert(new URL(result, base).pathname.startsWith('/zh/posts/'), 'search results must link to articles');
   await screenshot(page, 'search-results');
   console.log('PASS: production Pagefind search returns article results');
   await context.close();

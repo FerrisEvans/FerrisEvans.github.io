@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import { Card } from 'animal-island-ui';
 import CategoryBadge from './CategoryBadge.astro';
 import TagChip from './TagChip.astro';
@@ -19,10 +21,10 @@ const pattern = patterns[post.data.category as keyof typeof patterns] ?? 'defaul
 
 <li class="note-list-item"><Card pattern={pattern} hoverable className="note-entry">
   <div class="entry-meta">
-    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-    <span><Icon name="clock" size={14} />{readingTime(post)} 分钟</span>
+    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time>
+    <span><Icon name="clock" size={14} />{readingTime(post)} {t(locale, "分钟")}</span>
   </div>
-  <Heading class="entry-title"><a href={postUrl(post)}>{post.data.title}</a></Heading>
+  <Heading class="entry-title"><a href={localizePath(postUrl(post), locale)}>{post.data.title}</a></Heading>
   {post.data.description && <p class="entry-description">{post.data.description}</p>}
   <div class="entry-bottom">
     <div class="entry-labels">

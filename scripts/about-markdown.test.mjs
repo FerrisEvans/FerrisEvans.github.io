@@ -83,5 +83,28 @@ test('guide formulas, footnote round trips and heading links have real rendered 
   assert(nodes.some(node => node.tagName === 'sub' && textContent(node) === '2'));
   assert(nodes.some(node => node.tagName === 'sup' && textContent(node) === '2'));
   assert(nodes.some(node => node.tagName === 'img' && node.properties.src === '/assets/lib/rag.jpeg' && node.properties.alt === '检索增强生成的流程示意图'));
-  assert(nodes.some(node => node.tagName === 'a' && node.properties.href === '/about/writing/'));
+  assert(nodes.some(node => node.tagName === 'a' && node.properties.href === '/zh/about/writing/'));
+});
+
+test('the English syntax guide preserves rendered features and localizes reader-facing labels', async () => {
+  const fileURL = new URL('../src/content/pages/en/markdown-features.md', import.meta.url);
+  const source = readFileSync(fileURL, 'utf8').replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+  const english = await renderer.render(source, { fileURL });
+  const elements = [];
+  function collect(node) {
+    if (node.type === 'element') elements.push(node);
+    for (const child of node.children ?? []) collect(child);
+  }
+  collect(fromHtml(english.code, { fragment: true }));
+  const byId = new Map(elements.filter(node => node.properties.id).map(node => [node.properties.id, node]));
+  for (const link of elements.filter(node => node.tagName === 'a' && node.properties.href?.startsWith('#'))) {
+    assert(byId.has(decodeURIComponent(link.properties.href.slice(1))), `missing English target for ${link.properties.href}`);
+  }
+  assert.equal(elements.filter(node => hasClass(node, 'markdown-alert')).length, 5);
+  assert.equal(elements.filter(node => hasClass(node, 'rehype-code-group')).length, 1);
+  assert.equal(elements.filter(node => hasClass(node, 'numbered-reference')).length, 2);
+  assert.equal(english.metadata.frontmatter.hasMath, true);
+  assert(elements.some(node => node.properties['aria-label']?.startsWith('Enlarge image') || node.properties.ariaLabel?.startsWith('Enlarge image')));
+  assert(elements.some(node => node.tagName === 'a' && node.properties.href === '/en/about/writing/'));
+  assert.doesNotMatch(textContent(fromHtml(english.code, { fragment: true })), /[\u3400-\u9fff]/u);
 });

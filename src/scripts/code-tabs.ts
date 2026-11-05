@@ -1,3 +1,5 @@
+import { localeForDocument, t } from '../i18n';
+const text = (zh: string, en: string) => t(localeForDocument(), zh, en);
 import { initCodeGroups } from 'rehype-code-group/client';
 import { createBlogIcon, type BlogIconName } from './blog-icons';
 
@@ -5,7 +7,7 @@ function copyControl(getCode: () => HTMLPreElement) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'code-copy';
-  button.setAttribute('aria-label', '复制代码');
+  button.setAttribute('aria-label', text('复制代码', 'Copy code'));
   const status = document.createElement('span');
   status.className = 'sr-only';
   status.setAttribute('role', 'status');
@@ -15,7 +17,7 @@ function copyControl(getCode: () => HTMLPreElement) {
     button.replaceChildren(createBlogIcon(icon));
     button.title = title;
   };
-  show('copy', '复制代码');
+  show('copy', text('复制代码', 'Copy code'));
   let timer: ReturnType<typeof setTimeout> | undefined;
   let revision = 0;
   const reset = () => {
@@ -23,7 +25,7 @@ function copyControl(getCode: () => HTMLPreElement) {
     clearTimeout(timer);
     button.dataset.copied = 'false';
     status.textContent = '';
-    show('copy', '复制代码');
+    show('copy', text('复制代码', 'Copy code'));
   };
   button.addEventListener('click', async () => {
     reset();
@@ -33,12 +35,12 @@ function copyControl(getCode: () => HTMLPreElement) {
       await navigator.clipboard.writeText((pre.querySelector('code') ?? pre).textContent ?? '');
       if (current !== revision) return;
       button.dataset.copied = 'true';
-      show('check', '已复制');
-      status.textContent = '代码已复制';
+      show('check', text('已复制', 'Copied'));
+      status.textContent = text('代码已复制', 'Code copied');
     } catch {
       if (current !== revision) return;
-      show('error', '复制失败，请重试');
-      status.textContent = '复制失败，请重试';
+      show('error', text('复制失败，请重试', 'Copy failed. Please try again.'));
+      status.textContent = text('复制失败，请重试', 'Copy failed. Please try again.');
     }
     timer = setTimeout(reset, 1600);
   });
@@ -54,7 +56,7 @@ function addGroupCopyControl(group: HTMLElement) {
   if (!tablist || !panels.length || panels.some(panel => panel.children.length !== 1 || panel.firstElementChild?.tagName !== 'PRE')) return;
   const header = document.createElement('div');
   header.className = 'code-block-header code-group-header';
-  tablist.setAttribute('aria-label', '代码语言');
+  tablist.setAttribute('aria-label', text('代码语言', 'Code language'));
   const copy = copyControl(() => (panels.find(panel => !panel.hidden) ?? panels[0]).querySelector<HTMLPreElement>('pre')!);
   group.addEventListener('rehype-code-group:change', event => {
     if (event.target === group) copy.reset();

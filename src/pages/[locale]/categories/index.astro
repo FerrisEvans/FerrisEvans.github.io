@@ -1,0 +1,67 @@
+---
+import { countLabel, locales, getLocale, localizePath, t } from '../../../i18n';
+export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
+const locale = getLocale(Astro.url.pathname);
+import { Card, Title } from 'animal-island-ui';
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import { categoriesFor } from '../../../data/site';
+import { getPosts } from '../../../utils/posts';
+
+const posts = await getPosts({ locale });
+const categories = categoriesFor(posts.map((post) => post.data.category), locale);
+const countOf = (slug: string) => posts.filter((post) => post.data.category === slug).length;
+const icons: Record<string, string> = { 'programming-language': 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' };
+
+const patterns = ['app-pink', 'app-yellow', 'app-teal', 'purple'] as const;
+---
+
+<Base title={t(locale, "分类")}>
+  <div class="island-page">
+    <header class="collection-header">
+      <span class="page-decoration"><Icon name="grid" size={52} /></span>
+      <h1><Title color="app-yellow" size="large">{t(locale, "分类小天地")}</Title></h1>
+      <p class="island-lead">{t(locale, `${categories.length} 个分类，${posts.length} 篇笔记。挑一个喜欢的方向，开始逛逛吧。`, `${countLabel(locale, categories.length, "", "category", "categories")}, ${countLabel(locale, posts.length, "", "note")}. Choose a topic and see where it takes you.`)}</p>
+    </header>
+    <div class="folder-grid">
+      {categories.map((cat, index) => (
+        <a href={localizePath(`/categories/${cat.slug}/`, locale)} class="category-link">
+          <Card pattern={patterns[index % patterns.length]} hoverable className="category-card">
+            <div class="folder-top">
+              <span class="folder-symbol"><Icon name={icons[cat.slug] ?? 'book'} size={58} /></span>
+              <span class="folder-count">{countLabel(locale, countOf(cat.slug), "篇笔记", "note")}</span>
+            </div>
+            <h2>{cat.label}</h2>
+            <p>{cat.description}</p>
+            <span class="folder-bottom"><span>{t(locale, "进去看看")}</span><Icon name="arrow-right" size={24} /></span>
+          </Card>
+        </a>
+      ))}
+    </div>
+    <p class="collection-footnote"><Icon name="tag" size={24} />{t(locale, "想找得更具体一些？")}<a href={localizePath("/tags/", locale)}>{t(locale, "翻翻标签收集册")} <Icon name="arrow-right" size={18} /></a></p>
+  </div>
+</Base>
+
+<style>
+  .collection-header { margin-bottom: 38px; text-align: center; }
+  .page-decoration { display: inline-flex; color: var(--color-accent); margin-bottom: 14px; transform: rotate(-7deg); }
+  .collection-header h1 { margin: 0 0 22px; }
+  .folder-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .category-link { display: flex; min-width: 0; border-radius: 28px; }
+  .category-link :global(.category-card) { display: flex; flex-direction: column; width: 100%; padding: 32px; border-radius: 28px; color: var(--color-ink); }
+  .folder-top, .folder-bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .folder-symbol { display: grid; place-items: center; width: 88px; height: 88px; border-radius: 32px 26px 34px 28px; background: #fffbeaab; color: #794f27; transform: rotate(-5deg); }
+  .folder-count { padding: 8px 15px; border-radius: 50px; background: #fffbeac9; font-size: 13px; font-weight: 700; color: #725d42; }
+  h2 { margin-top: 24px; font-size: 26px; font-weight: 800; letter-spacing: .01em; }
+  .category-link p { max-width: 32em; margin-top: 12px; margin-bottom: 28px; color: var(--color-ink-soft); font-size: 15px; font-weight: 500; line-height: 1.9; }
+  .folder-bottom { margin-top: auto; padding-top: 20px; border-top: 2px dashed #947b5533; font-size: 15px; font-weight: 700; }
+  .collection-footnote { display: flex; justify-content: center; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 36px; font-size: 14px; line-height: 1.8; color: var(--color-ink-soft); }
+  .collection-footnote a { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; color: var(--color-accent); }
+  :global(.dark) .category-link :global(.category-card) { background-color: #40392e; border-color: #73624c; color: var(--color-snow); background-image: radial-gradient(#ebc59015 1.4px, transparent 1.4px); background-size: 14px 14px; }
+  :global(.dark) .category-link p, :global(.dark) .collection-footnote { color: var(--color-snow-soft); }
+  :global(.dark) .folder-symbol { background: #5a4a35; color: #f2d49c; }
+  :global(.dark) .folder-count { background: #5a4a35; color: #f2dfbf; }
+  :global(.dark) .folder-bottom { border-color: #d9bf8d38; }
+  :global(.dark) .collection-footnote a { color: var(--color-accent-dark); }
+  @media (max-width: 640px) { .folder-grid { grid-template-columns: 1fr; gap: 22px; } .category-link :global(.category-card) { padding: 26px; } .folder-symbol { width: 76px; height: 76px; } h2 { font-size: 23px; } }
+</style>

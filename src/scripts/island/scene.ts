@@ -98,10 +98,7 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
   renderer.domElement.style.touchAction = 'none';
   const navigation = createNavigation(camera, host, anchors, model);
   cleanupHooks.push(() => navigation.dispose());
-  // Bake the labels only after the site's bundled CJK face is ready, including
-  // on systems without a Chinese system font. Reuse the header's font request.
-  await Promise.race([document.fonts.load('700 32px "Noto Sans SC"', '笔记分类标签').catch(() => []), aborted]);
-  const wayfinding = createWayfinding(model);
+  const wayfinding = await Promise.race([createWayfinding(model, signal), aborted]);
   const animation = createAnimation(model, clips);
   const effects = createEffects(model, scene, camera);
   const activity = createActivity(model, scene);

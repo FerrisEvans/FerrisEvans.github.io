@@ -1,6 +1,7 @@
 import { RoomAssets } from '../room/assets';
 import { createPanels } from './panels';
-import { views, viewLabels, isIslandView, type IslandView, type HoverTarget } from './types';
+import { views, getViewLabels, isIslandView, type IslandView, type HoverTarget } from './types';
+import { localeForDocument, t } from '../../i18n';
 import { createIslandTooltip } from './tooltip';
 import type { createIsland } from './scene';
 
@@ -9,6 +10,8 @@ type Island = Awaited<ReturnType<typeof createIsland>>;
 function mountIsland() {
   const root = document.querySelector<HTMLElement>('#island-root');
   if (!root) return () => {};
+  const locale = localeForDocument();
+  const viewLabels = getViewLabels(locale);
   // The server-rendered directory stays usable if the module never loads.
   // Hide it during loading only after this enhancement actually starts.
   root.dataset.booted = 'true';
@@ -27,7 +30,7 @@ function mountIsland() {
   let visible = true;
   const hint = createIslandTooltip(host);
   const access = document.createElement('nav');
-  access.className = 'island-access-nav'; access.setAttribute('aria-label', '场景内容入口'); host.append(access);
+  access.className = 'island-access-nav'; access.setAttribute('aria-label', t(locale, '场景内容入口', 'Explore the island')); host.append(access);
   const navigationLinks = [...document.querySelectorAll<HTMLAnchorElement>('.site-header [data-island-nav]')];
   let focusedView: IslandView | null = null;
   function setHover(view: HoverTarget | null, point?: { x: number; y: number }) {
@@ -98,7 +101,7 @@ function mountIsland() {
     if (signal.aborted) return;
     generation++; releaseGraphics();
     root!.dataset.state = 'fallback'; progress.hidden = true; retry.hidden = false;
-    status.textContent = '庭院暂时没能打开。可以使用目录阅读，或重新加载。';
+    status.textContent = t(locale, '庭院暂时没能打开。可以使用目录阅读，或重新加载。', 'The courtyard could not load. Read from the directory or try again.');
     panels.enhanced(false); positionAccess();
     if (error) console.warn('Island unavailable:', error instanceof Error ? error.message : String(error));
   }
@@ -107,20 +110,20 @@ function mountIsland() {
     const attempt = new AbortController(); graphicsAborter = attempt;
     loadingStarted = performance.now();
     root!.dataset.state = 'loading'; progress.hidden = false; progress.value = 0; retry.hidden = true;
-    status.textContent = '正在准备小岛…'; panels.enhanced(false);
+    status.textContent = t(locale, '正在准备小岛…', 'Preparing the island…'); panels.enhanced(false);
     try {
       const model = new URL(root!.dataset.modelUrl!, location.href);
       const file = { url: model.pathname, bytes: Number(root!.dataset.modelBytes), sha256: model.searchParams.get('v') ?? undefined, priority: 'high' as const };
       const resources = new RoomAssets([file], (loaded, total, stats) => {
         if (current !== generation || signal.aborted) return;
         progress.value = total ? Math.min(90, loaded / total * 90) : 0;
-        status.textContent = `正在带来小岛 · ${(Math.min(loaded, total) / 1e6).toFixed(1)} / ${(total / 1e6).toFixed(1)} MB`;
+        status.textContent = `${t(locale, '正在带来小岛', 'Loading the island')} · ${(Math.min(loaded, total) / 1e6).toFixed(1)} / ${(total / 1e6).toFixed(1)} MB`;
         root!.dataset.loadedBytes = String(loaded); root!.dataset.cacheBytes = String(stats.cacheBytes);
       });
       assets = resources;
       const [bytes, module] = await Promise.all([resources.read(file.url, 'high'), import('./scene')]);
       if (current !== generation || signal.aborted) return;
-      root!.dataset.state = 'preparing'; progress.value = 92; status.textContent = '正在布置林间庭院…';
+      root!.dataset.state = 'preparing'; progress.value = 92; status.textContent = t(locale, '正在布置林间庭院…', 'Setting up the woodland courtyard…');
       const next = await module.createIsland(host, bytes, invalidate, () => { if (current === generation) fail(new Error('WebGL context lost')); }, attempt.signal);
       if (current !== generation || signal.aborted) { next.dispose(); return; }
       viewer = next; resources.release();
@@ -128,7 +131,7 @@ function mountIsland() {
       root!.dataset.state = 'ready'; root!.dataset.readyMs = (performance.now() - loadingStarted).toFixed(0);
       root!.dataset.metrics = JSON.stringify(viewer.metrics());
       progress.value = 100; progress.hidden = true;
-      status.textContent = '悬停物件查看入口，点击阅读。拖动环顾，滚轮缩放。';
+      status.textContent = t(locale, '悬停物件查看入口，点击阅读。拖动环顾，滚轮缩放。', 'Hover to discover an entrance, or tap to read. Drag to look around; scroll or pinch to zoom.');
       panels.enhanced(true);
       if (panels.selected) viewer.navigate(panels.selected, true, elapsed);
       invalidate();

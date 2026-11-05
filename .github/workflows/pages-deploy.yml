@@ -38,6 +38,9 @@ jobs:
       - name: Audit dependencies
         run: npm run audit:deps
 
+      - name: Require published English and Chinese article pairs
+        run: npm run check:translations
+
       - name: Check TypeScript and content schemas
         run: npm run check
 
@@ -71,6 +74,7 @@ jobs:
             exit 1
           fi
           npm run test:browser
+          npm run test:i18n-browser
           npm run test:guides
           npm run test:authoring
 

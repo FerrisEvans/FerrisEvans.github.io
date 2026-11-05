@@ -3,10 +3,11 @@ import { SITE } from '../data/site';
 import '../styles/global.css';
 interface Props { to: string; label: string; }
 const { to, label } = Astro.props;
+const chinese = to.startsWith('/zh/');
 const canonical = new URL(to, Astro.site);
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang={chinese ? 'zh-CN' : 'en'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,5 +20,5 @@ const canonical = new URL(to, Astro.site);
     <meta http-equiv="refresh" content={`0;url=${to}`} />
     <style>body { margin:0; padding:48px 24px; background:#f8f8f0; color:#794f27; font:16px/1.8 system-ui,sans-serif; } main { max-width:600px; margin:auto; } h1 { font-size:24px; } a { color:#087f77; }</style>
   </head>
-  <body><main><h1>{label}</h1><p>这个页面有了新的地址。<a href={to}>继续前往{label} →</a></p></main></body>
+  <body><main><h1>{label}</h1><p>{chinese ? '这个页面有了新的地址。' : 'This page has moved. '}<a href={to}>{chinese ? '继续前往' : 'Continue to '}{label} →</a></p></main></body>
 </html>

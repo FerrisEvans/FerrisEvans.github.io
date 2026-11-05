@@ -1,9 +1,12 @@
 ---
+import { getLocale, localizePath, t, languageTag } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import 'animal-island-ui/style';
 import '../styles/global.css';
 import '../styles/island.css';
 import '../styles/blog-buttons.css';
-import { SITE } from '../data/site';
+import { siteFor } from '../data/site';
+const SITE = siteFor(locale);
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BackToTop from '../components/BackToTop.astro';
@@ -13,15 +16,16 @@ import ThemeInit from '../components/ThemeInit.astro';
 interface Props {
   title?: string;
   description?: string;
+  alternates?: boolean;
 }
 
-const { title, description = SITE.description } = Astro.props;
+const { title, description = SITE.description, alternates = true } = Astro.props;
 const pageTitle = title ? `${title} | ${SITE.title}` : `${SITE.title} — ${SITE.tagline}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang={languageTag(locale)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -31,32 +35,38 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonical} />
+    {alternates && !Astro.url.pathname.includes('/drafts/') && <>
+      <link rel="alternate" hreflang="en" href={new URL(localizePath(Astro.url.pathname, 'en'), Astro.site)} />
+      <link rel="alternate" hreflang="zh-CN" href={new URL(localizePath(Astro.url.pathname, 'zh'), Astro.site)} />
+      <link rel="alternate" hreflang="x-default" href={new URL(localizePath(Astro.url.pathname, 'en'), Astro.site)} />
+    </>}
+    <meta property="og:locale" content={locale === 'zh' ? 'zh_CN' : 'en_US'} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={new URL(SITE.avatar, Astro.site)} />
-    <meta property="og:image:alt" content={`${SITE.author} 的头像，${SITE.title} 博客作者`} />
+    <meta property="og:image:alt" content={t(locale, `${SITE.author} 的头像，${SITE.title} 博客作者`, `${SITE.author}, author of ${SITE.title}`)} />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={new URL(SITE.avatar, Astro.site)} />
-    <meta name="twitter:image:alt" content={`${SITE.author} 的头像，${SITE.title} 博客作者`} />
-    <link rel="shortcut icon" type="image/x-icon" href={`/favicon.ico?v=${SITE.brandVersion}`} />
-    <link rel="icon" type="image/png" sizes="16x16" href={`/brand/island/favicon-16x16.png?v=${SITE.brandVersion}`} />
-    <link rel="icon" type="image/png" sizes="32x32" href={`/brand/island/favicon-32x32.png?v=${SITE.brandVersion}`} />
-    <link rel="icon" type="image/png" sizes="96x96" href={`/brand/island/favicon-96x96.png?v=${SITE.brandVersion}`} />
-    <link rel="icon" type="image/svg+xml" sizes="any" href={`/favicon.svg?v=${SITE.brandVersion}`} />
-    <link rel="apple-touch-icon" sizes="180x180" href={`/brand/island/apple-touch-icon.png?v=${SITE.brandVersion}`} />
-    <link rel="manifest" href={`/site.webmanifest?v=${SITE.brandVersion}`} />
-    <link rel="alternate" type="application/rss+xml" title={SITE.title} href="/rss.xml" />
+    <meta name="twitter:image:alt" content={t(locale, `${SITE.author} 的头像，${SITE.title} 博客作者`, `${SITE.author}, author of ${SITE.title}`)} />
+    <link rel="shortcut icon" type="image/x-icon" href={localizePath(`/favicon.ico?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="16x16" href={localizePath(`/brand/island/favicon-16x16.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="32x32" href={localizePath(`/brand/island/favicon-32x32.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="96x96" href={localizePath(`/brand/island/favicon-96x96.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/svg+xml" sizes="any" href={localizePath(`/favicon.svg?v=${SITE.brandVersion}`, locale)} />
+    <link rel="apple-touch-icon" sizes="180x180" href={localizePath(`/brand/island/apple-touch-icon.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="manifest" href={localizePath(`/site.webmanifest?v=${SITE.brandVersion}`, locale)} />
+    <link rel="alternate" type="application/rss+xml" title={SITE.title} href={localizePath("/rss.xml", locale)} />
     <LegacyWorkerRecovery />
     <slot name="head" />
     <ThemeInit />
   </head>
   <body class="blog-body min-h-screen">
-    <a href="#main-content" class="skip-link">跳到正文</a>
+    <a href={localizePath("#main-content", locale)} class="skip-link">{t(locale, "跳到正文")}</a>
     <Nav />
     <div class="blog-workspace">
     <main id="main-content" tabindex="-1" class="min-w-0 focus:outline-none">

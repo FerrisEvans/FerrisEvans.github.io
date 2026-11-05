@@ -1,7 +1,12 @@
 ---
-import { SITE } from '../data/site';
+import { getLocale, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
+import { siteFor } from '../data/site';
+const SITE = siteFor(locale);
 import Icon from './Icon.astro';
 
+interface Props { articleKey: string; }
+const { articleKey } = Astro.props;
 const g = SITE.giscus;
 ---
 
@@ -9,12 +14,12 @@ const g = SITE.giscus;
   <div class="comments-header">
     <span class="comments-icon"><Icon name="message" size={24} /></span>
     <div>
-      <p class="island-eyebrow">聊一聊</p>
-      <h2 id="comments-heading">讨论与评论</h2>
+      <p class="island-eyebrow">{t(locale, "聊一聊")}</p>
+      <h2 id="comments-heading">{t(locale, "讨论与评论")}</h2>
     </div>
     <span class="comments-provider">Giscus</span>
   </div>
-  <p class="comments-intro">问题、发现，或者另一种解法，都欢迎记在这里。</p>
+  <p class="comments-intro">{t(locale, "问题、发现，或者另一种解法，都欢迎记在这里。")}</p>
   <div class="giscus"></div>
   <script
     is:inline
@@ -23,14 +28,15 @@ const g = SITE.giscus;
     data-repo-id={g.repoId}
     data-category={g.category}
     data-category-id={g.categoryId}
-    data-mapping="pathname"
+    data-mapping="specific"
+    data-term={`posts/${articleKey}/`}
     data-strict="0"
     data-reactions-enabled="1"
     data-emit-metadata="0"
     data-input-position="bottom"
     data-loading="lazy"
     data-theme="preferred_color_scheme"
-    data-lang="zh-CN"
+    data-lang={locale === 'zh' ? 'zh-CN' : 'en'}
     crossorigin="anonymous"
     async></script>
 </section>

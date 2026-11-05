@@ -1,9 +1,11 @@
-import { parseView, viewLabels, type IslandView } from './types';
+import { parseView, getViewLabels, type IslandView } from './types';
+import { localeForDocument } from '../../i18n';
 import { randomizeTagTokens } from '../tag-tokens';
 
 /** Move server-rendered sections into one dialog. The same content remains
  * available without WebGL or JavaScript, with no duplicate headings or links. */
 export function createPanels(onChange: (view: IslandView | null) => void, signal: AbortSignal) {
+  const viewLabels = getViewLabels(localeForDocument());
   const dialog = document.querySelector<HTMLDialogElement>('#island-dialog')!;
   const panel = document.querySelector<HTMLElement>('#island-panel')!;
   const directory = document.querySelector<HTMLElement>('#island-directory')!;

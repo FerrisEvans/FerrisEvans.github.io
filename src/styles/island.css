@@ -52,6 +52,13 @@
 .nav-link:hover { background:#f0e8d8; transform:translateY(-1px); }
 .nav-link.is-active { background:#b7e4d4; color:#5b4a33; }
 .nav-actions { display:flex; gap:8px; align-items:center; }
+.nav-icon-link { justify-content:center; width:46px; height:46px; padding:10px; flex:none; }
+.nav-language { display:flex; align-items:center; gap:3px; flex:none; font-size:12px; font-weight:800; color:var(--color-ink-soft); }
+.nav-language a { display:inline-flex; min-height:40px; padding:8px 5px; align-items:center; border-radius:10px; }
+.nav-language a[aria-current] { color:var(--island-green); background:var(--island-muted); }
+.nav-language > span { opacity:.5; }
+.dark .nav-language { color:var(--color-snow-soft); }
+.nav-tooltip-host { position:fixed; inset:0; z-index:80; pointer-events:none; }
 .nav-room { display:inline-flex; align-items:center; gap:6px; padding:10px 8px; white-space:nowrap; font-size:12px; }
 .dark .nav-link { color:var(--color-snow-soft); }
 .dark .nav-link:hover { background:#50634c; }
@@ -84,4 +91,11 @@
  .island-icon-button { width:38px; height:38px; }
  .mobile-menu nav { grid-template-columns:repeat(2,1fr); padding-inline:20px; }
  .nav-link { font-size:14px; }
+}
+@media (max-width:480px) {
+ .nav-bar { gap:8px; padding-inline:12px; }
+ .nav-actions { gap:5px; }
+ .nav-actions .island-icon-button { width:36px; height:36px; }
+ .nav-language { font-size:11px; gap:2px; }
+ .nav-language a { padding-inline:3px; }
 }

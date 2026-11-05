@@ -1,12 +1,16 @@
-import { ABOUT } from '../data/room-about';
-import { ABOUT_GUIDES } from '../data/about-guides';
-import { categoriesFor, categoryCounts, categoryOf, SITE } from '../data/site';
+import { type Locale, localizePath, t, tagLabel } from '../i18n';
+import { aboutFor } from '../data/room-about';
+import { guidesFor } from '../data/about-guides';
+import { categoriesFor, categoryCounts, categoryOf, siteFor } from '../data/site';
 import { getPosts, postUrl, readingTime, type Post } from './posts';
 
 /** One published collection feeds the cover, island and existing reading routes. */
-export async function getIslandContent() {
-  const posts = await getPosts();
-  const categories = categoriesFor(posts.map(post => post.data.category));
+export async function getIslandContent(locale: Locale = 'en') {
+  const SITE = siteFor(locale);
+  const ABOUT = aboutFor(locale);
+  const ABOUT_GUIDES = guidesFor(locale);
+  const posts = await getPosts({ locale });
+  const categories = categoriesFor(posts.map(post => post.data.category), locale);
   const counts = categoryCounts(posts.map(post => post.data.category), categories);
   const tagCounts = new Map<string, number>();
   for (const post of posts) {
@@ -16,7 +20,7 @@ export async function getIslandContent() {
     title: post.data.title,
     description: post.data.description ?? '',
     href: postUrl(post),
-    category: categoryOf(post.data.category).label,
+    category: categoryOf(post.data.category, locale).label,
     date: post.data.pubDate.toISOString().slice(0, 10),
     updated: (post.data.updatedDate ?? post.data.pubDate).toISOString().slice(0, 10),
     readingMinutes: readingTime(post),
@@ -31,17 +35,17 @@ export async function getIslandContent() {
     ).slice(0, 4).map(adapt),
     categories: categories.map(category => ({
       slug: category.slug, title: category.label, description: category.description,
-      href: `/categories/${category.slug}/`, count: counts[category.slug], accent: category.accent,
+      href: localizePath(`/categories/${category.slug}/`, locale), count: counts[category.slug], accent: category.accent,
     })),
     tags: [...tagCounts.entries()]
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-      .map(([title, count]) => ({ title, count, href: `/tags/${encodeURIComponent(title)}/` })),
-    author: { name: SITE.author, intro: ABOUT.intro, href: '/about/', avatar: SITE.avatar },
+      .map(([title, count]) => ({ title: tagLabel(title, locale), count, href: localizePath(`/tags/${encodeURIComponent(title)}/`, locale) })),
+    author: { name: SITE.author, intro: ABOUT.intro, href: localizePath('/about/', locale), avatar: SITE.avatar },
     guides: ABOUT_GUIDES,
     links: [
-      { title: '订阅 RSS', description: '把新笔记送到你的阅读器。', href: '/rss.xml', icon: 'rss' },
-      { title: 'GitHub', description: '代码、实验和正在做的事。', href: SITE.github, icon: 'github' },
-      { title: '写一封信', description: SITE.email, href: `mailto:${SITE.email}`, icon: 'mail' },
+      { title: t(locale, '订阅 RSS', 'Subscribe via RSS'), description: t(locale, '把新笔记送到你的阅读器。', 'New notes, delivered to your feed reader.'), href: localizePath('/rss.xml', locale), icon: 'rss' },
+      { title: 'GitHub', description: t(locale, '代码、实验和正在做的事。', 'Code, experiments, and work in progress.'), href: SITE.github, icon: 'github' },
+      { title: t(locale, '写一封信', 'Write to me'), description: SITE.email, href: `mailto:${SITE.email}`, icon: 'mail' },
     ],
   };
 }

@@ -1,0 +1,19 @@
+---
+import { locales, getLocale } from '../../i18n';
+export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
+const locale = getLocale(Astro.url.pathname);
+import World from '../../layouts/World.astro';
+import HomeHero from '../../components/HomeHero.astro';
+import { getIslandAssets } from '../../utils/island-assets';
+import { getIslandContent } from '../../utils/island-content';
+const assets = getIslandAssets();
+const content = await getIslandContent(locale);
+---
+<World posterVersion={assets.posterVersion}>
+  <main id="main-content" tabindex="-1">
+    <HomeHero assets={assets} content={content} />
+  </main>
+  <script>
+    import '../../scripts/island/entry';
+  </script>
+</World>

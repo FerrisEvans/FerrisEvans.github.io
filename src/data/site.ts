@@ -1,3 +1,4 @@
+import { type Locale, t } from '../i18n';
 const BLOG_NAME = '未尽';
 const BRAND_VERSION = 'weijin-2';
 const AUTHOR_NAME = 'Ferris';
@@ -115,11 +116,11 @@ function accentFromSlug(slug: string): string {
   return CATEGORY_ACCENTS[hash % CATEGORY_ACCENTS.length];
 }
 
-export function categoryOf(slug: string): CategoryDef {
+export function categoryOf(slug: string, locale: Locale = 'zh'): CategoryDef {
   const configured = CATEGORIES.find((category) => category.slug === slug);
-  if (configured) return configured;
+  if (configured) return locale === 'zh' ? configured : { ...configured, label: t(locale, configured.label), description: t(locale, configured.description), subcategories: Object.fromEntries(Object.entries(configured.subcategories).map(([key,label]) => [key,t(locale,label)])) };
   const cached = generatedCategories.get(slug);
-  if (cached) return cached;
+  if (cached) return locale === 'zh' ? cached : { ...cached, description: `Notes on ${cached.label}` };
 
   const label = labelFromSlug(slug);
   const generated: CategoryDef = {
@@ -133,17 +134,17 @@ export function categoryOf(slug: string): CategoryDef {
   };
   generatedCategories.set(slug, generated);
   console.warn(`[category] "${slug}" is using generated metadata. Customize it in src/data/site.ts (CATEGORIES).`);
-  return generated;
+  return locale === 'zh' ? generated : { ...generated, description: `Notes on ${label}` };
 }
 
-export function categoriesFor(slugs: Iterable<string>): CategoryDef[] {
+export function categoriesFor(slugs: Iterable<string>, locale: Locale = 'zh'): CategoryDef[] {
   const publishedSlugs = new Set(slugs);
   const configuredSlugs = new Set(CATEGORIES.map((category) => category.slug));
   const discovered = [...publishedSlugs]
     .filter((slug) => !configuredSlugs.has(slug))
     .sort()
-    .map(categoryOf);
-  return [...CATEGORIES.filter((category) => publishedSlugs.has(category.slug)), ...discovered];
+    .map(slug => categoryOf(slug, locale));
+  return [...CATEGORIES.filter((category) => publishedSlugs.has(category.slug)).map(category => categoryOf(category.slug, locale)), ...discovered];
 }
 
 export function categoryCounts(slugs: Iterable<string>, categories: CategoryDef[] = CATEGORIES): Record<string, number> {
@@ -165,4 +166,8 @@ export function categoriesForWall(
     if (count > 0) return true;
     return emptySlots && category.wall === true;
   });
+}
+
+export function siteFor(locale: Locale) {
+  return locale === 'zh' ? SITE : { ...SITE, title: 'Weijin', tagline: 'Stay curious. Take your time.', intro: 'Notes on programming languages, game development, and AI—what I learn, build, and think about.', description: 'Weijin is Ferris’s personal blog about programming languages, game development, and AI.' };
 }

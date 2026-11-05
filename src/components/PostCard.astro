@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import { Card } from 'animal-island-ui';
 import { formatDate, postUrl, readingTime, type Post } from '../utils/posts';
 import CategoryBadge from './CategoryBadge.astro';
@@ -11,11 +13,11 @@ const icons: Record<string,string> = { 'programming-language': 'book', 'data-str
 <article class:list={['note-card', { 'featured-note': featured }]}>
 <Card pattern={featured ? 'app-teal' : 'default'} hoverable className="note-card-body">
   <div class="note-top"><CategoryBadge category={post.data.category} /><Icon name={icons[post.data.category] ?? 'book'} size={featured ? 52 : 38} /></div>
-  {featured && <p class="featured-label"><Icon name="leaf" size={18} /> 推荐从这里读起</p>}
-  <h2><a href={postUrl(post)}>{post.data.title}</a></h2>
+  {featured && <p class="featured-label"><Icon name="leaf" size={18} /> {t(locale, "推荐从这里读起")}</p>}
+  <h2><a href={localizePath(postUrl(post), locale)}>{post.data.title}</a></h2>
   {post.data.description && <p class="note-description">{post.data.description}</p>}
   <div class="note-tags">{post.data.tags.slice(0, featured ? 4 : 3).map(tag => <TagChip tag={tag} />)}</div>
-  <div class="note-bottom"><span><Icon name="calendar" size={18} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time><span>· {readingTime(post)} 分钟</span></span><Icon name="arrow-right" size={23} /></div>
+  <div class="note-bottom"><span><Icon name="calendar" size={18} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time><span>· {readingTime(post)} {t(locale, "分钟")}</span></span><Icon name="arrow-right" size={23} /></div>
 </Card>
 </article>
 <style>

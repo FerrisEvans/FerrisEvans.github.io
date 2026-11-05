@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Exercise draft -> publish -> delete using one Markdown file in a disposable site. */
+/** Exercise unpaired draft -> rejected publication -> bilingual publication -> deletion in a disposable site. */
 import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
 import { createHash, randomUUID } from 'node:crypto';
@@ -16,13 +16,16 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const temporary = await realpath(await mkdtemp(join(tmpdir(), 'praxis-authoring-')));
 const fixtureId = randomUUID().slice(0, 8);
 const slug = `authoring-contract-${fixtureId}`;
-const title = `旅行与烘焙：Markdown 发布验证 ${fixtureId}`;
+const locales = ['en', 'zh'];
+const titles = { zh: `旅行与烘焙：Markdown 发布验证 ${fixtureId}`, en: `Travel and baking: Markdown publication check ${fixtureId}` };
+const title = titles.zh;
 // Verify this full marker in result content; search tokenization may also match other posts.
 const marker = 'praxisunpublishedfjordquasar';
 const category = 'authoring-fixture';
 const tag = 'authoring-contract';
-const postPath = `/posts/${slug}/`;
-const fixturePath = join(temporary, 'src/content/blog', `${slug}.md`);
+const postPaths = Object.fromEntries(locales.map(locale => [locale, `/${locale}/posts/${slug}/`]));
+const postPath = postPaths.zh;
+const fixturePaths = Object.fromEntries(locales.map(locale => [locale, join(temporary, 'src/content/blog', locale, `${slug}.md`)]));
 const immutable = ['public/island/island.glb.bin', 'public/island/manifest.json', 'src/data/site.ts'];
 const children = new Set();
 const screenshotDirectory = process.env.AUTHORING_SCREENSHOT_DIR ? resolve(process.env.AUTHORING_SCREENSHOT_DIR) : null;
@@ -30,9 +33,11 @@ const revision = process.env.GITHUB_SHA || execFileSync('git', ['rev-parse', 'HE
 const environment = { ...process.env, GITHUB_SHA: revision, ASTRO_TELEMETRY_DISABLED: '1' };
 let browser;
 
-const fixture = `---
-title: "${title}"
-description: "旅行摄影与烘焙食谱，验证新增汉字无需生成字体。"
+const fixture = (locale) => `---
+locale: ${locale}
+translationKey: ${slug}
+title: "${titles[locale]}"
+description: "${locale === 'zh' ? '旅行摄影与烘焙食谱，验证新增汉字无需生成字体。' : 'Travel photography and baking recipes for the bilingual publication check.'}"
 pubDate: 2099-01-01
 category: ${category}
 tags: [${tag}]
@@ -41,17 +46,17 @@ draft: true
 
 ${marker} is the unique searchable publication marker.
 
-## 公式与图片
+## ${locale === 'zh' ? '公式与图片' : 'Formulas and images'}
 
-行内公式 $a^2+b^2=c^2$ 不需要手动开启数学开关。
+${locale === 'zh' ? '行内公式 $a^2+b^2=c^2$ 不需要手动开启数学开关。' : 'The inline formula $a^2+b^2=c^2$ does not require a manual math flag.'}
 
 $$
 \\frac{1}{2} + \\sqrt{x}
 $$
 
-![发布验证配图](/assets/lib/rag.jpeg)
+![${locale === 'zh' ? '发布验证配图' : 'Publication check illustration'}](/assets/lib/rag.jpeg)
 
-## 第一组代码
+## ${locale === 'zh' ? '第一组代码' : 'First code group'}
 
 ::: code-group labels=[GDScript, C#]
 
@@ -65,7 +70,7 @@ GD.Print("first-csharp-${'wide-code-'.repeat(22)}");
 
 :::
 
-## 第二组代码
+## ${locale === 'zh' ? '第二组代码' : 'Second code group'}
 
 ::: code-group labels=[GDScript, C#]
 
@@ -124,13 +129,18 @@ async function stop(task) {
   if (child.exitCode === null && child.signalCode === null) signal('SIGKILL');
 }
 
-async function build(label) {
+async function build(label, expectedFailure) {
   console.log(`Building isolated ${label} fixture…`);
   const task = command(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'build']);
   const timeout = setTimeout(() => { void stop(task); }, 180_000);
   try {
     const { code, signal } = await task.completion;
-    if (code !== 0) throw new Error(`${label} build failed (${signal ?? code})\n${task.output()}`);
+    if (expectedFailure) {
+      assert.notEqual(code, 0, `${label} must block the production build`);
+      assert.match(task.output(), expectedFailure, `${label} must identify the missing or draft counterpart\n${task.output()}`);
+      assert(task.output().includes(slug), `${label} identifies the affected article`);
+      console.log(`PASS: ${label} is blocked with an actionable translation reminder`);
+    } else if (code !== 0) throw new Error(`${label} build failed (${signal ?? code})\n${task.output()}`);
   } finally { clearTimeout(timeout); }
 }
 
@@ -164,7 +174,7 @@ async function startServer(mode) {
       throw new Error(`${mode} server exited before readiness\n${task.output()}`);
     }
     let response;
-    try { response = await fetch(`${base}/notes/`, { signal: AbortSignal.timeout(2_000) }); }
+    try { response = await fetch(`${base}/en/notes/`, { signal: AbortSignal.timeout(2_000) }); }
     catch { /* Initial startup can precede the listening socket. */ }
     if (response?.ok) return { ...task, base };
     if (response?.status >= 500) throw new Error(`${mode} server returned HTTP ${response.status}\n${task.output().slice(-12_000)}`);
@@ -195,11 +205,11 @@ async function newContext(options = {}) {
   return context;
 }
 
-async function searchResults(base) {
+async function searchResults(base, locale) {
   const context = await newContext();
   try {
     const page = await context.newPage();
-    await page.goto(`${base}/search/`);
+    await page.goto(`${base}/${locale}/search/`);
     return await page.evaluate(async (query) => {
       const pagefind = await import('/pagefind/pagefind.js');
       const results = await pagefind.search(query);
@@ -228,7 +238,9 @@ async function assertSelected(tab) {
   assert.equal(await tab.getAttribute('tabindex'), '0');
 }
 
-async function assertCodeTabs(page) {
+async function assertCodeTabs(page, locale) {
+  const copyLabel = locale === 'en' ? 'Copy code' : '复制代码';
+  const copiedLabel = locale === 'en' ? 'Copied' : '已复制';
   const groups = page.locator('.rehype-code-group');
   assert.equal(await groups.count(), 2, 'both Markdown directives produce code groups');
   const first = groups.nth(0);
@@ -262,7 +274,7 @@ async function assertCodeTabs(page) {
     });
   });
   const expectedCode = await first.getByRole('tabpanel').locator('pre > code').textContent();
-  const copy = first.getByRole('button', { name: '复制代码', exact: true });
+  const copy = first.getByRole('button', { name: copyLabel, exact: true });
   assert.equal((await copy.innerText()).trim(), '', 'copy control is icon-only');
   const copyIcons = copy.locator('svg');
   assert(await copyIcons.count() > 0);
@@ -271,19 +283,19 @@ async function assertCodeTabs(page) {
   await page.waitForFunction(() => typeof window.__authoringCopied === 'string');
   assert.equal(await page.evaluate(() => window.__authoringCopied), expectedCode, 'copy uses the current tab only');
   assert.equal(await copy.getAttribute('data-copied'), 'true');
-  assert.equal(await copy.getAttribute('title'), '已复制');
-  assert.equal(await copy.getAttribute('aria-label'), '复制代码');
+  assert.equal(await copy.getAttribute('title'), copiedLabel);
+  assert.equal(await copy.getAttribute('aria-label'), copyLabel);
   assert.equal((await copy.innerText()).trim(), '', 'success feedback remains icon-only');
   assert(expectedCode.includes('first-csharp-') && !expectedCode.includes('first-gdscript-'));
 
   const lightColor = await firstCsharp.evaluate((element) => getComputedStyle(element).backgroundColor);
-  await screenshot(page, 'authoring-desktop-light');
+  await screenshot(page, `authoring-${locale}-desktop-light`);
   await page.locator('#theme-toggle').click();
   assert(await page.evaluate(() => document.documentElement.classList.contains('dark')));
   await assertSelected(firstCsharp);
   const darkColor = await firstCsharp.evaluate((element) => getComputedStyle(element).backgroundColor);
   assert.notEqual(darkColor, lightColor, 'selected code tabs adapt to the page theme');
-  await screenshot(page, 'authoring-desktop-dark');
+  await screenshot(page, `authoring-${locale}-desktop-dark`);
 
   await page.setViewportSize({ width: 390, height: 844 });
   const scrolling = await first.getByRole('tabpanel').locator('pre').evaluate((element) => {
@@ -295,14 +307,15 @@ async function assertCodeTabs(page) {
   assert.match(scrolling.overflowX, /auto|scroll/);
   assert(Math.abs(scrolling.scrollLeft - (scrolling.scrollWidth - scrolling.width)) <= 2, 'wide code can scroll to its end');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'code does not widen the mobile page');
-  await screenshot(page, 'authoring-mobile-dark');
+  await screenshot(page, `authoring-${locale}-mobile-dark`);
   await page.locator('#theme-toggle').click();
-  await screenshot(page, 'authoring-mobile-light');
+  await screenshot(page, `authoring-${locale}-mobile-light`);
 }
 
 async function verifyAbsentProduction(label) {
   const dist = join(temporary, 'dist');
-  for (const path of [postPath, `/categories/${category}/`, `/tags/${tag}/`, '/drafts/']) {
+  for (const path of [`/posts/${slug}/`, '/drafts/', ...locales.flatMap(locale =>
+    [postPaths[locale], `/${locale}/categories/${category}/`, `/${locale}/tags/${tag}/`, `/${locale}/drafts/`])]) {
     assert.equal(await exists(join(dist, path, 'index.html')), false, `${path} is absent from production`);
   }
   for (const path of (await filesUnder(dist)).filter((path) => /\.(?:html|xml)$/.test(path))) {
@@ -314,7 +327,7 @@ async function verifyAbsentProduction(label) {
       const visitLinks = node => {
         if (node.tagName === 'a') {
           const href = node.properties?.href ?? '';
-          assert(!/^\/drafts(?:\/|[?#]|$)/.test(href), `${path} must not link to a production draft entry`);
+          assert(!/^\/(?:en\/|zh\/)?drafts(?:\/|[?#]|$)/.test(href), `${path} must not link to a production draft entry`);
         }
         for (const child of node.children ?? []) visitLinks(child);
       };
@@ -323,11 +336,13 @@ async function verifyAbsentProduction(label) {
   }
   const server = await startServer('preview');
   try {
-    const results = await searchResults(server.base);
-    for (const { url, content } of results) {
-      assert.notEqual(new URL(url, server.base).pathname, postPath, `${label} URL is absent from Pagefind`);
-      assert.equal(typeof content, 'string', 'Pagefind supplies indexed body content');
-      assert(!content.includes(marker), `${label} body marker is absent from Pagefind results`);
+    for (const locale of locales) {
+      const results = await searchResults(server.base, locale);
+      for (const { url, content } of results) {
+        assert(!Object.values(postPaths).includes(new URL(url, server.base).pathname), `${label} URLs are absent from Pagefind`);
+        assert.equal(typeof content, 'string', 'Pagefind supplies indexed body content');
+        assert(!content.includes(marker), `${label} body marker is absent from Pagefind results`);
+      }
     }
   }
   finally { await stop(server); }
@@ -347,7 +362,7 @@ async function verifyDraftDevelopment() {
   });
   try {
     const page = await context.newPage();
-    const response = await page.goto(`${server.base}/drafts/`);
+    const response = await page.goto(`${server.base}/zh/drafts/`);
     assert.equal(response.status(), 200);
     assert.match(await page.locator('meta[name="robots"]').getAttribute('content'), /noindex/);
     const draftLink = page.locator(`a[href="${postPath}"]`);
@@ -363,7 +378,12 @@ async function verifyDraftDevelopment() {
     await page.locator('.rehype-code-group').first().getByRole('tab', { name: 'C#', exact: true }).click();
     await assertSelected(page.locator('.rehype-code-group').first().getByRole('tab', { name: 'C#', exact: true }));
     await screenshot(page, 'authoring-draft-preview');
-    for (const path of ['/', '/notes/', '/categories/', '/tags/', '/archives/', '/rss.xml', '/explore/']) {
+    const otherDrafts = await fetch(`${server.base}/en/drafts/`);
+    assert(otherDrafts.ok);
+    assert(!(await otherDrafts.text()).includes(slug), 'a lone Chinese draft does not appear in the English draft list');
+    assert.equal((await fetch(`${server.base}${postPaths.en}`)).status, 404, 'a lone draft does not generate a counterpart route');
+    for (const path of ['/', ...locales.flatMap(locale =>
+      ['/', '/notes/', '/categories/', '/tags/', '/archives/', '/rss.xml', '/explore/'].map(path => `/${locale}${path}`))]) {
       const response = await fetch(`${server.base}${path}`, { signal: AbortSignal.timeout(30_000) });
       assert(response.ok, `${path} is available in development`);
       const html = await response.text();
@@ -377,54 +397,65 @@ async function verifyDraftDevelopment() {
 
 async function verifyPublished() {
   const dist = join(temporary, 'dist');
-  const article = await readFile(join(dist, postPath, 'index.html'), 'utf8');
-  assert(article.includes(marker));
-  assert(!article.includes('name="robots" content="noindex'), 'published article is indexable');
-  assert(!article.includes('class="draft-preview"'), 'published article has no draft banner');
-  for (const path of ['index.html', 'notes/index.html', `categories/${category}/index.html`, `tags/${tag}/index.html`, 'archives/index.html', 'rss.xml']) {
-    assert((await readFile(join(dist, path), 'utf8')).includes(postPath), `${path} discovers the new article automatically`);
-  }
-  assert((await readFile(join(dist, 'categories/index.html'), 'utf8')).includes(`/categories/${category}/`));
-  assert((await readFile(join(dist, 'tags/index.html'), 'utf8')).includes(`/tags/${tag}/`));
   const sitemap = (await Promise.all((await readdir(dist)).filter((name) => /^sitemap.*\.xml$/.test(name)).map((name) => readFile(join(dist, name), 'utf8')))).join('\n');
-  assert(sitemap.includes(postPath), 'published article enters the sitemap');
+  for (const locale of locales) {
+    const postPath = postPaths[locale];
+    const article = await readFile(join(dist, postPath, 'index.html'), 'utf8');
+    assert(article.includes(marker));
+    assert(!article.includes('name="robots" content="noindex'), 'published article is indexable');
+    assert(!article.includes('class="draft-preview"'), 'published article has no draft banner');
+    assert(article.includes(`lang="${locale === 'zh' ? 'zh-CN' : 'en'}"`), 'article has its own document language');
+    for (const path of ['index.html', 'notes/index.html', `categories/${category}/index.html`, `tags/${tag}/index.html`, 'archives/index.html', 'rss.xml']) {
+      assert((await readFile(join(dist, locale, path), 'utf8')).includes(postPath), `${locale}/${path} discovers the new article automatically`);
+    }
+    assert((await readFile(join(dist, locale, 'categories/index.html'), 'utf8')).includes(`/${locale}/categories/${category}/`));
+    assert((await readFile(join(dist, locale, 'tags/index.html'), 'utf8')).includes(`/${locale}/tags/${tag}/`));
+    assert(sitemap.includes(postPath), `${locale} article enters the sitemap`);
+    assert.equal(await exists(join(dist, locale, 'drafts/index.html')), false);
+  }
   assert(!sitemap.includes('/drafts/'));
   assert.equal(await exists(join(dist, 'drafts/index.html')), false);
 
   const server = await startServer('preview');
   const context = await newContext();
   try {
-    const results = await searchResults(server.base);
-    assert(results.some(({ url, content }) => new URL(url, server.base).pathname === postPath && content.includes(marker)),
-      'published article is searchable and its indexed content contains the full body marker');
-    const page = await context.newPage();
-    const response = await page.goto(`${server.base}/`);
-    assert.equal(response.status(), 200);
-    await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
-    await page.locator('[data-island-access="recent"]').focus();
-    await page.keyboard.press('Enter');
-    await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
-    const publishedLink = page.locator(`#island-panel a[href="${postPath}"]`).first();
-    assert(await publishedLink.isVisible(), 'one published Markdown file appears in the actual homepage scene panel');
-    await Promise.all([page.waitForURL(`${server.base}${postPath}`), publishedLink.click()]);
-    await assertMathAndImage(page);
-    await assertCodeTabs(page);
+    for (const locale of locales) {
+      const postPath = postPaths[locale];
+      const results = await searchResults(server.base, locale);
+      assert(results.some(({ url, content }) => new URL(url, server.base).pathname === postPath && content.includes(marker)),
+        `${locale} article is searchable and its indexed content contains the full body marker`);
+      assert(results.every(({ url }) => new URL(url, server.base).pathname.startsWith(`/${locale}/`)),
+        `${locale} search does not mix results from the other language`);
+      const page = await context.newPage();
+      const response = await page.goto(`${server.base}/${locale}/`);
+      assert.equal(response.status(), 200);
+      await page.waitForFunction(() => document.querySelector('#island-root')?.getAttribute('data-state') === 'ready', null, { timeout: 90_000 });
+      await page.locator('[data-island-access="recent"]').focus();
+      await page.keyboard.press('Enter');
+      await page.waitForFunction(() => document.querySelector('#island-dialog')?.open);
+      const publishedLink = page.locator(`#island-panel a[href="${postPath}"]`).first();
+      assert(await publishedLink.isVisible(), `${locale} Markdown version appears in its actual homepage scene panel`);
+      await Promise.all([page.waitForURL(`${server.base}${postPath}`), publishedLink.click()]);
+      await assertMathAndImage(page);
+      await assertCodeTabs(page, locale);
 
-    const noJs = await newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
-    try {
-      const staticPage = await noJs.newPage();
-      await staticPage.goto(`${server.base}${postPath}`);
-      const panels = staticPage.locator('.rcg-block');
-      assert.equal(await panels.count(), 4);
-      for (const panel of await panels.all()) assert(await panel.isVisible(), 'every code alternative stays readable without JavaScript');
-      for (const text of ['first-gdscript-', 'first-csharp-', 'second-gdscript-independent', 'second-csharp-independent']) {
-        assert((await staticPage.locator('.prose-custom').innerText()).includes(text));
-      }
-      assert.equal(await staticPage.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
-      await screenshot(staticPage, 'authoring-mobile-no-js');
-    } finally { await noJs.close(); }
+      const noJs = await newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+      try {
+        const staticPage = await noJs.newPage();
+        await staticPage.goto(`${server.base}${postPath}`);
+        const panels = staticPage.locator('.rcg-block');
+        assert.equal(await panels.count(), 4);
+        for (const panel of await panels.all()) assert(await panel.isVisible(), 'every code alternative stays readable without JavaScript');
+        for (const text of ['first-gdscript-', 'first-csharp-', 'second-gdscript-independent', 'second-csharp-independent']) {
+          assert((await staticPage.locator('.prose-custom').innerText()).includes(text));
+        }
+        assert.equal(await staticPage.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+        await screenshot(staticPage, `authoring-${locale}-mobile-no-js`);
+      } finally { await noJs.close(); }
+      await page.close();
+    }
   } finally { await context.close(); await stop(server); }
-  console.log('PASS: one Markdown file publishes to all indexes; math, images, independent code tabs, copying and mobile/no-JS reading work');
+  console.log('PASS: both Markdown versions publish to their language indexes and search; math, images, independent code tabs, copying and mobile/no-JS reading work');
 }
 
 try {
@@ -433,18 +464,22 @@ try {
     cp(join(root, path), join(temporary, path), { recursive: true })));
   await symlink(join(root, 'node_modules'), join(temporary, 'node_modules'), 'dir');
   assert.deepEqual(await snapshot(temporary), original);
-  await writeFile(fixturePath, fixture);
+  await writeFile(fixturePaths.zh, fixture('zh'));
   await build('draft');
   const channel = process.env.BROWSER_CHANNEL || (await exists(chromium.executablePath()) ? undefined : 'chrome');
   browser = await chromium.launch({ channel });
   await verifyAbsentProduction('draft');
   await verifyDraftDevelopment();
 
-  // This is the only author-side change between draft and publication.
-  await writeFile(fixturePath, fixture.replace('draft: true', 'draft: false'));
+  // A draft needs no counterpart, but publishing it must require a published pair.
+  await writeFile(fixturePaths.zh, fixture('zh').replace('draft: true', 'draft: false'));
+  await build('unpaired publication', /en translation is missing/);
+  await writeFile(fixturePaths.en, fixture('en'));
+  await build('publication with a draft counterpart', /en translation is still a draft/);
+  await writeFile(fixturePaths.en, fixture('en').replace('draft: true', 'draft: false'));
   await build('published');
   await verifyPublished();
-  await rm(fixturePath);
+  await Promise.all(Object.values(fixturePaths).map(path => rm(path)));
   await build('deleted');
   await verifyAbsentProduction('deleted');
   assert.deepEqual(await snapshot(temporary), original, 'publishing and deleting do not regenerate the scene or alter category configuration');

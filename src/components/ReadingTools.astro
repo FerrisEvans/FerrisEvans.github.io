@@ -1,8 +1,10 @@
 ---
+import { getLocale, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import Icon from './Icon.astro';
 ---
-<dialog id="image-viewer" class="image-viewer" aria-label="图片预览">
-  <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label="关闭图片预览" title="关闭图片预览"><Icon name="close" size={22} /></button>
+<dialog id="image-viewer" class="image-viewer" aria-label={t(locale, "图片预览")}>
+  <button id="image-viewer-close" type="button" class="image-viewer-close" aria-label={t(locale, "关闭图片预览")} title={t(locale, "关闭图片预览")}><Icon name="close" size={22} /></button>
   <img id="image-viewer-image" alt="" />
 </dialog>
 
@@ -18,7 +20,7 @@ import Icon from './Icon.astro';
       var anchor = document.createElement('a');
       anchor.className = 'heading-anchor';
       anchor.setAttribute('href', '#' + heading.id);
-      anchor.setAttribute('aria-label', '转到本节');
+      anchor.setAttribute('aria-label', document.documentElement.lang.startsWith('zh') ? '转到本节' : 'Link to this section');
       heading.appendChild(anchor);
     });
 
