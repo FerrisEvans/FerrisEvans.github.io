@@ -1,7 +1,38 @@
 import assert from 'node:assert/strict';
 
+async function verifyHomeLanguageTransition(browser, base) {
+  const context = await browser.newContext();
+  try {
+    const page = await context.newPage();
+    const errors = [];
+    let delayedStylesheets = 0;
+    page.on('pageerror', error => errors.push(error.message));
+    await page.goto(new URL('/en/', base).href);
+    // The source document has opted in. Delay destination styles to exercise
+    // the browser's transition decision before its external CSS is available.
+    await page.route('**/*', async route => {
+      if (route.request().resourceType() === 'stylesheet') {
+        delayedStylesheets++;
+        await new Promise(resolve => setTimeout(resolve, 900));
+      }
+      await route.continue();
+    });
+    await page.locator('[data-language-switch]').click();
+    await page.waitForURL(new URL('/zh/', base).href);
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(400);
+    assert(delayedStylesheets > 0, 'exercise an actual slow destination stylesheet request');
+    assert.equal(await page.locator('html').getAttribute('lang'), 'zh-CN');
+    assert(await page.locator('#island-root').isVisible(), 'the translated homepage remains visible after navigation');
+    assert.deepEqual(errors, [], 'homepage language navigation must not abort the native view transition when CSS loads slowly');
+  } finally {
+    await context.close();
+  }
+}
+
 /** Exercise the first painted homepage before its deferred module can run. */
 export async function verifyHomeLoading(browser, base) {
+  await verifyHomeLanguageTransition(browser, base);
   for (const [locale, width] of [['en', 1280], ['zh', 390]]) {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     const page = await context.newPage();
