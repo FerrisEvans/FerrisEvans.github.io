@@ -12,7 +12,7 @@ type Placement = { x: number; y: number; width: number; height: number };
 type Box = Placement & { name: string };
 type CloudLayout = { height: number; width: number; positions: Record<string, Placement> };
 type Point = { x: number; y: number } | null;
-const magnification = (width: number) => width < 600 ? 1.3 : 1.7;
+const magnification = (width: number) => width < 600 ? 1.3 : 1.9;
 
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
 // two-dimensional cloud. See docs/tag-cloud-motion.md for source and license.

@@ -1,7 +1,7 @@
 {
   "name": "weijin-blog",
   "type": "module",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "scripts": {
     "dev": "astro dev",
     "check": "astro sync && tsc --noEmit",
