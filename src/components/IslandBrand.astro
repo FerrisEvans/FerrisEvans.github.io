@@ -1,9 +1,9 @@
 ---
-import { SITE } from '../data/site';
+import { siteFor } from '../data/site';
 import logo from '../../public/brand/island/logo.svg?raw';
 import lettering from '../../public/brand/island/lettering.svg?raw';
 import mark from '../../public/brand/island/mark.svg?raw';
-import { getLocale, t } from '../i18n';
+import { getLocale } from '../i18n';
 interface Props {
   tagline?: boolean;
   compact?: boolean;
@@ -12,15 +12,16 @@ interface Props {
 }
 const { tagline = false, compact = false, inline = false, class: className } = Astro.props;
 const locale = getLocale(Astro.url.pathname);
-const brandName = t(locale, SITE.title, 'Weijin');
-const brandTagline = t(locale, SITE.tagline, 'Stay curious. Take your time.');
+const site = siteFor(locale);
+const brandName = site.title;
+const brandTagline = site.tagline;
 const decorative = (svg: string) => svg.replace(/role="img"/g, 'aria-hidden="true"').replace(/ aria-label="[^"]*"/g, '');
 ---
 <span class:list={['island-brand-identity', { 'island-brand-inline': inline, 'island-brand-compact': compact }, className]}>
   <span class:list={['island-brand-art', { 'island-brand-english': locale === 'en' }]} role="img" aria-label={brandName}>
     {locale === 'en' ? <>
       {!inline && <Fragment set:html={decorative(mark)} />}
-      {(inline || !compact) && <span class="island-brand-wordmark" aria-hidden="true">Weijin</span>}
+      {(inline || !compact) && <span class="island-brand-wordmark" aria-hidden="true">{brandName}</span>}
     </> : <Fragment set:html={decorative(inline ? lettering : compact ? mark : logo)} />}
   </span>
   {tagline && <span class="island-brand-tagline">{brandTagline}</span>}
@@ -45,6 +46,6 @@ const decorative = (svg: string) => svg.replace(/role="img"/g, 'aria-hidden="tru
   @media(max-width:480px) {
     :global(.site-header) .island-brand-identity .island-brand-art :global(svg) { height:32px; }
     :global(.site-header) .island-brand-art { gap:5px; }
-    :global(.site-header) .island-brand-wordmark { font-size:23px; }
+    :global(.site-header) .island-brand-wordmark { font-size:20px; }
   }
 </style>
