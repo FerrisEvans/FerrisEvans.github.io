@@ -493,7 +493,7 @@ public partial class Hello : Node
 
 ### Frontmatter 写法
 
-YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `src/content/blog/zh/hello-markdown.md` 后，下面的示例会得到 `/zh/posts/hello-markdown/` 路径。英文版放在 `src/content/blog/en/hello-markdown.md`，两份文件使用相同的 `translationKey`。
+YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `posts/zh/hello-markdown.md` 后，下面的示例会得到 `/zh/posts/hello-markdown/` 路径。英文版放在 `posts/en/hello-markdown.md`，两份文件使用相同的 `translationKey`。
 
 **写法**
 

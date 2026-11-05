@@ -10,7 +10,7 @@
   "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
   "retrieved": "2026-11-04",
   "tier": "FREE; no paid source tier purchased",
-  "status": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "status": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed.",
   "files": [
     {
       "file": "LICENSE.txt",

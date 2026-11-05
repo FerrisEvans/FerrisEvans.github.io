@@ -58,12 +58,21 @@ jobs:
           # GitHub's Ubuntu runner already includes Chrome and its dependencies.
           BROWSER_CHANNEL: chrome
         run: |
-          npm run preview -- --host 127.0.0.1 --port 4327 > "$RUNNER_TEMP/preview.log" 2>&1 &
+          # Keep Astro in the foreground so this PID owns the HTTP server.
+          node node_modules/astro/bin/astro.mjs preview --ignore-lock --host 127.0.0.1 --port 4327 > "$RUNNER_TEMP/preview.log" 2>&1 &
           preview_pid=$!
-          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          cleanup_preview() {
+            kill "$preview_pid" 2>/dev/null || true
+            wait "$preview_pid" 2>/dev/null || true
+          }
+          trap cleanup_preview EXIT
           preview_ready=0
           for attempt in $(seq 1 40); do
-            if curl --fail --silent http://127.0.0.1:4327/notes/ > /dev/null; then
+            if ! kill -0 "$preview_pid" 2>/dev/null; then
+              cat "$RUNNER_TEMP/preview.log"
+              exit 1
+            fi
+            if curl --fail --silent --max-time 2 http://127.0.0.1:4327/en/notes/ > /dev/null; then
               preview_ready=1
               break
             fi

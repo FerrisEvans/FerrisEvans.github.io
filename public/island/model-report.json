@@ -5745,7 +5745,7 @@
       "group": "Environment"
     }
   ],
-  "bytes": 5166360,
+  "bytes": 5172860,
   "triangles": 146370,
   "meshes": 108,
   "drawCalls": 110,
@@ -5788,18 +5788,6 @@
     "Ferris bear, glasses, sprout, book, stool and character animation",
     "reference-led Dog and Rabbit plush friends with packed cloth detail",
     "joining deck boards, bookshelf frame and dowels, open journal and pencil, coaster, planted soil pockets and connected light cable"
-  ],
-  "characterReferences": [
-    {
-      "file": "assets/island/references/dog-plush.jpg",
-      "sha256": "ccbb00dde64b28ac1687e5a1cb02ca51603f0ccdae30b94510184b379cb28506",
-      "use": "User-provided visual reference for original geometry; not embedded in the runtime asset"
-    },
-    {
-      "file": "assets/island/references/rabbit-plush.jpg",
-      "sha256": "e2b29c334b06af5738768d971adff1ac0aae5ad90f7518355be3629b35fd7e3a",
-      "use": "User-provided visual reference for original geometry; not embedded in the runtime asset"
-    }
   ],
   "interactionPivots": [
     {

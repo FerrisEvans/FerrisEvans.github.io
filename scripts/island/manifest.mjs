@@ -38,7 +38,6 @@ export async function modelManifest(root = process.cwd()) {
     ...['book', 'grid', 'tag'].map(icon => `node_modules/naive-icons/svg/${icon}.svg`),
     ...await sourceFiles(resolve(root, 'src/scripts/island')).then(files => files.map(file => relative(root, file))),
     ...await sourceFiles(resolve(root, 'assets/island/vendor'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),
-    ...await sourceFiles(resolve(root, 'assets/island/references'), name => name !== '.DS_Store').then(files => files.map(file => relative(root, file))),
   ].sort();
   const sources = Object.fromEntries(await Promise.all(sourcePaths.map(async path =>
     [path, sha256(await readFile(resolve(root, path)))])));

@@ -21,7 +21,9 @@ const magnification = (width: number) => width < 600 ? 1.3 : 1.9;
 const spring = { mass: .2, stiffness: 180, damping: 18, restDelta: .001, restSpeed: .01 };
 
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
-// two-dimensional cloud. See docs/tag-cloud-motion.md for source and license.
+// two-dimensional cloud. Source:
+// https://github.com/magicuidesign/magicui/blob/58ee1feebc504a660c00087b369da511e913477e/apps/www/registry/magicui/dock.tsx
+// MIT license: public/vendor/magic-ui/LICENSE.txt.
 // Native links move with their text; the selected word pins its current offset.
 function CloudWord({ locale, tag, hidden, position, size, plan, active, enabled, live }: {
   locale: Locale; tag: Tag; hidden: boolean; position?: Placement; size: number;

@@ -6,9 +6,10 @@ with the original Ferris bear and cream rabbit as companions. The bear retains i
 with a fuller continuous head/body silhouette and an open green reading book.
 The dog smells a raised flower pot, the bear reads beside the picnic, and the
 rabbit tends a small raised flowerbed with the sourced watering can. Dog and rabbit are original
-reference-led plush models, with packed fabric textures and separate joints;
-they use the user-provided photographs in `assets/island/references/`. Those
-reference photographs are not embedded in the runtime model.
+reference-led plush models, with packed fabric textures and separate joints.
+User-provided photographs guided their original modeling. Those photographs
+are no longer retained in the repository and are not build inputs or embedded
+runtime textures; the checked-in Python geometry reconstructs both characters.
 
 Original supporting details include the timber deck, bookcase frame/back braces
 and dowels, open journal with a hinged page, pencil, coaster, small planted-soil
@@ -20,7 +21,7 @@ separated along existing connected islands for leaf-only motion, preserving
 all source faces and UVs. Trailing plants use the pot foot as their support
 point and sit at a shelf/table edge so their leaves can hang naturally.
 
-The existing `public/brand/island/ferris-avatar.png` is a repository visual
+The existing `assets/brand/ferris-avatar.png` is a repository visual
 reference. This project makes no new claim about its upstream authorship.
 
 ## Adopted packages
@@ -47,9 +48,7 @@ available offline in that package directory. Relative URIs resolve without a
 network request. The repository retains the 58 adopted models, their original
 BIN/PNG dependencies and all five package licenses. Unused candidate models and
 their exclusive dependencies were removed before release, including the initial
-four-model Picnic directory superseded by the current Picnic subset. The
-[cleanup record](../../docs/island/asset-cleanup.json) lists all 182 removed files,
-their sizes and hashes, the retained-model basis and each updated source inventory.
+four-model Picnic directory superseded by the current Picnic subset.
 No retained model, buffer, image or license bytes were changed. Original archive
 URLs, revisions, archive hashes and per-file source paths remain in `SOURCE.json`.
 
@@ -218,4 +217,4 @@ nozzle direction downward, while the soil target remains fixed under
 The homepage itself hosts this scene. A separate exploration page or a normal
 article grid is not part of this garden asset's intended entry flow. Browser
 capture, fallbacks, interaction and mobile checks are documented in
-[ASSET_PIPELINE.md](ASSET_PIPELINE.md) and [QA.md](../../docs/island/QA.md).
+[ASSET_PIPELINE.md](ASSET_PIPELINE.md).

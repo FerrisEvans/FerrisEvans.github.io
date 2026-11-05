@@ -11,7 +11,7 @@
   "tier": "free official distribution; no paid Extra or Source files",
   "archiveBytes": 6435630,
   "archiveSha256": "2ee83e63bb7695f2d884ec27ddf6fce020789a452e7d5c5b0bbdfc4f6ea1fc8c",
-  "selectionStatus": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed; see docs/island/asset-cleanup.json.",
+  "selectionStatus": "Retained offline reconstruction subset: only models used by public/island/model-report.json, their original dependencies and license. Unused candidates removed.",
   "selectedModels": [
     {
       "file": "Tree_1_B_Color1.gltf",

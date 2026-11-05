@@ -7,7 +7,7 @@ const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
 });
 
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  loader: glob({ pattern: '{en,zh}/**/*.md', base: './posts' }),
   schema: z.object({
     locale: z.enum(['en', 'zh']),
     translationKey: z.string().regex(/^[A-Za-z0-9_-]+$/),

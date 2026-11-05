@@ -9,7 +9,7 @@ import sharp from 'sharp';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
 const island = join(root, 'public/brand/island');
-const legacy = join(root, 'public/assets/img/favicons');
+const brandSources = join(root, 'assets/brand');
 const source = await readFile(join(island, 'mark.svg'));
 const lettering = await readFile(join(island, 'lettering.svg'));
 for (const master of [source, lettering]) {
@@ -18,7 +18,8 @@ for (const master of [source, lettering]) {
 const geometry = bytes => bytes.toString().replace(/^.*?<svg\b[^>]*>/s, '').replace(/<\/svg>\s*$/, '').replace(/<title>.*?<\/title>/s, '');
 const logo = `<svg xmlns="http://www.w3.org/2000/svg" width="232" height="84" viewBox="0 0 232 84" role="img" aria-label="未尽"><title>未尽 · 书芽与原创中文字标</title><g transform="translate(1 12) rotate(-4 32 32)">${geometry(source)}</g>${geometry(lettering)}</svg>\n`.replace(/[ \t]+$/gm, '');
 await writeFile(join(island, 'logo.svg'), logo);
-const avatarPath = join(island, 'ferris-avatar.png');
+const bearSourceFile = 'assets/brand/ferris-avatar.png';
+const avatarPath = join(root, bearSourceFile);
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const avatarBefore = hash(await readFile(avatarPath));
 // Keep the full generated PNG as an authoring source, outside the public tree.
@@ -39,13 +40,12 @@ const siteSource = await readFile(join(root, 'src/data/site.ts'), 'utf8');
 const currentAvatarFile = siteSource.match(/avatar:\s*`\/brand\/island\/([^?`]+)/)?.[1];
 if (!currentAvatarFile || currentAvatarFile.includes('/')) throw new Error('Current author avatar must name a local brand file.');
 const currentAvatar = await readFile(join(island, currentAvatarFile));
-await mkdir(legacy, { recursive: true });
-const sizes = [16, 32, 48, 96, 150, 180, 192, 256, 512];
+const sizes = [16, 32, 48, 96, 180, 192, 256, 512];
 const png = new Map();
 for (const size of sizes) png.set(size, await sharp(source, { density: 384 }).resize(size, size).png().toBuffer());
-for (const size of [16, 32, 48, 96, 180, 192, 512]) await writeFile(join(island, `favicon-${size}x${size}.png`), png.get(size));
+for (const size of [16, 32, 96, 192, 512]) await writeFile(join(island, `favicon-${size}x${size}.png`), png.get(size));
 await writeFile(join(island, 'apple-touch-icon.png'), png.get(180));
-for (const path of [join(island, 'favicon.svg'), join(root, 'public/favicon.svg'), join(legacy, 'favicon.svg')]) await writeFile(path, source);
+await writeFile(join(root, 'public/favicon.svg'), source);
 
 /** ICO supports embedded PNG frames. Width/height zero encodes 256 pixels. */
 function packIco(frames) {
@@ -62,14 +62,7 @@ function packIco(frames) {
   return Buffer.concat([header, ...frames.map(([, bytes]) => bytes)]);
 }
 const ico = packIco([16, 32, 48, 96, 256].map(size => [size, png.get(size)]));
-for (const path of [join(island, 'favicon.ico'), join(root, 'public/favicon.ico'), join(legacy, 'favicon.ico')]) await writeFile(path, ico);
-const aliases = {
-  'favicon-16x16.png': 16, 'favicon-32x32.png': 32, 'favicon-48x48.png': 48, 'favicon-96x96.png': 96,
-  'apple-touch-icon.png': 180, 'mstile-150x150.png': 150,
-  'android-chrome-192x192.png': 192, 'android-chrome-512x512.png': 512,
-  'web-app-manifest-192x192.png': 192, 'web-app-manifest-512x512.png': 512,
-};
-for (const [file, size] of Object.entries(aliases)) await writeFile(join(legacy, file), png.get(size));
+await writeFile(join(root, 'public/favicon.ico'), ico);
 const identity = {
   name: '未尽', concept: 'round-ink-chinese-and-open-page-sprout', tagline: '保持好奇，慢慢来。',
   source: 'Original closed SVG contours for 未尽: gently leaning strokes, soft expanded terminals, unequal bar lengths and two separate ink drops. Open cream book and connected sage sprout. Drawn for this identity; no typeface outlines, third-party artwork or raster images.',
@@ -77,15 +70,15 @@ const identity = {
   faviconFallbacks: ['/favicon.ico', '/favicon.svg'], cacheVersion: 'weijin-2',
   palette: { sage: '#8bc4a8', cream: '#fff7e7', ink: '#76543b', darkLettering: '#fff3db' },
   sourceFiles: ['public/brand/island/mark.svg', 'public/brand/island/lettering.svg'], logoFile: 'public/brand/island/logo.svg', generator: 'scripts/brand/build-island-brand.mjs',
-  sourceSha256: { mark: hash(source), lettering: hash(lettering), logo: hash(logo) }, pngSizes: [16, 32, 48, 96, 180, 192, 512], icoSizes: [16, 32, 48, 96, 256],
+  sourceSha256: { mark: hash(source), lettering: hash(lettering), logo: hash(logo) }, pngSizes: [16, 32, 96, 180, 192, 512], icoSizes: [16, 32, 48, 96, 256],
   avatar: {
-    current: { file: currentAvatarFile, role: 'Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar', provenance: 'docs/island/avatar-generation.md', sha256: hash(currentAvatar) },
+    current: { file: `public/brand/island/${currentAvatarFile}`, role: 'Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar', provenance: 'Generated with image_gen on 2026-11-04 using the user-provided dog photograph for identity and the retained bear illustration for style.', sha256: hash(currentAvatar) },
     dogSource: { file: dogSourceFile, format: dogSourceMeta.format, bytes: dogSource.length, width: dogSourceMeta.width, height: dogSourceMeta.height, sha256: dogSourceHash },
-    dogDelivery: { file: dogDeliveryFile, format: dogDeliveryMeta.format, bytes: dogDelivery.length, width: dogDeliveryMeta.width, height: dogDeliveryMeta.height, sha256: hash(dogDelivery), encoding: dogEncoding },
-    retainedBear: { file: 'ferris-avatar.png', role: 'Retained previous bear illustration and style reference', sha256: avatarBefore },
+    dogDelivery: { file: `public/brand/island/${dogDeliveryFile}`, format: dogDeliveryMeta.format, bytes: dogDelivery.length, width: dogDeliveryMeta.width, height: dogDeliveryMeta.height, sha256: hash(dogDelivery), encoding: dogEncoding },
+    retainedBear: { file: bearSourceFile, role: 'Retained previous bear illustration and style reference', sha256: avatarBefore },
   },
 };
-await writeFile(join(island, 'identity.json'), JSON.stringify(identity, null, 2) + '\n');
+await writeFile(join(brandSources, 'identity.json'), JSON.stringify(identity, null, 2) + '\n');
 await writeFile(join(root, 'public/site.webmanifest'), JSON.stringify({
   name: '未尽', short_name: '未尽', description: '保持好奇，慢慢来。', lang: 'zh-CN',
   start_url: '/', display: 'browser', background_color: '#fff7e7', theme_color: '#8bc4a8',
@@ -120,11 +113,11 @@ if (process.argv.includes('--preview')) {
     </style><main><div class="label">WEIJIN · ORIGINAL CHINESE LETTERFORMS / BOOK &amp; SPROUT</div><div class="grid">${['','night'].map(cls=>`<section class="card ${cls}"><div class="label">${cls?'DARK':'LIGHT'} · TRANSPARENT VECTOR</div><div class="large">${logo}</div><div class="sample">${logo}<span class="label">HEADER · 44px</span></div><div class="sample footer">${logo}<span class="label">FOOTER · 36px</span></div><p class="inline">订阅 ${lettering} 的新消息</p><div class="icons">${[16,32,48].map(size=>`<div class="icon"><img width="${size}" height="${size}" src="${tiny(size)}"><span>${size}px</span></div>`).join('')}</div></section>`).join('')}</div><div class="foot">柔软的笔画、略有起伏的字面；书页还没有合上，好奇心继续生长。<br><small>Original path geometry · No font outlines · Full logo + inline wordmark · Separate simple favicon</small></div></main>`);
     await page.evaluate(() => document.fonts.ready);
     await page.locator('img').evaluateAll(images => Promise.all(images.map(image => image.decode())));
-    const preview = join(root, 'docs/island/previews/brand-weijin.png');
+    const preview = join(root, '.room-build/previews/brand-weijin.png');
     await mkdir(resolve(preview, '..'), { recursive: true });
     await page.screenshot({ path: preview });
   } finally { await browser.close(); }
 }
 if (hash(await readFile(avatarPath)) !== avatarBefore) throw new Error('Author avatar unexpectedly changed.');
 if (hash(await readFile(dogSourcePath)) !== dogSourceHash) throw new Error('Generated dog avatar source unexpectedly changed.');
-console.log(`未尽 brand regenerated: custom Chinese path lettering + book/sprout logo; 7 PNG sizes and 5-frame ICO from the simple icon; 512px dog avatar ${dogDelivery.length} bytes. Original dog source and retained bear portrait unchanged.`);
+console.log(`未尽 brand regenerated: custom Chinese path lettering + book/sprout logo; 6 PNG sizes and 5-frame ICO from the simple icon; 512px dog avatar ${dogDelivery.length} bytes. Original dog source and retained bear portrait unchanged.`);

@@ -34,8 +34,8 @@ generator and publication source seal check them. No paid source was used.
    model over the initial 5 MB budget. `--model-only` is available solely for
    bootstrap checks and is never used by the production build.
 5. Run `npm test`, `npm run check`, `npm run build`, `npm run verify:build`, and
-   the applicable browser tests. Build output removes old study assets, movie,
-   panoramas and CRT font. Their original sources are recoverable at `08844b2`.
+   the applicable browser tests. Retired study assets, movie,
+   panoramas and CRT font are recoverable at `08844b2`.
 
 The runtime caches the hashed compressed bytes using the existing persistent
 asset cache, expands gzip with the browser's native DecompressionStream, and
@@ -68,10 +68,10 @@ alone is not sufficient proof that a model appears in the delivered scene.
 
 ## Test migration
 
-The default suite preserves shared publishing contracts (`scripts/content.test.mjs`)
-and used binary loader/cache/timing contracts (`scripts/room/assets.test.mjs` and
+The default suite preserves shared publishing contracts (`tests/content.test.mjs`)
+and used binary loader/cache/timing contracts (`tests/room/assets.test.mjs` and
 `load-timings.test.mjs`). Island-specific asset seals and interaction tests are
-under this directory. Markdown, guides and search retain their existing tests.
+under `tests/island/`. Markdown, guides and search retain their existing tests.
 
 The removed shape-specific tests are recoverable at Git commit `08844b2`:
 fixed CRT/VHS model names, reflective/baked materials, paper deformation,
@@ -81,8 +81,6 @@ policy. Those are not requirements for the island. The mixed old
 the fixed tapes and CRT text assertions were retired with those features.
 The former pixel font pipeline and its `font:*` commands were also removed:
 Markdown now has no scene-specific font-build prerequisite.
-See [`docs/island/migration.md`](../../docs/island/migration.md) for the complete
-contract mapping.
 
 The former film worker is replaced at its original URL by a passive retirement
 worker with no fetch listener. It clears only this site's old root Chirpy and

@@ -493,7 +493,7 @@ This is the link’s destination. Syntax highlighting, code copying, image zoom,
 
 ### Frontmatter syntax
 
-Place YAML frontmatter at the very beginning of a Markdown file, between two `---` lines. It describes the article rather than forming part of its body, and is not part of CommonMark or GFM; its fields are defined by this site’s content model. Save the example below to `src/content/blog/en/hello-markdown.md` to give it the URL `/en/posts/hello-markdown/`. Its Chinese counterpart belongs in `src/content/blog/zh/hello-markdown.md`; both files share the same `translationKey`.
+Place YAML frontmatter at the very beginning of a Markdown file, between two `---` lines. It describes the article rather than forming part of its body, and is not part of CommonMark or GFM; its fields are defined by this site’s content model. Save the example below to `posts/en/hello-markdown.md` to give it the URL `/en/posts/hello-markdown/`. Its Chinese counterpart belongs in `posts/zh/hello-markdown.md`; both files share the same `translationKey`.
 
 **Syntax**
 

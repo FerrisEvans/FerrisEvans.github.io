@@ -1,0 +1,82 @@
+{
+  "name": "未尽",
+  "concept": "round-ink-chinese-and-open-page-sprout",
+  "tagline": "保持好奇，慢慢来。",
+  "source": "Original closed SVG contours for 未尽: gently leaning strokes, soft expanded terminals, unequal bar lengths and two separate ink drops. Open cream book and connected sage sprout. Drawn for this identity; no typeface outlines, third-party artwork or raster images.",
+  "component": "src/components/IslandBrand.astro",
+  "faviconRoot": "/brand/island/",
+  "faviconFallbacks": [
+    "/favicon.ico",
+    "/favicon.svg"
+  ],
+  "cacheVersion": "weijin-2",
+  "palette": {
+    "sage": "#8bc4a8",
+    "cream": "#fff7e7",
+    "ink": "#76543b",
+    "darkLettering": "#fff3db"
+  },
+  "sourceFiles": [
+    "public/brand/island/mark.svg",
+    "public/brand/island/lettering.svg"
+  ],
+  "logoFile": "public/brand/island/logo.svg",
+  "generator": "scripts/brand/build-island-brand.mjs",
+  "sourceSha256": {
+    "mark": "cf04e240ef4d79f503e06f9632f89c15987decf42236251578e03091f0071b51",
+    "lettering": "49029e983f50f8407ee6c5e93e924b2f01f53d30cbbd71797b01bb2179ed1963",
+    "logo": "5c8efa908d9698d1a882091af952fe6cf97ac5ce778b6fe0ce2413c660094c89"
+  },
+  "pngSizes": [
+    16,
+    32,
+    96,
+    180,
+    192,
+    512
+  ],
+  "icoSizes": [
+    16,
+    32,
+    48,
+    96,
+    256
+  ],
+  "avatar": {
+    "current": {
+      "file": "public/brand/island/ferris-dog-avatar.webp",
+      "role": "Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar",
+      "provenance": "Generated with image_gen on 2026-11-04 using the user-provided dog photograph for identity and the retained bear illustration for style.",
+      "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5"
+    },
+    "dogSource": {
+      "file": "assets/brand/ferris-dog-avatar.png",
+      "format": "png",
+      "bytes": 1460585,
+      "width": 1254,
+      "height": 1254,
+      "sha256": "27a9057a6b8d52cea21f804b91816962aa35e34ca3e344ed2e5f6b15f3702e79"
+    },
+    "dogDelivery": {
+      "file": "public/brand/island/ferris-dog-avatar.webp",
+      "format": "webp",
+      "bytes": 27364,
+      "width": 512,
+      "height": 512,
+      "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5",
+      "encoding": {
+        "width": 512,
+        "height": 512,
+        "fit": "inside",
+        "withoutEnlargement": true,
+        "quality": 88,
+        "effort": 6
+      }
+    },
+    "retainedBear": {
+      "file": "assets/brand/ferris-avatar.png",
+      "role": "Retained previous bear illustration and style reference",
+      "sha256": "667ab09099ff72ad12f9c5ec7da64a2bf33207ba0092f856b273a47431f138b3"
+    }
+  }
+}

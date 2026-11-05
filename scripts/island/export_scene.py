@@ -84,10 +84,6 @@ report = {
     'originalGeometry': ['Ferris bear, glasses, sprout, book, stool and character animation',
         'reference-led Dog and Rabbit plush friends with packed cloth detail',
         'joining deck boards, bookshelf frame and dowels, open journal and pencil, coaster, planted soil pockets and connected light cable'],
-    'characterReferences': [
-        {'file': 'assets/island/references/'+name, 'sha256': hashlib.sha256((SOURCE/'references'/name).read_bytes()).hexdigest(),
-         'use': 'User-provided visual reference for original geometry; not embedded in the runtime asset'}
-        for name in ['dog-plush.jpg', 'rabbit-plush.jpg']],
     'interactionPivots': [
         {'name': obj.name, 'parent': obj.parent.name if obj.parent else None,
          'positionThree': [round(obj.matrix_world.translation.x, 5), round(obj.matrix_world.translation.z, 5), round(-obj.matrix_world.translation.y, 5)],
