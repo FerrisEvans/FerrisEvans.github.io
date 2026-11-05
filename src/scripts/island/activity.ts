@@ -49,7 +49,8 @@ export function createActivity(root: Object3D, scene: Scene) {
     rotate('Dog_Ear_L', 'z', dogGreeting * -.035);
     rotate('Dog_Ear_R', 'z', dogGreeting * .035);
     rotate('Dog_Arm_L', 'y', dogGreeting * .68);
-    rotate('Dog_Arm_L', 'z', dogGreeting * (-1.2 + Math.sin(time * 7) * .15));
+    // The shorter padded hand greets below the cheek, clear of the large head.
+    rotate('Dog_Arm_L', 'z', dogGreeting * (-1.05 + Math.sin(time * 7) * .13));
     const dogBlink = reduced ? 0 : Math.exp(-Math.pow(((time + 2.1) % 5.3 - 4.8) / .105, 2));
     blink('Dog_Eye_L', dogBlink); blink('Dog_Eye_R', dogBlink);
 

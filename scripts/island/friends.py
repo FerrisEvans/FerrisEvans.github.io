@@ -317,14 +317,15 @@ def make_dog(name='Dog', loc=(0, 0, 0), scale=1, parent=None):
     for side, sign in [('L', -1), ('R', 1)]:
         arm = group(name + '_Arm_' + side, (sign*.205, .015, 1.29), body)
         # One continuous taper, without a pinched wrist or a separate ball hand.
-        # The sleeve hangs close to the body, with a gentle outward curve at its
-        # rounded end so the silhouette stays legible at the island scale.
+        # The sleeve hangs close to the body and ends beside the torso,
+        # above the feet. Its shoulder-to-tip drop is .54 rather than 1.08;
+        # retain the padded width and shoulder join while shortening the reach.
         _f_sweep(name + '_ArmCloth_' + side, [(sign*.14,.015,1.37,.025,.025),
-            (sign*.23,.015,1.29,.095,.079), (sign*.29,-.005,1.11,.11,.086),
-            (sign*.315,-.035,.87,.108,.084), (sign*.33,-.065,.62,.105,.083),
-            (sign*.35,-.095,.43,.112,.088), (sign*.36,-.115,.33,.115,.09),
-            (sign*.36,-.125,.27,.094,.075), (sign*.355,-.125,.23,.06,.048),
-            (sign*.35,-.125,.21,.002,.002)], p['fur'], arm, sides=24)
+            (sign*.23,.015,1.29,.095,.079), (sign*.29,-.005,1.20,.11,.086),
+            (sign*.315,-.035,1.08,.108,.084), (sign*.33,-.065,.98,.105,.083),
+            (sign*.35,-.095,.91,.112,.088), (sign*.36,-.115,.865,.115,.09),
+            (sign*.36,-.125,.81,.094,.075), (sign*.36,-.125,.77,.06,.048),
+            (sign*.36,-.125,.75,.002,.002)], p['fur'], arm, sides=24)
         leg = group(name + '_Leg_' + side, (sign*.13,.015,.43), body)
         # Short stuffed feet curve outward from the lower body, like soft socks.
         # A broad ankle blends into the paw instead of becoming a rigid shin.

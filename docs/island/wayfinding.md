@@ -26,3 +26,9 @@ all three sign hover/tap/open/close paths, two-way header feedback, native heade
 navigation, no viewport overflow, reduced motion and page errors. The dog was
 also inspected from front/side/overhead/three-quarter views and two greeting
 extremes. Physical phone and Safari verification were not performed.
+
+In 1.4.7 the dog's hanging arm length is halved from the 1.4.6 baseline:
+shoulder-to-tip vertical drop 1.08 → 0.54 model units. Shoulder position and
+padded width remain unchanged; the hand ends alongside the torso, above the hip.
+The greeting's arm raise is correspondingly lowered to keep the shorter padded
+hand clear of the cheek; both motion extremes were inspected again.
