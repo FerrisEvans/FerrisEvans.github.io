@@ -254,6 +254,114 @@ def _f_finish_root(root, loc, scale, parent, species, height):
     return root
 
 
+def _f_dog_finish_cloth(obj, texture_scale=1.55):
+    """Close UV-split seams without changing the authored silhouette or pivots."""
+    import bmesh
+    data = bmesh.new()
+    data.from_mesh(obj.data)
+    bmesh.ops.remove_doubles(data, verts=list(data.verts), dist=.000001)
+    bmesh.ops.recalc_face_normals(data, faces=list(data.faces))
+    data.to_mesh(obj.data)
+    data.free()
+    for polygon in obj.data.polygons:
+        polygon.use_smooth = True
+        if polygon.material_index == 0:
+            for index in polygon.loop_indices:
+                obj.data.uv_layers.active.data[index].uv *= texture_scale
+    obj.data.update()
+    obj['cloth_construction'] = 'Welded closed plush shell; finer terry loops'
+    return obj
+
+
+def _f_dog_sweep(name, stations, mat, parent, sides=28):
+    return _f_dog_finish_cloth(_f_sweep(name, stations, mat, parent, sides=sides, steps=5))
+
+
+def _f_dog_surface_stitch(name, surface, points, mat, parent):
+    """Seat the thread in the ear surface instead of floating a line in front."""
+    samples = []
+    for start, end in zip(points, points[1:]):
+        for step in range(7):
+            point = _FVector(start).lerp(_FVector(end), step / 7)
+            hit, location, normal, _ = surface.ray_cast((point.x, -2, point.z), (0, 1, 0))
+            if hit:
+                samples.append(tuple(location + normal * .0003))
+    hit, location, normal, _ = surface.ray_cast((points[-1][0], -2, points[-1][2]), (0, 1, 0))
+    if hit:
+        samples.append(tuple(location + normal * .0003))
+    assert len(samples) >= 2, 'The ear seam must follow its cloth surface'
+    return _f_line(name, samples, .0013, mat, parent)
+
+
+def _f_dog_eye_material():
+    """A small shared lens texture keeps the iris round at every LOD.
+
+    The little soft catchlights are in the lens itself, so the WebGL scene's
+    directional lights do not need an environment map to give the toy life.
+    """
+    key = 'Friend_Dog_glass_button'
+    if key in MATS:
+        return key
+    size = 256
+    yy, xx = _fnp.mgrid[:size, :size] / (size - 1) * 2 - 1
+    radius = _fnp.sqrt(xx * xx + yy * yy)
+    angle = _fnp.arctan2(yy, xx)
+    iris = _fnp.array([73, 54, 41]) / 255
+    pupil = _fnp.array([19, 21, 26]) / 255
+    blend = .5 + .5 * _fnp.tanh((radius - .86) / .018)
+    fibre = .96 + .04 * _fnp.sin(angle * 51 + radius * 18)
+    rgba = _fnp.ones((size, size, 4), dtype=_fnp.float32)
+    rgba[:, :, :3] = pupil[None, None, :] * (1 - blend[:, :, None])
+    rgba[:, :, :3] += iris[None, None, :] * blend[:, :, None] * fibre[:, :, None]
+    for x, y, rx, ry, opacity in [(-.26, .39, .105, .14, .90), (.27, -.20, .032, .043, .48)]:
+        distance = _fnp.sqrt(((xx - x) / rx) ** 2 + ((yy - y) / ry) ** 2)
+        mask = (.5 - .5 * _fnp.tanh((distance - .88) / .10)) * opacity
+        rgba[:, :, :3] = rgba[:, :, :3] * (1 - mask[:, :, None]) + _fnp.array([1, .96, .87]) * mask[:, :, None]
+    image = _f_image('Friend_Dog_glass_button_color', rgba)
+    material_key = _f_mat('Dog_glass_button', '#FFFFFF', .17, gloss=True)
+    material = MATS[material_key]
+    texture = material.node_tree.nodes.new('ShaderNodeTexImage')
+    texture.image = image
+    material.node_tree.links.new(texture.outputs['Color'], material.node_tree.nodes['Principled BSDF'].inputs['Base Color'])
+    return material_key
+
+
+def _f_dog_eye(name, side, centre, size, palette, parent, surface):
+    """One glass button seated against the actual curved cheek.
+
+    Keep the original eye pivot and vertical blink axis. The shell's rim follows
+    the cheek instead of leaving a flat disc hanging in front of the face.
+    """
+    pivot = group(name + '_Eye_' + side, centre, parent)
+    hit, contact, normal, _ = surface.ray_cast((centre[0], -2, centre[2]), (0, 1, 0))
+    assert hit, 'The glass eye must attach to the head surface'
+    normal.normalize()
+    across = _FVector((0, 0, 1)).cross(normal).normalized()
+    up = normal.cross(across).normalized()
+    segments, rings = 40, 24
+    verts, uv, faces = [], [], []
+    for row in range(rings + 1):
+        theta = math.pi * row / rings
+        radial = math.sin(theta)
+        for index in range(segments + 1):
+            angle = math.tau * index / segments
+            x, z = radial * math.cos(angle), radial * math.sin(angle)
+            plane = contact + across * (x * size) + up * (z * size * 1.09)
+            found, skin, _, _ = surface.ray_cast(plane + normal, -normal)
+            assert found, 'Every lens edge must be seated on cloth'
+            point = skin + normal * (.001 + math.cos(theta) * size * .45)
+            verts.append(tuple(point))
+            uv.append(((x + 1) / 2, (z + 1) / 2))
+    for row in range(rings):
+        for index in range(segments):
+            a = row * (segments + 1) + index
+            faces.append((a, a + segments + 1, a + segments + 2, a + 1))
+    eye = _f_mesh(name + '_GlassEye_' + side, verts, faces, uv, _f_dog_eye_material(), pivot)
+    _f_dog_finish_cloth(eye, texture_scale=1)
+    eye['eye_construction'] = 'Closed cheek-fitted glass lens; smooth iris and inset catchlights'
+    return pivot
+
+
 def _f_dog_face(name, p, parent):
     """One continuous sewn volume from the back of the skull to the nose tip.
 
@@ -271,15 +379,20 @@ def _f_dog_face(name, p, parent):
     for k in range(len(control)-1):
         a=_fnp.array(control[max(0,k-1)]);b=_fnp.array(control[k])
         c=_fnp.array(control[k+1]);d=_fnp.array(control[min(len(control)-1,k+2)])
-        for j in range(4):
-            t=j/4
+        for j in range(5):
+            t=j/5
             rows.append(.5*((2*b)+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t))
     rows.append(_fnp.array(control[-1]))
-    seg=48;verts=[];uv=[];faces=[]
+    seg=56;verts=[];uv=[];faces=[]
     for j,(y,z,rx,rz) in enumerate(rows):
         for i in range(seg+1):
             a=math.tau*i/seg
-            verts.append((max(.001,rx)*math.cos(a),y,z+max(.001,rz)*math.sin(a)))
+            # A little cheek padding and gathered cloth at the nose join keep
+            # the original head envelope while avoiding a perfect lathed oval.
+            cheek=.010*math.exp(-((y+.45)/.20)**2)*math.exp(-((math.sin(a)+.20)/.65)**2)
+            gather=.0028*math.cos(a*12)*math.exp(-((y+.69)/.032)**2)
+            verts.append(((max(.001,rx)+cheek+gather)*math.cos(a), y,
+                z+(max(.001,rz)+gather)*math.sin(a)))
             uv.append((i/seg*3,j/(len(rows)-1)*2))
     for j in range(len(rows)-1):
         for i in range(seg):
@@ -298,58 +411,68 @@ def _f_dog_face(name, p, parent):
                 vertex=obj.data.vertices[obj.data.loops[loop].vertex_index].co
                 obj.data.uv_layers.active.data[loop].uv=(vertex.x/.75+.5,(vertex.z-1.5)/.60)
     obj['nose_construction']='Single continuous head/snout surface; inset cloth material zone, no stacked plates'
+    _f_dog_finish_cloth(obj, texture_scale=1.8)
     # A faint sewn join follows the exact shared ring, with no raised rim.
-    seam=[(.355*math.cos(math.tau*i/64),-.6905,1.79+.29*math.sin(math.tau*i/64)) for i in range(65)]
-    _f_line(name+'_NoseStitch',seam,.0018,p['seam'],parent)
+    seam=[]
+    for i in range(97):
+        a=math.tau*i/96
+        cheek=.010*math.exp(-((-.69+.45)/.20)**2)*math.exp(-((math.sin(a)+.20)/.65)**2)
+        gather=.0028*math.cos(a*12)
+        seam.append(((.355+cheek+gather)*math.cos(a),-.6903,1.79+(.29+gather)*math.sin(a)))
+    _f_line(name+'_NoseStitch',seam,.0013,p['seam'],parent)
     return obj
 
 
 def make_dog(name='Dog', loc=(0, 0, 0), scale=1, parent=None):
     p = _f_palette()
+    # Dog-only fabric tuning leaves the rabbit and its material response intact.
+    p['fur'] = _f_mat('Dog_fine_charcoal_terry', '#24262A', .91, normal='Terry', strength=.27)
+    p['nose'] = _f_mat('Dog_soft_woven_nose', '#303239', .88, normal='Weave', strength=.20)
     root = group(name)
     body = group(name + '_Body', (0, 0, .90), root)
     # The reference is a floppy sewn toy: a long, softly padded body, hanging
     # sleeves and short feet. Keep the head size while lowering the soft hem;
     # a high hip and long narrow shins made the old silhouette too humanoid.
-    _f_sweep(name + '_Torso', [(0,.035,.35,.035,.035), (0,.035,.40,.13,.105),
+    _f_dog_sweep(name + '_Torso', [(0,.035,.35,.035,.035), (0,.035,.40,.13,.105),
         (0,.035,.53,.19,.145), (0,.03,.82,.21,.16), (0,.025,1.10,.215,.16),
-        (0,.01,1.36,.19,.14), (0,0,1.52,.105,.09)], p['fur'], body, sides=24)
+        (0,.01,1.36,.19,.14), (0,0,1.52,.105,.09)], p['fur'], body)
     for side, sign in [('L', -1), ('R', 1)]:
         arm = group(name + '_Arm_' + side, (sign*.205, .015, 1.29), body)
         # One continuous taper, without a pinched wrist or a separate ball hand.
         # The sleeve hangs close to the body and ends beside the torso,
         # above the feet. Its shoulder-to-tip drop is .54 rather than 1.08;
         # retain the padded width and shoulder join while shortening the reach.
-        _f_sweep(name + '_ArmCloth_' + side, [(sign*.14,.015,1.37,.025,.025),
+        _f_dog_sweep(name + '_ArmCloth_' + side, [(sign*.14,.015,1.37,.045,.038),
             (sign*.23,.015,1.29,.095,.079), (sign*.29,-.005,1.20,.11,.086),
             (sign*.315,-.035,1.08,.108,.084), (sign*.33,-.065,.98,.105,.083),
             (sign*.35,-.095,.91,.112,.088), (sign*.36,-.115,.865,.115,.09),
             (sign*.36,-.125,.81,.094,.075), (sign*.36,-.125,.77,.06,.048),
-            (sign*.36,-.125,.75,.002,.002)], p['fur'], arm, sides=24)
+            (sign*.36,-.125,.75,.002,.002)], p['fur'], arm)
         leg = group(name + '_Leg_' + side, (sign*.13,.015,.43), body)
         # Short stuffed feet curve outward from the lower body, like soft socks.
         # A broad ankle blends into the paw instead of becoming a rigid shin.
-        _f_sweep(name + '_LegCloth_' + side, [(sign*.10,.02,.51,.025,.025),
+        _f_dog_sweep(name + '_LegCloth_' + side, [(sign*.10,.02,.51,.045,.038),
             (sign*.135,.015,.44,.10,.09), (sign*.16,.005,.33,.105,.10),
             (sign*.20,-.035,.225,.115,.12), (sign*.245,-.085,.15,.13,.155),
             (sign*.265,-.115,.105,.135,.165), (sign*.27,-.13,.055,.11,.145),
             (sign*.27,-.13,.023,.075,.10), (sign*.27,-.13,.007,.025,.035),
-            (sign*.27,-.13,.005,.001,.001)], p['fur'], leg, sides=24)
+            (sign*.27,-.13,.005,.001,.001)], p['fur'], leg)
     tail = group(name + '_Tail', (0,.15,.78), body)
-    _f_sweep(name + '_TailCloth', [(0,.14,.78,.045,.045), (.025,.29,.72,.075,.07),
+    _f_dog_sweep(name + '_TailCloth', [(0,.14,.78,.045,.045), (.025,.29,.72,.075,.07),
         (.03,.43,.76,.07,.07), (.025,.50,.85,.055,.055), (0,.48,.91,.002,.002)], p['fur'], tail)
     head = group(name + '_Head', (0,0,1.48), body)
-    _f_dog_face(name,p,head)
-    _f_eye(name, 'L', (-.368,-.417,2.02), .135, p, head)
-    _f_eye(name, 'R', (.368,-.417,2.02), .135, p, head)
+    face = _f_dog_face(name,p,head)
+    _f_dog_eye(name, 'L', (-.368,-.417,2.02), .135, p, head, face)
+    _f_dog_eye(name, 'R', (.368,-.417,2.02), .135, p, head, face)
     for side, sign in [('L', -1), ('R', 1)]:
         ear = group(name + '_Ear_' + side, (sign*.46,.005,2.12), head)
-        _f_sweep(name+'_EarCloth_'+side, [(sign*.44,.01,2.16,.04,.045),
+        ear_cloth=_f_dog_sweep(name+'_EarCloth_'+side, [(sign*.44,.01,2.16,.055,.052),
             (sign*.57,-.035,2.055,.17,.09), (sign*.64,-.065,1.87,.205,.095),
             (sign*.67,-.10,1.63,.18,.085), (sign*.65,-.15,1.43,.13,.075),
-            (sign*.61,-.17,1.35,.06,.04),(sign*.60,-.17,1.335,.003,.003)], p['fur'], ear, sides=20)
-        _f_line(name+'_EarSeam_'+side, [(sign*.68,-.15,2.00),(sign*.75,-.185,1.79),
-            (sign*.75,-.205,1.57),(sign*.67,-.225,1.40)], .0026, p['seam'], ear)
+            (sign*.61,-.17,1.35,.06,.04),(sign*.60,-.17,1.335,.003,.003)], p['fur'], ear, sides=28)
+        _f_dog_surface_stitch(name+'_EarSeam_'+side, ear_cloth,
+            [(sign*.68,-.15,2.00),(sign*.75,-.185,1.79),
+             (sign*.75,-.205,1.57),(sign*.67,-.225,1.40)], p['seam'], ear)
     return _f_finish_root(root, loc, scale, parent, 'dog', 2.41)
 
 

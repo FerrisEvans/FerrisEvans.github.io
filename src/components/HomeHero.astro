@@ -14,6 +14,29 @@ const library = (content.featured.length ? content.featured : content.posts).sli
 
 ---
     <div id="island-root" data-state="loading" data-model-url={assets.modelUrl} data-model-bytes={assets.modelBytes} data-build-id={assets.buildId}>
+      <script is:inline>
+        (function () {
+          var root = document.currentScript.parentElement;
+          // Run while parsing, before the deferred scene module can download.
+          // Without this marker the reading directory briefly covers the poster.
+          root.dataset.bootPending = 'true';
+          var timeout = setTimeout(revealDirectory, 8000);
+          function cleanup() {
+            clearTimeout(timeout);
+            document.removeEventListener('DOMContentLoaded', revealDirectory);
+            root.removeEventListener('island-booted', cleanup);
+            delete root.dataset.bootPending;
+          }
+          function revealDirectory() {
+            // DOMContentLoaded follows deferred module success or failure. A
+            // failed module must restore reading immediately, not wait 8 seconds.
+            if (!root.dataset.booted) root.dataset.state = 'fallback';
+            cleanup();
+          }
+          document.addEventListener('DOMContentLoaded', revealDirectory, { once: true });
+          root.addEventListener('island-booted', cleanup, { once: true });
+        })();
+      </script>
       <h1 id="home-title" class="sr-only">{SITE.title} · {SITE.author} {t(locale, "的笔记与日常")}</h1>
       <section class="island-stage" aria-label={t(locale, "可探索的林间阅读庭院")}>
         <WorldCover id="island-poster" posterVersion={assets.posterVersion} decorative />

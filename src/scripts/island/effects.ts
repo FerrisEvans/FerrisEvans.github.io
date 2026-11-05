@@ -58,6 +58,9 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
     for (const view of hoverTargets) strength[view] = reduced ? Number(active === view) : MathUtils.damp(strength[view], Number(active === view), 7, dt);
     const library = strength.library, desk = strength.recent, plants = strength.tags, radio = strength.mail;
     move('Library_FeatureBook', 'z', library * .16);
+    // Tilting around the book's bottom-center otherwise lowers its outer
+    // corner into the shelf. Lift slightly while drawing it forward.
+    move('Library_FeatureBook', 'y', library * .008);
     rotate('Library_FeatureBook', 'z', library * -.075);
     rotate('Desk_Page', 'z', reduced ? 0 : desk * (.7 + .35 * Math.sin(time * 2.2)));
     lamp.intensity = desk * 2.4;

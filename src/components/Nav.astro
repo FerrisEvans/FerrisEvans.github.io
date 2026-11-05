@@ -4,9 +4,10 @@ import ThemeToggle from './ThemeToggle.astro';
 import Icon from './Icon.astro';
 import IslandBrand from './IslandBrand.astro';
 import LanguageIcon from './LanguageIcon.astro';
-import { getLocale, localizePath, t } from '../i18n';
+import { getLocale, localizePath, languageTag, t } from '../i18n';
 const locale = getLocale(Astro.url.pathname);
 const site = siteFor(locale);
+const otherLocale = locale === 'en' ? 'zh' : 'en';
 const languagePath = /^\/(en|zh)\//.test(Astro.url.pathname) ? Astro.url.pathname : '/';
 const primary = [
   { href: '/', label: t(locale, '首页', 'Home'), icon: 'home' },
@@ -33,18 +34,7 @@ const isActive = (href: string) => href === '/' ? path === '/'
       {primary.map(link => <a href={localizePath(link.href, locale)} data-island-nav={sceneViews[link.href]} data-nav-tooltip aria-label={link.label} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', 'nav-icon-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} size={25} /></a>)}
     </nav>
     <div class="nav-actions">
-      <details class="nav-language">
-        <summary class="island-icon-button blog-button language-toggle" data-nav-tooltip aria-label={t(locale, '选择语言', 'Choose language')} aria-controls="language-options"><LanguageIcon /></summary>
-        <nav id="language-options" class="language-menu" aria-label={t(locale, '语言', 'Language')}>
-          <p class="language-menu-title">{t(locale, '语言', 'Language')}</p>
-          {([{ code: 'zh', lang: 'zh-CN', name: '中文', label: '切换到中文' }, { code: 'en', lang: 'en', name: 'English', label: 'Switch to English' }] as const).map(language => (
-            <a href={localizePath(languagePath, language.code)} lang={language.lang} hreflang={language.lang} data-language-switch aria-label={language.label} aria-current={locale === language.code ? 'true' : undefined}>
-              <span>{language.name}</span>
-              <span class="language-choice-mark" aria-hidden="true">{locale === language.code && <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4.5 5L19 7" /></svg>}</span>
-            </a>
-          ))}
-        </nav>
-      </details>
+      <a href={localizePath(languagePath, otherLocale)} hreflang={languageTag(otherLocale)} class="island-icon-button blog-button nav-language" data-language-switch data-nav-tooltip aria-label={t(locale, '切换到英语', 'Switch to Chinese')}><LanguageIcon /></a>
       <a href={localizePath('/search/', locale)} class="island-icon-button blog-button" data-nav-tooltip aria-label={t(locale, '搜索', 'Search')} aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
       <ThemeToggle />
       <button id="menu-toggle" type="button" data-nav-tooltip aria-label={t(locale, '打开菜单', 'Open menu')} aria-controls="mobile-menu" aria-expanded="false" class="island-icon-button blog-button mobile-menu-toggle">
@@ -71,8 +61,6 @@ const isActive = (href: string) => href === '/' ? path === '/'
     const menu = document.getElementById('mobile-menu');
     const open = document.getElementById('menu-icon-open');
     const close = document.getElementById('menu-icon-close');
-    const languageMenu = document.querySelector<HTMLDetailsElement>('.nav-language');
-    const languageToggle = languageMenu?.querySelector<HTMLElement>('summary');
     if (!btn || !menu || !open || !close) return;
 
     // The same paper tooltip serves the scene and icon-only navigation.
@@ -87,7 +75,6 @@ const isActive = (href: string) => href === '/' ? path === '/'
     };
     const showHint = (target: HTMLElement) => {
       hideHint();
-      if (target === languageToggle && languageMenu?.open) return;
       const rect = target.getBoundingClientRect();
       tooltip.show(target.getAttribute('aria-label') ?? '', rect.x + rect.width / 2, rect.y + rect.height / 2, reduced.matches);
       target.setAttribute('aria-describedby', 'navigation-hint'); described = target;
@@ -111,29 +98,12 @@ const isActive = (href: string) => href === '/' ? path === '/'
       link.href = target.href;
     });
     refreshLanguageLinks();
-    languageLinks.forEach(link => link.addEventListener('click', () => {
-      refreshLanguageLinks();
-      if (languageMenu) languageMenu.open = false;
-    }));
+    languageLinks.forEach(link => link.addEventListener('click', refreshLanguageLinks));
     window.addEventListener('hashchange', refreshLanguageLinks);
     window.addEventListener('popstate', refreshLanguageLinks);
-    languageMenu?.addEventListener('toggle', () => {
-      hideHint();
-      if (languageMenu.open) { refreshLanguageLinks(); setMenu(false); }
-    });
-    document.addEventListener('pointerdown', event => {
-      if (languageMenu?.open && event.target instanceof Node && !languageMenu.contains(event.target)) {
-        languageMenu.open = false; hideHint();
-      }
-    });
-    languageMenu?.addEventListener('focusout', event => {
-      if (event.relatedTarget instanceof Node && !languageMenu.contains(event.relatedTarget)) languageMenu.open = false;
-    });
-
     function setMenu(expanded: boolean) {
       if (!btn || !menu || !open || !close) return;
       hideHint();
-      if (expanded && languageMenu) languageMenu.open = false;
       menu.dataset.open = String(expanded);
       menu.setAttribute('aria-hidden', String(!expanded));
       menu.inert = !expanded;
@@ -159,10 +129,6 @@ const isActive = (href: string) => href === '/' ? path === '/'
       }
       if (event.key !== 'Escape') return;
       hideHint();
-      if (languageMenu?.open) {
-        languageMenu.open = false; languageToggle?.focus(); hideHint(); event.preventDefault();
-        return;
-      }
       if (btn.getAttribute('aria-expanded') === 'true') {
         setMenu(false);
         btn.focus();

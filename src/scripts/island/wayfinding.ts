@@ -23,9 +23,9 @@ export async function createWayfinding(root: Object3D, signal: AbortSignal) {
   const cord = new MeshStandardMaterial({ color: '#8c7251', roughness: 1 });
   const plaques: Group[] = [];
   const specs = [
-    { view: 'library', icon: 0, kind: 'paper', x: -1.87, y: 2.60, z: -1.55, width: 1.10, height: .62, yaw: .28 },
-    { view: 'categories', icon: 1, kind: 'arrow', x: 1.45, y: 1.23, z: 2.18, width: 1.25, height: .59, yaw: .54 },
-    { view: 'tags', icon: 2, kind: 'plant', x: 3.57, y: 1.40, z: -.02, width: 1.12, height: .60, yaw: .40 },
+    { view: 'library', icon: 0, kind: 'paper', x: -1.87, y: 2.60, z: -1.55, width: .66, height: .62, yaw: .28 },
+    { view: 'categories', icon: 1, kind: 'arrow', x: 1.45, y: 1.23, z: 2.18, width: .70, height: .59, yaw: .54 },
+    { view: 'tags', icon: 2, kind: 'plant', x: 3.57, y: 1.40, z: -.02, width: .64, height: .60, yaw: .40 },
   ] as const;
   function rod(parent: Object3D, start: Vector3, end: Vector3, radius: number, material: MeshStandardMaterial) {
     const delta = end.clone().sub(start);
@@ -59,17 +59,20 @@ export async function createWayfinding(root: Object3D, signal: AbortSignal) {
     board.castShadow = true; board.receiveShadow = true; plaque.add(board);
     if (spec.kind === 'paper') {
       group.updateWorldMatrix(true, false);
-      for (const x of [-.34, .34]) rod(group, new Vector3(x, h / 2 - .04, 0), group.worldToLocal(new Vector3(spec.x + x, 3.08, -1.96)), .012, cord);
+      for (const x of [-w * .3, w * .3]) rod(group, new Vector3(x, h / 2 - .04, 0), group.worldToLocal(new Vector3(spec.x + x, 3.08, -1.96)), .012, cord);
     } else {
       rod(group, new Vector3(0, .45 - spec.y, -.055), new Vector3(0, h / 2 - .05, -.055), .045, wood);
     }
-    const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 256;
+    // A square texture on a square face preserves the original icon geometry
+    // as the wooden boards shrink from word labels to compact symbols.
+    const canvas = document.createElement('canvas'); canvas.width = canvas.height = 512;
     const ctx = canvas.getContext('2d')!;
-    ctx.drawImage(icons[spec.icon], 146, 18, 220, 220);
+    ctx.drawImage(icons[spec.icon], 40, 40, 432, 432);
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace;
     const ink = new MeshStandardMaterial({ map, transparent: true, roughness: 1, depthWrite: false });
     for (const back of [false, true]) {
-      const face = new Mesh(new PlaneGeometry(w * .86, h * .82), ink);
+      const iconSize = Math.min(w * .8, h * .82);
+      const face = new Mesh(new PlaneGeometry(iconSize, iconSize), ink);
       face.position.z = back ? -.014 : .049;
       if (back) face.rotation.y = Math.PI;
       plaque.add(face);

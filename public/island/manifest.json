@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "buildId": "3661d32d32f01fdd17c8",
+  "buildId": "e388b6d97ceed1ad524b",
   "model": {
     "file": "island.glb.bin",
     "encoding": "gzip",
-    "bytes": 1908247,
-    "sha256": "2ad0b5c7f007411cb18ddf7d1d43ed18a50f2dea3b8f66d9c4fedaee0e497452"
+    "bytes": 2011351,
+    "sha256": "06587bdaab37bc491f7a91e8a52700c785d9f684380e0d9eb728d78e5042bbd3"
   },
   "sources": {
-    "assets/island/island.blend": "074e39b15334c6906069a4fb09e33bed66f47eff763ef0f32523356d3ec3dabf",
-    "assets/island/island.glb": "5becc0aa6dbd50a626dcc25883b33ff3138f78114a64f5e1a0cdd69e541566d7",
+    "assets/island/island.blend": "557131d2d7be93b9196381f2b5b572aa5d8152fffee1c90e68e46e9b819b6a1d",
+    "assets/island/island.glb": "a6bf62d5457b57433bfa34475c97a8158c76a18de4f5de71519fcbb0dbef681e",
     "assets/island/references/dog-plush.jpg": "ccbb00dde64b28ac1687e5a1cb02ca51603f0ccdae30b94510184b379cb28506",
     "assets/island/references/rabbit-plush.jpg": "e2b29c334b06af5738768d971adff1ac0aae5ad90f7518355be3629b35fd7e3a",
     "assets/island/vendor/kaykit-forest-nature-1.0/Grass_1_A_Color1.bin": "d293510be3ca4a6062dc305c22a143ba134fc49af65aaba064cc8f8d868d6c6e",
@@ -148,19 +148,19 @@
     "node_modules/naive-icons/svg/book.svg": "2766dbb8d9b78e0c0196dcc25d3ead43f37c9b0be63e616b9a695e262c1fbc17",
     "node_modules/naive-icons/svg/grid.svg": "c2d80a33e85e1497eef0402f36aac94993eeb90c55e98702c528394aeed4e6df",
     "node_modules/naive-icons/svg/tag.svg": "3f37f5face4f173bdf6d3ec1e92caa8c0bedc3786202837671a431ccaa2c4aaa",
-    "scripts/island/build_scene.py": "f74ba4c02b3f700198c913c97ce449622a1fed4439fd9116fbeabd3601494ac5",
+    "scripts/island/build_scene.py": "b879506ce0d7e1a7975f7083f6a6d77760b75a3854fdd769e449cc087d02f782",
     "scripts/island/character.py": "52bff007cd5cf553700f01edac5d374bc6aca63d769ad844a425a66770eedf46",
-    "scripts/island/export_scene.py": "4f2881681074149c7ce30aa7341d36a6d8e24cdc3a27f6eaa70c68ebf5bebe55",
-    "scripts/island/friends.py": "fbc0bf56d67145b8bd52f340e10753fea6a3137cdc524f144051f9f97455ea79",
+    "scripts/island/export_scene.py": "d8d87f0e6c6bc540b874d5a1fc26b21e8b196517086b7cc946cc500cf9de2778",
+    "scripts/island/friends.py": "39a183add8dcfd8ccbe36729f17da0d702240503efa37000676bae337f71d101",
     "scripts/island/geometry.py": "ff8d42649c1b2f0b09a57d2943933ef62d11bf6f677e307abbc91627a82afc01",
     "scripts/island/pack-model.mjs": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
-    "scripts/island/render_friends.py": "7d360031492bb80f1b03068779ee8810218d610f11f07a41dd9ec22140d28bf2",
+    "scripts/island/render_friends.py": "78d842d6b62543bf04b71fb468d9cc02d0c8e170cff7d808a5d2acc6e7cebbf3",
     "scripts/island/render_friends_motion.py": "8a69becf4f12d9ac924f511fa22b6f8303b14bf04ae64755ba4236050046d39c",
     "scripts/island/vendor.py": "52704220260e9334c62aca5d41f0617bc64a29833992331cbf64bb34cee8ea37",
     "src/scripts/island/activity.ts": "37e3d22fac2cac1fdfabe0d0ec71bb49331d70970a106613e0cda58b41b0c1c0",
     "src/scripts/island/animation.ts": "3cc0f6d0694b272d645d3e0c99157b8b1e9164567b63b5ae7f655afe8cbcb110",
-    "src/scripts/island/effects.ts": "bae62037cda2756b0370f2b663ba7647937f7b48c0374ef18781cfc052c0b7bf",
-    "src/scripts/island/entry.ts": "ee1bf7bdb68d6e6dbcc0cdbd9f8d22e8cddb231f318a187f3e898ed75494699c",
+    "src/scripts/island/effects.ts": "a5647c25bfb13cc4dd917f5b9f52743b6ca4140cd0a4e9b1753530f1daba35a9",
+    "src/scripts/island/entry.ts": "c663e643de5b7757595743282c721fe343645aeba543ebe073a87088e834dca5",
     "src/scripts/island/fountain.ts": "cbf65111a1f9bec8c6abce3a2698dad464d541732576d46e77d0c81e08b72133",
     "src/scripts/island/navigation.ts": "087f353425410757a508c2b8b190aa7e99e3e931ebc56d696349c485e088a4f3",
     "src/scripts/island/outline.ts": "b1f6c868fe0ef8e0b56be67dc66b1f9f610e5150dc1163a4d874665d22ad2cb5",
@@ -170,13 +170,13 @@
     "src/scripts/island/scene.ts": "d11600039564c88994b75b1631aaac6d4ed71c6141863856c927e63cfb3f7410",
     "src/scripts/island/tooltip.ts": "f45339e4bc766841c3591beda029bae2e5f7560aeb3e06b3b2704deef7aa3c88",
     "src/scripts/island/types.ts": "16e2e6b8a13bb2226cb56083add77e2073768dfb3f121d783125a0a78f4264c6",
-    "src/scripts/island/wayfinding.ts": "bc382d1acd049019ba92f9c0e01b8ce0ded7f0bf3707660424193fa60f9e730d",
+    "src/scripts/island/wayfinding.ts": "5b87eddbd31bd7ae5a2f105334507bb34dcf7b1124aadd69b7d7dc6385f2719c",
     "src/styles/island-tooltip.css": "0bb44753855575d4341506ca8b8e8c9e0e37f17179c7fc7664cc0b554c87ebe1",
-    "src/styles/world.css": "fe260c1814bd19c5de7abdeb9279cf731cd51cbc71b7cb84f2573745ff3aaeab"
+    "src/styles/world.css": "2dee6028ab06780469e6181473b735e5d485e566a4efcf3f0fe73461856178ee"
   },
   "threeVersion": "0.186.1",
   "posters": {
-    "buildId": "3661d32d32f01fdd17c8",
+    "buildId": "e388b6d97ceed1ad524b",
     "renderer": "Three.js / browser WebGL",
     "framing": {
       "halfWidth": 7.672116566861505,
@@ -184,22 +184,22 @@
     },
     "files": {
       "cover-day.webp": {
-        "bytes": 106296,
-        "sha256": "4fa588e2083d27417bbeec0b8769410c0a9d88f38d71e1331113d8ad8b9afe16",
+        "bytes": 107170,
+        "sha256": "b4a89b518b21a8ccfb6e45e7723918d0c0d94e53d2f286036540d9156ad5ea65",
         "width": 1440,
         "height": 1200,
         "theme": "light"
       },
       "cover-night.webp": {
-        "bytes": 103878,
-        "sha256": "92f0de6beea52eb9f673bbd796cc504447682955b24ee4465a9ce78dd279cdd4",
+        "bytes": 104818,
+        "sha256": "516c91ddd25ed6e59308573992f6d7c28e5db61acb795b9e18e9e720e9ccbfb0",
         "width": 1440,
         "height": 1200,
         "theme": "dark"
       },
       "share.jpg": {
-        "bytes": 82901,
-        "sha256": "a9e2f4b4890f92c861e87c9f778e84b5351cfff9d84fc44cbd30ce569d3bef1f",
+        "bytes": 83476,
+        "sha256": "92afc267fb5a4d074e0054b7e58efe4f7c5f13e32ac401ed1b71bae5f84de0f8",
         "width": 1200,
         "height": 630,
         "theme": "light"

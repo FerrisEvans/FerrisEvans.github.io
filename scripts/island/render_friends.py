@@ -89,5 +89,5 @@ for prefix in ('Dog','Rabbit'):
         assert prefix+'_'+part in names, (prefix,part,'missing exported pivot')
 normal_materials=[mat['name'] for mat in gltf['materials'] if 'normalTexture' in mat]
 assert len(normal_materials)>=7,normal_materials
-assert len(gltf.get('images',[]))==4, 'Expected three shared normal maps and one floral color map'
+assert len(gltf.get('images',[]))==5, 'Expected three shared normal maps, a floral color map and the dog eye texture'
 print('FRIENDS_GLTF',len(raw),'bytes;',len(gltf['nodes']),'nodes;',len(normal_materials),'fabric materials with exported normal maps',flush=True)
