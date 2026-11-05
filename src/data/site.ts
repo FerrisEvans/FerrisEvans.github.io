@@ -169,5 +169,5 @@ export function categoriesForWall(
 }
 
 export function siteFor(locale: Locale) {
-  return locale === 'zh' ? SITE : { ...SITE, title: 'Weijin', tagline: 'Stay curious. Take your time.', intro: 'Notes on programming languages, game development, and AI—what I learn, build, and think about.', description: 'Weijin is Ferris’s personal blog about programming languages, game development, and AI.' };
+  return locale === 'zh' ? SITE : { ...SITE, title: 'Elsewhere', tagline: 'Stay curious. Take your time.', intro: 'Notes on programming languages, game development, and AI—what I learn, build, and think about.', description: 'Elsewhere is Ferris’s personal blog about programming languages, game development, and AI.' };
 }

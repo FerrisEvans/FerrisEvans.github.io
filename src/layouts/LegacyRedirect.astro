@@ -1,9 +1,10 @@
 ---
-import { SITE } from '../data/site';
+import { siteFor } from '../data/site';
 import '../styles/global.css';
 interface Props { to: string; label: string; }
 const { to, label } = Astro.props;
 const chinese = to.startsWith('/zh/');
+const site = siteFor(chinese ? 'zh' : 'en');
 const canonical = new URL(to, Astro.site);
 ---
 <!doctype html>
@@ -13,7 +14,7 @@ const canonical = new URL(to, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex,follow" />
     <link rel="canonical" href={canonical} />
-    <title>{label} · {SITE.title}</title>
+    <title>{label === site.title ? label : `${label} · ${site.title}`}</title>
     <script is:inline define:vars={{ to }}>
       window.location.replace(to + window.location.search + window.location.hash);
     </script>

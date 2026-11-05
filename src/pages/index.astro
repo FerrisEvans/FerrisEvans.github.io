@@ -1,4 +1,5 @@
 ---
 import LegacyRedirect from '../layouts/LegacyRedirect.astro';
+import { siteFor } from '../data/site';
 ---
-<LegacyRedirect to="/en/" label="Weijin" />
+<LegacyRedirect to="/en/" label={siteFor('en').title} />
