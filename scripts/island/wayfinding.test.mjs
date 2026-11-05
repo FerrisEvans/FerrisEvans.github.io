@@ -1,36 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, statSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { dirname, resolve } from 'node:path';
-import ts from 'typescript';
+import { resolve } from 'node:path';
 import * as THREE from 'three';
+import { loadTS } from './load-typescript.mjs';
 
 const require = createRequire(import.meta.url);
 const { Group } = THREE;
 
-// Load the real renderer with Vite's raw-SVG import behavior. Only the browser's
-// image decoder and 2D canvas are supplied below; Three creates the real meshes.
-function loadTS(filename, cache = new Map()) {
-  if (cache.has(filename)) return cache.get(filename).exports;
-  if (filename.endsWith('.json')) return JSON.parse(readFileSync(filename, 'utf8'));
-  const module = { exports: {} }; cache.set(filename, module);
-  const source = ts.transpileModule(readFileSync(filename, 'utf8'), {
-    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS, esModuleInterop: true },
-  }).outputText;
-  const localRequire = name => {
-    if (name === 'three') return THREE;
-    if (name.endsWith('.svg?raw')) return readFileSync(require.resolve(name.slice(0, -4)), 'utf8');
-    if (!name.startsWith('.')) return require(name);
-    const base = resolve(dirname(filename), name);
-    const target = [base, `${base}.ts`, `${base}.json`, resolve(base, 'index.ts')]
-      .find(file => { try { return statSync(file).isFile(); } catch { return false; } });
-    if (!target) throw new Error(`Missing test module ${name}`);
-    return loadTS(target, cache);
-  };
-  new Function('require', 'module', 'exports', source)(localRequire, module, module.exports);
-  return module.exports;
-}
+// Only browser image decoding and canvas are supplied below; Three creates
+// the real geometry from the production renderer.
 const { createWayfinding } = loadTS(resolve('src/scripts/island/wayfinding.ts'));
 
 function fixture(t, decode = () => Promise.resolve()) {
@@ -88,6 +68,15 @@ test('language-neutral signs retain their physical owners and use the same icons
     const maps = new Set();
     sign.traverse(object => { if (object.material?.map) maps.add(object.material.map); });
     assert.equal(maps.size, 1, 'both sides reuse one icon texture');
+    const plaque = sign.children[0], board = plaque.children.find(object => object.geometry?.type === 'ExtrudeGeometry');
+    board.geometry.computeBoundingBox();
+    const size = board.geometry.boundingBox.getSize(new THREE.Vector3());
+    assert(size.x / size.y < 1.5, 'icon signs must not retain the broad two-character boards');
+    for (const face of plaque.children.filter(object => object.material?.map)) {
+      assert.equal(face.geometry.parameters.width, face.geometry.parameters.height, 'square SVGs retain their proportions');
+      assert.equal(face.position.x, 0); assert.equal(face.position.y, 0, 'the icon stays centered in the sign body');
+    }
+    assert.equal([...maps][0].image.width, [...maps][0].image.height, 'the raster texture cannot squeeze the symbol');
     const source = decodeURIComponent([...maps][0].image.image.src.split(',')[1]);
     const original = readFileSync(require.resolve(`naive-icons/svg/${icon}.svg`), 'utf8');
     assert.equal(source, original.replace('<svg ', '<svg width="256" height="256" '));

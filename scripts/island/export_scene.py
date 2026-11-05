@@ -71,7 +71,7 @@ for key, provenance in PROVENANCE.items():
         'source': 'assets/island/vendor/' + PACKS[key] + '/SOURCE.json',
         'models': [item for item in provenance['selectedModels'] if item['file'] in used]})
 report = {
-    'schema': 2, 'generator': 'scripts/island/build_scene.py', 'author': 'Weijin / original Ferris character and garden composition',
+    'schema': 2, 'generator': 'scripts/island/build_scene.py', 'author': 'Elsewhere / original Ferris character and garden composition',
     'source': 'assets/island/island.blend', 'asset': 'assets/island/island.glb',
     'delivery': 'public/island/island.glb.bin',
     'externalAssets': external, 'assetInstances': INSTANCES,

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "source": "assets/island/island.glb",
-  "sourceSha256": "5becc0aa6dbd50a626dcc25883b33ff3138f78114a64f5e1a0cdd69e541566d7",
+  "sourceSha256": "a6bf62d5457b57433bfa34475c97a8158c76a18de4f5de71519fcbb0dbef681e",
   "packerSha256": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
   "file": "island.glb.bin",
-  "sourceBytes": 4950856,
-  "bytes": 1908247,
-  "packedBytes": 3199720,
-  "sha256": "2ad0b5c7f007411cb18ddf7d1d43ed18a50f2dea3b8f66d9c4fedaee0e497452",
-  "packedSha256": "7aed72bb4b6455cd840349511dfcddf558b431e481659b0cad85ff7b163ff2fc",
+  "sourceBytes": 5166360,
+  "bytes": 2011351,
+  "packedBytes": 3333104,
+  "sha256": "06587bdaab37bc491f7a91e8a52700c785d9f684380e0d9eb728d78e5042bbd3",
+  "packedSha256": "09afd0802aac270e477b104dbae7734ca62491a95605d5d415fffe68af3accbc",
   "compression": "gzip",
   "extension": "EXT_meshopt_compression",
   "textureExtension": "EXT_texture_webp",
@@ -21,9 +21,9 @@
     "quantization": false,
     "reordered": false
   },
-  "nodes": 180,
-  "meshes": 112,
-  "materials": 41,
+  "nodes": 176,
+  "meshes": 108,
+  "materials": 42,
   "animations": [
     {
       "name": "Idle",
@@ -55,6 +55,15 @@
       "width": 256,
       "height": 256,
       "pixelsSha256": "2e93c0631e0c586ef54ebfe1cfac3a1c194ee5ffd4e498cb6afbbbaed13c4d11",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Dog_glass_button_color",
+      "sourceBytes": 34802,
+      "bytes": 14050,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "d638ad5e8d91fceb405e774751d25abc3a9f3e19b67fbdbf160dcce032681049",
       "pixelsExact": true
     },
     {

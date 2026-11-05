@@ -12,9 +12,6 @@ function mountIsland() {
   if (!root) return () => {};
   const locale = localeForDocument();
   const viewLabels = getViewLabels(locale);
-  // The server-rendered directory stays usable if the module never loads.
-  // Hide it during loading only after this enhancement actually starts.
-  root.dataset.booted = 'true';
   const host = document.querySelector<HTMLElement>('#island-scene')!;
   const status = document.querySelector<HTMLElement>('#island-status')!;
   const progress = document.querySelector<HTMLProgressElement>('#island-progress')!;
@@ -191,6 +188,10 @@ function mountIsland() {
     setHover(view, { x: event.clientX - rect.left, y: event.clientY - rect.top });
   }, { signal });
   host.addEventListener('pointerleave', () => { if (!focusedView) setHover(null); }, { signal });
+  // Claim the inline pending state only once setup succeeds. If this module
+  // fails to load or initialize, the parser-time guard restores the directory.
+  root.dataset.booted = 'true';
+  root.dispatchEvent(new Event('island-booted'));
   void start();
   return () => { generation++; aborter.abort(); observer.disconnect(); visibility.disconnect(); releaseGraphics(); panels.dispose(); access.remove(); hint.dispose(); navigationLinks.forEach(link => link.classList.remove('is-scene-linked')); };
 }

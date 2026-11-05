@@ -1,7 +1,7 @@
 {
   "schema": 2,
   "generator": "scripts/island/build_scene.py",
-  "author": "Weijin / original Ferris character and garden composition",
+  "author": "Elsewhere / original Ferris character and garden composition",
   "source": "assets/island/island.blend",
   "asset": "assets/island/island.glb",
   "delivery": "public/island/island.glb.bin",
@@ -2429,7 +2429,7 @@
         0.63
       ],
       "scale": [
-        1,
+        1.15,
         1,
         1
       ],
@@ -2449,7 +2449,7 @@
         1.38
       ],
       "scale": [
-        1,
+        1.15,
         1,
         1
       ],
@@ -2469,7 +2469,7 @@
         2.13
       ],
       "scale": [
-        1,
+        1.15,
         1,
         1
       ],
@@ -2486,7 +2486,7 @@
       "position": [
         -1.6,
         1.86,
-        0.74
+        0.832000638961792
       ],
       "scale": [
         0.65,
@@ -2506,7 +2506,7 @@
       "position": [
         -0.37,
         1.86,
-        0.74
+        0.832000638961792
       ],
       "scale": [
         0.61,
@@ -2526,7 +2526,7 @@
       "position": [
         -1.6,
         1.86,
-        1.49
+        1.582000638961792
       ],
       "scale": [
         0.66,
@@ -2546,7 +2546,7 @@
       "position": [
         -1.59,
         1.86,
-        2.24
+        2.3320006389617918
       ],
       "scale": [
         0.68,
@@ -2566,7 +2566,7 @@
       "position": [
         -0.53,
         1.86,
-        2.24
+        2.3320006389617918
       ],
       "scale": [
         0.57,
@@ -2586,7 +2586,7 @@
       "position": [
         -0.94,
         1.85,
-        1.49
+        1.582000638961792
       ],
       "scale": [
         0.62,
@@ -2606,7 +2606,7 @@
       "position": [
         -0.37,
         1.87,
-        1.49
+        1.582000638961792
       ],
       "scale": [
         0.22,
@@ -2626,7 +2626,7 @@
       "position": [
         -0.35,
         1.88,
-        1.55
+        1.6412006874084473
       ],
       "scale": [
         0.22,
@@ -5745,12 +5745,12 @@
       "group": "Environment"
     }
   ],
-  "bytes": 4950856,
-  "triangles": 137494,
-  "meshes": 112,
-  "drawCalls": 114,
-  "materials": 41,
-  "textures": 15,
+  "bytes": 5166360,
+  "triangles": 146370,
+  "meshes": 108,
+  "drawCalls": 110,
+  "materials": 42,
+  "textures": 16,
   "animations": [
     {
       "name": "Idle",
@@ -5827,7 +5827,7 @@
       "parent": "Library",
       "positionThree": [
         -1.0,
-        1.49,
+        1.582,
         -1.85
       ],
       "role": ""
@@ -5837,10 +5837,10 @@
       "parent": "Library_Books",
       "positionThree": [
         -0.94,
-        1.49,
+        1.582,
         -1.85
       ],
-      "role": "pull toward Three local +Z by <=0.16, then return"
+      "role": "pull toward Three local +Z by <=0.16, lift +Y <=0.008, tilt Z >=-0.075, then return"
     },
     {
       "name": "Desk_Lamp",

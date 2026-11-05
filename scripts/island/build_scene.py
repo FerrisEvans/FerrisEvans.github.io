@@ -73,26 +73,65 @@ for i in range(14):
     box('Reading deck plank',(-2.9+i*.31,.70,.505),(.30,3.55,.11),'woodlight',ENV,.018)
 for x in [-2.78,1.02]:box('Deck bearer',(x,.70,.43),(.14,3.52,.12),'wooddark',ENV,.02)
 
-# The sourced shelves now have a plausible frame, restrained joinery and a
-# varied collection. Books remain independently selectable for hover motion.
-for x in [-2.15,.15]:
-    box('Bookcase upright',(x,2.04,1.79),(.13,.25,2.48),'wooddark',LIB,.025)
+# Fit the actual CC0 shelf to the frame. Its source width is 2.0 m, and its
+# bearing surface is 0.20 m above the imported bottom, not the visible lip.
+# Derive those dimensions from the imported mesh instead of guessing book Z.
+def library_bounds(objects):
+    bpy.context.view_layer.update()
+    points=[obj.matrix_world@vertex.co for obj in objects for vertex in obj.data.vertices]
+    return (Vector(tuple(min(point[i] for point in points) for i in range(3))),
+            Vector(tuple(max(point[i] for point in points) for i in range(3))))
+
+def library_support_surface(objects):
+    bpy.context.view_layer.update()
+    levels={}
+    for obj in objects:
+        for face in obj.data.polygons:
+            points=[obj.matrix_world@obj.data.vertices[i].co for i in face.vertices]
+            if max(p.z for p in points)-min(p.z for p in points)>.00001:continue
+            area=sum(a.x*b.y-b.x*a.y for a,b in zip(points,points[1:]+points[:1]))/2
+            if area<=0:continue
+            key=round(points[0].z,4)
+            record=levels.setdefault(key,{'area':0,'top':points[0].z})
+            record['area']+=area;record['top']=max(record['top'],*(p.z for p in points))
+    if not levels:raise RuntimeError('The sourced shelf has no horizontal bearing surface')
+    return max(levels.values(),key=lambda level:level['area'])['top']
+
+BOOKCASE_POST_X=(-2.15,.15)
+BOOKCASE_SHELF_BOTTOMS=(.63,1.38,2.13)
+BOOK_CONTACT_GAP=.002
+library_posts=[]
+for x in BOOKCASE_POST_X:
+    library_posts.append(box('Bookcase upright',(x,2.04,1.79),(.13,.25,2.48),'wooddark',LIB,.025))
     for z in [.70,1.45,2.20,2.96]:
-        cylinder('Bookcase recessed dowel',(x,1.902,z),.023,.008,'wood',LIB,12,(math.pi/2,0,0))
+        cylinder('Bookcase recessed dowel',(x,1.917,z),.023,.008,'wood',LIB,12,(math.pi/2,0,0))
 box('Bookcase top cap',(-1,2.02,3.08),(2.54,.42,.13),'wood',LIB,.025)
 box('Bookcase lower stretcher',(-1,2.10,.64),(2.32,.11,.16),'wooddark',LIB,.02)
 for lean in [-.77,.77]:
-    box('Bookcase back brace',(-1,2.23,1.79),(.075,.055,3.13),'wood',LIB,.013,(0,lean,0))
-for z in [.63,1.38,2.13]:asset('furniture','shelf_B_large',(-1.0,1.91,z),1,parent=LIB)
-LIB_BOOKS=group('Library_Books',(-1,1.85,1.49),LIB)
-for x,z,scale,yaw in [(-1.60,.74,.65,.015),(-.37,.74,.61,-.025),
-    (-1.60,1.49,.66,-.02),(-1.59,2.24,.68,.015),(-.53,2.24,.57,-.04)]:
-    asset('furniture','book_set',(x,1.86,z),scale,yaw=yaw,parent=LIB_BOOKS)
-FEATURE_BOOK=group('Library_FeatureBook',(-.94,1.85,1.49),LIB_BOOKS)
-FEATURE_BOOK['effectRole']='pull toward Three local +Z by <=0.16, then return'
-asset('furniture','book_single',(-.94,1.85,1.49),(.62,.74,.90),parent=FEATURE_BOOK)
-for x,y,z,ang in [(-.37,1.87,1.49,.04),(-.35,1.88,1.55,-.09)]:
-    asset('furniture','book_single',(x,y,z),(.22,.78,.78),rotation=(0,math.pi/2,ang),parent=LIB_BOOKS)
+    box('Bookcase back brace',(-1,2.17,1.79),(.075,.055,3.13),'wood',LIB,.013,(0,lean,0))
+_,shelf_bounds,_=template('furniture','shelf_B_large')
+shelf_width=max(p.x for p in shelf_bounds)-min(p.x for p in shelf_bounds)
+shelf_scale_x=(BOOKCASE_POST_X[1]-BOOKCASE_POST_X[0])/shelf_width
+library_shelves=[asset('furniture','shelf_B_large',(-1.0,1.91,z),(shelf_scale_x,1,1),parent=LIB)
+                 for z in BOOKCASE_SHELF_BOTTOMS]
+library_surfaces=[library_support_surface(objects) for objects in library_shelves]
+LIB['shelfSupportHeights']=library_surfaces
+LIB_BOOKS=group('Library_Books',(-1,1.85,library_surfaces[1]+BOOK_CONTACT_GAP),LIB)
+library_books=[]
+for x,level,scale,yaw in [(-1.60,0,.65,.015),(-.37,0,.61,-.025),
+    (-1.60,1,.66,-.02),(-1.59,2,.68,.015),(-.53,2,.57,-.04)]:
+    objects=asset('furniture','book_set',(x,1.86,library_surfaces[level]+BOOK_CONTACT_GAP),scale,yaw=yaw,parent=LIB_BOOKS)
+    library_books.append((objects,level))
+feature_bottom=library_surfaces[1]+BOOK_CONTACT_GAP
+FEATURE_BOOK=group('Library_FeatureBook',(-.94,1.85,feature_bottom),LIB_BOOKS)
+FEATURE_BOOK['effectRole']='pull toward Three local +Z by <=0.16, lift +Y <=0.008, tilt Z >=-0.075, then return'
+feature_objects=asset('furniture','book_single',(-.94,1.85,feature_bottom),(.62,.74,.90),parent=FEATURE_BOOK)
+library_books.append((feature_objects,1))
+stack_bottom=library_surfaces[1]+BOOK_CONTACT_GAP
+for x,y,ang in [(-.37,1.87,.04),(-.35,1.88,-.09)]:
+    objects=asset('furniture','book_single',(x,y,stack_bottom),(.22,.78,.78),rotation=(0,math.pi/2,ang),parent=LIB_BOOKS)
+    library_books.append((objects,1))
+    stack_bottom=library_bounds(objects)[1].z+BOOK_CONTACT_GAP
 asset('plants','pothos_plant_small_potted',(0,1.90,3.145),.38,yaw=math.pi/2,parent=LIB,contact_z=0)
 
 # The desk reads as a place in use: open pages, a pencil, a cup on a coaster,
