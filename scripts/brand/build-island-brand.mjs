@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
 
 const root = fileURLToPath(new URL('../..', import.meta.url));
-const island = join(root, 'public/brand/island');
+const island = join(root, 'public/brand');
 const brandSources = join(root, 'public/assets/brand');
 const source = await readFile(join(island, 'mark.svg'));
 const lettering = await readFile(join(island, 'lettering.svg'));
@@ -37,7 +37,7 @@ const dogDelivery = await sharp(dogSource)
 const dogDeliveryMeta = await sharp(dogDelivery).metadata();
 await writeFile(join(island, dogDeliveryFile), dogDelivery);
 const siteSource = await readFile(join(root, 'src/data/site.ts'), 'utf8');
-const currentAvatarFile = siteSource.match(/avatar:\s*`\/brand\/island\/([^?`]+)/)?.[1];
+const currentAvatarFile = siteSource.match(/avatar:\s*`\/brand\/([^?`]+)/)?.[1];
 if (!currentAvatarFile || currentAvatarFile.includes('/')) throw new Error('Current author avatar must name a local brand file.');
 const currentAvatar = await readFile(join(island, currentAvatarFile));
 const sizes = [16, 32, 48, 96, 180, 192, 256, 512];
@@ -66,15 +66,15 @@ await writeFile(join(root, 'public/favicon.ico'), ico);
 const identity = {
   name: '未尽', concept: 'round-ink-chinese-and-open-page-sprout', tagline: '保持好奇，慢慢来。',
   source: 'Original closed SVG contours for 未尽: gently leaning strokes, soft expanded terminals, unequal bar lengths and two separate ink drops. Open cream book and connected sage sprout. Drawn for this identity; no typeface outlines, third-party artwork or raster images.',
-  component: 'src/components/IslandBrand.astro', faviconRoot: '/brand/island/',
+  component: 'src/components/IslandBrand.astro', faviconRoot: '/brand/',
   faviconFallbacks: ['/favicon.ico', '/favicon.svg'], cacheVersion: 'weijin-2',
   palette: { sage: '#8bc4a8', cream: '#fff7e7', ink: '#76543b', darkLettering: '#fff3db' },
-  sourceFiles: ['public/brand/island/mark.svg', 'public/brand/island/lettering.svg'], logoFile: 'public/brand/island/logo.svg', generator: 'scripts/brand/build-island-brand.mjs',
+  sourceFiles: ['public/brand/mark.svg', 'public/brand/lettering.svg'], logoFile: 'public/brand/logo.svg', generator: 'scripts/brand/build-island-brand.mjs',
   sourceSha256: { mark: hash(source), lettering: hash(lettering), logo: hash(logo) }, pngSizes: [16, 32, 96, 180, 192, 512], icoSizes: [16, 32, 48, 96, 256],
   avatar: {
-    current: { file: `public/brand/island/${currentAvatarFile}`, role: 'Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar', provenance: 'Generated with image_gen on 2026-11-04 using the user-provided dog photograph for identity and the retained bear illustration for style.', sha256: hash(currentAvatar) },
+    current: { file: `public/brand/${currentAvatarFile}`, role: 'Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar', provenance: 'Generated with image_gen on 2026-11-04 using the user-provided dog photograph for identity and the retained bear illustration for style.', sha256: hash(currentAvatar) },
     dogSource: { file: dogSourceFile, format: dogSourceMeta.format, bytes: dogSource.length, width: dogSourceMeta.width, height: dogSourceMeta.height, sha256: dogSourceHash },
-    dogDelivery: { file: `public/brand/island/${dogDeliveryFile}`, format: dogDeliveryMeta.format, bytes: dogDelivery.length, width: dogDeliveryMeta.width, height: dogDeliveryMeta.height, sha256: hash(dogDelivery), encoding: dogEncoding },
+    dogDelivery: { file: `public/brand/${dogDeliveryFile}`, format: dogDeliveryMeta.format, bytes: dogDelivery.length, width: dogDeliveryMeta.width, height: dogDeliveryMeta.height, sha256: hash(dogDelivery), encoding: dogEncoding },
     retainedBear: { file: bearSourceFile, role: 'Retained previous bear illustration and style reference', sha256: avatarBefore },
   },
 };
@@ -82,7 +82,7 @@ await writeFile(join(brandSources, 'identity.json'), JSON.stringify(identity, nu
 await writeFile(join(root, 'public/site.webmanifest'), JSON.stringify({
   name: '未尽', short_name: '未尽', description: '保持好奇，慢慢来。', lang: 'zh-CN',
   start_url: '/', display: 'browser', background_color: '#fff7e7', theme_color: '#8bc4a8',
-  icons: [192, 512].map(size => ({ src: `/brand/island/favicon-${size}x${size}.png?v=weijin-2`, sizes: `${size}x${size}`, type: 'image/png', purpose: 'any' })),
+  icons: [192, 512].map(size => ({ src: `/brand/favicon-${size}x${size}.png?v=weijin-2`, sizes: `${size}x${size}`, type: 'image/png', purpose: 'any' })),
 }, null, 2) + '\n');
 
 // Contact sheet previews the actual SVG at display sizes, including inline use.

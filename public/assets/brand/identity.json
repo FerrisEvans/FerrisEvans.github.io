@@ -4,7 +4,7 @@
   "tagline": "保持好奇，慢慢来。",
   "source": "Original closed SVG contours for 未尽: gently leaning strokes, soft expanded terminals, unequal bar lengths and two separate ink drops. Open cream book and connected sage sprout. Drawn for this identity; no typeface outlines, third-party artwork or raster images.",
   "component": "src/components/IslandBrand.astro",
-  "faviconRoot": "/brand/island/",
+  "faviconRoot": "/brand/",
   "faviconFallbacks": [
     "/favicon.ico",
     "/favicon.svg"
@@ -17,10 +17,10 @@
     "darkLettering": "#fff3db"
   },
   "sourceFiles": [
-    "public/brand/island/mark.svg",
-    "public/brand/island/lettering.svg"
+    "public/brand/mark.svg",
+    "public/brand/lettering.svg"
   ],
-  "logoFile": "public/brand/island/logo.svg",
+  "logoFile": "public/brand/logo.svg",
   "generator": "scripts/brand/build-island-brand.mjs",
   "sourceSha256": {
     "mark": "cf04e240ef4d79f503e06f9632f89c15987decf42236251578e03091f0071b51",
@@ -44,7 +44,7 @@
   ],
   "avatar": {
     "current": {
-      "file": "public/brand/island/ferris-dog-avatar.webp",
+      "file": "public/brand/ferris-dog-avatar.webp",
       "role": "Current generated cartoon dog author avatar, distinct from the site logo; follows SITE.avatar",
       "provenance": "Generated with image_gen on 2026-11-04 using the user-provided dog photograph for identity and the retained bear illustration for style.",
       "sha256": "72129f3c4ce790534c3e4f38c876885ebe86ef07177cca9fc77d543216afc3c5"
@@ -58,7 +58,7 @@
       "sha256": "27a9057a6b8d52cea21f804b91816962aa35e34ca3e344ed2e5f6b15f3702e79"
     },
     "dogDelivery": {
-      "file": "public/brand/island/ferris-dog-avatar.webp",
+      "file": "public/brand/ferris-dog-avatar.webp",
       "format": "webp",
       "bytes": 27364,
       "width": 512,

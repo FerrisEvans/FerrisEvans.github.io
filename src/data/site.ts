@@ -12,7 +12,7 @@ export const SITE = {
   intro: BLOG_INTRO,
   author: AUTHOR_NAME,
   email: 'ferris.evans@outlook.com',
-  avatar: `/brand/island/ferris-dog-avatar.webp?v=${BRAND_VERSION}`,
+  avatar: `/brand/ferris-dog-avatar.webp?v=${BRAND_VERSION}`,
   github: 'https://github.com/FerrisEvans',
   twitter: 'https://twitter.com/ferrisgeek',
   postsPerPage: 9,

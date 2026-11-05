@@ -9,13 +9,13 @@
   "theme_color": "#8bc4a8",
   "icons": [
     {
-      "src": "/brand/island/favicon-192x192.png?v=weijin-2",
+      "src": "/brand/favicon-192x192.png?v=weijin-2",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/brand/island/favicon-512x512.png?v=weijin-2",
+      "src": "/brand/favicon-512x512.png?v=weijin-2",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"

@@ -54,11 +54,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:image" content={new URL(SITE.avatar, Astro.site)} />
     <meta name="twitter:image:alt" content={t(locale, `${SITE.author} 的头像，${SITE.title} 博客作者`, `${SITE.author}, author of ${SITE.title}`)} />
     <link rel="shortcut icon" type="image/x-icon" href={localizePath(`/favicon.ico?v=${SITE.brandVersion}`, locale)} />
-    <link rel="icon" type="image/png" sizes="16x16" href={localizePath(`/brand/island/favicon-16x16.png?v=${SITE.brandVersion}`, locale)} />
-    <link rel="icon" type="image/png" sizes="32x32" href={localizePath(`/brand/island/favicon-32x32.png?v=${SITE.brandVersion}`, locale)} />
-    <link rel="icon" type="image/png" sizes="96x96" href={localizePath(`/brand/island/favicon-96x96.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="16x16" href={localizePath(`/brand/favicon-16x16.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="32x32" href={localizePath(`/brand/favicon-32x32.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="96x96" href={localizePath(`/brand/favicon-96x96.png?v=${SITE.brandVersion}`, locale)} />
     <link rel="icon" type="image/svg+xml" sizes="any" href={localizePath(`/favicon.svg?v=${SITE.brandVersion}`, locale)} />
-    <link rel="apple-touch-icon" sizes="180x180" href={localizePath(`/brand/island/apple-touch-icon.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="apple-touch-icon" sizes="180x180" href={localizePath(`/brand/apple-touch-icon.png?v=${SITE.brandVersion}`, locale)} />
     <link rel="manifest" href={localizePath(`/site.webmanifest?v=${SITE.brandVersion}`, locale)} />
     <link rel="alternate" type="application/rss+xml" title={SITE.title} href={localizePath("/rss.xml", locale)} />
     <LegacyWorkerRecovery />

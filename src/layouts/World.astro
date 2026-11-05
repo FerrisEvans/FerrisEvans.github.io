@@ -48,9 +48,9 @@ const shareImage = new URL(`/island/share.jpg?v=${posterVersion}`, Astro.site);
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={shareImage} />
     <link rel="icon" type="image/svg+xml" href={localizePath(`/favicon.svg?v=${SITE.brandVersion}`, locale)} />
-    <link rel="icon" type="image/png" sizes="32x32" href={localizePath(`/brand/island/favicon-32x32.png?v=${SITE.brandVersion}`, locale)} />
-    <link rel="icon" type="image/png" sizes="16x16" href={localizePath(`/brand/island/favicon-16x16.png?v=${SITE.brandVersion}`, locale)} />
-    <link rel="apple-touch-icon" sizes="180x180" href={localizePath(`/brand/island/apple-touch-icon.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="32x32" href={localizePath(`/brand/favicon-32x32.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="icon" type="image/png" sizes="16x16" href={localizePath(`/brand/favicon-16x16.png?v=${SITE.brandVersion}`, locale)} />
+    <link rel="apple-touch-icon" sizes="180x180" href={localizePath(`/brand/apple-touch-icon.png?v=${SITE.brandVersion}`, locale)} />
     <link rel="manifest" href={localizePath(`/site.webmanifest?v=${SITE.brandVersion}`, locale)} />
     <link rel="alternate" type="application/rss+xml" title={`${SITE.title} RSS`} href={localizePath("/rss.xml", locale)} />
     <ThemeInit />
