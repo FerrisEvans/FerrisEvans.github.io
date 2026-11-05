@@ -63,11 +63,12 @@
 .language-menu-title { margin:0 9px 7px; color:var(--color-ink-soft); font-size:11px; font-weight:700; line-height:1.5; }
 .language-menu a { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:44px; padding:9px 11px; border-radius:11px 13px 10px 12px; color:var(--color-ink); font-size:14px; font-weight:800; line-height:1.5; transition:none; }
 .language-menu a:hover { background:var(--island-muted); }
-.language-menu a[aria-current] { color:var(--island-green); background:var(--island-muted); }
+.language-menu a[aria-current] { color:#076f68; background:var(--island-muted); }
 .language-choice-mark { display:inline-flex; align-items:center; width:17px; flex:none; }
 .dark .nav-language { color:var(--color-snow); }
 .dark .language-menu-title { color:var(--color-snow-soft); }
 .dark .language-menu a:not([aria-current]) { color:var(--color-snow); }
+.dark .language-menu a[aria-current] { color:var(--island-green); }
 .dark .nav-language[open] > .language-toggle { background:#d9eedb; }
 .nav-tooltip-host { position:fixed; inset:0; z-index:80; pointer-events:none; }
 .nav-room { display:inline-flex; align-items:center; gap:6px; padding:10px 8px; white-space:nowrap; font-size:12px; }
