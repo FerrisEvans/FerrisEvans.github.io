@@ -1,0 +1,223 @@
+---
+translationKey: cpp_declaration
+locale: en
+title: "Declarations"
+description: "Explore C++ declarations and definitions, scopes, variable shadowing, initialization, auto, decltype, and type aliases."
+pubDate: 2025-02-25
+category: programming-language
+subcategory: cpp
+tags: [declaration, definition, scope, initialization]
+---
+
+
+Before we can use a name—an identifier—in a C++ program, we must declare it. The declaration specifies its type so the compiler knows what kind of entity the name denotes.
+
+```c++
+char ch; // allocate storage for a char; zero-initialized if it has static storage duration
+auto count = 1; // allocate storage for an int and initialize it to 1
+const char *name = "Njal"; // allocate a pointer and storage for the string literal "Njal"; initialize the pointer with the literal's address
+struct Date{int d, m, y;}; // Date is a struct with three members
+int day(Date *p) { return p->d; } // day is a function that executes some code
+using Point = std::complex<short>; // Point is an alias for std::complex<short>
+```
+Most declarations are also definitions. We can think of a definition as a special kind of declaration that provides all the information needed to use the entity in a program.
+
+```c++
+// These declarations are not definitions; the entities must be defined elsewhere when their use requires a definition.
+double sqrt(double); // function declaration
+extern int error_number; // variable declaration
+struct User; // declaration of a type name
+```
+
+An entity may have several declarations, but it cannot have multiple definitions in the same translation unit. Declarations of the same entity must agree on its type.
+
+```c++
+int count;
+int count; // error: redefinition
+extern int error_number;
+extern short error_number; // error: conflicting types
+extern int err_number;
+extern int err_number; // OK: repeated declaration
+```
+
+## 1. Leading Specifiers
+
+These specify certain properties of a declaration other than its type.
+
+1. `static`
+2. `virtual`
+3. `extern`
+4. `constexpr`
+
+## 2. Declarators
+
+A declarator consists of a <u>name</u>[^name] and optional declarator operators. The table also includes the related syntax for a trailing return type.
+
+| Position | Operator | Meaning |
+|:--:|:-----------:|:-------------|
+| Prefix | `*` | Pointer |
+| Prefix | `*const` | Const pointer |
+| Prefix | `*volatile` | Volatile pointer |
+| Prefix | `&` | Lvalue reference |
+| Prefix | `&&` | Rvalue reference |
+| Leading specifier | `auto` | Function with a trailing return type |
+| Suffix | `[]` | Array |
+| Suffix | `()` | Function |
+| Suffix | `->` | Trailing function return type |
+
+## 3. Scope
+
+**Block scope, also called local scope**: A name declared inside a block delimited by braces `{}` is accessible within that block and its nested blocks, after its declaration.
+Function parameter names are available within the function body, much like local names.
+
+
+**Class scope**: The names of class members—data members and member functions—have class scope. They can be accessed from the class's member functions.
+Ordinary code outside the class can access public members; other access is governed by the rules for protected members, private members, and friends.
+A non-static member must also be accessed through an object: an object name, an object reference, or a pointer to an object, using the appropriate member-access operator.
+**Variables declared inside a member function are local to that function, rather than class members; its parameters are likewise local names.**
+
+
+**Namespace scope**: The scope of names declared in a namespace.
+
+
+**File scope, commonly called global scope**: Names declared outside blocks and classes at the top level are in the global namespace. They can be referred to later in the translation unit, subject to the usual visibility and access rules.
+
+
+**Statement scope**: The scope associated with declarations in statements.
+
+
+**Function scope**: The scope associated with labels in a function.
+
+
+## 4. Variable Shadowing
+
+Variable shadowing occurs when a variable declared in an inner scope has the same name as a variable in an outer scope. The outer variable is said to be shadowed.
+This can be confusing: a later use of the name may not make it clear which variable is intended.
+
+> [!WARNING]
+> Giving a global variable, or a local variable in a large function, a name such as `i` or `x` is asking for confusion.
+
+We can use the scope-resolution operator `::` to access a hidden global name.
+
+> [!CAUTION]
+> There is no corresponding scope qualifier that lets us directly name a hidden local variable.
+
+```c++
+int x;
+
+void f()
+{
+  int x = 1; // hide the global variable x
+  ::x = 2; // assign to the global x
+  x = 2; // assign to the local x
+}
+```
+
+## 5. Initialization
+
+```c++
+X a1 {v}; // direct-list-initialization: a useful general choice, though initializer-list constructors can affect its meaning
+X a2 = {v};
+X a3 = v;
+X a4(v);
+```
+
+**List-initialization** uses `{}` and rejects narrowing conversions.
+
+
+- An integer conversion is narrowing if the destination cannot represent every source value, unless the initializer is a constant expression whose value fits. For example, `char` to `int` is normally safe, while an arbitrary `int` to `char` is not.
+- Conversion from a floating-point type to a lower-ranked floating-point type can be narrowing. The rules allow certain constant-expression exceptions; `float` to `double` is not narrowing, while an arbitrary `double` to `float` is.
+- A floating-point value cannot be converted to an integer in list-initialization.
+- An integer-to-floating-point conversion is narrowing unless the initializer is a constant expression whose value is exactly representable in the destination type.
+
+```c++
+void f(double d, int i)
+{
+  int x2 = d; // if d == 7.9, x2 becomes 7
+  char c2 = i; // if i == 1025 and char has 8 bits, the converted value is 1
+  
+  int x3{d}; // error: possible truncation
+  char c3{i}; // error: possible narrowing
+  
+  char c4{24}; // OK: 24 is exactly representable as a char
+  char c5{264}; // error if char has 8 bits: 264 is not representable
+  
+  int x4{2.0}; // error: double-to-int conversion is not allowed here
+}
+```
+
+For the following types, an empty initializer list `{}` initializes the object to its default value.
+
+```c++
+int x4{}; // initialized to 0
+double d4{}; // initialized to 0.0
+char *p{}; // initialized to nullptr
+vector<int> v4{}; // initialized as an empty vector
+string s4{}; // initialized as an empty string
+```
+### 5.1 auto
+
+**When using `auto` to deduce a variable's type, `=` is often a clear choice. Braces require us to distinguish direct-list-initialization from copy-list-initialization.**
+In modern C++, `auto z1{99}` deduces `int`, whereas `auto z3 = {99}` deduces `std::initializer_list<int>`. Braces do not invariably produce an unwanted type.
+
+> [!TIP]
+> When using `auto`, choose the initializer form deliberately rather than treating `=` and `{}` as interchangeable.
+
+```c++
+auto z1{99}; // type is int in modern C++
+auto z2 = 99; // type is int
+```
+
+> [!NOTE]
+> Objects with static storage duration—including global, namespace-scope, and local `static` objects—undergo static initialization. When constant initialization does not apply, they are zero-initialized before any dynamic initialization; this is not the same as inserting a `{}` initializer into every declaration.
+
+### 5.2 decltype
+
+When we want to deduce a type without defining and initializing a new variable, we can use the type specifier `decltype(expr)`.
+Its result follows the `decltype` rules for the expression: an unparenthesized name yields the declared type, while other expressions also depend on their value category. **This is especially useful in generic programming.**
+
+```c++
+// Add two matrices whose element types may differ. The result's element type is the type produced by adding corresponding elements.
+template<class T, class U>
+auto operator+(const Matrix<T>& a, const Matrix<U>& b) -> Matrix<decltype(T{}+U{})>
+{
+  Matrix<decltype(T{}+U{})> res;
+  for(int i = 0; i != a.rows(); ++i)
+    for(int j = 0; j != a.cols(); ++j)
+      res(i, j) += a(i, j) + b(i, j);
+  return res;
+}
+```
+
+## 6. Type Aliases
+
+A type alias does not introduce a new type. It is a synonym for an existing type: another name for the same thing.
+
+- The original name may be too long, complicated, or awkward.
+- A programming technique may require different types to share a name in a particular context.
+- Giving a type a name in one place may make future maintenance easier.
+
+```c++
+using Pchar = char*; // pointer to char
+using PF = int(*)(double); // pointer to a function taking double and returning int
+template<class T> using Vector = std::vector<T, My_allocator<T>>; // alias template
+```
+
+> [!CAUTION]
+> Type modifiers cannot be applied to an alias name to build a different fundamental type.
+
+```c++
+using Char = char;
+using Uchar = unsigned Char; // error
+using Uchar = unsigned char; // OK
+```
+
+The suffix `_t` is commonly used for type aliases.
+
+```c++
+typedef int int32_t; // equivalent to using int32_t = int;
+typedef short int16_t; // equivalent to using int16_t = short;
+typedef void(*PtoF)(int); // equivalent to using PtoF = void(*)(int);
+```
+
+[^name]: [Google C++ Style Guide: Naming](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/naming.html)

@@ -4,6 +4,7 @@ const directiveTypes = new Set(['containerDirective', 'leafDirective', 'textDire
 /** remark-directive parses the syntax; this transform supplies page-local numbering. */
 export default function remarkCrossReferences() {
   return (tree, file) => {
+    const english = /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en';
     const labels = new Map();
     const references = [];
     const source = String(file.value);
@@ -54,7 +55,7 @@ export default function remarkCrossReferences() {
       if (!target) file.fail(`Unknown numbered reference: ${id}. Add :::numbered{#${id}} or correct the label.`, node);
       Object.assign(node, {
         type: 'link', url: `#${target.anchor}`,
-        data: { hProperties: { className: ['cross-reference'], ariaLabel: `参见编号 ${target.number}` } },
+        data: { hProperties: { className: ['cross-reference'], ariaLabel: english ? `See reference ${target.number}` : `参见编号 ${target.number}` } },
         children: [{ type: 'text', value: `(${target.number})` }],
       });
     }
@@ -69,7 +70,7 @@ export default function remarkCrossReferences() {
         data: { hName: 'div', hProperties: { id: anchor, className: ['numbered-reference'], tabIndex: -1 } },
         children: [
           { type: 'blockquote', data: { hName: 'div', hProperties: { className: ['numbered-content'] } }, children: content },
-          { type: 'paragraph', data: { hName: 'a', hProperties: { href: `#${anchor}`, className: ['reference-number'], ariaLabel: `编号 ${number} 的永久链接` } }, children: [{ type: 'text', value: `(${number})` }] },
+          { type: 'paragraph', data: { hName: 'a', hProperties: { href: `#${anchor}`, className: ['reference-number'], ariaLabel: english ? `Permalink to reference ${number}` : `编号 ${number} 的永久链接` } }, children: [{ type: 'text', value: `(${number})` }] },
         ],
       });
     }

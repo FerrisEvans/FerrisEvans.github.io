@@ -1,10 +1,12 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import type { MarkdownHeading } from 'astro';
 import Base from './Base.astro';
 import Icon from '../components/Icon.astro';
 import Toc from '../components/Toc.astro';
 import ReadingTools from '../components/ReadingTools.astro';
-import { ABOUT_GUIDES } from '../data/about-guides';
+import { guidesFor } from '../data/about-guides';
 import katexStyles from 'katex/dist/katex.min.css?url';
 import 'rehype-code-group/styles.css';
 
@@ -15,15 +17,15 @@ interface Props {
   hasMath?: boolean;
   byline?: string;
 }
-const { title, description, headings, hasMath = false, byline = '本站阅读资料' } = Astro.props;
-const related = ABOUT_GUIDES.filter(guide => guide.href !== Astro.url.pathname.replace(/\/?$/, '/'));
+const { title, description, headings, hasMath = false, byline = t(locale, "本站阅读资料", "Reading notes") } = Astro.props;
+const related = guidesFor(locale).filter(guide => guide.href !== Astro.url.pathname.replace(/\/?$/, '/'));
 ---
 
 <Base title={title} description={description}>
   <Fragment slot="head">{hasMath && <link rel="stylesheet" href={katexStyles} />}</Fragment>
   <div id="read-progress" class="guide-progress" aria-hidden="true"></div>
   <div class="island-page guide-page">
-    <a class="guide-back" href="/about/"><Icon name="arrow-left" size={16} />返回关于作者</a>
+    <a class="guide-back" href={localizePath("/about/", locale)}><Icon name="arrow-left" size={16} />{t(locale, "返回关于作者", "Back to About")}</a>
     <div class="guide-layout">
       <article class="island-panel guide-article" data-pagefind-body>
         <header class="guide-header">
@@ -32,21 +34,21 @@ const related = ABOUT_GUIDES.filter(guide => guide.href !== Astro.url.pathname.r
           <p class="island-lead">{description}</p>
         </header>
         <details class="guide-toc-mobile" data-pagefind-ignore>
-          <summary>本页目录</summary>
+          <summary>{t(locale, "本页目录", "On this page")}</summary>
           <Toc headings={headings} showTitle={false} />
         </details>
         <div class="prose-custom"><slot /></div>
         <footer class="guide-footer" data-pagefind-ignore>
-          <a href="/about/">返回关于作者</a>
-          <nav aria-label="相关阅读">
-            <p>相关阅读</p>
-            {related.map(guide => <a href={guide.href}>{guide.title}<Icon name="arrow-right" size={15} /></a>)}
+          <a href={localizePath("/about/", locale)}>{t(locale, "返回关于作者", "Back to About")}</a>
+          <nav aria-label={t(locale, "相关阅读", "Related reading")}>
+            <p>{t(locale, "相关阅读", "Related reading")}</p>
+            {related.map(guide => <a href={localizePath(guide.href, locale)}>{guide.title}<Icon name="arrow-right" size={15} /></a>)}
           </nav>
         </footer>
       </article>
       <aside class="guide-toc-desktop" data-pagefind-ignore>
         <div class="guide-bookmarks">
-          <p class="guide-toc-label">本页目录</p>
+          <p class="guide-toc-label">{t(locale, "本页目录", "On this page")}</p>
           <Toc headings={headings} showTitle={false} />
         </div>
       </aside>

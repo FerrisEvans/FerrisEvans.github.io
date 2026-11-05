@@ -1,0 +1,98 @@
+---
+import { countLabel, locales, getLocale, localizePath, t } from '../../../i18n';
+const locale = getLocale(Astro.url.pathname);
+import type { GetStaticPaths } from 'astro';
+import { Title } from 'animal-island-ui';
+import Base from '../../../layouts/Base.astro';
+import PostListItem from '../../../components/PostListItem.astro';
+import Icon from '../../../components/Icon.astro';
+import { categoriesFor, labelFromSlug } from '../../../data/site';
+import { getPosts, type Post } from '../../../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const paths = await Promise.all(locales.map(async (locale) => {
+  const posts = await getPosts({ locale });
+  return categoriesFor(posts.map((post) => post.data.category), locale).map((cat) => ({
+    params: { locale, category: cat.slug },
+    props: {
+      category: cat,
+      posts: posts.filter((post) => post.data.category === cat.slug),
+    },
+  }));
+  }));
+  return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { category, posts } = Astro.props as { category: ReturnType<typeof categoriesFor>[number]; posts: Post[] };
+
+const groups: { label: string; posts: Post[] }[] = [];
+const grouped = new Map<string, Post[]>();
+for (const post of posts) {
+  const key = post.data.subcategory ?? '';
+  if (!grouped.has(key)) grouped.set(key, []);
+  grouped.get(key)!.push(post);
+}
+const orderedKeys = [...Object.keys(category.subcategories), ...[...grouped.keys()].filter((k) => !(k in category.subcategories))];
+for (const key of orderedKeys) {
+  const list = grouped.get(key);
+  if (!list?.length) continue;
+  groups.push({ label: key ? (category.subcategories[key] ?? labelFromSlug(key)) : t(locale, "全部文章"), posts: list });
+}
+---
+
+<Base title={category.label} description={category.description}>
+  <div class="island-page">
+    <a href={localizePath("/categories/", locale)} class="back-link blog-button"><Icon name="arrow-left" size={17} />{t(locale, "全部分类")}</a>
+    <header class="collection-intro island-panel">
+      <span class="intro-symbol"><Icon name="book" size={52} /></span>
+      <div>
+        <h1 class="collection-title"><Title color="app-yellow" size="middle">{category.label}</Title></h1>
+        <p class="island-lead">{category.description}</p>
+        <p class="collection-total">{t(locale, "这本小册子里，收集了")} {countLabel(locale, posts.length, "篇笔记", "note")}</p>
+      </div>
+    </header>
+    {groups.length > 1 && (
+      <nav aria-label={t(locale, "子分类")} class="group-index">
+        {groups.map((group, index) => <a href={localizePath(`#group-${index}`, locale)}><span>{group.label}</span><span>{group.posts.length}</span></a>)}
+      </nav>
+    )}
+    {groups.map((group, index) => (
+      <section class="collection-group" aria-labelledby={`group-${index}`}>
+        <div class="group-heading">
+          <h2 id={`group-${index}`}>{group.label}</h2>
+          <span>{countLabel(locale, group.posts.length, "篇", "post")}</span>
+        </div>
+        <ul class="collection-notes">
+          {group.posts.map((post) => <PostListItem post={post} headingLevel={3} showTags />)}
+        </ul>
+      </section>
+    ))}
+    {posts.length === 0 && <p class="empty-collection island-panel">{t(locale, "这一册还没有笔记。")}<a href={localizePath("/notes/", locale)}>{t(locale, "先读读其他文章。")}</a></p>}
+  </div>
+</Base>
+
+<style>
+  .back-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-bottom: 18px; padding: 8px 16px; font-size: 14px; }
+  .collection-intro { display: flex; align-items: center; gap: 28px; padding: 36px; background: #fff3cf; background-image: radial-gradient(#e5c88840 1.4px, transparent 1.4px); background-size: 14px 14px; border: 2px solid #e3ca91; border-radius: 30px; box-shadow: none; }
+  .collection-title { margin-bottom: 22px; }
+  .intro-symbol { display: grid; place-items: center; flex: 0 0 90px; height: 90px; border-radius: 36px 28px 34px 30px; color: #794f27; background: #fff9e7; transform: rotate(-7deg); }
+  .collection-total { margin-top: 18px; color: var(--color-ink-soft); font-size: 14px; font-weight: 600; }
+  .group-index { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .group-index a { display: flex; align-items: center; gap: 15px; min-height: 46px; padding: 9px 20px; border: 2px solid #c1dfd0; border-radius: 50px; font-size: 14px; font-weight: 700; background: #ecf8e9; }
+  .group-index a:hover { border-color: var(--color-accent); color: var(--color-accent); }
+  .group-index a span:last-child { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; background: #fffbe7; font-size: 12px; }
+  .collection-group { margin-top: 36px; }
+  .group-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .group-heading h2 { scroll-margin-top: 115px; font-size: 23px; font-weight: 800; }
+  .group-heading > span { border-radius: 50px; padding: 5px 12px; background: #f7e2a4; color: #725d42; font-size: 12px; font-weight: 700; }
+  .collection-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; list-style: none; }
+  .empty-collection { margin-top: 28px; padding: 28px; color: var(--color-ink-soft); }
+  .empty-collection a { text-decoration: underline; }
+  :global(.dark) .collection-intro { background-color: #493f2c; border-color: #7c6a42; background-image: radial-gradient(#eedb9f16 1.4px, transparent 1.4px); }
+  :global(.dark) .group-index a { background: var(--color-night-elev); border-color: var(--color-line-dark); }
+  :global(.dark) .intro-symbol { color: #f3d28f; background: #605035; }
+  :global(.dark) .collection-total, :global(.dark) .empty-collection { color: var(--color-snow-soft); }
+  :global(.dark) .group-index a:hover { border-color: var(--color-accent-dark); color: var(--color-accent-dark); }
+  :global(.dark) .group-index a span:last-child, :global(.dark) .group-heading > span { background: #5c4e34; color: #f3dba9; }
+  @media (max-width: 640px) { .collection-intro { display: block; padding: 27px; } .intro-symbol { width: 76px; height: 76px; margin-bottom: 25px; } .collection-notes { grid-template-columns: 1fr; } }
+</style>

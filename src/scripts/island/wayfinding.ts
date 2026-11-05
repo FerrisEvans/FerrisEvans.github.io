@@ -3,17 +3,29 @@ import {
   PlaneGeometry, Shape, SRGBColorSpace, Vector3, type Object3D,
 } from 'three';
 import { viewObjects } from './types';
+import bookIcon from 'naive-icons/svg/book.svg?raw';
+import gridIcon from 'naive-icons/svg/grid.svg?raw';
+import tagIcon from 'naive-icons/svg/tag.svg?raw';
 
 /** Small, physical signs share their prop's picking/outline ownership. They are
  * world geometry, including their backs, so trees occlude them naturally. */
-export function createWayfinding(root: Object3D) {
+export async function createWayfinding(root: Object3D, signal: AbortSignal) {
+  // Reuse the exact SVGs used by the navigation. Their geometry is independent
+  // of language and does not wait for a web font before the island can open.
+  const icons = await Promise.all([bookIcon, gridIcon, tagIcon].map(async svg => {
+    const image = new Image();
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg.replace('<svg ', '<svg width="256" height="256" '))}`;
+    await image.decode();
+    return image;
+  }));
+  if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
   const wood = new MeshStandardMaterial({ color: '#b88d62', roughness: .94 });
   const cord = new MeshStandardMaterial({ color: '#8c7251', roughness: 1 });
   const plaques: Group[] = [];
   const specs = [
-    { view: 'library', text: '笔记', kind: 'paper', x: -1.87, y: 2.60, z: -1.55, width: 1.10, height: .62, yaw: .28 },
-    { view: 'categories', text: '分类', kind: 'arrow', x: 1.45, y: 1.23, z: 2.18, width: 1.25, height: .59, yaw: .54 },
-    { view: 'tags', text: '标签', kind: 'plant', x: 3.57, y: 1.40, z: -.02, width: 1.12, height: .60, yaw: .40 },
+    { view: 'library', icon: 0, kind: 'paper', x: -1.87, y: 2.60, z: -1.55, width: 1.10, height: .62, yaw: .28 },
+    { view: 'categories', icon: 1, kind: 'arrow', x: 1.45, y: 1.23, z: 2.18, width: 1.25, height: .59, yaw: .54 },
+    { view: 'tags', icon: 2, kind: 'plant', x: 3.57, y: 1.40, z: -.02, width: 1.12, height: .60, yaw: .40 },
   ] as const;
   function rod(parent: Object3D, start: Vector3, end: Vector3, radius: number, material: MeshStandardMaterial) {
     const delta = end.clone().sub(start);
@@ -51,14 +63,9 @@ export function createWayfinding(root: Object3D) {
     } else {
       rod(group, new Vector3(0, .45 - spec.y, -.055), new Vector3(0, h / 2 - .05, -.055), .045, wood);
     }
-    // Reuse the site's bundled CJK glyphs; system faces remain fallback only.
     const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 256;
     const ctx = canvas.getContext('2d')!;
-    ctx.fillStyle = '#61442e'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = '700 156px "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif';
-    ctx.fillText(spec.text, 256, 133);
-    ctx.strokeStyle = '#907452'; ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.moveTo(87, 224); ctx.quadraticCurveTo(256, 214, 425, 224); ctx.stroke();
+    ctx.drawImage(icons[spec.icon], 146, 18, 220, 220);
     const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace;
     const ink = new MeshStandardMaterial({ map, transparent: true, roughness: 1, depthWrite: false });
     for (const back of [false, true]) {
@@ -70,7 +77,7 @@ export function createWayfinding(root: Object3D) {
   }
   return {
     resize(width: number) {
-      // Give the three labels enough ink on a narrow screen. Supports keep
+      // Keep the three entrance symbols readable on a narrow screen. Supports keep
       // their ground/shelf contacts; only the signs themselves grow slightly.
       const scale = 1 + Math.max(0, Math.min(.55, (700 - width) / 500));
       plaques.forEach(plaque => plaque.scale.setScalar(scale));

@@ -22,6 +22,9 @@ async function fixture(t) {
     'src/styles/world.css': 'capture framing source',
     'src/styles/island-tooltip.css': 'shared tooltip styles',
     'node_modules/three/package.json': '{"version":"0.186.1"}',
+    'node_modules/naive-icons/svg/book.svg': '<svg><path id="book"/></svg>',
+    'node_modules/naive-icons/svg/grid.svg': '<svg><path id="grid"/></svg>',
+    'node_modules/naive-icons/svg/tag.svg': '<svg><path id="tag"/></svg>',
   })) await write(file, bytes);
   return { root, write };
 }
@@ -36,6 +39,21 @@ test('geometry, authoring source and renderer changes invalidate the same scene 
     await assert.rejects(verifyManifest(baseline, root, { modelOnly: true }), /sources changed/);
     assert.notEqual((await modelManifest(root)).buildId, baseline.buildId);
     await write(file, original);
+  }
+});
+
+test('each shared navigation icon invalidates the poster seal when its SVG changes', async t => {
+  const { root, write } = await fixture(t);
+  const baseline = await modelManifest(root);
+  for (const icon of ['book', 'grid', 'tag']) {
+    const file = `node_modules/naive-icons/svg/${icon}.svg`;
+    assert(baseline.sources[file], `${icon} belongs to the scene source seal`);
+    const original = await readFile(join(root, file));
+    await write(file, `<svg><path id="updated-${icon}"/></svg>`);
+    await assert.rejects(verifyManifest(baseline, root, { modelOnly: true }), /sources changed/);
+    assert.notEqual((await modelManifest(root)).buildId, baseline.buildId);
+    await write(file, original);
+    await verifyManifest(baseline, root, { modelOnly: true });
   }
 });
 

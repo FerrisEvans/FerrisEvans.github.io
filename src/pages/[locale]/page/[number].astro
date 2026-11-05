@@ -1,0 +1,20 @@
+---
+import { locales, getLocale, t } from '../../../i18n';
+const locale = getLocale(Astro.url.pathname);
+import type { GetStaticPaths } from 'astro';
+import LegacyRedirect from '../../../layouts/LegacyRedirect.astro';
+import { siteFor } from '../../../data/site';
+import { getPosts } from '../../../utils/posts';
+import { notesPageUrl } from '../../../utils/routes';
+export const getStaticPaths = (async () => {
+  const paths = await Promise.all(locales.map(async (locale) => {
+  const count = Math.max(1, Math.ceil((await getPosts({ locale })).length / siteFor(locale).postsPerPage));
+  return Array.from({ length: count }, (_, index) => ({
+    params: { locale, number: String(index + 1) }, props: { page: index + 1 },
+  }));
+  }));
+  return paths.flat();
+}) satisfies GetStaticPaths;
+const { page } = Astro.props;
+---
+<LegacyRedirect to={notesPageUrl(page, locale)} label={t(locale, `笔记 · 第 ${page} 页`, `Notes · Page ${page}`)} />

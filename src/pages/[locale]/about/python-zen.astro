@@ -1,0 +1,30 @@
+---
+import { locales, getLocale, t } from '../../../i18n';
+export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
+const locale = getLocale(Astro.url.pathname);
+import Guide from '../../../layouts/Guide.astro';
+import { aboutFor } from '../../../data/room-about';
+import { Code } from 'astro:components';
+import { codeLineNumbers } from '../../../plugins/code-line-numbers.mjs';
+const { zen } = aboutFor(locale);
+const headings = [{ depth:2, slug:'read-in-python', text:t(locale, "在 Python 中阅读", "Read it in Python") }, { depth:2, slug:'bilingual-text', text:t(locale, "中英对照", "The principles") }];
+---
+<Guide title={zen.title} description={t(locale, "十九条关于简洁、明确与可读性的编程思考，中英对照。", "Nineteen thoughts on simplicity, clarity, and readable code.")} headings={headings} byline={zen.author}>
+  <p>{t(locale, "这些简短的原则提醒我们，在代码的表达与设计之间反复权衡。中文沿用本站原有译文，英文原文见", "These short principles invite us to weigh the tradeoffs in how we express and design code. Read the original in")} <a href="https://peps.python.org/pep-0020/">PEP 20 — The Zen of Python</a>{t(locale, "。", ".")}</p>
+  <h2 id="read-in-python">{t(locale, "在 Python 中阅读", "Read it in Python")}</h2>
+  <p>{t(locale, "在 Python 解释器中运行：", "Run this in a Python interpreter:")}</p>
+  <Code code={zen.command} lang="python" themes={{ light: 'github-light-default', dark: 'github-dark-default' }} transformers={[codeLineNumbers]} />
+  <h2 id="bilingual-text">{t(locale, "中英对照", "The principles")}</h2>
+  <ol class="zen-lines">{zen.lines.map(line => {
+    const split = line.search(/[\u3400-\u9fff]/u);
+    const english = split === -1 ? line : line.slice(0, split).trim();
+    return <li><p lang="en">{english}</p>{locale === 'zh' && split !== -1 && <p>{line.slice(split)}</p>}</li>;
+  })}</ol>
+</Guide>
+<style>
+  .zen-lines li { padding:6px 0 16px; }
+  .zen-lines li p { margin:6px 0; }
+  .zen-lines li p[lang="en"] { font-weight:550; }
+  .zen-lines li p + p { font-size:.9em; color:var(--color-ink-soft); }
+  :global(.dark) .zen-lines li p + p { color:var(--color-snow-soft); }
+</style>

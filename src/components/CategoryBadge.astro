@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import { categoryOf } from '../data/site';
 
 interface Props {
@@ -7,11 +9,11 @@ interface Props {
 }
 
 const { category, class: className } = Astro.props;
-const cat = categoryOf(category);
+const cat = categoryOf(category, locale);
 ---
 
 <a
-  href={`/categories/${cat.slug}/`}
+  href={localizePath(`/categories/${cat.slug}/`, locale)}
   class:list={[
     'category-badge',
     className,

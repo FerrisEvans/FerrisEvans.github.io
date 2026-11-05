@@ -1,3 +1,4 @@
+import { type Locale, t, localizePath } from '../i18n';
 import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'motion/react';
 import { initialTagTokenColor, randomizeTagTokens } from '../scripts/tag-tokens';
@@ -7,7 +8,7 @@ import '../styles/tag-token.css';
 import '../styles/tag-word-cloud.css';
 
 type Tag = { name: string; count: number; href: string };
-interface TagWordCloudProps { tags: Tag[]; }
+interface TagWordCloudProps { tags: Tag[]; locale: Locale; }
 type Word = { name: string; count: number; width: number; height: number; textWidth: number; textHeight: number };
 type Placement = { x: number; y: number; width: number; height: number; textWidth: number; textHeight: number };
 type Box = Placement & { name: string };
@@ -22,8 +23,8 @@ const spring = { mass: .2, stiffness: 180, damping: 18, restDelta: .001, restSpe
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
 // two-dimensional cloud. See docs/tag-cloud-motion.md for source and license.
 // Native links move with their text; the selected word pins its current offset.
-function CloudWord({ tag, hidden, position, size, plan, active, enabled, live }: {
-  tag: Tag; hidden: boolean; position?: Placement; size: number;
+function CloudWord({ locale, tag, hidden, position, size, plan, active, enabled, live }: {
+  locale: Locale; tag: Tag; hidden: boolean; position?: Placement; size: number;
   plan: MotionValue<Record<string, WordMotion>>; active: MotionValue<Selection>;
   enabled: boolean; live: LiveWords;
 }) {
@@ -41,7 +42,7 @@ function CloudWord({ tag, hidden, position, size, plan, active, enabled, live }:
     return () => { unsubscribe(); live.delete(tag.name); };
   }, [tag.name, live, active, x, y, scale]);
   return <motion.li data-word={tag.name} hidden={hidden} style={{ ...(position ? { position: 'absolute', left: position.x, top: position.y, width: position.width, height: position.height } : {}), x: enabled ? x : 0, y: enabled ? y : 0, zIndex }}>
-    <a className="tag-token tag-item" href={tag.href} data-count={tag.count} data-tag={tag.name.toLowerCase()} data-tag-token={tag.name} data-token-color={initialTagTokenColor(tag.name)} aria-label={`${tag.name}，${tag.count} 篇笔记`} style={{ '--tag-token-size': `${size}px` } as CSSProperties}>
+    <a className="tag-token tag-item" href={tag.href} data-count={tag.count} data-tag={tag.name.toLowerCase()} data-tag-token={tag.name} data-token-color={initialTagTokenColor(tag.name)} aria-label={t(locale, `${tag.name}，${tag.count} 篇笔记`, `${tag.name}, ${tag.count} ${tag.count === 1 ? "note" : "notes"}`)} style={{ '--tag-token-size': `${size}px` } as CSSProperties}>
       <motion.span className="tag-word" style={{ scale: enabled ? scale : 1 }}>{tag.name}</motion.span>
     </a>
   </motion.li>;
@@ -85,7 +86,7 @@ function packWords(words: Word[], width: number): CloudLayout | null {
   return null; // Natural, weighted wrapping remains usable for unusually long collections.
 }
 
-export default function TagWordCloud({ tags }: TagWordCloudProps) {
+export default function TagWordCloud({ tags, locale }: TagWordCloudProps) {
   const root = useRef<HTMLDivElement>(null);
   const cloud = useRef<HTMLUListElement>(null);
   const search = useRef<HTMLInputElement>(null);
@@ -184,7 +185,7 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
       const rect = link.getBoundingClientRect(), bounds = host!.getBoundingClientRect();
       // The selected link is pinned at its current animated position.
       // Do not replay the shared popup animation when the count changes.
-      hint.show(`${link.dataset.count} 篇笔记`, rect.left + rect.width / 2 - bounds.left, rect.top - bounds.top, true);
+      hint.show(t(locale, `${link.dataset.count} 篇笔记`, `${link.dataset.count} ${link.dataset.count === "1" ? "note" : "notes"}`), rect.left + rect.width / 2 - bounds.left, rect.top - bounds.top, true);
       shown = link;
     }
     function select(link: HTMLAnchorElement | null) {
@@ -261,18 +262,18 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
       {tags.length > 0 && <div className="tag-tools">
         <label className="tag-search">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
-          <input id="tag-filter" ref={search} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="筛选标签…" aria-label="筛选标签" />
+          <input id="tag-filter" ref={search} type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={t(locale, "筛选标签…", "Filter tags…")} aria-label={t(locale, "筛选标签", "Filter tags")} />
         </label>
-        <p id="tag-count" className="sr-only" role="status" aria-live="polite">{normalized ? `找到 ${visibleCount} 个标签` : `${tags.length} 个标签`}</p>
+        <p id="tag-count" className="sr-only" role="status" aria-live="polite">{locale === "en" ? `${visibleCount} ${visibleCount === 1 ? "tag" : "tags"}` : normalized ? `找到 ${visibleCount} 个标签` : `${tags.length} 个标签`}</p>
       </div>}
-      <ul className="tag-word-cloud" aria-label="标签词云" ref={cloud} hidden={visibleCount === 0} data-packed={Boolean(layout)} style={layout ? { height: layout.height } : undefined}>
-        {tags.map(tag => <CloudWord key={tag.name} tag={tag} hidden={!tag.name.toLowerCase().includes(normalized)}
+      <ul className="tag-word-cloud" aria-label={t(locale, "标签词云", "Tag cloud")} ref={cloud} hidden={visibleCount === 0} data-packed={Boolean(layout)} style={layout ? { height: layout.height } : undefined}>
+        {tags.map(tag => <CloudWord locale={locale} key={tag.name} tag={tag} hidden={!tag.name.toLowerCase().includes(normalized)}
           position={layout?.positions[tag.name]} size={fontSize(tag.count)} plan={plan} active={active}
           enabled={motionEnabled} live={live.current} />)}
       </ul>
       {visibleCount === 0 && <div id="tag-empty" className="tag-cloud-empty">
-        <p>{tags.length ? '没有匹配的标签。换个关键词，再找找看。' : '标签还在慢慢收集，先翻开一篇笔记吧。'}</p>
-        {tags.length ? <button id="tag-reset" type="button" className="blog-button" onClick={() => { setQuery(''); search.current?.focus(); }}>清空筛选</button> : <a className="blog-button" href="/notes/">翻开笔记</a>}
+        <p>{tags.length ? t(locale, "没有匹配的标签。换个关键词，再找找看。", "No matching tags. Try another keyword.") : t(locale, "标签还在慢慢收集，先翻开一篇笔记吧。", "No tags yet. Start with a note.")}</p>
+        {tags.length ? <button id="tag-reset" type="button" className="blog-button" onClick={() => { setQuery(''); search.current?.focus(); }}>{t(locale, "清空筛选", "Clear filter")}</button> : <a className="blog-button" href={localizePath("/notes/", locale)}>{t(locale, "翻开笔记", "Browse notes")}</a>}
       </div>}
     </div>
   );

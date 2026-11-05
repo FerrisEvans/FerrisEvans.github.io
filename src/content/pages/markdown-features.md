@@ -1,9 +1,10 @@
 ---
 title: Markdown 语法与效果
 description: 按 CommonMark、GFM、HTML 与本站插件分类的写作示例，附发布元数据说明。
+locale: zh
 ---
 
-本页展示本站实际支持的写法。每项的“写法”可以直接复制，“效果”由同一套 Markdown 渲染器生成。如何组织内容、选择措辞和统一排版，见[文档格式约定](/about/writing/)。
+本页展示本站实际支持的写法。每项的“写法”可以直接复制，“效果”由同一套 Markdown 渲染器生成。如何组织内容、选择措辞和统一排版，见[文档格式约定](/zh/about/writing/)。
 
 | 层次 | 本页内容 | 换到其他平台时 |
 | --- | --- | --- |
@@ -41,7 +42,7 @@ GFM 是以 CommonMark 为基础的扩展规范；“GitHub 页面能显示”不
 
 ### 强调、行内代码与转义
 
-`**...**` 表示强强调，`*...*` 表示强调，反引号用于代码标识符。要显示语法字符本身，可在前面加反斜杠。具体语义选择见[文档格式约定](/about/writing/)。
+`**...**` 表示强强调，`*...*` 表示强调，反引号用于代码标识符。要显示语法字符本身，可在前面加反斜杠。具体语义选择见[文档格式约定](/zh/about/writing/)。
 
 **写法**
 
@@ -112,14 +113,14 @@ This is *emphasis*. 星号本身写成 \*。
 **写法**
 
 ```markdown
-[返回关于作者](/about/)
+[返回关于作者](/zh/about/)
 
 ![检索增强生成的流程示意图](/assets/lib/rag.jpeg)
 ```
 
 **效果**
 
-[返回关于作者](/about/)
+[返回关于作者](/zh/about/)
 
 ![检索增强生成的流程示意图](/assets/lib/rag.jpeg)
 
@@ -492,7 +493,7 @@ public partial class Hello : Node
 
 ### Frontmatter 写法
 
-YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `src/content/blog/hello-markdown.md` 后，下面的示例会得到 `/posts/hello-markdown/` 路径。
+YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `src/content/blog/zh/hello-markdown.md` 后，下面的示例会得到 `/zh/posts/hello-markdown/` 路径。英文版放在 `src/content/blog/en/hello-markdown.md`，两份文件使用相同的 `translationKey`。
 
 **写法**
 
@@ -503,6 +504,8 @@ description: 记录一个可复现的小实验。
 pubDate: 2026-11-04
 category: writing
 tags: [Markdown, 写作]
+locale: zh
+translationKey: hello-markdown
 draft: true
 ---
 ```
@@ -514,6 +517,8 @@ draft: true
 | `title` | 是 | 页面标题和文章列表标题 |
 | `pubDate` | 是 | 发布日期和文章排序 |
 | `category` | 是 | 分类索引，使用小写英文字母、数字和连字符 |
+| `locale` | 是 | 内容语言：`zh` 或 `en` |
+| `translationKey` | 是 | 中英文共享的稳定标识，区分大小写 |
 | `description` | 否 | 摘要与页面描述 |
 | `tags` | 否 | 标签索引，省略时为空 |
 | `subcategory` | 否 | 子分类标识，格式与分类相同 |
@@ -523,7 +528,7 @@ draft: true
 
 ### 预览、发布与删除
 
-设置 `draft: true` 后，运行 `npm run dev`，在本地 `/drafts/` 预览；生产构建不会生成这篇草稿的文章或索引。准备发布时改为 `draft: false`。新增或删除文章后，下次构建会更新文章列表、分类、标签、归档、RSS、站点地图和搜索索引。
+设置 `draft: true` 后，运行 `npm run dev`，在本地 `/zh/drafts/` 预览；生产构建不会生成这篇草稿的文章或索引。草稿可以暂时只有一种语言。准备发布时，须提供相同 `translationKey` 的中英文版本，并把两份都改为 `draft: false`；已发布文章必须具备已发布的对应译文。新增或删除文章后，下次构建会更新文章列表、分类、标签、归档、RSS、站点地图和搜索索引。
 
 不需要逐篇维护索引配置或书房字体。`name`、`desc`、`latex` 不是本文档采用的发布字段，请使用上表中的名称。流程图使用普通图片，本站不提供 Mermaid 渲染。
 

@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import type { CategoryDef } from '../data/site';
 
 interface Props {
@@ -7,7 +9,7 @@ interface Props {
   label?: string;
 }
 
-const { categories, counts, label = '栏目' } = Astro.props;
+const { categories, counts, label = t(locale, "栏目") } = Astro.props;
 ---
 
 {
@@ -18,23 +20,23 @@ const { categories, counts, label = '栏目' } = Astro.props;
         const unconfigured = cat.configured === false;
         return (
           <li>
-            <a href={`/categories/${cat.slug}/`} class="category-wall-card group">
+            <a href={localizePath(`/categories/${cat.slug}/`, locale)} class="category-wall-card group">
               <span class="category-wall-bar" style={`background: ${cat.accent};`} aria-hidden="true" />
               <span class="flex items-center justify-between gap-2">
                 <span class="font-mono text-sm font-semibold" style={`color: ${cat.accent};`}>
                   {cat.mark}
                 </span>
-                {unconfigured && <span class="category-wall-flag">未配置</span>}
+                {unconfigured && <span class="category-wall-flag">{t(locale, "未配置")}</span>}
               </span>
               <span class="mt-3 block font-sans text-lg font-medium tracking-tight text-ink transition-colors group-hover:text-accent dark:text-snow dark:group-hover:text-accent-dark">
                 {cat.label}
               </span>
               {unconfigured ? (
-                <span class="mt-1 block text-xs leading-5 text-ink-faint dark:text-snow-faint">在 site.ts 的 CATEGORIES 补全显示名</span>
+                <span class="mt-1 block text-xs leading-5 text-ink-faint dark:text-snow-faint">{t(locale, "在 site.ts 的 CATEGORIES 补全显示名")}</span>
               ) : (
-                <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? '尚无文章' : `${count} 篇文章`}</span>
+                <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? t(locale, "尚无文章") : t(locale, `${count} 篇文章`, `${count} ${count === 1 ? "post" : "posts"}`)}</span>
               )}
-              {unconfigured && <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? '尚无文章' : `${count} 篇文章`}</span>}
+              {unconfigured && <span class="mt-1 block text-xs text-ink-soft dark:text-snow-soft">{count === 0 ? t(locale, "尚无文章") : t(locale, `${count} 篇文章`, `${count} ${count === 1 ? "post" : "posts"}`)}</span>}
             </a>
           </li>
         );

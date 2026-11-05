@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t, tagLabel } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import manifest from '../../public/island/manifest.json';
 interface Props { id?: string; class?: string; posterVersion: string; alt?: string; decorative?: boolean; }
 const { id, class: className, posterVersion, alt = '', decorative = false } = Astro.props;

@@ -1,29 +1,22 @@
-import { readdirSync } from 'node:fs';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'blog'>;
 
-const caseMap = new Map(
-  readdirSync('./src/content/blog')
-    .filter((f) => f.endsWith('.md'))
-    .map((f) => {
-      const name = f.slice(0, -'.md'.length);
-      return [name.toLowerCase(), name];
-    })
-);
+import { type Locale, tagId } from '../i18n';
 
 /** Drafts are opt-in for local previews and can never enter a production build. */
-export async function getPosts(options: { includeDrafts?: boolean } = {}): Promise<Post[]> {
+export async function getPosts(options: { includeDrafts?: boolean; locale?: Locale } = {}): Promise<Post[]> {
   const includeDrafts = import.meta.env.DEV && options.includeDrafts === true;
-  const posts = await getCollection('blog', ({ data }) => !data.draft || includeDrafts);
-  return posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const posts = await getCollection('blog', ({ data }) => data.locale === (options.locale ?? 'en') && (!data.draft || includeDrafts));
+  return posts.map(post => ({ ...post, data: { ...post.data, tags: post.data.tags.map(tagId) } })).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
 
 export function postSlug(post: Post): string {
-  return caseMap.get(post.id) ?? post.id;
+  return post.data.translationKey;
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date, locale: Locale = 'zh'): string {
+  if (locale === 'en') return new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(date);
   return `${date.getUTCFullYear()}年${date.getUTCMonth() + 1}月${date.getUTCDate()}日`;
 }
 
@@ -49,5 +42,5 @@ export function readingTime(post: Post): number {
 }
 
 export function postUrl(post: Post): string {
-  return `/posts/${postSlug(post)}/`;
+  return `/${post.data.locale}/posts/${postSlug(post)}/`;
 }

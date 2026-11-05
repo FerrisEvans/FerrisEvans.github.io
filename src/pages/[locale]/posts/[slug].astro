@@ -1,0 +1,242 @@
+---
+import { countLabel, locales, getLocale, localizePath, t } from '../../../i18n';
+const locale = getLocale(Astro.url.pathname);
+import { render } from 'astro:content';
+import katexStyles from 'katex/dist/katex.min.css?url';
+import 'rehype-code-group/styles.css';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import Icon from '../../../components/Icon.astro';
+import Toc from '../../../components/Toc.astro';
+import ReadingTools from '../../../components/ReadingTools.astro';
+import Giscus from '../../../components/Giscus.astro';
+import CategoryBadge from '../../../components/CategoryBadge.astro';
+import TagChip from '../../../components/TagChip.astro';
+import { SITE, categoryOf, labelFromSlug } from '../../../data/site';
+import { getPosts, formatDate, postUrl, postSlug, readingTime, wordCount, type Post } from '../../../utils/posts';
+
+export const getStaticPaths = (async () => {
+  const paths = await Promise.all(locales.map(async (locale) => {
+  const posts = await getPosts({ locale, includeDrafts: import.meta.env.DEV });
+  return posts.map((post) => {
+    const visiblePosts = posts.filter((candidate) => !candidate.data.draft || candidate.id === post.id);
+    const position = visiblePosts.findIndex((candidate) => candidate.id === post.id);
+    const series = visiblePosts
+      .filter((candidate) =>
+        candidate.data.category === post.data.category &&
+        (candidate.data.subcategory ?? '') === (post.data.subcategory ?? ''))
+      .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+    const related = visiblePosts
+      .filter((candidate) => candidate.id !== post.id && candidate.data.category === post.data.category)
+      .slice(0, 3);
+    return {
+      params: { locale, slug: postSlug(post) },
+      props: {
+        post,
+        older: visiblePosts[position + 1] ?? null,
+        newer: visiblePosts[position - 1] ?? null,
+        series,
+        related,
+      },
+    };
+  });
+  }));
+  return paths.flat();
+}) satisfies GetStaticPaths;
+
+const { post, older, newer, series, related } = Astro.props as {
+  post: Post;
+  older: Post | null;
+  newer: Post | null;
+  series: Post[];
+  related: Post[];
+};
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const hasMath = remarkPluginFrontmatter.hasMath === true || post.data.math;
+const isDraft = post.data.draft;
+const cat = categoryOf(post.data.category, locale);
+const sub = post.data.subcategory
+  ? (cat.subcategories[post.data.subcategory] ?? labelFromSlug(post.data.subcategory))
+  : undefined;
+const seriesLabel = sub ?? cat.label;
+const seriesIndex = series.findIndex((item) => item.id === post.id) + 1;
+const readingMinutes = readingTime(post);
+const words = wordCount(post);
+const hasToc = headings.some((heading) => heading.depth === 2 || heading.depth === 3);
+const tocCount = headings.filter((heading) => heading.depth === 2 || heading.depth === 3).length;
+
+---
+
+<Base alternates={!isDraft} title={post.data.title} description={post.data.description}>
+  <Fragment slot="head">
+    {hasMath && <link rel="stylesheet" href={katexStyles} />}
+    {isDraft && <meta name="robots" content="noindex,nofollow" />}
+  </Fragment>
+  <div id="read-progress" class="fixed left-0 top-0 z-50 h-0.5 bg-accent dark:bg-accent-dark" style="width: 0%" aria-hidden="true"></div>
+
+  <div class="island-page reading-page">
+    {isDraft && <aside class="draft-preview" aria-label={t(locale, "草稿预览")} data-pagefind-ignore><strong>{t(locale, "草稿预览 · 仅本地可见")}</strong><p>{t(locale, "准备发布时，将文章头部的")} <code>draft</code> {t(locale, "改为")} <code>false</code>{locale === "zh" ? "。" : "."}</p><a href={localizePath("/drafts/", locale)}>{t(locale, "返回草稿列表")}</a></aside>}
+    <nav aria-label={t(locale, "面包屑")} class="reading-breadcrumb">
+      <a href={localizePath("/notes/", locale)}><Icon name="book" size={16} /> {t(locale, "文章")}</a>
+      <span aria-hidden="true">/</span>
+      <a href={localizePath(`/categories/${cat.slug}/`, locale)}>{cat.label}</a>
+      {sub && <><span aria-hidden="true">/</span><span>{sub}</span></>}
+    </nav>
+
+    <div class:list={["reading-layout", hasToc && "has-bookmarks"]}>
+      <article class="island-panel notebook-sheet">
+        <header class="notebook-header">
+          <div class="notebook-label"><span class="island-eyebrow">{t(locale, "一页小笔记")}</span><Icon name="leaf" size={24} /></div>
+          <h1>{post.data.title}</h1>
+          {post.data.description && <p class="notebook-description">{post.data.description}</p>}
+          <div class="notebook-meta">
+            <a href={localizePath("/about/", locale)} rel="author"><Icon name="user" size={15} />{t(locale, `作者：${SITE.author}`, `By ${SITE.author}`)}</a>
+            <span><Icon name="calendar" size={15} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time></span>
+            <span><Icon name="clock" size={15} />{readingMinutes} {t(locale, "分钟 · 约")} {words} {t(locale, "字")}</span>
+            {post.data.updatedDate && <span><time datetime={post.data.updatedDate.toISOString()}>{t(locale, "更新于")} {formatDate(post.data.updatedDate, locale)}</time></span>}
+          </div>
+          <div class="notebook-topics">
+            <CategoryBadge category={post.data.category} />
+            {post.data.tags.map((tag) => <TagChip tag={tag} />)}
+          </div>
+          {!isDraft && <a href={localizePath("#comments", locale)} class="comments-jump"><Icon name="message" size={16} />{t(locale, "参与讨论")}<Icon name="arrow-right" size={14} /></a>}
+
+          {series.length > 1 && (
+            <details class="series-nav notebook-series">
+              <summary>
+                <span class="series-heading"><Icon name="layers" size={18} />{seriesLabel} {t(locale, "系列")}</span>
+                <span class="series-count">{t(locale, `第 ${seriesIndex} / ${series.length} 篇`, `${seriesIndex} of ${series.length}`)}</span>
+              </summary>
+              <ol>
+                {series.map((item, index) => (
+                  <li>
+                    <span class="series-number">{String(index + 1).padStart(2, '0')}</span>
+                    {item.id === post.id ? (
+                      <span aria-current="page" class="series-current">{item.data.title}</span>
+                    ) : <a href={localizePath(postUrl(item), locale)}>{item.data.title}</a>}
+                  </li>
+                ))}
+              </ol>
+            </details>
+          )}
+          {hasToc && (
+            <details data-pagefind-ignore class="mobile-toc notebook-mobile-toc">
+              <summary><span>{t(locale, "本文目录")}</span><span>{countLabel(locale, tocCount, "节", "section")}</span></summary>
+              <div class="mobile-toc-content"><Toc headings={headings} showTitle={false} /></div>
+            </details>
+          )}
+        </header>
+
+        <div data-pagefind-body class="prose-custom notebook-content"><Content /></div>
+
+        <footer data-pagefind-ignore class="notebook-footer">
+          {related.length > 0 && (
+            <section aria-labelledby="related-heading" class="related-notes">
+              <p class="island-eyebrow">KEEP EXPLORING</p>
+              <h2 id="related-heading">{t(locale, "接着读一篇")}</h2>
+              <div class="related-grid">
+                {related.map((item) => (
+                  <a href={localizePath(postUrl(item), locale)}>
+                    <Icon name="book" size={20} />
+                    <h3>{item.data.title}</h3>
+                    <span>{t(locale, "阅读笔记")} <Icon name="arrow-right" size={16} /></span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          )}
+          <nav aria-label={t(locale, "相邻文章")} class="adjacent-notes">
+            {older ? (
+              <a href={localizePath(postUrl(older), locale)} class="prev-next-card">
+                <span><Icon name="arrow-left" size={16} />{t(locale, "上一篇")}</span>
+                <strong>{older.data.title}</strong>
+              </a>
+            ) : <span />}
+            {newer && (
+              <a href={localizePath(postUrl(newer), locale)} class="prev-next-card next-note">
+                <span>{t(locale, "下一篇")}<Icon name="arrow-right" size={16} /></span>
+                <strong>{newer.data.title}</strong>
+              </a>
+            )}
+          </nav>
+          {!isDraft && <Giscus articleKey={post.data.translationKey} />}
+        </footer>
+        <ReadingTools />
+      </article>
+
+      {hasToc && (
+        <aside data-pagefind-ignore class="reading-bookmarks">
+          <div class="bookmarks-sticky">
+            <div class="toc-scroll"><Toc headings={headings} /></div>
+            {!isDraft && <a href={localizePath("#comments", locale)} class="bookmark-comments"><Icon name="message" size={16} />{t(locale, "讨论与评论")}<Icon name="arrow-right" size={14} /></a>}
+          </div>
+        </aside>
+      )}
+    </div>
+  </div>
+</Base>
+
+<style>
+  @reference "../../../styles/global.css";
+  .reading-page { max-width:1280px; }
+  .draft-preview { margin-bottom:24px; padding:20px; border:1px dashed var(--color-accent); border-radius:16px; background:var(--color-paper-subtle); font-size:14px; line-height:1.8; }
+  .draft-preview a { color:var(--color-accent); text-decoration:underline; }
+  :global(.dark) .draft-preview { background:var(--color-night-subtle); border-color:var(--color-accent-dark); }
+  :global(.dark) .draft-preview a { color:var(--color-accent-dark); }
+  .reading-breadcrumb { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:24px; font-size:12px; color:var(--color-ink-faint); }
+  .reading-breadcrumb a { display:inline-flex; align-items:center; gap:7px; }
+  .reading-breadcrumb a:hover { color:var(--color-accent); }
+  .reading-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:24px; align-items:start; }
+  .notebook-sheet { min-width:0; width:100%; max-width:880px; margin-inline:auto; padding:38px 40px 30px; }
+  .notebook-label { display:flex; align-items:center; justify-content:space-between; color:var(--color-accent); gap:16px; }
+  .notebook-header h1 { font-size:clamp(1.8rem,3vw,2.65rem); font-weight:750; line-height:1.35; letter-spacing:.01em; margin:20px 0 18px; overflow-wrap:anywhere; }
+  .notebook-description { font-size:15px; line-height:1.9; color:var(--color-ink-soft); }
+  .notebook-meta { display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px; margin-top:24px; font-size:11px; color:var(--color-ink-faint); }
+  .notebook-meta > span, .notebook-meta > a { display:inline-flex; align-items:center; gap:6px; }
+  .notebook-topics { display:flex; flex-wrap:wrap; gap:9px; margin-top:18px; }
+  .comments-jump { display:inline-flex; align-items:center; gap:7px; margin-top:20px; font-size:12px; color:var(--color-accent); }
+  .notebook-series { border:1px solid var(--color-line); background:var(--color-paper-subtle); padding:16px 18px; border-radius:16px; margin-top:28px; }
+  .notebook-series summary { font-size:13px; gap:8px; }
+  .series-heading { display:flex; align-items:center; gap:8px; }
+  .series-count { margin-left:auto; font-size:11px; color:var(--color-ink-faint); }
+  .notebook-series ol { margin-top:16px; padding-top:16px; border-top:1px dashed var(--color-line); }
+  .notebook-series li { display:flex; align-items:baseline; gap:12px; font-size:13px; line-height:1.7; margin-top:10px; }
+  .series-number { flex-shrink:0; font-size:10px; font-family:var(--font-sans); color:var(--color-ink-faint); }
+  .series-current { font-weight:650; color:var(--color-accent); }
+  .notebook-series li a:hover { color:var(--color-accent); }
+  .notebook-mobile-toc { margin-top:22px; border-block:1px solid var(--color-line); padding-block:16px; }
+  .notebook-mobile-toc summary { font-size:13px; }
+  .notebook-mobile-toc summary > span:last-child { margin-left:auto; color:var(--color-ink-faint); font-size:11px; }
+  .mobile-toc-content { margin-top:16px; }
+  .notebook-content { margin-top:36px; padding-top:8px; }
+  .notebook-footer { min-width:0; margin-top:52px; }
+  .related-notes { border-top:1px dashed var(--color-line); padding-top:30px; }
+  .related-notes h2 { font-size:21px; font-weight:700; margin:8px 0 20px; }
+  .related-grid { display:grid; gap:12px; }
+  .related-grid > a { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:12px; border:1px solid var(--color-line); border-radius:16px; padding:17px; background:var(--color-paper); transition:background .15s,transform .15s; }
+  .related-grid > a:hover { background:var(--color-paper-subtle); transform:translateY(-2px); }
+  .related-grid > a > :global(svg) { color:var(--color-accent); }
+  .related-grid h3 { font-size:13px; font-weight:650; line-height:1.7; }
+  .related-grid span { display:flex; align-items:center; justify-content:space-between; align-self:stretch; gap:8px; margin-top:auto; font-size:10px; color:var(--color-ink-faint); }
+  .adjacent-notes { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; margin-top:30px; padding-block:24px; border-block:1px dashed var(--color-line); }
+  .prev-next-card { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:9px; }
+  .prev-next-card > span { display:flex; align-items:center; gap:7px; font-size:11px; color:var(--color-ink-faint); }
+  .prev-next-card strong { font-size:13px; font-weight:600; line-height:1.7; }
+  .prev-next-card:hover strong { color:var(--color-accent); }
+  .next-note { text-align:right; align-items:flex-end; }
+  .reading-bookmarks { display:none; }
+  .bookmarks-sticky { position:sticky; top:96px; }
+  .toc-scroll { max-height:calc(100vh - 12rem); overflow-y:auto; padding:0 8px 20px 0; }
+  .bookmark-comments { display:flex; align-items:center; gap:8px; padding-top:18px; border-top:1px dashed var(--color-line); color:var(--color-ink-faint); font-size:12px; }
+  .bookmark-comments > :global(svg:last-child) { margin-left:auto; }
+  :global(.dark) .reading-breadcrumb, :global(.dark) .notebook-meta, :global(.dark) .series-count, :global(.dark) .series-number, :global(.dark) .notebook-mobile-toc summary > span:last-child, :global(.dark) .related-grid span, :global(.dark) .prev-next-card > span, :global(.dark) .bookmark-comments { color:var(--color-snow-faint); }
+  :global(.dark) .notebook-description { color:var(--color-snow-soft); }
+  :global(.dark) .notebook-label, :global(.dark) .comments-jump, :global(.dark) .series-current, :global(.dark) .related-grid > a > :global(svg) { color:var(--color-accent-dark); }
+  :global(.dark) .notebook-series { background:var(--color-night-subtle); border-color:var(--color-line-dark); }
+  :global(.dark) .notebook-series ol, :global(.dark) .notebook-mobile-toc, :global(.dark) .related-notes, :global(.dark) .adjacent-notes, :global(.dark) .bookmark-comments { border-color:var(--color-line-dark); }
+  :global(.dark) .related-grid > a { background:var(--color-night); border-color:var(--color-line-dark); }
+  :global(.dark) .related-grid > a:hover { background:var(--color-night-subtle); }
+  @media (min-width:640px) { .related-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  @media (min-width:1440px) { .reading-layout.has-bookmarks { grid-template-columns:minmax(0,880px) 190px; justify-content:center; } .reading-bookmarks { display:block; align-self:stretch; padding-top:30px; } .notebook-mobile-toc { display:none; } }
+  @media (max-width:639px) { .notebook-sheet { padding:25px 20px; } .reading-breadcrumb { font-size:11px; gap:8px; } .notebook-header h1 { font-size:26px; } .notebook-description { font-size:14px; } .notebook-series { padding:14px; } .series-heading { gap:6px; } .series-count { font-size:10px; } }
+</style>

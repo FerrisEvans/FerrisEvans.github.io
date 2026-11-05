@@ -1,4 +1,6 @@
 ---
+import { getLocale } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import { categoryOf } from '../data/site';
 import IslandBrand from './IslandBrand.astro';
 
@@ -9,7 +11,7 @@ interface Props {
 }
 
 const { category, label, class: className } = Astro.props;
-const cat = categoryOf(category);
+const cat = categoryOf(category, locale);
 const text = label ?? cat.label;
 ---
 

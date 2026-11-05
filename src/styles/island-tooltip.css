@@ -1,8 +1,8 @@
 /* Animal Island UI's bordered island tooltip: organic paper outline + tail. */
-.island-tooltip { --tooltip-fill:#f7f3df; --tooltip-line:#c4b89e; position:absolute; z-index:12; width:max-content; max-width:240px; padding:14px 22px; color:#725d42; font-size:13px; font-weight:800; line-height:1.55; pointer-events:none; filter:drop-shadow(0 4px 14px #794f2724); transform-origin:50% 100%; }
+.island-tooltip { --tooltip-fill:#f7f3df; --tooltip-line:#c4b89e; position:absolute; z-index:12; width:max-content; max-width:min(240px,calc(100% - 20px)); padding:14px 22px; color:#725d42; font-size:13px; font-weight:800; line-height:1.55; pointer-events:none; filter:drop-shadow(0 4px 14px #794f2724); transform-origin:50% 100%; }
 .island-tooltip svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
 .island-tooltip path { fill:var(--tooltip-fill); stroke:var(--tooltip-line); stroke-width:2; stroke-linejoin:round; }
-.island-tooltip span { position:relative; white-space:nowrap; }
+.island-tooltip span { position:relative; white-space:normal; overflow-wrap:anywhere; }
 .island-tooltip::after { content:''; position:absolute; left:var(--tail-left,50%); bottom:-5px; width:10px; height:10px; transform:translateX(-50%) rotate(45deg); border-right:2px solid var(--tooltip-line); border-bottom:2px solid var(--tooltip-line); border-radius:2px; background:var(--tooltip-fill); }
 .island-tooltip[data-placement="bottom"]::after { top:-5px; bottom:auto; transform:translateX(-50%) rotate(225deg); }
 .dark .island-tooltip { --tooltip-fill:#465943; --tooltip-line:#a8b78c; color:#fff5df; }

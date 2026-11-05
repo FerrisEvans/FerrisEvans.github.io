@@ -1,5 +1,8 @@
 ---
-import { SITE } from '../data/site';
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
+import { siteFor } from '../data/site';
+const SITE = siteFor(locale);
 import Icon from './Icon.astro';
 import IslandBrand from './IslandBrand.astro';
 import { Divider } from 'animal-island-ui';
@@ -7,13 +10,13 @@ const year = new Date().getFullYear();
 ---
 <div class="footer-wave" aria-hidden="true"><Divider type="ocean-wave" animated={false} /></div>
 <footer data-pagefind-ignore class="island-footer">
-  <div><a href="/" aria-label={`${SITE.title} 首页`}><IslandBrand /></a><span>© {year} <a href="/about/" rel="author">{SITE.author}</a> · {SITE.tagline}</span></div>
-  <nav aria-label="作者联系与博客订阅">
-    <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label={`${SITE.author} 的 GitHub`}><Icon name="github" size={18} /></a>
-    <a href={SITE.twitter} target="_blank" rel="noopener noreferrer" aria-label={`${SITE.author} 的 X（Twitter）`} class="social-x">𝕏</a>
-    <a href={`mailto:${SITE.email}`} aria-label={`给 ${SITE.author} 发邮件`}><Icon name="mail" size={18} /></a>
-    <a href="/rss.xml" aria-label={`订阅 ${SITE.title} RSS`}><Icon name="rss" size={18} /></a>
-    <a class="astro-credit" href="https://astro.build" target="_blank" rel="noopener noreferrer">Built with Astro</a>
+  <div><a href={localizePath("/", locale)} aria-label={t(locale, `${SITE.title} 首页`, `${SITE.title} home`)}><IslandBrand /></a><span>© {year} <a href={localizePath("/about/", locale)} rel="author">{SITE.author}</a> · {SITE.tagline}</span></div>
+  <nav aria-label={t(locale, "作者联系与博客订阅")}>
+    <a href={localizePath(SITE.github, locale)} target="_blank" rel="noopener noreferrer" aria-label={t(locale, `${SITE.author} 的 GitHub`, `${SITE.author} on GitHub`)}><Icon name="github" size={18} /></a>
+    <a href={localizePath(SITE.twitter, locale)} target="_blank" rel="noopener noreferrer" aria-label={t(locale, `${SITE.author} 的 X（Twitter）`, `${SITE.author} on X (Twitter)`)} class="social-x">𝕏</a>
+    <a href={localizePath(`mailto:${SITE.email}`, locale)} aria-label={t(locale, `给 ${SITE.author} 发邮件`, `Email ${SITE.author}`)}><Icon name="mail" size={18} /></a>
+    <a href={localizePath("/rss.xml", locale)} aria-label={t(locale, `订阅 ${SITE.title} RSS`, `Subscribe to ${SITE.title} via RSS`)}><Icon name="rss" size={18} /></a>
+    <a class="astro-credit" href={localizePath("https://astro.build", locale)} target="_blank" rel="noopener noreferrer">Built with Astro</a>
   </nav>
 </footer>
 <style>

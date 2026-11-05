@@ -9,7 +9,9 @@ const slugSchema = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
-    title: z.string(),
+    locale: z.enum(['en', 'zh']),
+    translationKey: z.string().regex(/^[A-Za-z0-9_-]+$/),
+    title: z.string().min(1),
     description: z.string().optional(),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),

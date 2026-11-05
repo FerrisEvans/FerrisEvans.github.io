@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import type { MarkdownHeading } from 'astro';
 import Icon from './Icon.astro';
 
@@ -13,12 +15,12 @@ const toc = headings.filter((heading) => heading.depth === 2 || heading.depth ==
 
 {
   toc.length > 0 && (
-    <nav aria-label="目录" class="notebook-toc">
-      {showTitle && <div class="toc-title"><Icon name="book" size={19} /><span>这篇笔记的书签</span></div>}
+    <nav aria-label={t(locale, "目录")} class="notebook-toc">
+      {showTitle && <div class="toc-title"><Icon name="book" size={19} /><span>{t(locale, "这篇笔记的书签")}</span></div>}
       <ul class="toc-items">
         {toc.map((heading) => (
           <li class={heading.depth === 3 ? 'toc-nested' : ''}>
-            <a href={`#${heading.slug}`} class="toc-link">
+            <a href={localizePath(`#${heading.slug}`, locale)} class="toc-link">
               {heading.text}
             </a>
           </li>

@@ -93,7 +93,7 @@ test('reading tables retain GFM content and alignment inside one keyboard-scroll
   const header = tables[0].table.children.find(node => node.tagName === 'thead');
   const row = header.children.find(node => node.tagName === 'tr');
   assert.deepEqual(row.children.filter(node => node.tagName === 'th').map(node => node.properties.align), ['left', 'center', 'right']);
-  assert.match(code, /href="\/about\/markdown\/"/);
+  assert.match(code, /href="\/zh\/about\/markdown\/"/);
   assert.match(code, /<strong>Ready<\/strong>/);
   assert.match(code, /<code>A\|B<\/code>/);
   assert.match(code, /class="katex"/);

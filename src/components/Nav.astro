@@ -3,62 +3,114 @@ import { SITE } from '../data/site';
 import ThemeToggle from './ThemeToggle.astro';
 import Icon from './Icon.astro';
 import IslandBrand from './IslandBrand.astro';
+import { getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
+const languagePath = /^\/(en|zh)\//.test(Astro.url.pathname) ? Astro.url.pathname : '/';
 const primary = [
-  { href: '/', label: '首页', icon: 'home' },
-  { href: '/notes/', label: '笔记', icon: 'book' },
-  { href: '/categories/', label: '分类', icon: 'grid' },
-  { href: '/tags/', label: '标签', icon: 'tag' },
-  { href: '/archives/', label: '归档', icon: 'archive' },
-  { href: '/about/', label: '关于', icon: 'user' },
+  { href: '/', label: t(locale, '首页', 'Home'), icon: 'home' },
+  { href: '/notes/', label: t(locale, '笔记', 'Notes'), icon: 'book' },
+  { href: '/categories/', label: t(locale, '分类', 'Categories'), icon: 'grid' },
+  { href: '/tags/', label: t(locale, '标签', 'Tags'), icon: 'tag' },
+  { href: '/archives/', label: t(locale, '归档', 'Archives'), icon: 'archive' },
+  { href: '/about/', label: t(locale, '关于', 'About'), icon: 'user' },
 ];
 const links = [
   ...primary,
-  ...(import.meta.env.DEV ? [{ href: '/drafts/', label: '草稿', icon: 'pencil' }] : []),
+  ...(import.meta.env.DEV ? [{ href: '/drafts/', label: t(locale, '草稿', 'Drafts'), icon: 'pencil' }] : []),
 ];
 const sceneViews: Record<string, string> = { '/notes/': 'library', '/categories/': 'categories', '/tags/': 'tags', '/about/': 'about' };
-const path = Astro.url.pathname;
+const path = Astro.url.pathname.replace(/^\/(?:en|zh)(?=\/|$)/, '') || '/';
 const isActive = (href: string) => href === '/' ? path === '/'
   : href === '/notes/' ? path.startsWith('/notes/') || path.startsWith('/posts/')
   : path.startsWith(href);
 ---
 <header class="island-nav site-header" data-pagefind-ignore>
   <div class="nav-bar">
-    <a href="/" aria-label={SITE.title + ' 首页'} class="island-brand"><IslandBrand /></a>
-    <nav aria-label="主导航" class="desktop-navigation nav-links">
-      {primary.map(link => <a href={link.href} data-island-nav={sceneViews[link.href]} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} size={23} /><span>{link.label}</span></a>)}
+    <a href={localizePath('/', locale)} aria-label={t(locale, `${SITE.title} 首页`, 'Weijin home')} class="island-brand"><IslandBrand /></a>
+    <nav aria-label={t(locale, '主导航', 'Main navigation')} class="desktop-navigation nav-links">
+      {primary.map(link => <a href={localizePath(link.href, locale)} data-island-nav={sceneViews[link.href]} data-nav-tooltip aria-label={link.label} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', 'nav-icon-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} size={25} /></a>)}
     </nav>
     <div class="nav-actions">
-      <a href="/search/" class="island-icon-button blog-button" aria-label="搜索" aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
+      <div class="nav-language" role="group" aria-label={t(locale, '语言', 'Language')}>
+        <a href={localizePath(languagePath, 'zh')} lang="zh-CN" hreflang="zh-CN" data-language-switch aria-label="切换到中文" aria-current={locale === 'zh' ? 'true' : undefined}>中文</a>
+        <span aria-hidden="true">/</span>
+        <a href={localizePath(languagePath, 'en')} lang="en" hreflang="en" data-language-switch aria-label="Switch to English" aria-current={locale === 'en' ? 'true' : undefined}>EN</a>
+      </div>
+      <a href={localizePath('/search/', locale)} class="island-icon-button blog-button" data-nav-tooltip aria-label={t(locale, '搜索', 'Search')} aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
       <ThemeToggle />
-      <button id="menu-toggle" type="button" aria-label="打开菜单" aria-controls="mobile-menu" aria-expanded="false" class="island-icon-button blog-button mobile-menu-toggle">
+      <button id="menu-toggle" type="button" data-nav-tooltip aria-label={t(locale, '打开菜单', 'Open menu')} aria-controls="mobile-menu" aria-expanded="false" class="island-icon-button blog-button mobile-menu-toggle">
         <span id="menu-icon-open"><Icon name="menu" /></span><span id="menu-icon-close" class="hidden"><Icon name="close" /></span>
       </button>
     </div>
   </div>
   <div id="mobile-menu" class="mobile-menu" aria-hidden="true" inert>
-    <div class="mobile-menu-inner"><nav aria-label="移动导航">
-      {links.map(link => <a href={link.href} data-island-nav={sceneViews[link.href]} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} /><span>{link.label}</span></a>)}
+    <div class="mobile-menu-inner"><nav aria-label={t(locale, '移动导航', 'Mobile navigation')}>
+      {links.map(link => <a href={localizePath(link.href, locale)} data-island-nav={sceneViews[link.href]} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} /><span>{link.label}</span></a>)}
     </nav></div>
   </div>
   <noscript>
-    <nav class="no-script-navigation" aria-label="页面导航">{links.map(link => <a href={link.href}>{link.label}</a>)}</nav>
+    <nav class="no-script-navigation" aria-label={t(locale, '页面导航', 'Page navigation')}>{links.map(link => <a href={localizePath(link.href, locale)}>{link.label}</a>)}</nav>
     <style>.mobile-menu-toggle, .theme-switch { display: none; }</style>
   </noscript>
 </header>
-<script is:inline>
+<script>
+  import { localeForDocument, localizePath, t } from '../i18n';
+  import { createIslandTooltip } from '../scripts/island/tooltip';
   (function () {
-    var btn = document.getElementById('menu-toggle');
-    var menu = document.getElementById('mobile-menu');
-    var open = document.getElementById('menu-icon-open');
-    var close = document.getElementById('menu-icon-close');
-    if (!btn || !menu) return;
+    const locale = localeForDocument();
+    const btn = document.getElementById('menu-toggle');
+    const menu = document.getElementById('mobile-menu');
+    const open = document.getElementById('menu-icon-open');
+    const close = document.getElementById('menu-icon-close');
+    if (!btn || !menu || !open || !close) return;
 
-    function setMenu(expanded) {
+    // The same paper tooltip serves the scene and icon-only navigation.
+    const tooltipHost = document.createElement('div');
+    tooltipHost.className = 'nav-tooltip-host';
+    document.body.append(tooltipHost);
+    const tooltip = createIslandTooltip(tooltipHost, { id: 'navigation-hint' });
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+    let described: HTMLElement | null = null;
+    const hideHint = () => {
+      tooltip.hide(); described?.removeAttribute('aria-describedby'); described = null;
+    };
+    const showHint = (target: HTMLElement) => {
+      hideHint();
+      const rect = target.getBoundingClientRect();
+      tooltip.show(target.getAttribute('aria-label') ?? '', rect.x + rect.width / 2, rect.y + rect.height / 2, reduced.matches);
+      target.setAttribute('aria-describedby', 'navigation-hint'); described = target;
+    };
+    document.querySelectorAll<HTMLElement>('[data-nav-tooltip], .site-header .theme-switch').forEach(target => {
+      target.removeAttribute('title');
+      target.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') showHint(target); });
+      target.addEventListener('pointerleave', hideHint);
+      target.addEventListener('focus', () => showHint(target));
+      target.addEventListener('blur', hideHint);
+      target.addEventListener('click', hideHint);
+    });
+    window.addEventListener('scroll', hideHint, { passive: true });
+    window.addEventListener('resize', hideHint);
+    window.addEventListener('pagehide', hideHint);
+    // Keep a shared article anchor or search query when changing language.
+    const languageLinks = [...document.querySelectorAll<HTMLAnchorElement>('[data-language-switch]')];
+    const refreshLanguageLinks = () => languageLinks.forEach(link => {
+      const target = new URL(link.href);
+      target.search = location.search; target.hash = location.hash;
+      link.href = target.href;
+    });
+    refreshLanguageLinks();
+    languageLinks.forEach(link => link.addEventListener('click', refreshLanguageLinks));
+    window.addEventListener('hashchange', refreshLanguageLinks);
+    window.addEventListener('popstate', refreshLanguageLinks);
+
+    function setMenu(expanded: boolean) {
+      if (!btn || !menu || !open || !close) return;
+      hideHint();
       menu.dataset.open = String(expanded);
       menu.setAttribute('aria-hidden', String(!expanded));
       menu.inert = !expanded;
       btn.setAttribute('aria-expanded', String(expanded));
-      btn.setAttribute('aria-label', expanded ? '关闭菜单' : '打开菜单');
+      btn.setAttribute('aria-label', expanded ? t(locale, '关闭菜单', 'Close menu') : t(locale, '打开菜单', 'Open menu'));
       open.classList.toggle('hidden', expanded);
       close.classList.toggle('hidden', !expanded);
     }
@@ -67,17 +119,18 @@ const isActive = (href: string) => href === '/' ? path === '/'
       setMenu(btn.getAttribute('aria-expanded') !== 'true');
     });
     menu.addEventListener('click', function (event) {
-      if (event.target.closest('a')) setMenu(false);
+      if (event.target instanceof Element && event.target.closest('a')) setMenu(false);
     });
     document.addEventListener('keydown', function (event) {
       if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
         event.preventDefault();
-        var input = document.querySelector('.pagefind-ui__search-input');
+        const input = document.querySelector<HTMLInputElement>('.pagefind-ui__search-input');
         if (input) input.focus();
-        else window.location.href = '/search/?focus=1';
+        else window.location.href = localizePath('/search/?focus=1', locale);
         return;
       }
       if (event.key !== 'Escape') return;
+      hideHint();
       if (btn.getAttribute('aria-expanded') === 'true') {
         setMenu(false);
         btn.focus();

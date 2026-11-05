@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, tagLabel } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 interface Props {
   tag: string;
   class?: string;
@@ -8,11 +10,11 @@ const { tag, class: className } = Astro.props;
 ---
 
 <a
-  href={`/tags/${encodeURIComponent(tag)}/`}
+  href={localizePath(`/tags/${encodeURIComponent(tag)}/`, locale)}
   class:list={[
     'tag-chip',
     className,
   ]}
 >
-  #{tag}
+  #{tagLabel(tag, locale)}
 </a>

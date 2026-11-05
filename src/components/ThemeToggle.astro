@@ -1,7 +1,9 @@
 ---
+import { getLocale, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import Icon from './Icon.astro';
 ---
-<button id="theme-toggle" type="button" aria-label="切换明暗模式" title="切换明暗模式" class="island-icon-button blog-button theme-switch">
+<button id="theme-toggle" type="button" aria-label={t(locale, "切换明暗模式")} title={t(locale, "切换明暗模式")} class="island-icon-button blog-button theme-switch">
   <span class="dark:hidden"><Icon name="sun" /></span>
   <span class="hidden dark:block"><Icon name="moon" /></span>
 </button>

@@ -1,4 +1,6 @@
 ---
+import { getLocale, localizePath, t, tagLabel } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 /** The same original, colored folk-art icon family used by Animal Island UI. */
 import { LeafIcon, BookIcon, GridIcon, TagIcon, InboxIcon, SearchIcon, ArrowRightIcon, ArrowLeftIcon, ArrowUpIcon, CodeIcon, FolderIcon, RocketIcon, SparklesIcon, CalendarIcon, ClockIcon, ChatIcon, HomeIcon, UserIcon, MailIcon, RssIcon, CatIcon, SunIcon, MoonIcon, MenuIcon, CloseIcon, BearIcon, FlowerIcon, TreeIcon, MushroomIcon, CoffeeCupIcon, ButterflyIcon, CloudIcon, HeartIcon, PencilIcon, BirdIcon, SnailIcon } from 'naive-icons';
 interface Props { name: string; size?: number; class?: string }

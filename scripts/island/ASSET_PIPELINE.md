@@ -23,11 +23,11 @@ generator and publication source seal check them. No paid source was used.
    `transport.json` records the exact source/packer/output hashes and sizes.
    The same command then seals the model bytes, Blender and raw glTF sources,
    packer, every `scripts/island/*.py` authoring module,
-   vendor sources, runtime rendering sources
+   vendor sources, runtime rendering sources, the three shared `naive-icons` SVG sign assets,
    and installed Three.js version into `public/island/manifest.json`.
 3. Start the local development server at port 4327. Run
    `BASE_URL=http://127.0.0.1:4327 npm run assets:posters`. The script waits for
-   actual browser WebGL readiness at `/?capture=1` and the matching build ID before capturing.
+   actual browser WebGL readiness at `/en/?capture=1` and the matching build ID before capturing.
    Light and dark covers are 1440 × 1200; the sharing image is 1200 × 630.
    These are browser renders, not Blender previews or concept artwork.
 4. `npm run assets:check` rejects stale packing receipts, changed sources, mismatched poster seals or a
@@ -53,8 +53,12 @@ applies HTTP gzip to the original GLB; compare actual encoded transfer bytes as
 well as file sizes when reporting savings. Report actual
 browser, device, viewport, DPR, cache conditions, frame time and draw calls in
 the acceptance record. Mobile browser emulation is not a physical device test.
-The canonical interactive route is `/`; `/island/` and `/room/` are compatibility
-redirects. `/island/` remains the static asset directory. Homepage model loading
+The interactive routes are `/en/` and `/zh/`; `/` selects the default English
+homepage, while `/island/` and `/room/` are compatibility redirects. `/island/`
+remains the static asset directory. The physical signs use the same book, grid
+and tag icons as the navigation, so the model and captured posters are shared
+between languages. The upstream MIT notice is retained under
+`public/vendor/naive-icons/`. Homepage model loading
 is automatic, and unavailable JavaScript/WebGL retains the poster and directory.
 
 The export retains `extras.vendorAssets` on imported/merged geometry. Model

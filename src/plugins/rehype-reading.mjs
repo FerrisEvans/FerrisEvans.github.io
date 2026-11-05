@@ -7,7 +7,7 @@ function standaloneImage(paragraph) {
     : null;
 }
 
-function imageFigure(image) {
+function imageFigure(image, english) {
   const alt = String(image.properties?.alt ?? '');
   image.properties = { ...image.properties, loading: 'lazy', decoding: 'async' };
   const children = [
@@ -17,7 +17,7 @@ function imageFigure(image) {
       properties: {
         type: 'button',
         className: ['image-zoom'],
-        'aria-label': alt ? `放大图片：${alt}` : '放大图片',
+        'aria-label': english ? (alt ? `Enlarge image: ${alt}` : 'Enlarge image') : (alt ? `放大图片：${alt}` : '放大图片'),
       },
       children: [image],
     },
@@ -34,7 +34,7 @@ function imageFigure(image) {
   return { type: 'element', tagName: 'figure', properties: {}, children };
 }
 
-function visit(node) {
+function visit(node, english) {
   const children = node.children ?? [];
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
@@ -42,7 +42,7 @@ function visit(node) {
         !node.properties?.className?.includes('prose-table-scroll')) {
       // Keep the native table semantics and GFM alignment. The surrounding
       // region owns clipping and keyboard scrolling, including without JS.
-      visit(child);
+      visit(child, english);
       children[i] = {
         type: 'element',
         tagName: 'div',
@@ -50,7 +50,7 @@ function visit(node) {
           className: ['prose-table-scroll'],
           tabIndex: 0,
           role: 'region',
-          ariaLabel: '表格（可横向滚动）',
+          ariaLabel: english ? 'Table (scroll horizontally)' : '表格（可横向滚动）',
         },
         children: [child],
       };
@@ -59,14 +59,14 @@ function visit(node) {
     if (child.type === 'element' && child.tagName === 'p') {
       const image = standaloneImage(child);
       if (image) {
-        children[i] = imageFigure(image);
+        children[i] = imageFigure(image, english);
         continue;
       }
     }
-    visit(child);
+    visit(child, english);
   }
 }
 
 export default function rehypeReading() {
-  return (tree) => visit(tree);
+  return (tree, file = {}) => visit(tree, /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en');
 }

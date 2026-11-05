@@ -10,7 +10,13 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshotDirectory = process.env.SCREENSHOT_DIR
   ? resolve(process.env.SCREENSHOT_DIR)
   : join(tmpdir(), 'praxis-guide-browser');
-const paths = ['/about/python-zen/', '/about/writing/', '/about/markdown/'];
+const guideSlugs = ['python-zen', 'writing', 'markdown'];
+const guidePaths = locale => guideSlugs.map(slug => `/${locale}/about/${slug}/`);
+const paths = guidePaths('zh');
+const englishPaths = guidePaths('en');
+const selectedLocales = (process.env.GUIDE_LOCALES || 'zh,en').split(',');
+assert(selectedLocales.length && selectedLocales.every(locale => locale === 'zh' || locale === 'en'), 'GUIDE_LOCALES must contain zh and/or en');
+const localeOf = path => path.startsWith('/zh/') ? 'zh' : 'en';
 const pageErrors = [];
 const consoleErrors = [];
 
@@ -103,16 +109,45 @@ async function clickWithoutJavaScript(link) {
 async function assertGuideNavigation(page, path) {
   assert.equal(await page.getByRole('heading', { level: 1 }).count(), 1, `${path} has one H1`);
   assert.equal(await page.locator('article[data-pagefind-body]').count(), 1, `${path} exposes its searchable article body`);
-  const related = page.getByRole('navigation', { name: '相关阅读' });
+  const locale = localeOf(path);
+  const related = page.getByRole('navigation', { name: locale === 'zh' ? '相关阅读' : 'Related reading' });
   assert.equal(await related.count(), 1, 'related guides have a named navigation region');
-  for (const other of paths.filter(value => value !== path)) {
+  for (const other of guidePaths(locale).filter(value => value !== path)) {
     assert(await related.locator(`a[href="${other}"]`).count() > 0, `${path} links to ${other}`);
   }
-  assert(await page.getByRole('link', { name: /返回关于作者/ }).count() > 0, 'guide can return to About');
+  assert(await page.getByRole('link', { name: locale === 'zh' ? /返回关于作者/ : /Back to About/ }).count() > 0, 'guide can return to About');
   await assertAnchorTargets(page);
 }
 
-async function assertAboutCards(page) {
+async function assertLocaleContent(page, path) {
+  const locale = localeOf(path);
+  assert.equal(await page.locator('html').getAttribute('lang'), locale === 'zh' ? 'zh-CN' : 'en');
+  const crossLanguageLinks = await page.locator('main a[href]').evaluateAll((links, currentLocale) => links.flatMap(link => {
+    const url = new URL(link.href);
+    if (url.origin !== location.origin || !/^\/(?:en|zh)\//.test(url.pathname)) return [];
+    return url.pathname.startsWith(`/${currentLocale}/`) ? [] : [url.pathname];
+  }), locale);
+  assert.deepEqual(crossLanguageLinks, [], `${path} keeps reading links in the current language`);
+  if (locale !== 'en') return;
+  const visibleText = await page.locator('main').evaluate(main => {
+    const clone = main.cloneNode(true);
+    for (const code of clone.querySelectorAll('script, style, template')) code.remove();
+    // Chinese typography examples are intentional examples, not untranslated UI.
+    const typography = clone.querySelector('#chinese-typography');
+    if (typography) {
+      let sibling = typography.nextElementSibling;
+      while (sibling && sibling.tagName !== 'H2') {
+        const next = sibling.nextElementSibling;
+        sibling.remove();
+        sibling = next;
+      }
+    }
+    return clone.textContent;
+  });
+  assert.doesNotMatch(visibleText, /[\u3400-\u9fff]/u, `${path} contains no untranslated Chinese outside typography examples`);
+}
+
+async function assertAboutCards(page, locale = 'zh') {
   const cards = page.locator('.about-guides .guide-card');
   assert.equal(await cards.count(), 3, 'About has three guide cards');
   assert(await page.evaluate(() => {
@@ -135,9 +170,9 @@ async function assertAboutCards(page) {
     for (const dark of [false, true]) {
       await setTheme(page, dark);
       await assertNoOverflow(page, `About ${viewport} ${dark ? 'dark' : 'light'}`);
-      await screenshot(page, `about-${viewport}-${dark ? 'dark' : 'light'}`);
+      await screenshot(page, `${locale}-about-${viewport}-${dark ? 'dark' : 'light'}`);
       if (viewport === 'desktop' && !dark) {
-        await page.locator('.about-guides').screenshot({ path: join(screenshotDirectory, 'about-cards-desktop.png'), animations: 'disabled' });
+        await page.locator('.about-guides').screenshot({ path: join(screenshotDirectory, `${locale}-about-cards-desktop.png`), animations: 'disabled' });
       }
     }
   }
@@ -151,7 +186,7 @@ async function setTheme(page, dark) {
 }
 
 async function assertResponsiveGuide(page, path) {
-  const name = path.split('/').filter(Boolean).at(-1);
+  const name = `${localeOf(path)}-${path.split('/').filter(Boolean).at(-1)}`;
   for (const [viewport, size] of [
     ['desktop', { width: 1440, height: 1000 }],
     ['mobile', { width: 390, height: 844 }],
@@ -174,23 +209,23 @@ async function assertResponsiveGuide(page, path) {
     }
     for (const dark of [false, true]) {
       await setTheme(page, dark);
-      if (path === '/about/markdown/') {
+      if (path.endsWith('/about/markdown/')) {
         await assertNativeMarkdownReading(page, { checkKeyboardScroll: viewport === 'mobile' });
         await assertCrossReferences(page);
         if (!dark) {
           await page.mouse.move(0, 0);
-          await page.screenshot({ path: join(screenshotDirectory, `markdown-${viewport}-cross-references.png`), animations: 'disabled' });
+          await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-cross-references.png`), animations: 'disabled' });
         }
       }
       await assertNoOverflow(page, `${path} ${viewport} ${dark ? 'dark' : 'light'}`);
       await screenshot(page, `${name}-${viewport}-${dark ? 'dark' : 'light'}`);
-      if (path === '/about/markdown/' && !dark) {
+      if (path.endsWith('/about/markdown/') && !dark) {
         if (viewport === 'mobile') await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(screenshotDirectory, `markdown-${viewport}-detail.png`), animations: 'disabled' });
+        await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-detail.png`), animations: 'disabled' });
       }
-      if (path === '/about/markdown/') {
+      if (path.endsWith('/about/markdown/')) {
         await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(screenshotDirectory, `markdown-${viewport}-code-${dark ? 'dark' : 'light'}.png`), animations: 'disabled' });
+        await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-code-${dark ? 'dark' : 'light'}.png`), animations: 'disabled' });
       }
     }
   }
@@ -225,6 +260,8 @@ async function assertLineNumbers(code) {
 }
 
 async function assertCodeGroup(page) {
+  const english = localeOf(new URL(page.url()).pathname) === 'en';
+  const copyLabel = english ? 'Copy code' : '复制代码';
   const groups = page.locator('article .rehype-code-group');
   assert.equal(await groups.count(), 1, 'syntax guide has one two-language code group');
   const group = groups.first();
@@ -249,7 +286,7 @@ async function assertCodeGroup(page) {
   }));
   const expected = await group.getByRole('tabpanel').locator('pre > code').textContent();
   assert(expected.includes('\n') && /\n {4}\S/.test(expected), 'sample exercises source newlines and indentation');
-  const copy = group.getByRole('button', { name: '复制代码', exact: true });
+  const copy = group.getByRole('button', { name: copyLabel, exact: true });
   assert.equal((await copy.innerText()).trim(), '', 'copy control displays an icon without text');
   const icon = copy.locator('svg');
   assert(await icon.count() > 0);
@@ -258,8 +295,8 @@ async function assertCodeGroup(page) {
   await page.waitForFunction(() => typeof window.__guideCopied === 'string');
   assert.equal(await page.evaluate(() => window.__guideCopied), expected, 'copy preserves exact source whitespace without decorative line numbers');
   assert.equal(await copy.getAttribute('data-copied'), 'true');
-  assert.equal(await copy.getAttribute('title'), '已复制');
-  assert.equal(await copy.getAttribute('aria-label'), '复制代码', 'copy control keeps a stable accessible name');
+  assert.equal(await copy.getAttribute('title'), english ? 'Copied' : '已复制');
+  assert.equal(await copy.getAttribute('aria-label'), copyLabel, 'copy control keeps a stable accessible name');
   assert.equal((await copy.innerText()).trim(), '', 'success feedback remains icon-only');
   const color = await tabs.nth(1).evaluate(element => getComputedStyle(element).backgroundColor);
   await setTheme(page, !await page.evaluate(() => document.documentElement.classList.contains('dark')));
@@ -400,7 +437,8 @@ async function assertCrossReferences(page, { noJavaScript = false } = {}) {
 }
 
 async function assertImageViewer(page) {
-  const zoom = page.getByRole('button', { name: /放大图片/ }).first();
+  const english = localeOf(new URL(page.url()).pathname) === 'en';
+  const zoom = page.getByRole('button', { name: english ? /Enlarge image/ : /放大图片/ }).first();
   assert(await zoom.count() > 0, 'guide includes a real image example');
   await zoom.scrollIntoViewIfNeeded();
   const image = zoom.locator('img');
@@ -408,11 +446,11 @@ async function assertImageViewer(page) {
   assert(await image.evaluate(element => element.naturalWidth > 0), 'source image loads');
   const source = await image.evaluate(element => element.currentSrc || element.src);
   await zoom.click();
-  const dialog = page.getByRole('dialog', { name: '图片预览' });
+  const dialog = page.getByRole('dialog', { name: english ? 'Image preview' : '图片预览' });
   assert(await dialog.isVisible(), 'image opens in the viewer');
   assert.equal(await dialog.locator('img').evaluate(element => element.src), source);
   await dialog.locator('img').evaluate(element => element.decode());
-  await dialog.getByRole('button', { name: /关闭/ }).click();
+  await dialog.getByRole('button', { name: english ? /Close/ : /关闭/ }).click();
   assert.equal(await dialog.isVisible(), false, 'close button dismisses image viewer');
   await zoom.click();
   await page.keyboard.press('Escape');
@@ -426,16 +464,17 @@ try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: 'light', reducedMotion: 'reduce' });
   const page = await context.newPage();
   observe(page);
-  await visit(page, '/about/');
+  if (selectedLocales.includes('zh')) {
+  await visit(page, '/zh/about/');
   for (const path of paths) assert(await page.locator(`main a[href="${path}"]`).count() > 0, `About links to ${path}`);
   await assertAboutCards(page);
   for (const path of paths) {
-    await visit(page, '/about/');
+    await visit(page, '/zh/about/');
     await page.locator(`main a[href="${path}"]`).first().click();
     await page.waitForURL(new URL(path, base).href);
     await settleImages(page);
     await assertGuideNavigation(page, path);
-    if (path === '/about/markdown/') {
+    if (path.endsWith('/about/markdown/')) {
       await assertCodeGroup(page);
       await assertMarkdownFeatures(page);
       await assertImageViewer(page);
@@ -445,22 +484,52 @@ try {
     await page.getByRole('navigation', { name: '相关阅读' }).locator(`a[href="${related}"]`).click();
     await page.waitForURL(new URL(related, base).href);
     await page.getByRole('link', { name: /返回关于作者/ }).first().click();
-    await page.waitForURL(new URL('/about/', base).href);
+    await page.waitForURL(new URL('/zh/about/', base).href);
     console.log(`PASS: ${path} navigation, heading/anchor targets, desktop/mobile ToCs and light/dark layouts`);
+  }
+  }
+  if (selectedLocales.includes('en')) {
+  await visit(page, '/en/about/');
+  await assertLocaleContent(page, '/en/about/');
+  for (const path of englishPaths) assert(await page.locator(`main a[href="${path}"]`).count() > 0, `English About links to ${path}`);
+  await assertAboutCards(page, 'en');
+  for (const path of englishPaths) {
+    await visit(page, path);
+    await assertLocaleContent(page, path);
+    await assertGuideNavigation(page, path);
+    if (path.endsWith('/about/markdown/')) {
+      await assertCodeGroup(page);
+      await assertMarkdownFeatures(page);
+      await assertImageViewer(page);
+    }
+    if (path.endsWith('/python-zen/')) {
+      assert.equal(await page.locator('.zen-lines > li').count(), 19);
+      assert.equal(await page.locator('.zen-lines > li p').count(), 19, 'English Zen shows only the original English lines');
+    }
+    await assertResponsiveGuide(page, path);
+    const related = englishPaths.find(value => value !== path);
+    await page.getByRole('navigation', { name: 'Related reading' }).locator(`a[href="${related}"]`).click();
+    await page.waitForURL(new URL(related, base).href);
+    await page.getByRole('link', { name: /Back to About/ }).first().click();
+    await page.waitForURL(new URL('/en/about/', base).href);
+    console.log(`PASS: ${path} localized content, links, anchors, reading tools and responsive layouts`);
+  }
   }
   await context.close();
 
   const plainContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
   const plain = await plainContext.newPage();
   observe(plain);
-  for (const path of paths) {
+  for (const path of selectedLocales.flatMap(guidePaths)) {
+    const locale = localeOf(path);
     await visit(plain, path);
+    await assertLocaleContent(plain, path);
     await assertGuideNavigation(plain, path);
     const mobile = plain.locator('details.guide-toc-mobile');
     if (!await mobile.evaluate(element => element.open)) await mobile.locator(':scope > summary').click();
     await clickAnchor(plain, mobile.locator('a[href*="#"]').first());
     await assertNoOverflow(plain, `${path} without JavaScript`);
-    if (path === '/about/markdown/') {
+    if (path.endsWith('/about/markdown/')) {
       const panels = plain.locator('article .rcg-block');
       assert.equal(await panels.count(), 2);
       for (const panel of await panels.all()) {
@@ -472,9 +541,9 @@ try {
       await assertCrossReferences(plain, { noJavaScript: true });
       await assertNoOverflow(plain, 'numbered definitions without JavaScript');
     }
-    await screenshot(plain, `${path.split('/').filter(Boolean).at(-1)}-mobile-no-js`);
-    await clickWithoutJavaScript(plain.getByRole('link', { name: /返回关于作者/ }).first());
-    await plain.waitForURL(new URL('/about/', base).href);
+    await screenshot(plain, `${locale}-${path.split('/').filter(Boolean).at(-1)}-mobile-no-js`);
+    await clickWithoutJavaScript(plain.getByRole('link', { name: locale === 'zh' ? /返回关于作者/ : /Back to About/ }).first());
+    await plain.waitForURL(new URL(`/${locale}/about/`, base).href);
     await clickWithoutJavaScript(plain.locator(`main a[href="${path}"]`).first());
     await plain.waitForURL(new URL(path, base).href);
   }

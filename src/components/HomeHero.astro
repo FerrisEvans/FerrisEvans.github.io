@@ -1,8 +1,11 @@
 ---
+import { countLabel, getLocale, localizePath, t } from '../i18n';
+const locale = getLocale(Astro.url.pathname);
 import Icon from './Icon.astro';
 import TagToken from './TagToken.astro';
 import WorldCover from './WorldCover.astro';
-import { SITE } from '../data/site';
+import { siteFor } from '../data/site';
+const SITE = siteFor(locale);
 import type { getIslandAssets } from '../utils/island-assets';
 import type { IslandContent } from '../utils/island-content';
 interface Props { assets: ReturnType<typeof getIslandAssets>; content: IslandContent; }
@@ -11,74 +14,74 @@ const library = (content.featured.length ? content.featured : content.posts).sli
 
 ---
     <div id="island-root" data-state="loading" data-model-url={assets.modelUrl} data-model-bytes={assets.modelBytes} data-build-id={assets.buildId}>
-      <h1 id="home-title" class="sr-only">{SITE.title} · {SITE.author} 的笔记与日常</h1>
-      <section class="island-stage" aria-label="可探索的林间阅读庭院">
+      <h1 id="home-title" class="sr-only">{SITE.title} · {SITE.author} {t(locale, "的笔记与日常")}</h1>
+      <section class="island-stage" aria-label={t(locale, "可探索的林间阅读庭院")}>
         <WorldCover id="island-poster" posterVersion={assets.posterVersion} decorative />
-        <div id="island-scene" role="group" tabindex="-1" aria-describedby="scene-instructions" aria-label="可探索的庭院：书架、书桌、喷泉、小狗、植物角和收音机"></div>
+        <div id="island-scene" role="group" tabindex="-1" aria-describedby="scene-instructions" aria-label={t(locale, "可探索的庭院：书架、书桌、喷泉、小狗、植物角和收音机")}></div>
         <div class="island-loading">
-          <p id="island-status" role="status" aria-live="polite">正在准备庭院…</p>
-          <progress id="island-progress" value="0" max="100" aria-label="庭院资源加载进度"></progress>
-          <button id="island-retry" type="button" class="world-small-button blog-button" hidden>重新加载庭院</button>
+          <p id="island-status" role="status" aria-live="polite">{t(locale, "正在准备庭院…")}</p>
+          <progress id="island-progress" value="0" max="100" aria-label={t(locale, "庭院资源加载进度")}></progress>
+          <button id="island-retry" type="button" class="world-small-button blog-button" hidden>{t(locale, "重新加载庭院")}</button>
         </div>
-        <p id="scene-instructions" class="sr-only">悬停物件查看入口，点击阅读。拖动环顾，滚轮或双指缩放；键盘 Tab 浏览入口，Enter 打开。</p>
+        <p id="scene-instructions" class="sr-only">{t(locale, "悬停物件查看入口，点击阅读。拖动环顾，滚轮或双指缩放；键盘 Tab 浏览入口，Enter 打开。")}</p>
         <noscript>
           <style>.island-loading,.island-no-script { display:none; } #island-directory { visibility:visible!important; display:block!important; inset:12px!important; }</style>
         </noscript>
       </section>
       <div id="island-directory" class="island-directory">
-        <p class="island-directory-intro">不必等庭院加载，也可以从这里翻开笔记。</p>
+        <p class="island-directory-intro">{t(locale, "不必等庭院加载，也可以从这里翻开笔记。")}</p>
         <section id="library" data-island-section aria-labelledby="panel-library-title">
-          <p class="island-panel-kicker"><Icon name="book" size={23} />全部笔记</p>
-          <h2 id="panel-library-title">挑一本，坐下来读。</h2>
-          <p class="island-panel-lead">这里收集了 {content.total} 篇学习与实践笔记。书架不大，能探索的想法很多。</p>
-          {library.length ? <ul class="island-post-list">{library.map(post => <li><a href={post.href}><span class="island-post-meta">{post.category} · {post.readingMinutes} 分钟</span><h3>{post.title}</h3>{post.description && <p>{post.description}</p>}<span class="island-post-cta">翻开这篇 <span aria-hidden="true">↗</span></span></a></li>)}</ul> : <p class="world-empty">第一篇笔记还在准备中。</p>}
-          <nav class="island-panel-actions" aria-label="书架阅读工具">
-            <a class="world-button world-button-accent" href="/notes/">全部 {content.total} 篇笔记 <span aria-hidden="true">→</span></a>
-            <a class="world-small-button blog-button" href="/search/?focus=1"><Icon name="search" size={18} />搜索笔记</a>
+          <p class="island-panel-kicker"><Icon name="book" size={23} />{t(locale, "全部笔记")}</p>
+          <h2 id="panel-library-title">{t(locale, "挑一本，坐下来读。")}</h2>
+          <p class="island-panel-lead">{t(locale, "这里收集了")} {content.total} {t(locale, "篇学习与实践笔记。书架不大，能探索的想法很多。")}</p>
+          {library.length ? <ul class="island-post-list">{library.map(post => <li><a href={localizePath(post.href, locale)}><span class="island-post-meta">{post.category} · {post.readingMinutes} {t(locale, "分钟")}</span><h3>{post.title}</h3>{post.description && <p>{post.description}</p>}<span class="island-post-cta">{t(locale, "翻开这篇")} <span aria-hidden="true">↗</span></span></a></li>)}</ul> : <p class="world-empty">{t(locale, "第一篇笔记还在准备中。")}</p>}
+          <nav class="island-panel-actions" aria-label={t(locale, "书架阅读工具")}>
+            <a class="world-button world-button-accent" href={localizePath("/notes/", locale)}>{t(locale, "全部")} {content.total} {t(locale, "篇笔记")} <span aria-hidden="true">→</span></a>
+            <a class="world-small-button blog-button" href={localizePath("/search/?focus=1", locale)}><Icon name="search" size={18} />{t(locale, "搜索笔记")}</a>
           </nav>
         </section>
         <section id="recent" data-island-section aria-labelledby="panel-recent-title">
-          <p class="island-panel-kicker"><Icon name="pencil" size={23} />最近更新</p>
-          <h2 id="panel-recent-title">最近，有这些新发现。</h2>
-          <p class="island-panel-lead">新写下的笔记，还有重新翻开补充的旧页。</p>
-          {content.recent.length ? <ul class="island-post-list">{content.recent.map(post => <li><a href={post.href}><span class="island-post-meta"><time datetime={post.updated}>{post.updated}</time> · {post.category}</span><h3>{post.title}</h3>{post.description && <p>{post.description}</p>}<span class="island-post-cta">看看更新 <span aria-hidden="true">↗</span></span></a></li>)}</ul> : <p class="world-empty">书桌上还没有新的笔记。</p>}
-          <a class="island-text-link" href="/archives/">按时间归档，翻阅全部笔记 →</a>
+          <p class="island-panel-kicker"><Icon name="pencil" size={23} />{t(locale, "最近更新")}</p>
+          <h2 id="panel-recent-title">{t(locale, "最近，有这些新发现。")}</h2>
+          <p class="island-panel-lead">{t(locale, "新写下的笔记，还有重新翻开补充的旧页。")}</p>
+          {content.recent.length ? <ul class="island-post-list">{content.recent.map(post => <li><a href={localizePath(post.href, locale)}><span class="island-post-meta"><time datetime={post.updated}>{post.updated}</time> · {post.category}</span><h3>{post.title}</h3>{post.description && <p>{post.description}</p>}<span class="island-post-cta">{t(locale, "看看更新")} <span aria-hidden="true">↗</span></span></a></li>)}</ul> : <p class="world-empty">{t(locale, "书桌上还没有新的笔记。")}</p>}
+          <a class="island-text-link" href={localizePath("/archives/", locale)}>{t(locale, "按时间归档，翻阅全部笔记 →")}</a>
         </section>
         <section id="categories" data-island-section aria-labelledby="panel-categories-title">
-          <p class="island-panel-kicker"><Icon name="grid" size={23} />分类</p>
-          <h2 id="panel-categories-title">今天，想往哪里走？</h2>
-          <p class="island-panel-lead">坐在喷泉旁，挑一个想慢慢琢磨的方向。</p>
-          <ul class="island-category-list">{content.categories.map(category => <li><a href={category.href}><span class="island-category-mark" style={'--category-accent:' + category.accent} aria-hidden="true"></span><div><h3>{category.title}</h3><p>{category.description}</p></div><span class="island-category-count">{category.count} 篇 <span aria-hidden="true">↗</span></span></a></li>)}</ul>
-          {!content.categories.length && <p class="world-empty">有了第一篇笔记，小路就会出现。</p>}
-          <a class="island-text-link" href="/categories/">查看分类小天地 →</a>
+          <p class="island-panel-kicker"><Icon name="grid" size={23} />{t(locale, "分类")}</p>
+          <h2 id="panel-categories-title">{t(locale, "今天，想往哪里走？")}</h2>
+          <p class="island-panel-lead">{t(locale, "坐在喷泉旁，挑一个想慢慢琢磨的方向。")}</p>
+          <ul class="island-category-list">{content.categories.map(category => <li><a href={localizePath(category.href, locale)}><span class="island-category-mark" style={'--category-accent:' + category.accent} aria-hidden="true"></span><div><h3>{category.title}</h3><p>{category.description}</p></div><span class="island-category-count">{countLabel(locale, category.count, "篇", "post")} <span aria-hidden="true">↗</span></span></a></li>)}</ul>
+          {!content.categories.length && <p class="world-empty">{t(locale, "有了第一篇笔记，小路就会出现。")}</p>}
+          <a class="island-text-link" href={localizePath("/categories/", locale)}>{t(locale, "查看分类小天地 →")}</a>
         </section>
         <section id="about" data-island-section aria-labelledby="panel-about-title">
-          <p class="island-panel-kicker"><Icon name="user" size={23} />关于与阅读指南</p>
-          <div class="island-author"><img src={content.author.avatar} width="88" height="88" loading="lazy" decoding="async" alt="Ferris 的黑色小狗卡通头像" /><div><h2 id="panel-about-title">你好，我是 {content.author.name}。</h2><p>保持好奇，慢慢来。</p></div></div>
+          <p class="island-panel-kicker"><Icon name="user" size={23} />{t(locale, "关于与阅读指南")}</p>
+          <div class="island-author"><img src={content.author.avatar} width="88" height="88" loading="lazy" decoding="async" alt={t(locale, "Ferris 的黑色小狗卡通头像")} /><div><h2 id="panel-about-title">{t(locale, `你好，我是 ${content.author.name}。`, `Hi, I’m ${content.author.name}.`)}</h2><p>{t(locale, "保持好奇，慢慢来。")}</p></div></div>
           <p class="island-panel-lead">{content.author.intro}</p>
-          <a class="island-text-link" href={content.author.href}>再多认识我一点 →</a>
-          <h3 class="island-guides-heading">一起读的三份指南</h3>
-          <ul class="island-guide-list">{content.guides.map(guide => <li><a href={guide.href}><Icon name={guide.icon} size={26} /><div><span>{guide.label}</span><h4>{guide.title}</h4><p>{guide.description}</p></div><span aria-hidden="true">↗</span></a></li>)}</ul>
+          <a class="island-text-link" href={localizePath(content.author.href, locale)}>{t(locale, "再多认识我一点 →")}</a>
+          <h3 class="island-guides-heading">{t(locale, "一起读的三份指南")}</h3>
+          <ul class="island-guide-list">{content.guides.map(guide => <li><a href={localizePath(guide.href, locale)}><Icon name={guide.icon} size={26} /><div><span>{guide.label}</span><h4>{guide.title}</h4><p>{guide.description}</p></div><span aria-hidden="true">↗</span></a></li>)}</ul>
         </section>
         <section id="tags" data-island-section aria-labelledby="panel-tags-title">
-          <p class="island-panel-kicker"><Icon name="leaf" size={23} />标签</p>
-          <h2 id="panel-tags-title">让零散的想法，连在一起。</h2>
-          <p class="island-panel-lead">从常用关键词开始，在笔记之间散散步。</p>
-          <ul class="island-tag-list">{content.tags.slice(0, 18).map(tag => <li><TagToken name={tag.title} count={tag.count} href={tag.href} /></li>)}</ul>
-          {!content.tags.length && <p class="world-empty">还没有挂上标签。</p>}
-          <a class="world-button blog-button island-panel-link" href="/tags/">全部 {content.tags.length} 个标签 <span aria-hidden="true">→</span></a>
+          <p class="island-panel-kicker"><Icon name="leaf" size={23} />{t(locale, "标签")}</p>
+          <h2 id="panel-tags-title">{t(locale, "让零散的想法，连在一起。")}</h2>
+          <p class="island-panel-lead">{t(locale, "从常用关键词开始，在笔记之间散散步。")}</p>
+          <ul class="island-tag-list">{content.tags.slice(0, 18).map(tag => <li><TagToken name={tag.title} count={tag.count} href={localizePath(tag.href, locale)} /></li>)}</ul>
+          {!content.tags.length && <p class="world-empty">{t(locale, "还没有挂上标签。")}</p>}
+          <a class="world-button blog-button island-panel-link" href={localizePath("/tags/", locale)}>{t(locale, "全部")} {content.tags.length} {t(locale, "个标签")} <span aria-hidden="true">→</span></a>
         </section>
         <section id="mail" data-island-section aria-labelledby="panel-mail-title">
-          <p class="island-panel-kicker"><Icon name="mail" size={23} />订阅与联系</p>
-          <h2 id="panel-mail-title">有空的话，保持联系。</h2>
-          <p class="island-panel-lead">订阅一份慢慢更新的笔记，或者来聊聊正在做的事。</p>
-          <ul class="island-guide-list">{content.links.map(link => <li><a href={link.href}><Icon name={link.icon} size={28} /><div><h3>{link.title}</h3><p>{link.description}</p></div><span aria-hidden="true">↗</span></a></li>)}</ul>
+          <p class="island-panel-kicker"><Icon name="mail" size={23} />{t(locale, "订阅与联系")}</p>
+          <h2 id="panel-mail-title">{t(locale, "有空的话，保持联系。")}</h2>
+          <p class="island-panel-lead">{t(locale, "订阅一份慢慢更新的笔记，或者来聊聊正在做的事。")}</p>
+          <ul class="island-guide-list">{content.links.map(link => <li><a href={localizePath(link.href, locale)}><Icon name={link.icon} size={28} /><div><h3>{link.title}</h3><p>{link.description}</p></div><span aria-hidden="true">↗</span></a></li>)}</ul>
         </section>
       </div>
-      <dialog id="island-dialog" aria-label="庭院里的笔记">
+      <dialog id="island-dialog" aria-label={t(locale, "庭院里的笔记")}>
         <div class="island-dialog-actions">
           <span id="island-panel-label"></span>
-          <button id="island-close" type="button" class="island-icon-button blog-button" aria-label="关闭内容，返回庭院"><Icon name="close" size={22} /></button>
+          <button id="island-close" type="button" class="island-icon-button blog-button" aria-label={t(locale, "关闭内容，返回庭院")}><Icon name="close" size={22} /></button>
         </div>
         <div id="island-panel"></div>
       </dialog>
