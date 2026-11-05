@@ -1,9 +1,10 @@
 import {
-  Box3, BoxGeometry, CatmullRomCurve3, CylinderGeometry, Group, InstancedMesh,
+  Box3, BoxGeometry, CylinderGeometry, Group,
   MathUtils, Mesh, MeshStandardMaterial, Object3D, PointLight, SphereGeometry,
-  TorusGeometry, TubeGeometry, Vector3, type Camera, type Scene,
+  Vector3, type Camera, type Scene,
 } from 'three';
 import { hoverTargets, type HoverTarget } from './types';
+import { createFountain } from './fountain';
 
 /** Each response belongs to the object: flowing water, a page, foliage, a wag,
  * or music. Nothing scales/explodes the whole island. Pivots are authored in the
@@ -30,31 +31,11 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
     const part = parts.get(name); if (part) part.object.position[axis] = part.position[axis] + amount;
   }
 
-  const water = new Group(); water.name = 'Hover_FountainWater';
-  water.position.copy(at('Fountain_WaterAnchor', 'Categories')); water.visible = false; scene.add(water);
+  const fountainOrigin = at('Fountain_WaterAnchor', 'Categories');
   const basinAnchor = root.getObjectByName('Fountain_BasinAnchor');
-  const basinY = basinAnchor ? basinAnchor.getWorldPosition(new Vector3()).y + .005 - water.position.y : -.6591;
-  const waterMaterial = new MeshStandardMaterial({ color: '#48bed4', roughness: .22, metalness: .02, emissive: '#24889d', emissiveIntensity: .16, transparent: true, opacity: .94, depthWrite: false });
-  const jetCurve = new CatmullRomCurve3([new Vector3(), new Vector3(.015,.55,0), new Vector3(0,1.15,0), new Vector3(.025,1.28,.015)]);
-  water.add(new Mesh(new TubeGeometry(jetCurve, 18, .048, 7, false), waterMaterial));
-  for (let i = 0; i < 6; i++) {
-    const a = i * Math.PI / 3;
-    const points = Array.from({ length: 17 }, (_, k) => {
-      const t = k / 16, r = .86 * t;
-      return new Vector3(Math.cos(a) * r, 3.6 * t * (1 - t) + basinY * t, Math.sin(a) * r);
-    });
-    water.add(new Mesh(new TubeGeometry(new CatmullRomCurve3(points), 18, .023, 6, false), waterMaterial));
-  }
-  const drops = new InstancedMesh(new SphereGeometry(.041, 8, 6), waterMaterial, 30);
-  drops.name = 'Fountain_Droplets'; water.add(drops); const dummy = new Object3D();
-  const ringMaterial = new MeshStandardMaterial({ color: '#d7f4ef', emissive: '#7cced5', emissiveIntensity: .2, transparent: true, opacity: .65, depthWrite: false });
-  // The six splash rings sit at the stream landings on the lower basin's
-  // authored water surface (world Y .805), clear of its central pedestal.
-  const rings = Array.from({ length: 6 }, (_, i) => {
-    const a = i * Math.PI / 3;
-    const mesh = new Mesh(new TorusGeometry(.065, .008, 5, 24), ringMaterial);
-    mesh.rotation.x = -Math.PI / 2; mesh.position.set(Math.cos(a) * .86, basinY, Math.sin(a) * .86); water.add(mesh); return mesh;
-  });
+  const basinY = basinAnchor ? basinAnchor.getWorldPosition(new Vector3()).y + .005 - fountainOrigin.y : -.6591;
+  const fountain = createFountain(fountainOrigin, basinY);
+  const { water } = fountain; scene.add(water);
 
   const notes = new Group(); notes.name = 'Hover_RadioNotes';
   notes.position.copy(at('Radio_NoteAnchor', 'Mailbox')); notes.visible = false; scene.add(notes);
@@ -85,20 +66,7 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
       rotate(name, 'x', reduced ? 0 : plants * Math.cos(time * 2.1 + i) * .02);
     }
     rotate('Radio', 'z', reduced ? 0 : radio * Math.sin(time * 8) * .035);
-    water.visible = !reduced && strength.categories > .008;
-    // Fade the flow without moving its contact points off the two water levels.
-    waterMaterial.opacity = .94 * strength.categories;
-    ringMaterial.opacity = .65 * strength.categories;
-    if (water.visible) {
-      for (let i = 0; i < 30; i++) {
-        const t = (time * .8 + i / 30) % 1, a = i % 6 * Math.PI / 3;
-        const r = .86 * t;
-        dummy.position.set(Math.cos(a) * r, 4.2 * t * (1 - t) + basinY * t, Math.sin(a) * r);
-        dummy.scale.setScalar(.65 + Math.sin(i * 7) * .22); dummy.scale.y *= 1.55; dummy.updateMatrix(); drops.setMatrixAt(i, dummy.matrix);
-      }
-      drops.instanceMatrix.needsUpdate = true;
-      rings.forEach((ring, i) => { const s = .3 + ((time * .9 + i / 6) % 1) * 2.4; ring.scale.set(s, s, 1); });
-    }
+    fountain.update(time, strength.categories, reduced);
     notes.visible = !reduced && radio > .008;
     if (notes.visible) symbols.forEach((note, i) => {
       const t = (time * .6 + i / 3) % 1;

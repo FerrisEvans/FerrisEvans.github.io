@@ -15,6 +15,7 @@ const links = [
   ...primary,
   ...(import.meta.env.DEV ? [{ href: '/drafts/', label: '草稿', icon: 'pencil' }] : []),
 ];
+const sceneViews: Record<string, string> = { '/notes/': 'library', '/categories/': 'categories', '/tags/': 'tags', '/about/': 'about' };
 const path = Astro.url.pathname;
 const isActive = (href: string) => href === '/' ? path === '/'
   : href === '/notes/' ? path.startsWith('/notes/') || path.startsWith('/posts/')
@@ -24,7 +25,7 @@ const isActive = (href: string) => href === '/' ? path === '/'
   <div class="nav-bar">
     <a href="/" aria-label={SITE.title + ' 首页'} class="island-brand"><IslandBrand /></a>
     <nav aria-label="主导航" class="desktop-navigation nav-links">
-      {primary.map(link => <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} size={23} /><span>{link.label}</span></a>)}
+      {primary.map(link => <a href={link.href} data-island-nav={sceneViews[link.href]} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} size={23} /><span>{link.label}</span></a>)}
     </nav>
     <div class="nav-actions">
       <a href="/search/" class="island-icon-button blog-button" aria-label="搜索" aria-keyshortcuts="Meta+K Control+K"><Icon name="search" /></a>
@@ -36,7 +37,7 @@ const isActive = (href: string) => href === '/' ? path === '/'
   </div>
   <div id="mobile-menu" class="mobile-menu" aria-hidden="true" inert>
     <div class="mobile-menu-inner"><nav aria-label="移动导航">
-      {links.map(link => <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} /><span>{link.label}</span></a>)}
+      {links.map(link => <a href={link.href} data-island-nav={sceneViews[link.href]} aria-current={isActive(link.href) ? 'page' : undefined} class:list={['nav-link', { 'is-active': isActive(link.href) }]}><Icon name={link.icon} /><span>{link.label}</span></a>)}
     </nav></div>
   </div>
   <noscript>

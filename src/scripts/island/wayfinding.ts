@@ -1,0 +1,79 @@
+import {
+  CanvasTexture, CylinderGeometry, ExtrudeGeometry, Group, Mesh, MeshStandardMaterial,
+  PlaneGeometry, Shape, SRGBColorSpace, Vector3, type Object3D,
+} from 'three';
+import { viewObjects } from './types';
+
+/** Small, physical signs share their prop's picking/outline ownership. They are
+ * world geometry, including their backs, so trees occlude them naturally. */
+export function createWayfinding(root: Object3D) {
+  const wood = new MeshStandardMaterial({ color: '#b88d62', roughness: .94 });
+  const cord = new MeshStandardMaterial({ color: '#8c7251', roughness: 1 });
+  const plaques: Group[] = [];
+  const specs = [
+    { view: 'library', text: '笔记', kind: 'paper', x: -1.87, y: 2.60, z: -1.55, width: 1.10, height: .62, yaw: .28 },
+    { view: 'categories', text: '分类', kind: 'arrow', x: 1.45, y: 1.23, z: 2.18, width: 1.25, height: .59, yaw: .54 },
+    { view: 'tags', text: '标签', kind: 'plant', x: 3.57, y: 1.40, z: -.02, width: 1.12, height: .60, yaw: .40 },
+  ] as const;
+  function rod(parent: Object3D, start: Vector3, end: Vector3, radius: number, material: MeshStandardMaterial) {
+    const delta = end.clone().sub(start);
+    const mesh = new Mesh(new CylinderGeometry(radius, radius, delta.length(), 8), material);
+    mesh.position.copy(start).add(end).multiplyScalar(.5);
+    mesh.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), delta.normalize());
+    mesh.castShadow = true; parent.add(mesh);
+  }
+  for (const spec of specs) {
+    const owner = root.getObjectByName(viewObjects[spec.view]);
+    if (!owner) continue;
+    const group = new Group(); group.name = `Wayfinding_${spec.view}`;
+    owner.add(group); root.updateWorldMatrix(true, true);
+    group.position.copy(owner.worldToLocal(new Vector3(spec.x, spec.y, spec.z)));
+    group.rotation.y = spec.yaw;
+    const plaque = new Group(); group.add(plaque); plaques.push(plaque);
+    const { width: w, height: h } = spec;
+    const shape = new Shape(), r = .07;
+    shape.moveTo(-w / 2 + r, -h / 2);
+    shape.lineTo(w / 2 - r, -h / 2);
+    if (spec.kind === 'arrow') {
+      shape.lineTo(w / 2 + .13, 0); shape.lineTo(w / 2 - r, h / 2);
+    } else {
+      shape.quadraticCurveTo(w / 2, -h / 2, w / 2, -h / 2 + r);
+      shape.lineTo(w / 2, h / 2 - r); shape.quadraticCurveTo(w / 2, h / 2, w / 2 - r, h / 2);
+    }
+    shape.lineTo(-w / 2 + r, h / 2); shape.quadraticCurveTo(-w / 2, h / 2, -w / 2, h / 2 - r);
+    shape.lineTo(-w / 2, -h / 2 + r); shape.quadraticCurveTo(-w / 2, -h / 2, -w / 2 + r, -h / 2);
+    const material = new MeshStandardMaterial({ color: spec.kind === 'paper' ? '#fff2d1' : spec.kind === 'plant' ? '#dce5ba' : '#e2be88', roughness: 1 });
+    const board = new Mesh(new ExtrudeGeometry(shape, { depth: .035, bevelEnabled: true, bevelSize: .015, bevelThickness: .012, bevelSegments: 2, steps: 1, curveSegments: 5 }), material);
+    board.castShadow = true; board.receiveShadow = true; plaque.add(board);
+    if (spec.kind === 'paper') {
+      group.updateWorldMatrix(true, false);
+      for (const x of [-.34, .34]) rod(group, new Vector3(x, h / 2 - .04, 0), group.worldToLocal(new Vector3(spec.x + x, 3.08, -1.96)), .012, cord);
+    } else {
+      rod(group, new Vector3(0, .45 - spec.y, -.055), new Vector3(0, h / 2 - .05, -.055), .045, wood);
+    }
+    // Reuse the site's bundled CJK glyphs; system faces remain fallback only.
+    const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 256;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#61442e'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = '700 156px "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.fillText(spec.text, 256, 133);
+    ctx.strokeStyle = '#907452'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(87, 224); ctx.quadraticCurveTo(256, 214, 425, 224); ctx.stroke();
+    const map = new CanvasTexture(canvas); map.colorSpace = SRGBColorSpace;
+    const ink = new MeshStandardMaterial({ map, transparent: true, roughness: 1, depthWrite: false });
+    for (const back of [false, true]) {
+      const face = new Mesh(new PlaneGeometry(w * .86, h * .82), ink);
+      face.position.z = back ? -.014 : .049;
+      if (back) face.rotation.y = Math.PI;
+      plaque.add(face);
+    }
+  }
+  return {
+    resize(width: number) {
+      // Give the three labels enough ink on a narrow screen. Supports keep
+      // their ground/shelf contacts; only the signs themselves grow slightly.
+      const scale = 1 + Math.max(0, Math.min(.55, (700 - width) / 500));
+      plaques.forEach(plaque => plaque.scale.setScalar(scale));
+    },
+  };
+}

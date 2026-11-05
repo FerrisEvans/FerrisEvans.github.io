@@ -11,6 +11,7 @@ import { createEffects } from './effects';
 import { createActivity } from './activity';
 import { createOutline } from './outline';
 import { createPicker } from './picking';
+import { createWayfinding } from './wayfinding';
 import { viewObjects, hoverObjects, type IslandView, type HoverTarget } from './types';
 import { releaseObjectResources } from './resources';
 
@@ -96,11 +97,16 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
   // The full-viewport scene owns drag, pinch and wheel gestures.
   renderer.domElement.style.touchAction = 'none';
   const navigation = createNavigation(camera, host, anchors, model);
+  cleanupHooks.push(() => navigation.dispose());
+  // Bake the labels only after the site's bundled CJK face is ready, including
+  // on systems without a Chinese system font. Reuse the header's font request.
+  await Promise.race([document.fonts.load('700 32px "Noto Sans SC"', '笔记分类标签').catch(() => []), aborted]);
+  const wayfinding = createWayfinding(model);
   const animation = createAnimation(model, clips);
   const effects = createEffects(model, scene, camera);
   const activity = createActivity(model, scene);
   const outline = createOutline(renderer, scene, camera);
-  cleanupHooks.push(() => navigation.dispose(), () => animation.dispose(), () => outline.dispose());
+  cleanupHooks.push(() => animation.dispose(), () => outline.dispose());
   const picker = createPicker(model, camera, host);
   navigation.controls.addEventListener('change', invalidate);
   let highlighted: HoverTarget | null = null;
@@ -140,7 +146,7 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, width < 700 ? 1.5 : 2));
     renderer.setSize(width, height, false);
     outline.resize(width, height, renderer.getPixelRatio());
-    navigation.resize(width, height); invalidate();
+    navigation.resize(width, height); wayfinding.resize(width); invalidate();
   }
   resize(); theme(document.documentElement.classList.contains('dark'));
   await Promise.race([renderer.compileAsync(scene, camera), aborted]);

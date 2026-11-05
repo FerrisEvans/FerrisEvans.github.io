@@ -308,23 +308,32 @@ def make_dog(name='Dog', loc=(0, 0, 0), scale=1, parent=None):
     p = _f_palette()
     root = group(name)
     body = group(name + '_Body', (0, 0, .90), root)
-    _f_sweep(name + '_Torso', [(0,.035,.57,.08,.07), (0,.035,.75,.19,.145), (0,.025,1.08,.22,.16),
+    # The reference is a floppy sewn toy: a long, softly padded body, hanging
+    # sleeves and short feet. Keep the head size while lowering the soft hem;
+    # a high hip and long narrow shins made the old silhouette too humanoid.
+    _f_sweep(name + '_Torso', [(0,.035,.35,.035,.035), (0,.035,.40,.13,.105),
+        (0,.035,.53,.19,.145), (0,.03,.82,.21,.16), (0,.025,1.10,.215,.16),
         (0,.01,1.36,.19,.14), (0,0,1.52,.105,.09)], p['fur'], body, sides=24)
-    # Deliberately slender limbs and flared soft paws, as in the source toy.
     for side, sign in [('L', -1), ('R', 1)]:
-        arm = group(name + '_Arm_' + side, (sign*.19, .015, 1.29), body)
-        _f_sweep(name + '_ArmCloth_' + side, [(sign*.12,.015,1.36,.025,.025),(sign*.18,.015,1.30,.075,.065),
-            (sign*.28,-.005,1.15,.085,.07), (sign*.34,-.04,.92,.07,.065),
-            (sign*.39,-.075,.74,.075,.065), (sign*.395,-.095,.65,.09,.074),
-            (sign*.395,-.10,.60,.10,.078),(sign*.395,-.10,.55,.08,.063),
-            (sign*.395,-.10,.52,.045,.036),(sign*.395,-.10,.51,.002,.002)], p['fur'], arm)
-        leg = group(name + '_Leg_' + side, (sign*.13,.015,.67), body)
-        _f_sweep(name + '_LegCloth_' + side, [(sign*.08,.015,.77,.025,.025),(sign*.13,.015,.69,.075,.075),
-            (sign*.15,.018,.49,.065,.065), (sign*.17,-.005,.23,.075,.075),
-            (sign*.19,-.04,.16,.10,.11),(sign*.19,-.075,.10,.115,.15),
-            (sign*.19,-.09,.06,.105,.145),(sign*.19,-.09,.025,.075,.105),
-            (sign*.19,-.09,.007,.02,.025),(sign*.19,-.09,.005,.001,.001)], p['fur'], leg)
-        _f_line(name+'_PawSeam_'+side, [(sign*.255,-.18,.067), (sign*.19,-.225,.063), (sign*.135,-.18,.067)], .0025, p['seam'], leg)
+        arm = group(name + '_Arm_' + side, (sign*.205, .015, 1.29), body)
+        # One continuous taper, without a pinched wrist or a separate ball hand.
+        # The sleeve hangs close to the body, with a gentle outward curve at its
+        # rounded end so the silhouette stays legible at the island scale.
+        _f_sweep(name + '_ArmCloth_' + side, [(sign*.14,.015,1.37,.025,.025),
+            (sign*.23,.015,1.29,.095,.079), (sign*.29,-.005,1.11,.11,.086),
+            (sign*.315,-.035,.87,.108,.084), (sign*.33,-.065,.62,.105,.083),
+            (sign*.35,-.095,.43,.112,.088), (sign*.36,-.115,.33,.115,.09),
+            (sign*.36,-.125,.27,.094,.075), (sign*.355,-.125,.23,.06,.048),
+            (sign*.35,-.125,.21,.002,.002)], p['fur'], arm, sides=24)
+        leg = group(name + '_Leg_' + side, (sign*.13,.015,.43), body)
+        # Short stuffed feet curve outward from the lower body, like soft socks.
+        # A broad ankle blends into the paw instead of becoming a rigid shin.
+        _f_sweep(name + '_LegCloth_' + side, [(sign*.10,.02,.51,.025,.025),
+            (sign*.135,.015,.44,.10,.09), (sign*.16,.005,.33,.105,.10),
+            (sign*.20,-.035,.225,.115,.12), (sign*.245,-.085,.15,.13,.155),
+            (sign*.265,-.115,.105,.135,.165), (sign*.27,-.13,.055,.11,.145),
+            (sign*.27,-.13,.023,.075,.10), (sign*.27,-.13,.007,.025,.035),
+            (sign*.27,-.13,.005,.001,.001)], p['fur'], leg, sides=24)
     tail = group(name + '_Tail', (0,.15,.78), body)
     _f_sweep(name + '_TailCloth', [(0,.14,.78,.045,.045), (.025,.29,.72,.075,.07),
         (.03,.43,.76,.07,.07), (.025,.50,.85,.055,.055), (0,.48,.91,.002,.002)], p['fur'], tail)

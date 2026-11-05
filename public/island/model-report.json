@@ -4,6 +4,7 @@
   "author": "Weijin / original Ferris character and garden composition",
   "source": "assets/island/island.blend",
   "asset": "assets/island/island.glb",
+  "delivery": "public/island/island.glb.bin",
   "externalAssets": [
     {
       "name": "Tiny Treats - Pretty Park 1.0",
@@ -5744,10 +5745,10 @@
       "group": "Environment"
     }
   ],
-  "bytes": 4899572,
-  "triangles": 135718,
-  "meshes": 114,
-  "drawCalls": 116,
+  "bytes": 4954692,
+  "triangles": 137494,
+  "meshes": 112,
+  "drawCalls": 114,
   "materials": 41,
   "textures": 15,
   "animations": [
@@ -6050,6 +6051,5 @@
     }
   ],
   "sourceLicense": "External assets CC0-1.0 by Isa Lousberg / Tiny Treats and Kay Lousberg / KayKit. Source packages, licenses, hashes and actual mesh origins are retained.",
-  "buildCommand": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python scripts/island/build_scene.py",
-  "delivery": "public/island/island.glb.bin"
+  "buildCommand": "/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python scripts/island/build_scene.py"
 }

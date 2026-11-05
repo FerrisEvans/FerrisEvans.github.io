@@ -28,9 +28,11 @@ function mountIsland() {
   const hint = createIslandTooltip(host);
   const access = document.createElement('nav');
   access.className = 'island-access-nav'; access.setAttribute('aria-label', '场景内容入口'); host.append(access);
+  const navigationLinks = [...document.querySelectorAll<HTMLAnchorElement>('.site-header [data-island-nav]')];
   let focusedView: IslandView | null = null;
   function setHover(view: HoverTarget | null, point?: { x: number; y: number }) {
     viewer?.hover(view); root!.dataset.hover = view ?? '';
+    navigationLinks.forEach(link => link.classList.toggle('is-scene-linked', Boolean(view) && link.dataset.islandNav === view));
     host.style.cursor = isIslandView(view) ? 'pointer' : 'grab';
     if (isIslandView(view) && point && !capture) hint.show(viewLabels[view], point.x, point.y, reduced.matches);
     else hint.hide();
@@ -81,6 +83,16 @@ function mountIsland() {
     root.dataset.view = view ?? 'home'; focusedView = null; setHover(null);
     invalidate();
   }, signal);
+  // Existing header links still navigate normally; hover/focus only explains
+  // their scene counterpart. Archives and recent updates intentionally differ.
+  for (const link of navigationLinks) {
+    const view = link.dataset.islandNav as IslandView;
+    const highlight = () => { if (viewer && !panels.selected && !capture) setHover(view); };
+    link.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') highlight(); }, { signal });
+    link.addEventListener('pointerleave', () => { if (document.activeElement !== link) setHover(null); }, { signal });
+    link.addEventListener('focus', highlight, { signal });
+    link.addEventListener('blur', () => { if (!link.matches(':hover')) setHover(null); }, { signal });
+  }
   function releaseGraphics() { stop(); graphicsAborter?.abort(); graphicsAborter = undefined; assets?.dispose(); assets = undefined; viewer?.dispose(); viewer = undefined; }
   function fail(error?: unknown) {
     if (signal.aborted) return;
@@ -177,7 +189,7 @@ function mountIsland() {
   }, { signal });
   host.addEventListener('pointerleave', () => { if (!focusedView) setHover(null); }, { signal });
   void start();
-  return () => { generation++; aborter.abort(); observer.disconnect(); visibility.disconnect(); releaseGraphics(); panels.dispose(); access.remove(); hint.dispose(); };
+  return () => { generation++; aborter.abort(); observer.disconnect(); visibility.disconnect(); releaseGraphics(); panels.dispose(); access.remove(); hint.dispose(); navigationLinks.forEach(link => link.classList.remove('is-scene-linked')); };
 }
 
 let unmount = mountIsland();

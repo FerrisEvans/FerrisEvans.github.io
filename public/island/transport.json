@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "source": "assets/island/island.glb",
-  "sourceSha256": "1070a6f51190f6705a8de6d257642dc32ea4ebe5e8901339d23934314ec0c683",
+  "sourceSha256": "89e67ba4c74ccfe388a8f1a4bfe5a8390fabcce5a71c2b9269c487bc06c1922f",
   "packerSha256": "b1970fd973ec4a975ad9060678076d53b83b0876accada2cc98464125836a00d",
   "file": "island.glb.bin",
-  "sourceBytes": 4899572,
-  "bytes": 1890820,
-  "packedBytes": 3182360,
-  "sha256": "d646296a514837648ba6cab05ceadc621d87ab3cb420b3091c9f38c7dbb9e513",
-  "packedSha256": "78426d1dcec986da29c94bbcc7307e36aad5f99d20331c6307bf3c82137d58d4",
+  "sourceBytes": 4954692,
+  "bytes": 1909693,
+  "packedBytes": 3201636,
+  "sha256": "30b9da1ea9c8dea1bf65f55712d6cb6234c40fae383083bfd3f497b40914903e",
+  "packedSha256": "bb4310fd0176a8febe103d4d663192d3a627f5ec359900154ec2a2a8bd0f4a98",
   "compression": "gzip",
   "extension": "EXT_meshopt_compression",
   "textureExtension": "EXT_texture_webp",
@@ -21,8 +21,8 @@
     "quantization": false,
     "reordered": false
   },
-  "nodes": 182,
-  "meshes": 114,
+  "nodes": 180,
+  "meshes": 112,
   "materials": 41,
   "animations": [
     {
