@@ -7,12 +7,16 @@
 .tag-word-cloud { position:relative; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 10px; list-style:none; margin:0; padding:16px 0; border:0; background:transparent; }
 .tag-word-cloud > li { display:flex; max-width:100%; margin:0; padding:0; }
 .tag-word-cloud[hidden],.tag-word-cloud > li[hidden] { display:none; }
-.tag-word-cloud .tag-item { position:relative; align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); transform:translateY(var(--cloud-lift,0px)) scale(var(--cloud-scale,1)); transform-origin:center; transition:none; text-decoration:none; }
-.tag-word-cloud .tag-word { font-size:clamp(14px,var(--tag-token-size),39px); font-weight:700; line-height:1.25; overflow-wrap:anywhere; }
-.tag-word-cloud .tag-item:hover,.tag-word-cloud .tag-item:active { text-decoration:none; }
-.tag-word-cloud[data-magnifying="true"] .tag-item { will-change:transform; }
-.tag-word-cloud .tag-item[data-cloud-active="true"] { filter:brightness(.86); }
-.dark .tag-word-cloud .tag-item[data-cloud-active="true"] { filter:brightness(1.14); }
+.tag-word-cloud .tag-item { position:relative; align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); transform:none; transition:none; text-decoration:none; }
+.tag-word-cloud[data-packed="true"] .tag-item { width:100%; height:100%; padding:0; }
+.tag-word-cloud .tag-word { display:block; flex:none; max-width:100%; font-size:clamp(14px,var(--tag-token-size),39px); font-weight:700; line-height:1.25; overflow-wrap:anywhere; pointer-events:none; transform-origin:center; }
+.tag-word-cloud .tag-item:hover,.tag-word-cloud .tag-item:active { transform:none; text-decoration:none; }
+/* Keep the same compositing layer through entrance/exit and avoid brightness
+   changes on hover: those made the old text appear to flash. */
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) { .tag-word-cloud .tag-word { will-change:transform; } }
+.tag-cloud-content .island-tooltip { animation:tag-hint-enter .12s ease-out; transition:left .14s ease-out,top .14s ease-out; }
+@keyframes tag-hint-enter { from { opacity:0; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { .tag-cloud-content .island-tooltip { animation:none; transition:none; } }
 .tag-cloud-empty { padding:34px 0; text-align:center; color:var(--color-ink-soft); font-size:14px; line-height:1.9; }
 .tag-cloud-empty .blog-button { display:inline-flex; align-items:center; min-height:44px; margin-top:18px; padding:8px 20px; }
 .dark .tag-search { color:var(--color-snow-soft); }
