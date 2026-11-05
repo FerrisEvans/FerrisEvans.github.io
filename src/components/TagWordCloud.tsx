@@ -12,6 +12,7 @@ type Placement = { x: number; y: number; width: number; height: number };
 type Box = Placement & { name: string };
 type CloudLayout = { height: number; width: number; positions: Record<string, Placement> };
 type Point = { x: number; y: number } | null;
+const magnification = (width: number) => width < 600 ? 1.3 : 1.7;
 
 // Magic UI Dock's MotionValue → transform → spring composition, adapted to a
 // two-dimensional cloud. See docs/tag-cloud-motion.md for source and license.
@@ -43,7 +44,7 @@ function CloudWord({ tag, hidden, position, size, pointer, active, enabled, radi
  * The links and their normal tab order stay in the same DOM throughout. */
 function packWords(words: Word[], width: number): CloudLayout | null {
   if (!words.length || width < 1 || words.length > 160) return null;
-  const spread = width < 600 ? 1.25 : 1.5, gap = width < 600 ? 8 : 12;
+  const spread = magnification(width) + .05, gap = width < 600 ? 8 : 12;
   const ranked = [...words].sort((a, b) => b.count - a.count || b.width - a.width || a.name.localeCompare(b.name));
   const min = Math.sqrt(Math.min(...ranked.map(word => word.count)));
   const max = Math.sqrt(Math.max(...ranked.map(word => word.count)));
@@ -207,7 +208,7 @@ export default function TagWordCloud({ tags }: TagWordCloudProps) {
         {tags.map(tag => <CloudWord key={tag.name} tag={tag} hidden={!tag.name.toLowerCase().includes(normalized)}
           position={layout?.positions[tag.name]} size={fontSize(tag.count)} pointer={pointer} active={active}
           enabled={motionEnabled} radius={Math.min(220, Math.max(150, (layout?.width ?? 800) * .25))}
-          growth={layout && layout.width < 600 ? .2 : .45} />)}
+          growth={magnification(layout?.width ?? 800) - 1} />)}
       </ul>
       {visibleCount === 0 && <div id="tag-empty" className="tag-cloud-empty">
         <p>{tags.length ? '没有匹配的标签。换个关键词，再找找看。' : '标签还在慢慢收集，先翻开一篇笔记吧。'}</p>
