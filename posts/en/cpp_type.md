@@ -1,7 +1,7 @@
 ---
 translationKey: cpp_type
 locale: en
-title: "C++ Types"
+title: "C++ types"
 description: "A guide to fundamental C++ types—bool, characters, integers, floating-point types, and void—along with narrowing conversions and literal prefixes and suffixes."
 pubDate: 2025-02-22
 category: programming-language
@@ -9,11 +9,12 @@ subcategory: cpp
 tags: [type]
 ---
 
+This article introduces fundamental C++ types, literal notation, and conversions. Examples are independent snippets, with intentionally invalid lines marked `error`. Except where shown, headers and surrounding functions are omitted; the examples are not a single program.
 
-## 1. Boolean Types
+## Boolean types
 
-A Boolean variable (`bool`) holds either `true` or `false` and is commonly used for the result of a logical operation.
-By definition, converting a Boolean value to an integer turns `true` into 1 and `false` into 0. Conversely, integers can be implicitly converted to Boolean values when needed: a nonzero integer becomes `true`, and zero becomes `false`.
+A Boolean variable (`bool`) holds either `true` or `false` and often stores the result of a logical operation.
+Converting a Boolean value to an integer produces 1 for `true` and 0 for `false`. Conversely, integers can be implicitly converted to Boolean values: a nonzero integer becomes `true`, and zero becomes `false`.
 
 ```c++
 bool b1 = 7;
@@ -29,14 +30,18 @@ bool x = a + b; // true
 bool y = a || b; // true
 bool z = a - b; // false
 ```
-If we want to use a `{}` initializer to prevent a <u>narrowing conversion</u>[^narrowing_conversion] while deliberately converting an `int` to `bool`, we can make the condition explicit:
+
+To convert an `int` to `bool` in a `{}` initializer without a narrowing conversion[^narrowing_conversion], make the comparison explicit:
+
 ```c++
 void f(int i)
 {
   bool b{i != 0};
 }
 ```
+
 Pointers can also be implicitly converted to `bool` when needed. A non-null pointer becomes `true`, while a null pointer becomes `false`.
+
 ```c++
 void g(int *p)
 {
@@ -51,7 +56,7 @@ void g(int *p)
 > [!TIP]
 > I prefer `if (p)` to `if (p != nullptr)`: it is concise and directly expresses whether `p` is non-null. Neither form proves that the pointed-to object is still valid.
 
-## 2. Character Types
+## Character types
 
 In C++, `char` occupies exactly one byte, so `sizeof(char)` is always 1. The number of bits in a byte depends on the implementation:
 a byte has at least 8 bits, and 8-bit bytes are common. The size in bytes and the number of bits per byte are different measurements.
@@ -62,43 +67,42 @@ unsigned char c1 = 64; // well-defined: char has at least 8 bits, enough to hold
 unsigned char c2 = 1256; // the result depends on the width of char; with 8 bits it wraps to 232
 ```
 
-**char**: The ordinary character type used for program text. It represents values in the implementation's character encoding and commonly occupies 8 bits.
+`char`: The ordinary character type used for program text. It represents values in the implementation's character encoding and commonly occupies 8 bits.
 
+`signed char`: The same size as `char`, but explicitly signed, so it can hold negative, zero, and positive values.
 
-**signed char**: Similar in size to `char`, but explicitly signed, so it can hold both negative and positive values.
+`unsigned char`: The same size as `char`, but explicitly unsigned.
 
+`wchar_t`: Used for wide characters. Its size is implementation-defined and is chosen to support the wide-character encoding used by the implementation.
 
-**unsigned char**: Similar in size to `char`, but explicitly unsigned.
+`char16_t`: Used for UTF-16 code units.
 
-
-**wchar_t**: Used for wide characters. Its size is implementation-defined and is chosen to support the wide-character encoding used by the implementation.
-
-
-**char16_t**: Used for UTF-16 code units.
-
-
-**char32_t**: Used for UTF-32 code units.
-
+`char32_t`: Used for UTF-32 code units.
 
 > [!NOTE]
 > An implementation may give `char` the same representation and range as either `signed char` or `unsigned char`. They nevertheless remain three distinct types, and pointers to them are not interchangeable.
 
-Each character in the programming environment's character encoding corresponds to an integer value.
+We can inspect the integer value of a `char` in the implementation's character encoding:
+The following function reads characters from standard input and prints their integer values. It requires `<iostream>`; the caller is omitted.
+
 ```c++
+#include <iostream>
+
+// A main() function that calls intval() is omitted.
 // Inspect the integer value associated with a character
 void intval()
 {
-  for (char c; cin >> c; )
+  for (char c; std::cin >> c; )
     std::cout << "the value of '" << c << "' is " << int{c} << '\n';
 }
 ```
 
 > [!WARNING]
-> Avoid assuming an object's representation, especially when working with characters.
+> Avoid making assumptions about how objects are represented in memory, especially when working with characters.
 
 | Symbol / prefix | Meaning | Example |
 |:------------:|:--------------:|:----------|
-|     `'`      |     `char`     | `c`       |
+|     `'`      |     `char`     | `'c'`     |
 |     `u'`     |   `char16_t`   | `u'c'`    |
 |     `U'`     |   `char32_t`   | `U'c'`    |
 |     `L'`     |   `wchar_t`    | `L'c'`    |
@@ -109,24 +113,23 @@ void intval()
 | `U"` `UR"` | UTF-32 string | `U"foo"` |
 | `L"` `LR"` | `wchar_t` string | `L"foo"` |
 
-<sub>*“String” in this table means a <u>string literal</u>[^string_literal], not the `std::string` type.*</sub>
+In this table, “string” means a string literal[^string_literal], not the `std::string` type.
 
-## 3. Integer Types
+## Integer types
 
 | Symbol | Position | Meaning | Example |
 |:---------:|:--:|:---------:|:----------|
 | `0` | Prefix | Octal | `0776` |
 | `0x` `0X` | Prefix | Hexadecimal | `0xff` |
-| `u` `U` | Suffix | unsigned | `10U` |
-| `l` `L` | Suffix | long | `20000L` |
-| `ll` `LL` | Suffix | long long | `20000LL` |
+| `u` `U` | Suffix | `unsigned` | `10U` |
+| `l` `L` | Suffix | `long` | `20000L` |
+| `ll` `LL` | Suffix | `long long` | `20000LL` |
 
+## Floating-point types
 
-## 4. Floating-Point Types
-
-- `float`: single precision
-- `double`: double precision
-- `long double`: extended precision
+- `float`: typically single precision
+- `double`: typically double precision, with at least as much precision as `float`
+- `long double`: at least as much precision as `double`; the actual format depends on the implementation
 
 | Symbol | Position | Meaning | Example |
 |:-------:|:--:|:-------:|:--------|
@@ -135,34 +138,33 @@ void intval()
 | `.` | Infix | Floating-point decimal point | `1.2` |
 
 > [!TIP]
-> For most applications, we can use `bool` for Boolean values, `char` for characters, `int` for integers, and `double` for floating-point values. The other fundamental types can be thought of as variations on these,
-> useful when performance, compatibility, or other requirements call for them. In many cases, those four types are enough.
+> For many applications, `bool`, `char`, `int`, and `double` are good starting points for Boolean values, characters, integers, and floating-point values. Choose other fundamental types when range, precision, performance, or compatibility requirements call for them.
 
-## 5. void
+## The `void` type
 
-1. As a function return type, it indicates that the function returns no value.
-2. As the pointed-to type of a pointer, it indicates that the type of the object is unspecified.
+- As a function return type, it indicates that the function returns no value.
+- In a pointer type (`void*`), it lets the pointer refer to an object without specifying the object's type.
 
 ```c++
 void f();
 void *ptr;
 ```
 
-## 6. Size
+## Size
 
 $$
-1 byte = 8 bit
+1\text{ byte} = 8\text{ bits}
 $$
 
-The equation above describes the common 8-bit-byte case. Under the C++ standard, many important details are implementation-defined and closely tied to the hardware on which the program runs.
+The equation above describes the common 8-bit-byte case. Under the [C++ standard's rules for fundamental types](https://eel.is/c++draft/basic.fundamental), many important details are implementation-defined and closely tied to the hardware on which the program runs.
 
 C++ requires `char` to have at least 8 bits, `short` at least 16 bits, and `long` at least 32 bits.
 
 The width of `int` is also implementation-defined. It is intended to be a natural size for integer operations on the target machine and commonly occupies 4 bytes.
 
 > [!WARNING]
-> 1. `char` commonly has 8 bits, but machines with 32-bit `char` also exist.
-> 2. Never assume that `int` and a pointer have the same size. On many 64-bit architectures, a pointer is larger than an `int`.
+> - `char` commonly has 8 bits, but machines with 32-bit `char` also exist.
+> - Never assume that `int` and a pointer have the same size. On many 64-bit architectures, a pointer is larger than an `int`.
 
 [^narrowing_conversion]: A conversion that can lose information.
-[^string_literal]: A sequence of characters enclosed in double quotes. A string literal normally contains one more character than is visible in its spelling: a terminating zero character, `\0`.
+[^string_literal]: A sequence of characters enclosed in double quotes. The resulting array includes a terminating null character, `\0`.

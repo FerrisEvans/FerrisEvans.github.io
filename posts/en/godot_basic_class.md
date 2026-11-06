@@ -1,5 +1,5 @@
 ---
-title: "The Four Core Concepts of Godot"
+title: "The four core concepts of Godot"
 description: An introduction to Godot’s four core concepts—scenes, nodes, the scene tree, and signals—to help beginners see how they fit together.
 pubDate: 2025-03-16
 category: game-dev
@@ -9,53 +9,55 @@ locale: en
 translationKey: godot_basic_class
 ---
 
+I wrote these notes after completing my second Godot project, which gave me a broad overview of the engine.
+[The tutorial I followed](https://www.bilibili.com/video/BV1pu4y1b7p6) covers a lot of ground, so I decided to collect what I had learned in a series of posts.
+I will roughly follow the order of the tutorial and the [official documentation](https://docs.godotengine.org/en/stable/) as I revisit the material.
 
-I wrote these notes after finishing a project that gave me a broad overview of Godot. It was also my second Godot project.
-[This tutorial](https://www.bilibili.com/video/BV1pu4y1b7p6) covers a lot of ground, and after working through it, I decided to summarize what I had learned in a series of posts.
-I will try to follow the order of the tutorial and the [official documentation](https://docs.godotengine.org/en/stable/) as I review the material.
+This post introduces scenes, nodes, the scene tree, and signals in Godot 4. The interface examples use English labels.
 
-<font color="orange">These notes are not presented as entirely original work. They may include substantial translation or quotations, alongside my own understanding.</font>
+**Sources:** These notes summarize the tutorial and Godot’s [overview of key concepts](https://docs.godotengine.org/en/stable/getting_started/introduction/key_concepts_overview.html), with my own explanations.
 
-> [!TIP]
-> This series will probably focus entirely on 2D development. The discussion is limited to that area, and some of my understanding may be inaccurate: I am still learning, and Godot continues to evolve, so certain concepts may become outdated.
-> Corrections and discussion are welcome. Leave a message in the comments below.
+> [!NOTE]
+> I expect this series to focus on 2D development. I am still learning, so there may be mistakes, and some details may become outdated as Godot evolves.
+> If you spot an error or want to discuss something, leave a comment below.
 
-## 1. Scenes
+## Scenes
 
-In Godot, you build a game by creating many scenes. A scene might represent a character, a weapon, a menu, or a complete UI.
+In Godot, you build a game by creating many scenes. A scene might represent a character, a weapon, a menu, or a complete user interface (UI). The screenshot below shows a main menu scene in the editor.
 
-![iShot_2025-03-16_13.48.17.png](../img/iShot_2025-03-16_13.48.17.png)
+![A main menu scene in Godot, with the node tree on the left and the menu preview in the center](../img/iShot_2025-03-16_13.48.17.png)
 
-Scenes are generally reusable. Once you have created a scene, you can use it wherever and whenever you need it. You build your game in Godot by combining these scenes.
+Scenes are reusable: once you have created one, you can instantiate it wherever you need it. You build your game by combining these scene instances.
 
-## 2. Nodes
+## Nodes
 
-Nodes are the smallest building blocks of a scene in Godot.
+Nodes are the smallest building blocks of a scene in Godot. The **Create New Node** dialog lists the available node types and their inheritance hierarchy.
 
-![iShot_2025-03-16_13.53.36.png](../img/iShot_2025-03-16_13.53.36.png)
+![The Create New Node dialog listing node types including Node2D, Control, and Node3D](../img/iShot_2025-03-16_13.53.36.png)
 
-Different nodes provide different capabilities, and we use them to build scenes. A scene usually contains several nodes; in other words, a scene is a tree of nodes.
+Each node type provides different capabilities. A scene consists of one or more nodes arranged in a tree.
 
 All nodes share these features:
-1. Editable properties.
-2. Callbacks that let them update every frame.
-3. The ability to extend them with new properties and methods.
-4. The ability to add them as children of other nodes.
 
-## 3. The scene tree
+- Editable properties
+- Callbacks that let them update every frame
+- Support for extension with new properties and methods
+- Support for being added as children of other nodes
 
-After creating our scenes, we need to assemble the game’s levels or maps. One way to picture this is that a scene is a tree of nodes, while a level is a tree of scenes.
+## The scene tree
 
-![iShot_2025-03-16_14.04.01.png](../img/iShot_2025-03-16_14.04.01.png)
+Once we have created our scenes, we can combine them to build levels or maps. A level can contain several scene instances, each with its own nodes. At runtime, these nodes become part of the game’s scene tree.
 
-Items with this icon are scenes used in the example level. Click the scene icon to open the original scene and edit it again.
+In the screenshot below, **Player** is a scene instance. Its scene icon displays the **Open in Editor** tooltip; click it to open and edit the source scene.
 
-## 4. Signals
+![The Outside level’s node tree, with the Open in Editor scene icon highlighted beside Player](../img/iShot_2025-03-16_14.04.01.png)
 
-Signals are an extremely important concept in Godot. For now, a simple way to understand them is as a means of passing information between scenes.
+## Signals
 
-Nodes have their own signals, and we can also define custom ones. I will expand these notes on signals as this series continues.
+Signals let nodes notify other parts of the game when something happens.
 
-When something happens to a node—for example, a body enters an area, a timer expires, or two bodies collide—you can have the affected node emit a signal, which in turn can call a connected function.
+Node types provide built-in signals, and we can also define custom ones. I will explore signals in more detail as this series continues.
 
-You can define custom signals. Signals are not restricted to a single scene: nodes in different scene instances can communicate once their objects are referenced and a connection is established. Emitting a signal invokes its connected callables. See the [official Signal documentation](https://docs.godotengine.org/en/stable/classes/class_signal.html).
+When an event occurs—for example, a body enters an area, a timer expires, or two bodies collide—the relevant node can emit a signal to invoke connected functions.
+
+Signals can also connect nodes in different scene instances. With references to the relevant objects, you can connect a signal to a receiving method; emitting the signal then invokes that method. See the [official Signal documentation](https://docs.godotengine.org/en/stable/classes/class_signal.html).

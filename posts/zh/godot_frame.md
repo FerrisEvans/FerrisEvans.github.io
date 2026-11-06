@@ -1,61 +1,59 @@
 ---
 locale: zh
 translationKey: godot_frame
-title: "Godot 移动力"
-description: 解释 Godot 中 _process 的 delta 参数含义，说明用 Delta Time 实现帧率无关的移动。
+title: "Godot 中的移动与帧间隔"
+description: 解释 Godot 中 _process 的 delta 参数含义，说明如何用帧间隔实现与帧率无关的移动。
 pubDate: 2025-03-19
 category: game-dev
 subcategory: godot
 tags: [godot, frame]
 ---
 
+本文以 Godot 4 的 GDScript 为例，说明 `_process()` 的 `delta` 参数如何用于计算每帧位移。它讨论移动的计算方式，不提供完整的角色控制器。
 
-当我们开始编写脚本后，我们会遇到一个 `_process(delta: float)` 函数。游戏画面的每一帧都会调用一次这个函数。函数本身的作用很好理解，但是我想谈一下这个函数的入参 `delta`。
+`_process(delta: float)` 在启用处理时由 Godot 每个渲染帧调用一次。以下片段展示回调签名，可放在继承自 `Node` 或其子类的脚本中；`pass` 表示暂不执行任何操作。
 
 ```gdscript
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+# 每帧调用；delta 是距上次调用经过的时间，单位为秒。
 func _process(delta: float) -> void:
     pass
 ```
 
-## 1. Delta Time
+这段代码不会移动节点。后文说明如何用 `delta` 计算位移。
 
-在 Godot 中，**delta** 也就是 **Delta Time**，这个概念在硬件、网络以及计算机图形学中都有相对应的概念。在此我们只讨论游戏和图形编程，他表示在两个连续的帧之间经过的时间，也就是连续帧之间的时间差。他可以根据当前帧和上一帧的时间戳来计算。
+## 帧间隔
 
-在游戏渲染中，常会以 每秒帧数(FPS/Frame Per Second)来量化帧的渲染速度。如果你的游戏以 60FPS 运行，那么每帧的持续时间将是 $\frac{1}{60}$ 秒。
+在 `_process()` 回调中，`delta` 表示距上次调用经过的时间，单位为秒。更一般地说，时间增量（delta time）是两次更新之间经过的时间；本文讨论的是相邻渲染帧之间的间隔。
 
-在实时应用程序中，特别是游戏，硬件性能和场景复杂度会使帧率变化。如果每帧都移动固定距离，高帧率设备上的角色就会移动得更快。Godot 已通过 `delta` 提供距上次 `_process()` 调用经过的秒数；用以像素/秒表示的速度乘以它，就得到这一帧的位移，不需要自己另设定时器。它用于补偿帧间隔变化，不会自动解决网络延迟或同步问题。涉及碰撞的物理运动应在 `_physics_process()` 中处理。参见[官方处理循环说明](https://docs.godotengine.org/en/stable/tutorials/scripting/idle_and_physics_processing.html)。
+帧率通常以每秒帧数（frames per second，FPS）表示。如果游戏稳定运行在 60 FPS，每帧间隔就是 $\frac{1}{60}$ 秒。
 
-## 2. Movement
+硬件性能和场景复杂度会影响帧率。如果角色每帧都移动固定距离，帧率越高，它移动得就越快。将每秒移动的像素数乘以 `delta`，即可得到这一帧的位移，从而补偿帧间隔变化。涉及碰撞的物理运动应在 `_physics_process()` 中处理。参见[官方处理循环说明](https://docs.godotengine.org/en/stable/tutorials/scripting/idle_and_physics_processing.html)。
 
-The movement speed of our game is determined by how fast the game runs(how many frames are generated)
+## 每帧移动固定距离
 
-当我们谈论游戏速度的时候，我们通常在谈论到底生成了多少帧。一台非常慢的电脑和一台非常快的电脑，这个差距是巨大的。
+如果让物体每帧移动固定的像素数，它的移动速度就取决于帧率。同一段代码可能在性能不同的电脑上产生不同的移动速度。
 
-| Speed(pixels per frame) | Frames per second | Total movement(per second) |
+| 每帧位移（像素） | 帧率（FPS） | 每秒位移（像素） |
 | --- | --- | --- |
-| 10px | 30 | 10 * 30 = 300 |
-| 10px | 60 | 10 * 60 = 600 |
-| 10px | 120 | 10 * 120 = 1200 |
+| 10 | 30 | $10 \times 30 = 300$ |
+| 10 | 60 | $10 \times 60 = 600$ |
+| 10 | 120 | $10 \times 120 = 1200$ |
 
-Since come scenes are harder to render than others, it might even run inconsistently on the same system!
+不同场景的渲染负担不同，因此即使在同一台电脑上，帧率也可能发生变化。
 
-> [!TIP]
-> Delta time is the elapsed time since the previous processing callback.
-> For example, if the framerate is 60fps, delta time is $1s \div 60 = 0.0167$ or about 17 milliseconds.
+> [!NOTE]
+> 在稳定的 60 FPS 下，每帧间隔约为 $1 \div 60 \approx 0.0167$ 秒，即约 17 毫秒。
 
-This information we can use to keep the same at a constant speed regardless of framerate.
+要在帧率变化时保持物体的移动速度不变，需要用每秒速度乘以 `delta`。
 
-Multiply speed in units per second by delta time to obtain the displacement for that frame.
+## 让移动速度独立于帧率
 
-## 3. How frame rates influence the game
+现在将速度设为 10 像素/秒。每帧位移等于速度乘以 `delta`，其中 `delta` 的单位为秒。下表中的小数为了便于阅读做了近似，计算使用精确分数。
 
-这里把速度定义为 10 像素/秒，而不是上一节的 10 像素/帧。每帧位移 = 速度 × delta；表中只对显示的小数取近似值，计算使用完整分数。
-
-| Speed (pixels per second) | Frames per second | Delta time (seconds) | Movement per frame (pixels) | Total movement per second (pixels) |
+| 速度（像素/秒） | 帧率（FPS） | 帧间隔（秒） | 每帧位移（像素） | 每秒位移（像素） |
 | --- | --- | --- | --- | --- |
-| 10 | 30 | 1 / 30 | 10 / 30 ≈ 0.333 | (10 / 30) * 30 = 10 |
-| 10 | 60 | 1 / 60 | 10 / 60 ≈ 0.167 | (10 / 60) * 60 = 10 |
-| 10 | 120 | 1 / 120 | 10 / 120 ≈ 0.083 | (10 / 120) * 120 = 10 |
+| 10 | 30 | $1 / 30$ | $10 / 30 \approx 0.333$ | $(10 / 30) \times 30 = 10$ |
+| 10 | 60 | $1 / 60$ | $10 / 60 \approx 0.167$ | $(10 / 60) \times 60 = 10$ |
+| 10 | 120 | $1 / 120$ | $10 / 120 \approx 0.083$ | $(10 / 120) \times 120 = 10$ |
 
-With delta accounted for, this movement keeps the same speed across frame rates!
+乘以 `delta` 后，物体在这三种帧率下都以 10 像素/秒的速度移动。

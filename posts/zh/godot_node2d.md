@@ -9,51 +9,48 @@ subcategory: godot
 tags: [godot, node2d]
 ---
 
+本文介绍 Godot 4 中常见的 2D 节点及其用途，界面标签采用英文名称。
 
-前文中我们提过，节点是构建场景的最小单元。不同的节点拥有不同的属性，他们可以实现不同的功能。通过 <kbd>Create New Node</kbd> 可以看到，根节点是 **Node**。在 **Node** 下有 **CanvasItem** 节点，他是 2D 空间下的抽象基类。**Node2D** 是 2D 游戏对象的父类，**Control** 是 UI 节点的抽象父类。我们研究的大部分节点，都是 **Node2D** 和 **Control** 的子类。
+节点是场景的最小构成单元，每种节点都有自己的属性和功能。在 **Create New Node** 对话框中，`Node` 位于类型层级的根部。它的子类 `CanvasItem` 是可在 2D 空间中绘制内容的抽象基类；`Node2D` 是 2D 游戏对象的基类，`Control` 是用户界面（UI）节点的基类，两者都继承自 `CanvasItem`。这个系列涉及的大多数节点都继承自 `Node2D` 或 `Control`。
 
-![alt text](../img/iShot_2025-03-18_10.40.31.png)
+![Godot 的 Create New Node 对话框，展示 Node、CanvasItem、Node2D 和 Control 的继承关系](../img/iShot_2025-03-18_10.40.31.png)
 
-> [!TIP]
-> Godot provides built-in lifecycle callbacks whose names begin with `_`.
-> 1. `_ready()` runs when the node is ready in the scene tree.
-> 2. `_process()` is run on every frame of the game.
+Godot 提供名称以 `_` 开头的内置生命周期回调，例如：
 
-You can target other nodes in 2 ways:
-1. `get_node("node path")`
-2. `$node path`
+- `_ready()`：节点在场景树中准备就绪后调用。
+- `_process()`：启用处理时，在每个渲染帧调用。
 
-You can also give nodes a unique name. When you capture a node in code you can access their properties and call methods on them.
+在节点脚本中，可以使用以下任一写法按路径查找其他节点：
 
-> [!TIP]
-> A major aspect of Godot is to make nodes communicate with each other.
+- `get_node("NodePath")`
+- `$NodePath`
 
-## 1. Area2D
+将 `NodePath` 替换为相对于当前节点的实际路径，例如 `Player/Camera2D`。这两种写法都返回对目标节点的引用；取得引用后，就可以访问它的属性并调用方法。也可以为节点设置场景唯一名称，便于通过名称查找。
 
-An area that can check if another body entered. Can be moved by changing the position.
+让节点之间相互通信，是使用 Godot 构建游戏的重要部分。
 
-*Check if player entered a house, the lasers will be areas.*
+## `Area2D` 区域节点
 
-他是一个可以检查另一个物体是否进入的区域。
+`Area2D` 可以检测物理物体或其他区域何时进入、离开其范围。修改位置可以移动这个区域。
 
-## 2. StaticBody2D
+**示例：** 检测玩家是否进入房屋，或定义激光的检测范围。
 
-A static body that other bodies collide with. Not supposed to be moved.
+## `StaticBody2D` 静态物体
 
-*Any static object: Walls, beds, obstacles...*
+`StaticBody2D` 可与其他物体发生碰撞，适用于保持在固定位置的对象。
 
-## 3. RigidBody2D
+**示例：** 墙壁、床和静止的障碍物。
 
-Moving body that moves via physics(like a cannonball). Set an initial velocity.
+## `RigidBody2D` 刚体
 
-*The grenade*
+`RigidBody2D` 的运动由物理引擎控制。可以为它设置初始速度，再由引擎计算后续运动。
 
-RigidBody2D has a gravity settings that is 1 by default. You can set physics behaviour in the inspector and additional options are set via a PhysicsMaterial.
+**示例：** 炮弹或手榴弹。
 
-And you are supposed to set a starting velocity, the movement is then influenced by physics.
+`RigidBody2D` 的重力缩放值默认为 `1`。可以在 **Inspector** 中配置其物理行为，并通过 `PhysicsMaterial` 设置摩擦和弹性等属性。
 
-## 4. CharacterBody2D
+## `CharacterBody2D` 角色物体
 
-Moving body controlled by code. Inbuilt methods.
+`CharacterBody2D` 由代码控制移动，并提供辅助处理移动的方法。
 
-*Any entity that is controlled by code: The player & all enemies.*
+**示例：** 玩家角色、敌人及其他由代码控制的实体。

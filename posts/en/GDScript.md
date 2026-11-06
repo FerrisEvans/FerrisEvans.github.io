@@ -1,5 +1,5 @@
 ---
-title: "GDScript Style Guide"
+title: "GDScript style guide"
 description: Notes on the official GDScript style guide, covering formatting, naming conventions, code order, and type declarations.
 pubDate: 2025-03-17
 category: game-dev
@@ -9,12 +9,9 @@ locale: en
 translationKey: GDScript
 ---
 
+This post covers GDScript formatting, naming conventions, declaration order, and type annotations. For language syntax, see the [official documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/index.html). Because GDScript’s syntax resembles Python’s, [PEP 8](https://peps.python.org/pep-0008/) is also a useful reference.
 
-This post does not cover GDScript syntax. For questions about the language itself, see the [official documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/index.html).
-Here, I want to focus on code style.
-Because GDScript is quite similar to Python, [PEP 8](https://peps.python.org/pep-0008/) is also a useful reference.
-
-Here is a complete example based on the [style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html).
+The examples below use Godot 4 GDScript syntax. This class example comes from the [official style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html)[^godot-docs] and illustrates how to organize a script. It is not a standalone state-machine implementation: the state nodes and the `Events` object it uses belong to the surrounding project and are not included here.
 
 ```gdscript
 class_name StateMachine
@@ -93,20 +90,21 @@ class State:
 		print("Hello!")
 ```
 
-## 1. Formatting
+The declarations come first, followed by engine callbacks, other methods, and the inner `State` class. The next sections explain these conventions.
+
+## Formatting
 
 - Use LF line endings.
 - Use UTF-8 encoding without a byte order mark.
-- Indent with <kbd>Tab</kbd> rather than <kbd>Space</kbd>.
+- Use tabs for indentation.
 
-
-## 2. Naming conventions
+## Naming conventions
 
 | Type         | Convention    | Example                     |
 |:-------------|:--------------|:----------------------------|
 | File names   | snake_case    | `yaml_parser.gd`            |
 | Class names  | PascalCase    | `class_name YAMLParser`     |
-| Node names   | PascalCase    | `Camera3D` `Player`         |
+| Node names   | PascalCase    | `Camera3D`, `Player`         |
 | Functions    | snake_case    | `func load_level():`        |
 | Variables    | snake_case    | `var particle_effect`       |
 | Signals      | snake_case    | `signal door_opened`        |
@@ -114,9 +112,11 @@ class State:
 | Enum names   | PascalCase    | `enum Element`              |
 | Enum members | CONSTANT_CASE | `{EARTH, WATER, AIR, FIRE}` |
 
-## 3. Code order
+## Code order
 
-```gdscript
+The following outline shows the recommended declaration order. It is a reference list, not executable GDScript.
+
+```text
 01. @tool, @icon, @static_unload
 02. class_name
 03. extends
@@ -141,18 +141,21 @@ class State:
 	6. remaining virtual methods
 15. overridden custom methods
 16. remaining methods
-17. subclasses
+17. inner classes
 ```
 
 This ordering broadly follows these principles:
-1. Put properties and signals first, followed by methods and functions.
-2. Put `public` members before `private` members.
-3. Put virtual callbacks before the class interface.
-4. Put constructors and initialization methods, such as `_init()` and `_ready()`, before other methods. Follow them with `_unhandled_input()` and `_physics_process()`.
-5. Put `@onready` variables after other member variables and before methods. They are initialized before the `_ready()` callback; their declarations do not need to sit immediately above `_ready()` in the source.
-6. Declare local variables as close as possible to where they are first used.
 
-## 4. Type declarations
+- Put properties and signals first, followed by methods and functions.
+- Put public members before private members.
+- Put virtual callbacks before the methods that make up the class’s public interface.
+- Put constructors and initialization methods, such as `_init()` and `_ready()`, before other methods. Follow them with `_unhandled_input()` and `_physics_process()`.
+- Put `@onready` variables after other member variables and before methods. They are initialized before the `_ready()` callback; their declarations do not need to appear immediately above `_ready()` in the source.
+- Declare local variables as close as possible to where they are first used.
+
+## Type declarations
+
+These snippets compare alternative declarations inside a GDScript file. Read each declaration independently; the repeated variable names are not meant to appear in one scope.
 
 When the intended type is not obvious, declare it explicitly rather than relying on type inference.
 
@@ -164,7 +167,9 @@ var health: int = 0 # Good
 var health := 0 # Bad
 ```
 
-Conversely, when the type is already obvious, use type inference without repeating the declaration.
+The explicit `int` annotation states the intended type. The inferred declaration also produces an `int`, but leaves the reader to guess whether that was intentional.
+
+When the type is obvious from the initializer, use type inference to avoid a redundant type annotation. In this example, `complex_function()` stands for a project function whose implementation is omitted.
 
 ```gdscript
 # The type is clearly inferred as Vector3.
@@ -175,7 +180,9 @@ var direction: Vector3 = Vector3(1, 2, 3) # Bad
 var value := complex_function() # Bad
 ```
 
-Sometimes we want a specific type, but a function’s declared return type is more general.
+`Vector3(...)` makes the resulting type clear; the name `complex_function()` does not.
+
+If a function’s declared return type is more general than the type you need, add a type annotation or a cast. The following declarations assume that the script extends `Node` or one of its subclasses and that `UI/LifeBar` is the path to a `ProgressBar` node.
 
 ```gdscript
 @onready var health_bar: ProgressBar = get_node("UI/LifeBar") # Good
@@ -183,3 +190,7 @@ Sometimes we want a specific type, but a function’s declared return type is mo
 # The compiler can't infer the exact type and will use Node instead of ProgressBar
 @onready var health_bar := get_node("UI/LifeBar") # Bad
 ```
+
+Both annotated alternatives make the expected `ProgressBar` type explicit. The final declaration infers the more general `Node` type.
+
+[^godot-docs]: The Godot documentation credits Juan Linietsky, Ariel Manzur, and the Godot Engine community and uses the [CC BY 3.0 license](https://creativecommons.org/licenses/by/3.0/). See [About this documentation](https://docs.godotengine.org/en/stable/about/introduction.html#about-this-documentation). This post summarizes its guidance and reproduces its examples.

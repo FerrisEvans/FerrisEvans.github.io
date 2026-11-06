@@ -1,6 +1,6 @@
 ---
-title: "Movement and Delta Time in Godot"
-description: What the delta parameter of Godot’s _process function means, and how delta time makes movement independent of frame rate.
+title: "Movement and delta time in Godot"
+description: What the delta parameter in Godot’s _process function means and how to use it to make movement independent of frame rate.
 pubDate: 2025-03-19
 category: game-dev
 subcategory: godot
@@ -9,8 +9,9 @@ locale: en
 translationKey: godot_frame
 ---
 
+This post uses Godot 4 GDScript to explain how the `delta` parameter of `_process()` helps calculate movement per frame. It covers the calculation, rather than a complete character controller.
 
-Once we start writing scripts, we encounter a function called `_process(delta: float)`. It is called once for every rendered frame. The purpose of the function is straightforward, but I want to take a closer look at its `delta` parameter.
+Godot calls `_process(delta: float)` once per rendered frame while processing is enabled. The following snippet shows the callback signature in a script that extends `Node` or one of its subclasses; `pass` means that the callback takes no action yet.
 
 ```gdscript
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,44 +19,42 @@ func _process(delta: float) -> void:
     pass
 ```
 
-## 1. Delta Time
+This snippet does not move the node. The following sections explain how to use `delta` to calculate displacement.
 
-In Godot, **delta** means **delta time**. Related concepts appear in hardware, networking, and computer graphics. Here, we are only discussing games and graphics programming: delta time is the elapsed time between two consecutive frames. It can be calculated from the timestamps of the current and previous frames.
+## Delta time
+
+In Godot’s `_process()` callback, `delta` is the elapsed time since the previous call, measured in seconds. More generally, delta time means the time between two updates. Here, we are concerned with the interval between rendered frames.
 
 Rendering speed in games is commonly measured in frames per second, or FPS. If your game runs at 60 FPS, each frame lasts $\frac{1}{60}$ of a second.
 
-In real-time applications, hardware and scene complexity can change the frame rate. Moving a fixed distance every frame makes a character faster at higher frame rates. Godot already supplies `delta` as the seconds since the previous `_process()` call. Multiply a speed in pixels per second by it to obtain the displacement for that frame; no separate timer is needed. This compensates for frame intervals, not network latency or synchronization. Handle physics movement involving collisions in `_physics_process()`. See the [official processing-loop documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/idle_and_physics_processing.html).
+In real-time applications, hardware performance and scene complexity affect the frame rate. If a character moves a fixed distance every frame, it moves faster at higher frame rates. Multiply its speed in pixels per second by `delta` to calculate its displacement for that frame. This accounts for varying frame intervals. Movement that involves physics and collisions belongs in `_physics_process()`. See the [official processing-loop documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/idle_and_physics_processing.html).
 
-## 2. Movement
+## Moving a fixed distance per frame
 
-The movement speed of our game is determined by how fast the game runs: how many frames it generates.
+If we move an object a fixed number of pixels each frame, its speed depends on the frame rate. The same code can produce very different movement speeds on a slow computer and a fast one.
 
-When we talk about game speed here, we mean how many frames are generated. The difference between a very slow computer and a very fast one can be enormous.
-
-| Speed(pixels per frame) | Frames per second | Total movement(per second) |
+| Movement per frame (pixels) | Frames per second | Movement per second (pixels) |
 | --- | --- | --- |
-| 10px | 30 | 10 * 30 = 300 |
-| 10px | 60 | 10 * 60 = 600 |
-| 10px | 120 | 10 * 120 = 1200 |
+| 10 | 30 | $10 \times 30 = 300$ |
+| 10 | 60 | $10 \times 60 = 600$ |
+| 10 | 120 | $10 \times 120 = 1200$ |
 
-Since some scenes are harder to render than others, performance can even vary on the same system!
+Since some scenes are more demanding to render than others, the frame rate can vary even on the same computer.
 
-> [!TIP]
+> [!NOTE]
 > Delta time is the elapsed time since the previous processing callback.
-> For example, if the framerate is 60fps, delta time is $1s \div 60 = 0.0167$ or about 17 milliseconds.
+> At a steady 60 FPS, delta time is $1 \div 60 \approx 0.0167$ seconds, or about 17 milliseconds.
 
-We can use this information to keep the game moving at a constant speed regardless of frame rate.
+To keep an object moving at a constant speed as the frame rate changes, multiply its speed in units per second by delta time.
 
-Multiply speed in units per second by delta time to obtain the displacement for that frame.
+## Making movement independent of frame rate
 
-## 3. How frame rates influence the game
-
-Here, speed means 10 pixels per second, rather than the 10 pixels per frame in the previous section. Displacement per frame = speed × delta. Decimal values are rounded for display; calculations use the full fractions.
+Now let’s set the speed to 10 pixels per second. The displacement for each frame is speed multiplied by `delta`, where `delta` is measured in seconds. Decimal values in the table are rounded for readability; the calculations use the exact fractions.
 
 | Speed (pixels per second) | Frames per second | Delta time (seconds) | Movement per frame (pixels) | Total movement per second (pixels) |
 | --- | --- | --- | --- | --- |
-| 10 | 30 | 1 / 30 | 10 / 30 ≈ 0.333 | (10 / 30) * 30 = 10 |
-| 10 | 60 | 1 / 60 | 10 / 60 ≈ 0.167 | (10 / 60) * 60 = 10 |
-| 10 | 120 | 1 / 120 | 10 / 120 ≈ 0.083 | (10 / 120) * 120 = 10 |
+| 10 | 30 | $1 / 30$ | $10 / 30 \approx 0.333$ | $(10 / 30) \times 30 = 10$ |
+| 10 | 60 | $1 / 60$ | $10 / 60 \approx 0.167$ | $(10 / 60) \times 60 = 10$ |
+| 10 | 120 | $1 / 120$ | $10 / 120 \approx 0.083$ | $(10 / 120) \times 120 = 10$ |
 
-With delta accounted for, this movement keeps the same speed across frame rates!
+Multiplying by `delta` keeps the object’s speed at 10 pixels per second at all three frame rates.

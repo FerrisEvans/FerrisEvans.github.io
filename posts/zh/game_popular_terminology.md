@@ -9,55 +9,53 @@ subcategory: game-design
 tags: [terminology]
 ---
 
+游戏中的属性名称、缩写及其效果会因作品而异。以下表格收集常见含义与用法示例，具体效果以游戏内的说明为准。“未注明”表示本文未给出全称，“无补充说明”表示该条目没有额外备注。
 
 ## 属性
 
-| 缩写  | 含义        |      全称      | 备注                     |
-|:---:|:----------|:------------:|:-----------------------|
-| STR | 力量        |   strength   | 攻击力、负重                 |
-| VIT | 耐力、生命力、活力 |   vitality   | 生命升级增量、精力升级增量，有的游戏当体质用 |
-| CON | 体质        | constitution |                        |
-| INT | 智力        | intelligence | 魔法攻击                   |
-| WIZ | 巫术、魔法     |   wizardry   | 跟魔法攻击有关，类似INT          |
-| WIS | 智慧、感知     |    wisdom    | 辅助魔法法力                 |
-| MND | 精神力、心智    |     Mind     | 魔法防御                   |
-| SPI | 精神        |    spirit    |                        |
-| MEN | 精神        |  mentality   |                        |
-| PIE | 虔诚        |              | 法力升级增量、法力恢复速度          |
-| DEX | 敏捷        |  dexterity   | 攻速、防御、闪避               |
-| SPD | 速度        |    speed     | 移速、攻速、施法速度、读条速度        |
-| AGI | 灵巧、灵敏度    |   agility    | 回避率                    |
-| AGL | 回避率       |              |                        |
-| LUK | 幸运        |     luck     |                        |
-| PER | 个性        | personality  |                        |
-| Chr | 魅力        |   charming   |                        |
-| KAR | 命运、业力     |    Karma     |                        |
+| 缩写 | 含义 | 英文全称 | 备注 |
+| --- | --- | --- | --- |
+| STR | 力量 | strength | 攻击力、负重能力 |
+| VIT | 活力、耐力 | vitality | 可能影响升级时增加的生命值和精力，部分游戏中作用类似体质 |
+| CON | 体质 | constitution | 无补充说明 |
+| INT | 智力 | intelligence | 魔法攻击力 |
+| WIZ | 巫术、魔法 | wizardry | 可能影响魔法攻击力，作用类似 INT |
+| WIS | 智慧、感知 | wisdom | 可能影响法力或辅助魔法 |
+| MND | 心智、精神力 | mind | 魔法防御 |
+| SPI | 精神 | spirit | 无补充说明 |
+| MEN | 精神力 | mentality | 无补充说明 |
+| PIE | 虔诚 | piety | 升级时增加的法力、法力恢复 |
+| DEX | 敏捷 | dexterity | 攻击速度、防御、闪避 |
+| SPD | 速度 | speed | 移动速度、攻击速度、施法速度、引导速度 |
+| AGI | 灵巧、敏捷 | agility | 可能影响闪避或行动顺序 |
+| AGL | 敏捷 | agility | agility 的另一种缩写，具体效果因游戏而异 |
+| LUK | 幸运 | luck | 无补充说明 |
+| PER | 个性 | personality | 无补充说明 |
+| CHR | 魅力 | charisma | 无补充说明 |
+| KAR | 业力 | karma | 无补充说明 |
 
 ## 战斗数值
 
-|      缩写       | 含义             |        全称        | 备注                    |
-|:-------------:|:---------------|:----------------:|:----------------------|
-|      HP       | 生命值、血量         |   health point   |                       |
-|    MP/Mana    | 魔法值            |    mana point    |                       |
-|      SP       | 技能能量值、技能经验值、耐力 |                  | 有的游戏是MP改成SP，可以消耗也可以累计 |
-|      CP       | 愤怒值、战斗指数       |                  | 通常设定为累计满才可放大招         |
-|      DAM      | 攻击力            |      damage      |                       |
-|      ATK      | 物理攻击力          |      attack      |                       |
-|   MATK/MAG    | 魔法攻击力          |   magic attack   |                       |
-|      DEF      | 物理防御力          |     defence      |                       |
-|     MDEF      | 魔法防御力          |  magic defence   |                       |
-| AVO/AVD/AVOID | 回避率            |                  |                       |
-|      AAR      | 物理攻击回避率        |                  |                       |
-|      SAR      | 魔法攻击回避率        |                  |                       |
-|  RESIST/RES   | 魔法抵抗力          |                  |                       |
-|      WSP      | 武器攻击速度         |   weapon speed   |                       |
-|     CT/CR     | 暴击率、会心率        |     critical     |                       |
-|      RNG      | 攻击范围           |      range       |                       |
-|      CD       | 冷却时间           |    cool down     |                       |
-|   MOV/MOVP    | 移动力            | movement (point) | 每回合可移动范围              |
-|      HIT      | 命中率、连击数        |       hit        |                       |
-|     COMBO     | 连击数            |      combo       | 现在大多数游戏的连击数都用combo表示  |
-|      KB       | 击破值            |   attack break   |                       |
-|      SL       | 斩击             |      slash       |                       |
-|      TH       | 突刺             |      thrust      |                       |
-|      EVA      | 回避             |      evade       |                       |
+| 缩写 | 含义 | 英文全称 | 备注 |
+| --- | --- | --- | --- |
+| HP | 生命值 | hit points / health points | 无补充说明 |
+| MP/Mana | 法力 | magic points / mana points | 无补充说明 |
+| SP | 技能点、技能能量或耐力 | 未注明 | 可能用于释放能力、解锁技能，或作为 MP 的替代资源 |
+| CP | 怒气或特殊招式资源 | 未注明 | 具体含义因游戏而异，可能需要达到阈值后才能使用特殊招式 |
+| DAM | 伤害 | damage | 无补充说明 |
+| ATK | 物理攻击力 | attack | 无补充说明 |
+| MATK/MAG | 魔法攻击力 | magic attack | 无补充说明 |
+| DEF | 物理防御 | defense | 无补充说明 |
+| MDEF | 魔法防御 | magic defense | 无补充说明 |
+| AVO/AVD/AVOID | 闪避概率 | 未注明 | 无补充说明 |
+| RESIST/RES | 抗性 | resistance | 可能针对魔法、元素或状态效果 |
+| WSP | 武器攻击速度 | weapon speed | 无补充说明 |
+| CT/CR | 暴击概率 | critical hit rate | 缩写因游戏而异 |
+| RNG | 攻击范围 | range | 无补充说明 |
+| CD | 冷却时间 | cooldown | 无补充说明 |
+| MOV/MOVP | 移动力 | movement / movement points | 单位每回合可移动的距离 |
+| HIT | 命中概率或命中次数 | hit | 具体含义取决于上下文 |
+| COMBO | 连击数 | combo | 连续攻击或命中的次数 |
+| SL | 斩击 | slash | 无补充说明 |
+| TH | 突刺 | thrust | 无补充说明 |
+| EVA | 闪避 | evasion | 无补充说明 |

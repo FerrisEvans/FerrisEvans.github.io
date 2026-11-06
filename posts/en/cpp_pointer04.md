@@ -1,35 +1,43 @@
 ---
 translationKey: cpp_pointer04
 locale: en
-title: "Pointers, Part 4 | References"
-description: "Explore lvalues and rvalues, including why variables and some expressions can appear on the left side of an assignment."
+title: "Pointers, part 4 | Lvalues and rvalues"
+description: "Understand lvalues and rvalues, and why some expressions can appear on the left side of an assignment."
 pubDate: 2025-03-02
 category: programming-language
 subcategory: cpp
 tags: [pointer, reference, lvalue, rvalue]
 ---
 
+## Lvalues and rvalues
 
-## Lvalues and Rvalues
+The examples in this article use C expressions to explain lvalues and rvalues; they do not cover the full C++ value-category model. The code blocks are snippets intended to appear inside a function.
 
-To explain pointers more clearly, we also need to understand lvalues and rvalues. Compiler designers introduced these terms many years ago, and they are still in use, although their historical meanings do not precisely describe all the rules of C.
+To understand pointers, it helps to understand lvalues and rvalues. These long-established terms originally referred to the left and right sides of an assignment, but that distinction does not fully capture how they are used in C today.
 
-As an initial intuition, an lvalue identifies an object, and a modifiable lvalue can appear on the left side of an assignment. The right side can use either an lvalue or an rvalue, subject to the required conversions.
+As a starting point, an lvalue identifies an object, and a modifiable lvalue can appear on the left side of an assignment. The right side can be either an lvalue or an rvalue, with any required conversions applied.
+
+Assume that `a` and `b` have already been declared as integers and `b` has been initialized:
 
 ```c
+/* Declarations and the surrounding function are omitted. */
 a = b + 25;
 ```
 
 `a` is an lvalue, and `b + 25` is an rvalue.
 
-Can we swap them? The lvalue `a` can be used on the right side, but `b + 25` cannot be used on the left: it does not designate an object that can be assigned to. Such an assignment is invalid.
+If we reverse the assignment, `a` can appear on the right side, but `b + 25` cannot appear on the left: it does not identify an object we can assign to.
 
 > [!TIP]
-> When the computer evaluates `b + 25`, its result must be represented somewhere. That does not make the expression an lvalue: the expression computes a value rather than designating an object. Numeric literals are likewise not lvalues; string literals are an exception to a blanket claim about all literals, because they designate arrays.
+> Evaluating `b + 25` produces a value, but that does not make the expression an lvalue: it computes a result rather than identifying an object. Numeric literals are not lvalues either. String literals, however, are lvalues because they identify arrays.
 
-We might conclude that variables can be lvalues but expressions cannot. That is not correct: the left sides of the following assignments are expressions.
+This does not mean that only variable names can be lvalues. In the following examples, the subscript expression `a[b + 10]` and the dereference expression `*p` are both lvalues:
+
+In this independent snippet, `b` is initialized so that `b + 10` is a valid index. The assignments set `a[10]` to `0` and then `a[0]` to `10`.
 
 ```c
+/* Place these statements inside a function; the wrapper is omitted. */
+int b = 0;
 int a[30];
 a[b + 10] = 0;
 

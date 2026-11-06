@@ -1,18 +1,19 @@
 ---
 translationKey: cpp_pointer02
 locale: en
-title: "Pointers, Part 2 | Arrays"
-description: "Explore array declarations and access, the relationship between array names and pointers, and how to release free-store arrays safely."
+title: "Pointers, part 2 | Arrays"
+description: "How to declare arrays, access their elements, understand array-to-pointer conversion, and manage dynamically allocated arrays safely."
 pubDate: 2025-03-02
 category: programming-language
 subcategory: cpp
 tags: [pointer, array]
 ---
 
+This article explains built-in arrays, array-to-pointer conversion, and array lifetime management. The complete C example demonstrates element access; the surrounding discussion explains where the same ideas apply to C++.
 
-## 1. Declaration and Access
+## Declaration and access
 
-Arrays are the most basic way C++ represents a sequence of objects in memory. If all we need is a sequence with a fixed size and a fixed element type, an array meets that requirement.
+Arrays are a basic way to represent a sequence of objects in C++. An array holds a fixed number of elements, all of the same type.
 
 For a type `T`, `T[size]` means “an array containing `size` elements of type `T`.” Element indices range from `0` to `size-1`.
 
@@ -23,13 +24,17 @@ The number of elements in a built-in array—its bound—must be a constant expr
 > [!CAUTION]
 > Accessing an array out of bounds is undefined behavior and can cause serious program errors. C++ built-in arrays do not guarantee runtime bounds checking.
 
+Save the following as a C source file and compile it with a C compiler. It prints the first element, the array’s starting address, the first element again, and then the second element. The numeric output is `1`, `1`, and `2`; the address depends on the run.
+
 ```c
-int main() {
+#include <stdio.h>
+
+int main(void) {
     int a;
     a = 0;
     int arr[] = {1, 2, 3, 4};
     printf("%d\n", *arr); /* 1 */
-    printf("%p\n", arr); /* 0x7ff7b82f8110 */
+    printf("%p\n", (void *)arr); /* The address varies between runs. */
     printf("%d\n", arr[0]); /* 1 */
     printf("%d\n", *(arr + 1)); /* 2 */
 
@@ -37,15 +42,15 @@ int main() {
 }
 ```
 
-In the example above, `a` is a scalar: it holds a single value of integer type.
-By contrast, `arr` is an array, a collection of values in which an index identifies a particular element.
+In the example above, `a` is a scalar: it holds a single integer.
+By contrast, `arr` holds multiple integers, and we use an index to select an element.
 For example, `arr[0]` denotes the first value in `arr`, while `arr[2]` denotes the third.
 
 `arr[0]` has integer type, but what is the type of `arr` itself?
 In most C expressions, an array expression is converted to a pointer to its first element. The pointer's type depends on the element type of the array.
 
-This does not mean that arrays and pointers are the same. A pointer is a scalar value; an array contains a fixed number of elements, even though the compiler does not generally check whether a subscript is valid.
-The compiler keeps track of those array properties. When an expression requires the array-to-pointer conversion, it produces a pointer value to the first element.
+This does not mean that arrays and pointers are the same. A pointer holds a single address; an array contains a fixed number of elements. The compiler knows the array's element type and size, although it does not generally check whether a subscript is within bounds.
+When an expression requires array-to-pointer conversion, the result is a pointer to the array's first element.
 
 > [!TIP]
 > This conversion produces a pointer value, not a separate pointer variable that can be reassigned to move the array. The array's storage is determined by its storage duration and allocation. In particular, automatic and dynamically allocated arrays do not have their addresses fixed at link time.
@@ -55,15 +60,12 @@ Built-in arrays cannot be assigned as a whole. Where the language requires it, a
 
 > [!WARNING]
 > Avoid exposing raw arrays in interfaces: implicit array-to-pointer conversion is a common source of errors in C and C-style C++.
-> If an array was allocated in the <u>free store</u>[^free_store] with `new[]`, remember to release its pointer with `delete[]` after its final use.
+> If an array was allocated in the free store[^free_store] with `new[]`, pass the pointer returned by `new[]` to `delete[]` when the array is no longer needed.
 
-The simplest reliable approach is to use resource handles such as `string`, `vector`, or `unique_ptr` to manage the lifetime of a free-store array.
+For simpler, more reliable lifetime management, use an owning type such as `std::string`, `std::vector`, or `std::unique_ptr<T[]>`.
 
 > [!CAUTION]
-> If an array has <u>static</u>[^static] storage or is allocated on the stack, do not apply `delete[]` to it.
-
-## 2. Arrays and Pointers
-
+> If an array has static[^static] storage or is allocated on the stack, do not apply `delete[]` to it.
 
 [^free_store]: Objects whose lifetimes are controlled directly with `new` and `delete`. Note that the free store and the heap are not necessarily the same thing.
 [^static]: Objects declared at global or namespace scope, as well as objects or data members declared `static` inside functions or classes, are created and initialized only once and remain alive until program termination.
