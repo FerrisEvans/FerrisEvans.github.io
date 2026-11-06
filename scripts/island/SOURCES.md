@@ -15,11 +15,15 @@ Original supporting details include the timber deck, bookcase frame/back braces
 and dowels, open journal with a hinged page, pencil, coaster, small planted-soil
 pockets and connected light cable/pendants. The large environmental,
 furniture, plant, bird and picnic models come from the packages below. Their
-original mesh shapes, UVs and atlas colors are retained; transforms and a matte
-material response adapt them to the composition. Plant foliage and pots are
-separated along existing connected islands for leaf-only motion, preserving
-all source faces and UVs. Trailing plants use the pot foot as their support
-point and sit at a shelf/table edge so their leaves can hang naturally.
+source mesh shapes and atlas files are preserved; transforms and a matte
+material response adapt them to the composition. As the one UV/material exception,
+the grass top uses continuous world-space UVs and a deterministic seamless detail
+texture derived from the source palette, avoiding a full-atlas repeat on every
+ground slice. Terrain geometry and the original side material are unchanged.
+Plant foliage and pots are separated along existing connected islands for
+leaf-only motion, preserving all source faces and UVs. Trailing plants use the
+pot foot as their support point and sit at a shelf/table edge so their leaves
+can hang naturally.
 
 The existing `public/brand/ferris-avatar.png` is a repository visual
 reference. This project makes no new claim about its upstream authorship.
@@ -161,17 +165,21 @@ Source directory: `public/island/vendor/kaykit-forest-nature-1.0/`.
 and SHA-256 before import. It shares images by content hash rather than filename:
 Pretty Park's `tiny_treats_texture_1.png` is different from the same-named
 Picnic/House Plants atlas. Material sharing includes the texture hash, base
-color, alpha, metallic value and face-culling state. Source geometry and UVs are
-unchanged; scene roughness is set to 0.92 and specular IOR level to 0.22.
+color, alpha, metallic value and face-culling state. Source geometry is unchanged;
+only the ground-top UVs are remapped continuously. Scene roughness is set to 0.92
+and specular IOR level to 0.22.
 
 The exported GLB contains six embedded source PNG images: the Pretty Park palette,
 Pretty Park grass pattern, shared Picnic/House Plants palette, green plaid
 pattern, KayKit Furniture Bits atlas and KayKit Forest atlas. Their embedded
-bytes match the source PNG hashes. Four additional original generated fabric
-images supply the dog/rabbit normal maps and rabbit floral cloth, making ten
-embedded images in total. Shared images can have multiple glTF texture/sampler
-entries; the current material contract includes 15 texture entries. No external
-texture URL is needed at runtime.
+bytes match the source PNG hashes. Four generated fabric normal maps and seven
+tinted fabric color maps preserve the dog/rabbit cloth appearance through glTF,
+without relying on Blender-only color multiplication. The dog's glass-button
+texture and the rabbit's floral cloth bring the character total to thirteen
+original generated images; the seamless ground detail texture makes fourteen,
+or twenty embedded images including the six source atlases. Shared images can
+have multiple glTF texture/sampler entries; the current material contract
+includes 24 texture entries. No external texture URL is needed at runtime.
 The `.blend` uses packed images. Static batching preserves a sorted
 `vendorAssets` source list on each merged mesh; it does not merge objects across
 interaction or animation parents.
@@ -206,7 +214,9 @@ glTF and Three.js use Y up / +Z front. Semantic groups remain `Library`,
 current visible objects are the bookcase, writing desk, fountain, dog, potting
 corner, radio and surrounding garden. `Bear` and `Rabbit` remain separate
 companion roots. `model-report.json.interactionPivots` records exported book,
-page, lamp, foliage, radio and fountain anchors in Three coordinates. Pots stay
+page, lamp, foliage, radio, fountain and `GardenLight_0/1` anchors in Three
+coordinates. The street-light anchors follow the same collision-checked lantern
+positions used by the model and the runtime's warm night lighting. Pots stay
 fixed while `Plants_*_Foliage` children sway; `Desk_Page` hinges at the journal
 spine; both fountain water surfaces have explicit anchors. The rabbit's can
 is parented to its hand grip; its measured nozzle centre and unit `flow_axis`

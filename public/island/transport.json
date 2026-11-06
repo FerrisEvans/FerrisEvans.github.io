@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "source": "public/island/island.glb",
-  "sourceSha256": "967f20d4dec520cf500f5bcc9dc84f726cf1400c21fae7478c6bdc54745a22d1",
+  "sourceSha256": "13733fe491550fe30c7735bafbe435e2a172c8d66b662a8e4c47d0385e84c1fc",
   "packerSha256": "5dfea5384119ac44a05eb2e3aaccdf79a640d4ed471590989c6e6c5bbf1354bb",
   "file": "island.glb.bin",
-  "sourceBytes": 5172860,
-  "bytes": 2011348,
-  "packedBytes": 3335488,
-  "sha256": "f5df3bba1a30cb4a8810daf9374017cc1d34b42ee5f252835f38c0431293627c",
-  "packedSha256": "464dba90c21821a2e7dbefa4483a80ddf43a6693b872f363757934cf6e599aa6",
+  "sourceBytes": 6084380,
+  "bytes": 2440711,
+  "packedBytes": 3758364,
+  "sha256": "6049a4617d43dcc4e636e49f28701a7070bb96ced1f1908542e52d9bb927bccb",
+  "packedSha256": "f392e4416e4642c37a4d49791b5f6b427f5ad857f3a0f0d9e4e51c09c68caf8c",
   "compression": "gzip",
   "extension": "EXT_meshopt_compression",
   "textureExtension": "EXT_texture_webp",
@@ -23,7 +23,7 @@
   },
   "nodes": 176,
   "meshes": 108,
-  "materials": 42,
+  "materials": 43,
   "animations": [
     {
       "name": "Idle",
@@ -58,12 +58,21 @@
       "pixelsExact": true
     },
     {
-      "name": "Friend_Dog_glass_button_color",
-      "sourceBytes": 34802,
-      "bytes": 14050,
+      "name": "Friend_Terry_24262A_color",
+      "sourceBytes": 96080,
+      "bytes": 35544,
       "width": 256,
       "height": 256,
-      "pixelsSha256": "d638ad5e8d91fceb405e774751d25abc3a9f3e19b67fbdbf160dcce032681049",
+      "pixelsSha256": "69b55bd3f13062386bebe0a00788bdb4cddc89490bd32871dc6cacf50d915e9a",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Dog_glass_button_color",
+      "sourceBytes": 33927,
+      "bytes": 13582,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "3ca497b1c6735150c78739bc228d407db002b0ac10c9ebc867c5d732837031fe",
       "pixelsExact": true
     },
     {
@@ -73,6 +82,15 @@
       "width": 256,
       "height": 256,
       "pixelsSha256": "0898fb581089b10dc8ef3eb90fd3f34d38f8429010e3ebc879e982fb12483ab0",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Weave_303239_color",
+      "sourceBytes": 83304,
+      "bytes": 31536,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "b22650f2138e04c85db6ae067b3cf073c38b73d1d75d2a28361cbd1402d84371",
       "pixelsExact": true
     },
     {
@@ -103,6 +121,15 @@
       "pixelsExact": true
     },
     {
+      "name": "Garden_seamless_grass",
+      "sourceBytes": 215818,
+      "bytes": 63820,
+      "width": 512,
+      "height": 512,
+      "pixelsSha256": "3a8c893f7caaa5fe1f09124e254de8f4bb1dd917ca00ff2bf2f8ec6064c8e59d",
+      "pixelsExact": true
+    },
+    {
       "name": "furniturebits_texture",
       "sourceBytes": 15605,
       "bytes": 11958,
@@ -121,12 +148,39 @@
       "pixelsExact": true
     },
     {
+      "name": "Friend_Plush_normal",
+      "sourceBytes": 122626,
+      "bytes": 91204,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "b1eba0c5958641870f603b89b17a5a470e39afe106d37b73ffa4d7bdc4f0c305",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Plush_F2E8D2_color",
+      "sourceBytes": 93301,
+      "bytes": 47374,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "b61a5925d99adcce4b43ef67e9293410df6a2a6538b7a1705edb30ccd9612e3d",
+      "pixelsExact": true
+    },
+    {
       "name": "Friend_Rabbit_floral_weave",
-      "sourceBytes": 140777,
-      "bytes": 12686,
+      "sourceBytes": 138080,
+      "bytes": 16278,
       "width": 512,
       "height": 512,
-      "pixelsSha256": "3fc1fa97c4883f75569f4a2dd1b16c9f82587fe4530aa97c3e59bb7969d04ce7",
+      "pixelsSha256": "3e33750d86ffaec96d5af3669684538962f20108530d5da4a117c932d5390ada",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Weave_966D59_color",
+      "sourceBytes": 93362,
+      "bytes": 40854,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "e282214eacfce34268befbf407505835333bbfd17b14ea50eaa57fa7453927c3",
       "pixelsExact": true
     },
     {
@@ -136,6 +190,33 @@
       "width": 256,
       "height": 256,
       "pixelsSha256": "05a6344082138061ee540f060c85ea40c7392376d4758f28f5354b27a9c4719a",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Cord_805549_color",
+      "sourceBytes": 70906,
+      "bytes": 32520,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "89c65dc7e03f098f1fd6f7d5c92200c2ce53aa768029e2d138cd05d5198eb228",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Plush_E8DBC2_color",
+      "sourceBytes": 91894,
+      "bytes": 46436,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "768c340fb0674619ce55fd7fe106d610c0e7ee4475541cbd54844e3788d15e0e",
+      "pixelsExact": true
+    },
+    {
+      "name": "Friend_Cord_C58C82_color",
+      "sourceBytes": 76059,
+      "bytes": 38280,
+      "width": 256,
+      "height": 256,
+      "pixelsSha256": "58a1020b717eef413df6c63956cd4ae5ce2f2a15a06eaa1433c63311647b9c32",
       "pixelsExact": true
     }
   ]

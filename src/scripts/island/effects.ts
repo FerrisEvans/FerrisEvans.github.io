@@ -52,6 +52,32 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
   });
   const lamp = new PointLight('#ffe3a0', 0, 2.8, 2);
   lamp.position.copy(at('Desk_LightAnchor', 'Desk_Lamp')).add(new Vector3(0,.08,0)); scene.add(lamp);
+  let dark = false;
+  const bulbMaterial = (name: string) => new MeshStandardMaterial({
+    name, color: '#fff1cf', roughness: .5, emissive: '#ffd596', emissiveIntensity: .05,
+  });
+  const gardenLights = Array.from({ length: 2 }, (_, index) => {
+    const anchor = root.getObjectByName(`GardenLight_${index}`);
+    const position = (anchor?.getWorldPosition(new Vector3()) ?? new Vector3());
+    const material = bulbMaterial(`GardenLight_BulbMaterial_${index}`);
+    const bulb = new Mesh(noteHead, material);
+    bulb.name = `GardenLight_Bulb_${index}`; bulb.scale.set(.075,.105,.075); bulb.position.copy(position); scene.add(bulb);
+    const light = new PointLight('#ffd79a', 0, 4.2, 2);
+    light.name = `GardenLight_Point_${index}`; light.position.copy(position); scene.add(light);
+    return { light, material, position: position.toArray() };
+  });
+  const deskBulbMaterial = bulbMaterial('Desk_BulbMaterial');
+  const deskBulb = new Mesh(noteHead, deskBulbMaterial);
+  deskBulb.name = 'Desk_Bulb'; deskBulb.scale.setScalar(.045); deskBulb.position.copy(lamp.position).add(new Vector3(0,-.06,0)); scene.add(deskBulb);
+
+  function theme(value: boolean) {
+    dark = value;
+    for (const fixture of gardenLights) {
+      fixture.light.intensity = value ? 7.5 : 0;
+      fixture.material.emissiveIntensity = value ? 2 : .05;
+    }
+    deskBulbMaterial.emissiveIntensity = value ? 1.8 : .05;
+  }
 
   function update(time: number, dt: number, nextReduced: boolean) {
     reduced = nextReduced;
@@ -63,7 +89,7 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
     move('Library_FeatureBook', 'y', library * .008);
     rotate('Library_FeatureBook', 'z', library * -.075);
     rotate('Desk_Page', 'z', reduced ? 0 : desk * (.7 + .35 * Math.sin(time * 2.2)));
-    lamp.intensity = desk * 2.4;
+    lamp.intensity = desk * 2.4 + (dark ? 1.2 : 0);
     for (const [i, name] of ['Plants_Monstera_Foliage', 'Plants_Sansevieria_Foliage', 'Plants_Pothos_Foliage'].entries()) {
       rotate(name, 'z', reduced ? 0 : plants * Math.sin(time * 3 + i) * .035);
       rotate(name, 'x', reduced ? 0 : plants * Math.cos(time * 2.1 + i) * .02);
@@ -79,8 +105,10 @@ export function createEffects(root: Object3D, scene: Scene, camera: Camera) {
     });
   }
   return {
-    update,
+    update, theme,
     hover(view: HoverTarget | null) { active = view; },
-    state() { return { active, strength: { ...strength }, fountainVisible: water.visible, notesVisible: notes.visible, lampIntensity: lamp.intensity, reduced, pivots: [...parts.keys()] }; },
+    state() { return { active, strength: { ...strength }, fountainVisible: water.visible, notesVisible: notes.visible, lampIntensity: lamp.intensity,
+      gardenLights: gardenLights.map(fixture => ({ intensity: fixture.light.intensity, emissiveIntensity: fixture.material.emissiveIntensity, position: fixture.position })),
+      reduced, pivots: [...parts.keys()] }; },
   };
 }

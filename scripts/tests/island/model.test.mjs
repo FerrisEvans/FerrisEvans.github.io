@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { basename, dirname, resolve } from 'node:path';
+import sharp from 'sharp';
+import { NodeIO } from '@gltf-transform/core';
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
+import { Matrix4, Vector3 } from 'three';
 
 const binary = readFileSync(new URL('../../../public/island/island.glb', import.meta.url));
 const report = JSON.parse(readFileSync(new URL('../../../public/island/model-report.json', import.meta.url), 'utf8'));
@@ -75,6 +79,69 @@ test('reading and watering props retain real animation channels and anchored own
   const flowAxis = nodes.get('Rabbit_WaterNozzleAnchor').extras?.flow_axis;
   assert(Array.isArray(flowAxis) && flowAxis.length === 3 && flowAxis.every(Number.isFinite), 'the real nozzle exports a finite local flow vector');
   assert(Math.abs(Math.hypot(...flowAxis) - 1) < 1e-5, 'the exported nozzle direction is a unit vector');
+});
+
+test('street lanterns keep their collision-checked positions and matching light anchors', () => {
+  const lanterns = report.assetInstances.filter(instance => instance.file === 'street_lantern.gltf');
+  assert.deepEqual(lanterns.map(instance => instance.position), [[-5.85, .25, .45], [5.65, .25, .45]]);
+  const names = new Set(document.nodes.map(node => node.name));
+  for (const [index, lantern] of lanterns.entries()) {
+    const name = `GardenLight_${index}`;
+    assert(names.has(name), `${name} survives export for the runtime light`);
+    const anchor = report.interactionPivots.find(pivot => pivot.name === name);
+    assert(anchor, `${name} is recorded in the layout report`);
+    const expected = [lantern.position[0], lantern.position[2] + 4 * lantern.scale[2], -lantern.position[1]].map(value => Number(value.toFixed(5)));
+    assert.deepEqual(anchor.positionThree, expected);
+  }
+});
+
+test('continuous ground texture replaces tiled repetition without altering the terrain mesh', () => {
+  const ground = document.nodes.find(node => {
+    const sources = node.extras?.vendorAssets ?? [];
+    return sources.length === 9 && sources.every(source => source.includes('/floor_grass_sliced_'));
+  });
+  assert(ground, 'all nine source ground slices remain present');
+  const mesh = document.meshes[ground.mesh];
+  assert.equal(mesh.primitives.length, 2, 'the top and original sides retain separate materials');
+  const materials = mesh.primitives.map(primitive => document.materials[primitive.material]);
+  assert(materials.some(material => material.name === 'Garden_continuous_grass'));
+  assert(materials.some(material => material.name !== 'Garden_continuous_grass'));
+  assert(document.images.some(image => image.name?.includes('Garden_seamless_grass')));
+});
+
+test('dog fabric keeps its charcoal tint in the delivered texture pixels', async () => {
+  const material = document.materials.find(material => material.name === 'Friend_Dog_fine_charcoal_terry');
+  assert(material?.pbrMetallicRoughness?.baseColorTexture, 'the dog has a real fabric color texture');
+  const texture = document.textures[material.pbrMetallicRoughness.baseColorTexture.index];
+  const image = document.images[texture.source];
+  const view = document.bufferViews[image.bufferView];
+  const start = 20 + binary.readUInt32LE(12) + 8 + (view.byteOffset ?? 0);
+  const stats = await sharp(binary.subarray(start, start + view.byteLength)).stats();
+  assert.equal(stats.channels.length, 4);
+  for (const channel of stats.channels.slice(0, 3)) assert(channel.mean < 60, 'the fabric must stay charcoal rather than turning white after export');
+});
+
+test('rabbit keeps a subtle smile without a muzzle or vertical nose line', async () => {
+  const names = new Set(document.nodes.map(node => node.name));
+  assert(!names.has('Rabbit_PuckeredMouth'));
+  const document3d = await new NodeIO().registerExtensions(ALL_EXTENSIONS).read(resolve('public/island/island.glb'));
+  assert(document3d.getRoot().listMaterials().some(material => material.getName() === 'Friend_Rabbit_face_stitches'));
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const node of document3d.getRoot().listNodes()) {
+    if (!node.getMesh()) continue;
+    const matrix = new Matrix4().fromArray(node.getWorldMatrix());
+    for (const primitive of node.getMesh().listPrimitives()) {
+      if (primitive.getMaterial()?.getName() !== 'Friend_Rabbit_face_stitches') continue;
+      const positions = primitive.getAttribute('POSITION');
+      for (let index = 0; index < positions.getCount(); index++) {
+        const point = new Vector3().fromArray(positions.getElement(index, [])).applyMatrix4(matrix);
+        minX = Math.min(minX, point.x); maxX = Math.max(maxX, point.x);
+        minY = Math.min(minY, point.y); maxY = Math.max(maxY, point.y);
+      }
+    }
+  }
+  assert(maxX - minX > .03, 'the subtle smile spans both sides of the nose');
+  assert(maxY - minY < .025, 'no vertical line may connect the nose and smile');
 });
 
 test('every adopted source model is licensed, hash-verified and present in exported mesh provenance', () => {

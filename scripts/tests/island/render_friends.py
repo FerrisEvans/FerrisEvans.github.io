@@ -68,6 +68,10 @@ for label,eye in [('front',(0,-8,2.8)),('three-quarter',(4,-8,3.3)),('top',(2,-4
     print('FRIENDS_RENDER',scene.render.filepath,flush=True)
 meshes=[obj for obj in bpy.context.scene.objects if obj.type=='MESH' and obj != floor]
 print('FRIENDS_GEOMETRY',sum(sum(len(poly.vertices)-2 for poly in obj.data.polygons) for obj in meshes),'triangles',len(meshes),'meshes',flush=True)
+for prefix in ('Dog','Rabbit'):
+    root = bpy.data.objects[prefix]
+    points = [obj.matrix_world @ Vector(corner) for obj in root.children_recursive if obj.type == 'MESH' for corner in obj.bound_box]
+    assert min(point.z for point in points) >= -.001, f'{prefix} feet must not penetrate the floor'
 bpy.ops.object.select_all(action='DESELECT')
 for obj in scene.objects:
     ancestor=obj
@@ -89,5 +93,5 @@ for prefix in ('Dog','Rabbit'):
         assert prefix+'_'+part in names, (prefix,part,'missing exported pivot')
 normal_materials=[mat['name'] for mat in gltf['materials'] if 'normalTexture' in mat]
 assert len(normal_materials)>=7,normal_materials
-assert len(gltf.get('images',[]))==5, 'Expected three shared normal maps, a floral color map and the dog eye texture'
+assert len(gltf.get('images',[]))==13, 'Expected four normal maps, seven tinted fabric maps, a floral color map and the dog eye texture'
 print('FRIENDS_GLTF',len(raw),'bytes;',len(gltf['nodes']),'nodes;',len(normal_materials),'fabric materials with exported normal maps',flush=True)

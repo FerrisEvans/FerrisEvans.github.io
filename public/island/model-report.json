@@ -2907,7 +2907,7 @@
       "position": [
         5.060400009155273,
         -2.460322390784668,
-        0.9133634003048096
+        0.9637634189968262
       ],
       "scale": [
         0.38,
@@ -3185,8 +3185,8 @@
       "pack": "park",
       "file": "street_lantern.gltf",
       "position": [
-        -4.8,
-        1.45,
+        -5.85,
+        0.25,
         0.45
       ],
       "scale": [
@@ -3205,8 +3205,8 @@
       "pack": "park",
       "file": "street_lantern.gltf",
       "position": [
-        3.02,
-        2.75,
+        5.65,
+        0.25,
         0.45
       ],
       "scale": [
@@ -5745,12 +5745,12 @@
       "group": "Environment"
     }
   ],
-  "bytes": 5172860,
-  "triangles": 146370,
+  "bytes": 6084380,
+  "triangles": 146098,
   "meshes": 108,
-  "drawCalls": 110,
-  "materials": 42,
-  "textures": 16,
+  "drawCalls": 111,
+  "materials": 43,
+  "textures": 24,
   "animations": [
     {
       "name": "Idle",
@@ -5885,7 +5885,7 @@
       "parent": "Rabbit_Arm_R",
       "positionThree": [
         5.0604,
-        1.1916,
+        1.242,
         2.4024
       ],
       "role": ""
@@ -5905,7 +5905,7 @@
       "parent": "Rabbit_WateringCanGrip",
       "positionThree": [
         5.0604,
-        1.1916,
+        1.242,
         2.4024
       ],
       "role": "Three local -Z tilt about hand grip, -0.95 rad points the real nozzle downward",
@@ -5917,7 +5917,7 @@
       "parent": "Rabbit_WateringCan",
       "positionThree": [
         5.0604,
-        1.06904,
+        1.11944,
         2.62702
       ],
       "role": "measured nozzle face centre; follows can and hand",
@@ -5956,6 +5956,26 @@
         1.35
       ],
       "role": "lower water surface; add .005 for ripples"
+    },
+    {
+      "name": "GardenLight_0",
+      "parent": "Environment",
+      "positionThree": [
+        -5.85,
+        3.21,
+        -0.25
+      ],
+      "role": "street lantern bulb centre; local garden lighting anchor"
+    },
+    {
+      "name": "GardenLight_1",
+      "parent": "Environment",
+      "positionThree": [
+        5.65,
+        3.17,
+        -0.25
+      ],
+      "role": "street lantern bulb centre; local garden lighting anchor"
     },
     {
       "name": "Plants_Monstera",

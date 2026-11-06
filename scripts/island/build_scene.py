@@ -62,10 +62,12 @@ exec(compile((ROOT/'scripts/island/character.py').read_text(), 'character.py', '
 exec(compile((ROOT/'scripts/island/vendor.py').read_text(), 'vendor.py', 'exec'), globals())
 
 # Modular park ground, a broad rounded island with a quieter central clearing.
-# The nine authored slices keep the source grass pattern and bevelled perimeter.
+# Preserve the authored slices and side material; only the top's repetition changes.
+ground_objects=[]
 for row, names in enumerate(['ABC','DEF','GHI']):
     for col, letter in enumerate(names):
-        asset('park','floor_grass_sliced_'+letter,((col-1)*4.32,(1-row)*3.24,-.05),(2.16,1.62,1))
+        ground_objects.extend(asset('park','floor_grass_sliced_'+letter,((col-1)*4.32,(1-row)*3.24,-.05),(2.16,1.62,1)))
+continuous_grass(ground_objects)
 GROUND=.45
 # A shallow connecting timber plinth gives the open reading corner a place.
 for i in range(14):
@@ -233,9 +235,10 @@ FOUNTAIN_BASIN['effectRole']='lower water surface; add .005 for ripples'
 # Garden bench and lanterns, with room to see the bear from the overview.
 asset('park','bench',(-4.45,.12,GROUND),1.03,yaw=-.22)
 asset('park','bench',(2.10,2.65,GROUND),.86,yaw=.02)
-for i,(x,y,s) in enumerate([(-4.8,1.45,.69),(3.02,2.75,.68)]):
+for i,(x,y,s) in enumerate([(-5.85,.25,.69),(5.65,.25,.68)]):
     asset('park','street_lantern',(x,y,GROUND),s)
-    group('GardenLight_'+str(i),(x,y,GROUND+4.0*s),ENV)
+    light=group('GardenLight_'+str(i),(x,y,GROUND+4.0*s),ENV)
+    light['effectRole']='street lantern bulb centre; local garden lighting anchor'
 
 # Pot feet stay supported while original connected leaf/stem islands sway.
 asset('furniture','table_low',(4.13,1.04,GROUND),.80,parent=TAGS)

@@ -93,7 +93,8 @@ report = {
         for obj in scene.objects if obj.type == 'EMPTY' and (obj.name in {
             'Library_Books','Library_FeatureBook','Desk_Lamp','Desk_OpenBook','Desk_Page','Fountain_WaterAnchor','Fountain_BasinAnchor','Radio','Radio_NoteAnchor',
             'Plants_Monstera','Plants_Sansevieria','Plants_Pothos','Dog','Rabbit','Bear_Book','Bear_Book_Page','Dog_FlowerAnchor',
-            'Rabbit_WateringCan','Rabbit_WateringCanGrip','Rabbit_WaterNozzleAnchor','Rabbit_WaterTargetAnchor'} or obj.name.endswith('_Foliage'))],
+            'Rabbit_WateringCan','Rabbit_WateringCanGrip','Rabbit_WaterNozzleAnchor','Rabbit_WaterTargetAnchor',
+            'GardenLight_0','GardenLight_1'} or obj.name.endswith('_Foliage'))],
     'sourceLicense': 'External assets CC0-1.0 by Isa Lousberg / Tiny Treats and Kay Lousberg / KayKit. Source packages, licenses, hashes and actual mesh origins are retained.',
     'buildCommand': '/Applications/Blender.app/Contents/MacOS/Blender --background --factory-startup --python scripts/island/build_scene.py',
 }

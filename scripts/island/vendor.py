@@ -159,3 +159,58 @@ def foliage_asset(stem, name, loc, scale, yaw=0, parent=None, soil_height=.55, c
             piece['adaptation'] = 'Original connected foliage/pot components separated; geometry and UVs unchanged'
         bpy.data.objects.remove(obj, do_unlink=True)
     return root, pivot
+
+
+def continuous_grass(objects):
+    """Replace per-slice UV repetition with a continuous, seamless ground texture."""
+    import numpy as np
+    source_image = next(node.image for obj in objects for material in obj.data.materials
+                        for node in material.node_tree.nodes if node.type == 'TEX_IMAGE' and node.image)
+    width, height = source_image.size
+    source_pixels = np.array(source_image.pixels[:], dtype=np.float32).reshape(height, width, 4)
+    base = source_pixels[:, :, :3].mean(axis=(0, 1))
+    size = 512
+    rng = np.random.default_rng(2606)
+    yy, xx = np.mgrid[:size, :size]
+    coarse = rng.uniform(-.0035, .0035, (16, 16))
+    low = np.kron(coarse, np.ones((32, 32)))
+    low = (low + np.roll(low, 1, 0) + np.roll(low, -1, 0) + np.roll(low, 1, 1) + np.roll(low, -1, 1)) / 5
+    detail = rng.normal(0, .0008, (size, size))
+    rgb = np.broadcast_to(base, (size, size, 3)).copy() + low[:, :, None] + detail[:, :, None]
+    for _ in range(72):
+        cx, cy = rng.uniform(0, size, 2)
+        radius = rng.uniform(4, 12)
+        tone = rng.uniform(-.012, .012)
+        for ox in (-size, 0, size):
+            for oy in (-size, 0, size):
+                distance = ((xx + ox - cx) / radius) ** 2 + ((yy + oy - cy) / radius) ** 2
+                mask = np.clip(1 - distance, 0, 1) ** 1.5
+                rgb += mask[:, :, None] * tone
+    rgba = np.ones((size, size, 4), dtype=np.float32)
+    rgba[:, :, :3] = np.clip(rgb, 0, 1)
+    image = bpy.data.images.new('Garden_seamless_grass', width=size, height=size, alpha=True)
+    image.colorspace_settings.name = source_image.colorspace_settings.name
+    image.pixels.foreach_set(rgba.astype(np.float32).ravel())
+    image.pack()
+    material = bpy.data.materials.new('Garden_continuous_grass')
+    material.use_nodes = True
+    shader = material.node_tree.nodes.get('Principled BSDF')
+    shader.inputs['Roughness'].default_value = .98
+    shader.inputs['Specular IOR Level'].default_value = .22
+    texture = material.node_tree.nodes.new('ShaderNodeTexImage')
+    texture.image = image
+    material.node_tree.links.new(texture.outputs['Color'], shader.inputs['Base Color'])
+    bpy.context.view_layer.update()
+    for obj in objects:
+        obj.data.materials.append(material)
+        top_index = len(obj.data.materials) - 1
+        uv = obj.data.uv_layers.active.data
+        for polygon in obj.data.polygons:
+            if polygon.normal.z <= .5:
+                continue
+            polygon.material_index = top_index
+            for loop_index in polygon.loop_indices:
+                vertex = obj.data.vertices[obj.data.loops[loop_index].vertex_index]
+                point = obj.matrix_world @ vertex.co
+                uv[loop_index].uv = (point.x / 4.32, point.y / 4.32)
+        obj['adaptation'] = 'Continuous world-space top UV and original seamless grass texture; source side material retained'

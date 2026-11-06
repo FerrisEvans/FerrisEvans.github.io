@@ -134,6 +134,7 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
         material.emissive.set('#ffd596'); material.emissiveIntensity = dark ? 1.5 : .05;
       }
     }
+    effects.theme(dark);
     outline.theme(dark);
     invalidate();
   }

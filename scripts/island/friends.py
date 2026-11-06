@@ -32,7 +32,11 @@ def _f_cloth_normal(kind):
     size = 256
     yy, xx = _fnp.mgrid[:size, :size] / size
     rng = _fnp.random.default_rng(431 if kind == 'Terry' else 57)
-    if kind == 'Terry':
+    if kind == 'Plush':
+        height = .22 * _fnp.sin(xx * math.tau * 85 + .6 * _fnp.sin(yy * math.tau * 9))
+        height += .08 * rng.random((size, size))
+        strength = .65
+    elif kind == 'Terry':
         # Irregular, closed thread loops: readable fabric without noisy silhouettes.
         wx = xx * 24 + .32 * _fnp.sin(yy * math.tau * 8) + .21 * _fnp.sin(xx * math.tau * 5 + yy * math.tau * 11)
         wy = yy * 24 + .28 * _fnp.sin(xx * math.tau * 7) + .18 * _fnp.sin(xx * math.tau * 9 - yy * math.tau * 6)
@@ -58,6 +62,33 @@ def _f_cloth_normal(kind):
     return _f_image(name, rgba, True)
 
 
+def _f_cloth_color(kind, color):
+    name = 'Friend_' + kind + '_' + color.lstrip('#') + '_color'
+    if bpy.data.images.get(name):
+        return bpy.data.images[name]
+    size = 256
+    yy, xx = _fnp.mgrid[:size, :size] / size
+    rng = _fnp.random.default_rng(731 if kind == 'Terry' else 157)
+    if kind == 'Plush':
+        value = .93 + .035 * _fnp.sin(xx * math.tau * 85 + .6 * _fnp.sin(yy * math.tau * 9))
+        value += rng.random((size, size)) * .035
+    elif kind == 'Terry':
+        wx = xx * 24 + .32 * _fnp.sin(yy * math.tau * 8) + .21 * _fnp.sin(xx * math.tau * 5 + yy * math.tau * 11)
+        wy = yy * 24 + .28 * _fnp.sin(xx * math.tau * 7) + .18 * _fnp.sin(xx * math.tau * 9 - yy * math.tau * 6)
+        d = _fnp.sqrt((_fnp.mod(wx, 1) - .5) ** 2 + ((_fnp.mod(wy, 1) - .5) * 1.2) ** 2)
+        loops = _fnp.exp(-((d - .27) / .065) ** 2)
+        value = .66 + .42 * loops + rng.random((size, size)) * .12
+    elif kind == 'Cord':
+        value = .86 + .14 * (.5 + .5 * _fnp.cos(xx * math.tau * 58)) + rng.random((size, size)) * .025
+    else:
+        value = .90 + .05 * _fnp.sin(xx * math.tau * 70) * _fnp.sin(yy * math.tau * 70)
+        value += rng.random((size, size)) * .04
+    base = _fnp.array([int(color[i:i+2], 16) / 255 for i in (1, 3, 5)])
+    rgba = _fnp.ones((size, size, 4), dtype=_fnp.float32)
+    rgba[:, :, :3] = base[None, None, :] * _fnp.clip(value, 0, 1)[:, :, None]
+    return _f_image(name, rgba)
+
+
 def _f_dress_image():
     name = 'Friend_Rabbit_floral_weave'
     if bpy.data.images.get(name):
@@ -67,8 +98,8 @@ def _f_dress_image():
     rgba = _fnp.ones((n, n, 4), dtype=_fnp.float32)
     cloth = _fnp.array([.91, .875, .79])
     weave = .014 * _fnp.sin(xx * math.tau * 180) + .012 * _fnp.sin(yy * math.tau * 180)
-    # Subtle alternate lace channels, intentionally not a second striped dress.
-    lace = .025 * (_fnp.cos(xx * math.tau * 22) ** 12)
+    # A quiet open lace grid sits below the larger embroidered flowers.
+    lace = .032 * (_fnp.cos(xx * math.tau * 22) ** 12 + _fnp.cos(yy * math.tau * 22) ** 12)
     rgba[:, :, :3] = cloth[None, None, :] + (weave + lace)[:, :, None]
     for row in range(6):
         for col in range(7):
@@ -110,6 +141,11 @@ def _f_mat(key, color, roughness=.88, normal=None, strength=.3, gloss=False, flo
         bump.inputs['Strength'].default_value = strength
         material.node_tree.links.new(texture.outputs['Color'], bump.inputs['Color'])
         material.node_tree.links.new(bump.outputs['Normal'], shader.inputs['Normal'])
+        if not floral:
+            color_texture = material.node_tree.nodes.new('ShaderNodeTexImage')
+            color_texture.name = 'Exportable woven base color'
+            color_texture.image = _f_cloth_color(normal, color)
+            material.node_tree.links.new(color_texture.outputs['Color'], shader.inputs['Base Color'])
     if floral:
         texture = material.node_tree.nodes.new('ShaderNodeTexImage')
         texture.image = _f_dress_image()
@@ -126,8 +162,8 @@ def _f_palette():
         'brown': _f_mat('Warm_glass_iris', '#493629', .18, gloss=True),
         'black': _f_mat('Black_glass_pupil', '#13151A', .10, gloss=True),
         'shine': _f_mat('Glass_catchlight', '#FFF5DE', .20),
-        'cream': _f_mat('Rabbit_ivory_plush', '#F2E8D2', normal='Terry', strength=.20),
-        'inner': _f_mat('Rabbit_inner_ear', '#E8DBC2', normal='Weave', strength=.22),
+        'cream': _f_mat('Rabbit_ivory_plush', '#F2E8D2', normal='Plush', strength=.22),
+        'inner': _f_mat('Rabbit_inner_ear', '#E8DBC2', normal='Plush', strength=.18),
         'pink': _f_mat('Rabbit_pink_nose', '#C58C82', normal='Cord', strength=.16),
         'stitch': _f_mat('Rabbit_face_stitches', '#907866'),
         'cord': _f_mat('Rabbit_brown_corduroy', '#805549', normal='Cord', strength=.34),
@@ -313,13 +349,16 @@ def _f_dog_eye_material():
     rgba = _fnp.ones((size, size, 4), dtype=_fnp.float32)
     rgba[:, :, :3] = pupil[None, None, :] * (1 - blend[:, :, None])
     rgba[:, :, :3] += iris[None, None, :] * blend[:, :, None] * fibre[:, :, None]
-    for x, y, rx, ry, opacity in [(-.26, .39, .105, .14, .90), (.27, -.20, .032, .043, .48)]:
+    for x, y, rx, ry, opacity in [(-.26, .39, .085, .11, .58), (.27, -.20, .026, .034, .28)]:
         distance = _fnp.sqrt(((xx - x) / rx) ** 2 + ((yy - y) / ry) ** 2)
         mask = (.5 - .5 * _fnp.tanh((distance - .88) / .10)) * opacity
         rgba[:, :, :3] = rgba[:, :, :3] * (1 - mask[:, :, None]) + _fnp.array([1, .96, .87]) * mask[:, :, None]
     image = _f_image('Friend_Dog_glass_button_color', rgba)
-    material_key = _f_mat('Dog_glass_button', '#FFFFFF', .17, gloss=True)
+    material_key = _f_mat('Dog_glass_button', '#FFFFFF', .34, gloss=True)
     material = MATS[material_key]
+    shader = material.node_tree.nodes.get('Principled BSDF')
+    shader.inputs['Coat Weight'].default_value = .12
+    shader.inputs['Specular IOR Level'].default_value = .22
     texture = material.node_tree.nodes.new('ShaderNodeTexImage')
     texture.image = image
     material.node_tree.links.new(texture.outputs['Color'], material.node_tree.nodes['Principled BSDF'].inputs['Base Color'])
@@ -372,8 +411,8 @@ def _f_dog_face(name, p, parent):
     # y, centre-z, half-width, half-height. Last stations close the soft nose.
     control=[(.49,1.91,.002,.002),(.44,1.91,.25,.27),(.31,1.92,.45,.42),
         (.10,1.92,.565,.48),(-.10,1.89,.555,.47),(-.28,1.85,.505,.415),
-        (-.44,1.81,.445,.36),(-.58,1.79,.387,.317),(-.69,1.79,.355,.29),
-        (-.77,1.79,.33,.27),(-.85,1.79,.27,.225),(-.905,1.79,.17,.145),
+        (-.44,1.81,.445,.36),(-.58,1.79,.387,.27),(-.69,1.79,.355,.245),
+        (-.77,1.79,.33,.22),(-.85,1.79,.27,.18),(-.905,1.79,.17,.115),
         (-.935,1.79,.002,.002)]
     rows=[]
     for k in range(len(control)-1):
@@ -418,61 +457,59 @@ def _f_dog_face(name, p, parent):
         a=math.tau*i/96
         cheek=.010*math.exp(-((-.69+.45)/.20)**2)*math.exp(-((math.sin(a)+.20)/.65)**2)
         gather=.0028*math.cos(a*12)
-        seam.append(((.355+cheek+gather)*math.cos(a),-.6903,1.79+(.29+gather)*math.sin(a)))
+        seam.append(((.355+cheek+gather)*math.cos(a),-.6903,1.79+(.245+gather)*math.sin(a)))
     _f_line(name+'_NoseStitch',seam,.0013,p['seam'],parent)
     return obj
 
 
 def make_dog(name='Dog', loc=(0, 0, 0), scale=1, parent=None):
     p = _f_palette()
-    # Dog-only fabric tuning leaves the rabbit and its material response intact.
-    p['fur'] = _f_mat('Dog_fine_charcoal_terry', '#24262A', .91, normal='Terry', strength=.27)
+    p['fur'] = _f_mat('Dog_fine_charcoal_terry', '#24262A', .91, normal='Terry', strength=.40)
     p['nose'] = _f_mat('Dog_soft_woven_nose', '#303239', .88, normal='Weave', strength=.20)
     root = group(name)
     body = group(name + '_Body', (0, 0, .90), root)
-    # The reference is a floppy sewn toy: a long, softly padded body, hanging
-    # sleeves and short feet. Keep the head size while lowering the soft hem;
-    # a high hip and long narrow shins made the old silhouette too humanoid.
-    _f_dog_sweep(name + '_Torso', [(0,.035,.35,.035,.035), (0,.035,.40,.13,.105),
-        (0,.035,.53,.19,.145), (0,.03,.82,.21,.16), (0,.025,1.10,.215,.16),
-        (0,.01,1.36,.19,.14), (0,0,1.52,.105,.09)], p['fur'], body)
+    _f_dog_sweep(name + '_Torso', [(0,.035,.35,.035,.035), (0,.035,.40,.16,.13),
+        (0,.035,.53,.235,.17), (0,.03,.82,.26,.19), (0,.025,1.10,.265,.19),
+        (0,.01,1.36,.235,.17), (0,0,1.52,.13,.11)], p['fur'], body)
     for side, sign in [('L', -1), ('R', 1)]:
-        arm = group(name + '_Arm_' + side, (sign*.205, .015, 1.29), body)
-        # One continuous taper, without a pinched wrist or a separate ball hand.
-        # The sleeve hangs close to the body and ends beside the torso,
-        # above the feet. Its shoulder-to-tip drop is .54 rather than 1.08;
-        # retain the padded width and shoulder join while shortening the reach.
+        arm = group(name + '_Arm_' + side, (sign*.29, .015, 1.29), body)
         _f_dog_sweep(name + '_ArmCloth_' + side, [(sign*.14,.015,1.37,.045,.038),
-            (sign*.23,.015,1.29,.095,.079), (sign*.29,-.005,1.20,.11,.086),
-            (sign*.315,-.035,1.08,.108,.084), (sign*.33,-.065,.98,.105,.083),
-            (sign*.35,-.095,.91,.112,.088), (sign*.36,-.115,.865,.115,.09),
-            (sign*.36,-.125,.81,.094,.075), (sign*.36,-.125,.77,.06,.048),
-            (sign*.36,-.125,.75,.002,.002)], p['fur'], arm)
+            (sign*.23,.015,1.30,.095,.079), (sign*.29,-.005,1.23,.11,.086),
+            (sign*.315,-.035,1.15,.108,.084), (sign*.33,-.065,1.08,.105,.083),
+            (sign*.35,-.095,1.00,.112,.088), (sign*.36,-.115,.93,.115,.09),
+            (sign*.36,-.125,.88,.094,.075), (sign*.36,-.125,.86,.06,.048),
+            (sign*.36,-.125,.84,.002,.002)], p['fur'], arm)
         leg = group(name + '_Leg_' + side, (sign*.13,.015,.43), body)
-        # Short stuffed feet curve outward from the lower body, like soft socks.
-        # A broad ankle blends into the paw instead of becoming a rigid shin.
-        _f_dog_sweep(name + '_LegCloth_' + side, [(sign*.10,.02,.51,.045,.038),
-            (sign*.135,.015,.44,.10,.09), (sign*.16,.005,.33,.105,.10),
-            (sign*.20,-.035,.225,.115,.12), (sign*.245,-.085,.15,.13,.155),
-            (sign*.265,-.115,.105,.135,.165), (sign*.27,-.13,.055,.11,.145),
-            (sign*.27,-.13,.023,.075,.10), (sign*.27,-.13,.007,.025,.035),
-            (sign*.27,-.13,.005,.001,.001)], p['fur'], leg)
+        _f_dog_sweep(name + '_LegCloth_' + side, [(sign*.10,.02,.51,.05,.04),
+            (sign*.135,.015,.44,.11,.10), (sign*.17,-.005,.33,.115,.11),
+            (sign*.21,-.03,.225,.13,.14), (sign*.25,-.065,.15,.145,.16),
+            (sign*.27,-.09,.105,.145,.155), (sign*.27,-.10,.055,.12,.14),
+            (sign*.27,-.10,.02,.08,.10), (sign*.27,-.10,.012,.025,.035),
+            (sign*.27,-.10,.005,.001,.001)], p['fur'], leg)
     tail = group(name + '_Tail', (0,.15,.78), body)
     _f_dog_sweep(name + '_TailCloth', [(0,.14,.78,.045,.045), (.025,.29,.72,.075,.07),
         (.03,.43,.76,.07,.07), (.025,.50,.85,.055,.055), (0,.48,.91,.002,.002)], p['fur'], tail)
     head = group(name + '_Head', (0,0,1.48), body)
     face = _f_dog_face(name,p,head)
-    _f_dog_eye(name, 'L', (-.368,-.417,2.02), .135, p, head, face)
-    _f_dog_eye(name, 'R', (.368,-.417,2.02), .135, p, head, face)
+    _f_dog_eye(name, 'L', (-.368,-.417,2.02), .125, p, head, face)
+    _f_dog_eye(name, 'R', (.368,-.417,2.02), .125, p, head, face)
     for side, sign in [('L', -1), ('R', 1)]:
         ear = group(name + '_Ear_' + side, (sign*.46,.005,2.12), head)
         ear_cloth=_f_dog_sweep(name+'_EarCloth_'+side, [(sign*.44,.01,2.16,.055,.052),
-            (sign*.57,-.035,2.055,.17,.09), (sign*.64,-.065,1.87,.205,.095),
-            (sign*.67,-.10,1.63,.18,.085), (sign*.65,-.15,1.43,.13,.075),
-            (sign*.61,-.17,1.35,.06,.04),(sign*.60,-.17,1.335,.003,.003)], p['fur'], ear, sides=28)
+            (sign*.53,-.02,2.07,.15,.08), (sign*.58,-.04,1.94,.17,.085),
+            (sign*.60,-.07,1.78,.155,.08), (sign*.59,-.11,1.64,.12,.07),
+            (sign*.57,-.14,1.56,.05,.035),(sign*.56,-.14,1.54,.003,.003)], p['fur'], ear, sides=28)
         _f_dog_surface_stitch(name+'_EarSeam_'+side, ear_cloth,
-            [(sign*.68,-.15,2.00),(sign*.75,-.185,1.79),
-             (sign*.75,-.205,1.57),(sign*.67,-.225,1.40)], p['seam'], ear)
+            [(sign*.58,-.12,2.02),(sign*.64,-.15,1.88),
+             (sign*.63,-.17,1.70),(sign*.58,-.19,1.56)], p['seam'], ear)
+    def shorten_muzzle(y):
+        return y if y >= -.28 else -.28 + (y + .28) * .84
+    for child in head.children_recursive:
+        if child.type == 'EMPTY':
+            child.location.y = shorten_muzzle(child.location.y)
+        elif child.type == 'MESH':
+            for vertex in child.data.vertices:
+                vertex.co.y = shorten_muzzle(vertex.co.y)
     return _f_finish_root(root, loc, scale, parent, 'dog', 2.41)
 
 
@@ -483,12 +520,13 @@ def _f_dress(name, p, parent):
         (1.31,.34,.30),(1.39,.265,.245)]
     verts, faces, uv = [], [], []
     seg = 96
-    for row, (z, rx, ry) in enumerate(profile):
+    for row, (source_z, rx, ry) in enumerate(profile):
+        z = 1.39 + (source_z - 1.39) * 1.10
         for i in range(seg+1):
             a = math.tau*i/seg
-            gathered = (.022 if z<.95 else .007)*math.cos(a*16) + .006*math.cos(a*8+.4)
+            gathered = (.022 if source_z<.95 else .007)*math.cos(a*16) + .006*math.cos(a*8+.4)
             verts.append(((rx+gathered)*math.cos(a), (ry+gathered*.7)*math.sin(a), z+.004*math.cos(a*16)))
-            uv.append((i/seg, (z-.48)/.91))
+            uv.append((i/seg, (source_z-.48)/.91))
     for row in range(len(profile)-1):
         for i in range(seg):
             a = row*(seg+1)+i
@@ -497,7 +535,7 @@ def _f_dress(name, p, parent):
     solid = obj.modifiers.new('Sewn cloth thickness', 'SOLIDIFY'); solid.thickness=.012
     bpy.context.view_layer.objects.active = obj
     bpy.ops.object.modifier_apply(modifier=solid.name)
-    for z, rx, ry in [(.515,.498,.412),(.977,.323,.292)]:
+    for z, rx, ry in [(1.39+(.515-1.39)*1.10,.498,.412),(1.39+(.977-1.39)*1.10,.323,.292)]:
         pts=[]
         for i in range(65):
             a=math.tau*i/64; ripple=.014*math.cos(a*16) if z<.6 else .004*math.cos(a*16)
@@ -508,15 +546,15 @@ def _f_dress(name, p, parent):
 
 def _f_collar_point(a,t):
     co,si=math.cos(a),math.sin(a)
-    xi,yi=.245*co,.245*si
+    xi,yi=.26*co,.26*si
     if si<0:
-        xo=.395*math.copysign(abs(co)**.5,co)
-        yo=-.35*abs(si)**.5
+        xo=.43*math.copysign(abs(co)**.5,co)
+        yo=-.38*abs(si)**.5
     else:
         # The rear yoke follows the padded shoulders rather than forming stiff
         # square wings. Only the reference's front retains square lower corners.
-        xo=(.395-.045*si)*math.copysign(abs(co)**(.5+.5*min(1,si*3)),co)
-        yo=.325*si
+        xo=(.43-.045*si)*math.copysign(abs(co)**(.5+.5*min(1,si*3)),co)
+        yo=.35*si
     zi=1.447+.009*si
     zo=(1.205 if si<0 else 1.25)+.115*(1-abs(si)**.25)
     ease=.022*math.sin(math.pi*t)
@@ -545,23 +583,23 @@ def _f_rabbit_collar(name,p,parent):
         _f_line(name+'_CollarStitch',[_f_collar_point(math.tau*i/80,t) for i in range(81)],.0022,p['ribbon'],parent)
     for sign in [-1,1]:
         a=-math.pi/2+sign*.65
-        centre=_FVector(_f_collar_point(a,.84))
-        across=(_FVector(_f_collar_point(a+.001,.84))-_FVector(_f_collar_point(a-.001,.84))).normalized()
-        down=(_FVector(_f_collar_point(a,.85))-_FVector(_f_collar_point(a,.83))).normalized()
+        centre=_FVector(_f_collar_point(a,.90))
+        across=(_FVector(_f_collar_point(a+.001,.90))-_FVector(_f_collar_point(a-.001,.90))).normalized()
+        down=(_FVector(_f_collar_point(a,.91))-_FVector(_f_collar_point(a,.89))).normalized()
         normal=down.cross(across).normalized()
         if normal.y>0:normal=-normal
         centre+=normal*.011
         right=_FVector((1,0,0));right=(right-normal*right.dot(normal)).normalized()
         up=normal.cross(right).normalized()
         rotation=normal.to_track_quat('Z','Y').to_euler()
-        cylinder(name+'_Button',tuple(centre),.05,.012,p['button'],parent,vertices=24,rot=rotation)
+        cylinder(name+'_Button',tuple(centre),.058,.012,p['button'],parent,vertices=24,rot=rotation)
         face=centre+normal*.008
-        torus(name+'_ButtonRim',tuple(face),.039,.003,p['hem'],parent,major=20,rot=rotation)
-        for dx,dz in [(-.011,-.011),(.011,-.011),(-.011,.011),(.011,.011)]:
+        torus(name+'_ButtonRim',tuple(face),.045,.003,p['hem'],parent,major=20,rot=rotation)
+        for dx,dz in [(-.013,-.013),(.013,-.013),(-.013,.013),(.013,.013)]:
             point=face+right*dx+up*dz+normal*.002
             ellipsoid(name+'_ButtonHole',tuple(point),(.0055,.0055,.002),p['hole'],parent,seg=8,rings=6,rot=rotation)
         for diagonal in [-1,1]:
-            points=[tuple(face+normal*.004+right*(k*.011)+up*(diagonal*k*.011)) for k in [-1,1]]
+            points=[tuple(face+normal*.004+right*(k*.013)+up*(diagonal*k*.013)) for k in [-1,1]]
             _f_line(name+'_ButtonThread',points,.0018,p['hem'],parent)
     return collar
 
@@ -590,63 +628,61 @@ def make_rabbit(name='Rabbit', loc=(0, 0, 0), scale=1, parent=None):
     p = _f_palette()
     root=group(name)
     body=group(name+'_Body',(0,0,.93),root)
-    # The full outer silhouette belongs to the padded dress. Keep the hidden
-    # stuffed core within it so cream plush cannot break through the fabric.
+    def padded(stations):
+        return [(x,y,z,w*1.15,d*1.12) for x,y,z,w,d in stations]
     _f_sphere(name+'_Torso',(0,0,1.01),(.29,.255,.45),p['cream'],body,segments=28,rings=18)
     _f_sphere(name+'_SoftNeck',(0,0,1.43),(.235,.235,.20),p['cream'],body,segments=24,rings=16)
     _f_dress(name,p,body)
     for side,sign in [('L',-1),('R',1)]:
         leg=group(name+'_Leg_'+side,(sign*.19,.02,.55),body)
-        _f_sweep(name+'_LegCloth_'+side,[(sign*.18,.025,.58,.105,.115),(sign*.20,.01,.38,.105,.12),
-            (sign*.22,-.035,.19,.13,.16),(sign*.235,-.11,.10,.16,.22),
-            (sign*.24,-.13,.035,.13,.185),(sign*.24,-.13,.012,.005,.005)],p['cream'],leg,sides=20)
+        _f_sweep(name+'_LegCloth_'+side,[(sign*.18,.025,.54,.13,.13),(sign*.20,.01,.35,.13,.14),
+            (sign*.22,-.035,.17,.155,.18),(sign*.235,-.11,.11,.18,.24),
+            (sign*.24,-.14,.06,.17,.21),(sign*.24,-.14,.025,.13,.16),
+            (sign*.24,-.14,.005,.02,.02)],p['cream'],leg,sides=20)
         arm=group(name+'_Arm_'+side,(sign*.30,.01,1.28),body)
         if side=='R':
-            _f_sweep(name+'_ArmCloth_'+side,[(.29,.015,1.30,.11,.12),(.39,-.09,1.21,.14,.14),
-                (.49,-.19,1.08,.135,.14),(.56,-.27,1.01,.14,.15),
-                (.57,-.30,.96,.11,.115),(.56,-.30,.92,.003,.003)],p['cream'],arm,sides=20)
-            _f_sweep(name+'_Sleeve_'+side,[(.18,.015,1.37,.08,.09),(.30,.0,1.30,.12,.13),
-                (.38,-.075,1.23,.155,.155),(.44,-.13,1.14,.152,.15)],p['dress'],arm,sides=20)
-            grip=group(name+'_WateringCanGrip',(.57,-.42,1.03),arm)
+            _f_sweep(name+'_ArmCloth_'+side,padded([(.29,.015,1.30,.11,.12),(.39,-.09,1.23,.14,.14),
+                (.49,-.19,1.14,.135,.14),(.56,-.27,1.09,.14,.15),
+                (.57,-.30,1.04,.11,.115),(.56,-.30,1.00,.003,.003)]),p['cream'],arm,sides=20)
+            _f_sweep(name+'_Sleeve_'+side,padded([(.18,.015,1.37,.08,.09),(.30,.0,1.30,.12,.13),
+                (.38,-.075,1.23,.155,.155),(.44,-.13,1.14,.152,.15)]),p['dress'],arm,sides=20)
+            grip=group(name+'_WateringCanGrip',(.57,-.42,1.10),arm)
             grip['attachment']='Align watering-can handle centre here; child prop may tilt independently'
             grip['local_axes']='Identity rest rotation: Three X right, Y up, Z front'
         else:
-            _f_sweep(name+'_ArmCloth_'+side,[(sign*.29,.015,1.30,.11,.12),(sign*.39,-.02,1.21,.14,.14),
-                (sign*.49,-.045,1.06,.135,.14),(sign*.56,-.065,.90,.14,.15),
-                (sign*.57,-.08,.82,.11,.115),(sign*.56,-.08,.78,.003,.003)],p['cream'],arm,sides=20)
-            _f_sweep(name+'_Sleeve_'+side,[(sign*.18,.015,1.37,.08,.09),(sign*.30,.01,1.30,.12,.13),(sign*.38,-.02,1.23,.155,.155),
-                (sign*.44,-.035,1.14,.152,.15)],p['dress'],arm,sides=20)
+            _f_sweep(name+'_ArmCloth_'+side,padded([(sign*.29,.015,1.30,.11,.12),(sign*.39,-.02,1.23,.14,.14),
+                (sign*.49,-.045,1.14,.135,.14),(sign*.56,-.065,1.02,.14,.15),
+                (sign*.57,-.08,.93,.11,.115),(sign*.56,-.08,.90,.003,.003)]),p['cream'],arm,sides=20)
+            _f_sweep(name+'_Sleeve_'+side,padded([(sign*.18,.015,1.37,.08,.09),(sign*.30,.01,1.30,.12,.13),(sign*.38,-.02,1.23,.155,.155),
+                (sign*.44,-.035,1.14,.152,.15)]),p['dress'],arm,sides=20)
     _f_rabbit_collar(name,p,body)
     tail=group(name+'_Tail',(0,.30,.68),body)
     _f_sphere(name+'_CottonTail',(0,.43,.69),(.18,.17,.17),p['cream'],tail,segments=24,rings=16,fuzz=.02)
     head=group(name+'_Head',(0,0,1.43),body)
     _f_sphere(name+'_HeadCloth',(0,-.012,1.83),(.465,.43,.44),p['cream'],head,
-        shape=lambda x,y,z:(x*(1-.10*z),y-.035*max(0,-z/.44),z),fuzz=.006)
-    _f_sphere(name+'_SoftMuzzle',(0,-.385,1.70),(.245,.105,.18),p['cream'],head,segments=28,rings=18)
-    _f_eye(name,'L',(-.259,-.363,1.88),.058,p,head)
-    _f_eye(name,'R',(.259,-.363,1.88),.058,p,head)
-    # A softly bevelled inverted triangle, matching the little stitched pink nose.
-    nose=mesh(name+'_PinkNose',[(-.062,-.491,1.804),(.062,-.491,1.804),(0,-.505,1.727),
-        (-.052,-.466,1.800),(.052,-.466,1.800),(0,-.479,1.738)],
-        [(0,2,1),(3,4,5),(0,1,4,3),(1,2,5,4),(2,0,3,5)],p['pink'],head,edge=.014)
+        shape=lambda x,y,z:(x*(1-.06*z)*(1+.04*max(0,-z/.44)**2),y-.035*max(0,-z/.44),z),fuzz=.006)
+    _f_eye(name,'L',(-.259,-.363,1.88),.052,p,head)
+    _f_eye(name,'R',(.259,-.363,1.88),.052,p,head)
+    nose=mesh(name+'_PinkNose',[(-.068,-.446,1.804),(.068,-.446,1.804),(0,-.460,1.727),
+        (-.058,-.421,1.800),(.058,-.421,1.800),(0,-.434,1.738)],
+        [(0,2,1),(3,4,5),(0,1,4,3),(1,2,5,4),(2,0,3,5)],p['pink'],head,edge=.018)
     for i in range(-3,4):
         x=i*.013
-        _f_line(name+'_NoseEmbroidery',[(x,-.507,1.792),(x*.72,-.515,1.756+abs(i)*.006)],.0018,p['pink'],head)
-    _f_line(name+'_MouthStem',[(0,-.491,1.733),(0,-.495,1.684)],.0035,p['stitch'],head)
-    _f_line(name+'_MouthLeft',[(0,-.495,1.684),(-.025,-.489,1.664),(-.045,-.481,1.675)],.0035,p['stitch'],head)
-    _f_line(name+'_MouthRight',[(0,-.495,1.684),(.025,-.489,1.664),(.045,-.481,1.675)],.0035,p['stitch'],head)
+        _f_line(name+'_NoseEmbroidery',[(x,-.462,1.792),(x*.72,-.470,1.756+abs(i)*.006)],.0018,p['pink'],head)
+    _f_line(name+'_MouthLeft',[(0,-.450,1.668),(-.024,-.444,1.662),(-.052,-.436,1.686)],.0032,p['stitch'],head)
+    _f_line(name+'_MouthRight',[(0,-.450,1.668),(.024,-.444,1.662),(.052,-.436,1.686)],.0032,p['stitch'],head)
     for side,sign in [('L',-1),('R',1)]:
         ear=group(name+'_Ear_'+side,(sign*.36,.015,2.08),head)
         stations=[(sign*.34,.02,2.095,.055,.04),(sign*.47,.045,2.045,.115,.065),
-            (sign*.55,.055,1.85,.135,.065),(sign*.60,.045,1.59,.133,.06),
-            (sign*.64,.015,1.34,.115,.055),(sign*.64,-.01,1.20,.08,.045),
-            (sign*.61,-.02,1.16,.003,.003)]
+            (sign*.55,.055,1.82,.135,.07),(sign*.58,.045,1.52,.14,.07),
+            (sign*.60,.015,1.20,.13,.065),(sign*.60,-.01,.90,.11,.055),
+            (sign*.58,-.02,.72,.07,.04),(sign*.56,-.02,.68,.003,.003)]
         _f_sweep(name+'_EarCloth_'+side,stations,p['cream'],ear,sides=20)
         _f_sweep(name+'_EarLining_'+side,[(sign*.46,-.017,2.025,.035,.006),
-            (sign*.54,-.016,1.85,.075,.009),(sign*.59,-.02,1.59,.073,.009),
-            (sign*.63,-.045,1.35,.055,.009),(sign*.625,-.055,1.23,.016,.005)],p['inner'],ear,sides=12)
+            (sign*.54,-.016,1.82,.075,.009),(sign*.58,-.02,1.52,.073,.009),
+            (sign*.60,-.035,1.22,.06,.009),(sign*.60,-.045,.95,.05,.008),
+            (sign*.585,-.055,.76,.016,.005)],p['inner'],ear,sides=12)
     bow=group(name+'_Bow',(-.365,-.10,2.145),head)
-    # Rabbit's right, viewer left; four asymmetric ribbon strips and a tied centre.
     _f_ribbon(name+'_BowLoopLeft',[(-.365,-.12,2.145),(-.48,-.14,2.22),(-.57,-.12,2.275),
         (-.59,-.075,2.22),(-.51,-.06,2.18),(-.365,-.11,2.145)],[.03,.065,.07,.065,.055,.03],p['ribbon'],bow)
     _f_ribbon(name+'_BowLoopRight',[(-.365,-.12,2.145),(-.29,-.13,2.235),(-.24,-.11,2.31),
@@ -656,4 +692,10 @@ def make_rabbit(name='Rabbit', loc=(0, 0, 0), scale=1, parent=None):
     _f_ribbon(name+'_BowTailShort',[(-.36,-.14,2.14),(-.30,-.15,2.07),(-.27,-.13,2.025)],
         [.03,.046,.043],p['ribbon'],bow)
     box(name+'_BowKnot',(-.365,-.145,2.145),(.07,.07,.09),p['cord'],bow,w=.025,rot=(0,.25,-.25))
+    leg_meshes=[obj for obj in root.children_recursive if obj.type=='MESH' and obj.name.startswith(name+'_LegCloth_')]
+    lowest = min(vertex.co.z for obj in leg_meshes for vertex in obj.data.vertices)
+    if lowest < .002:
+        for obj in leg_meshes:
+            for vertex in obj.data.vertices:
+                vertex.co.z += .002 - lowest
     return _f_finish_root(root,loc,scale,parent,'rabbit',2.33)
