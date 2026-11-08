@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import aboutAvatar from '../../assets/about-avatar.png';
 import { locales, getLocale, localizePath, t } from '../../i18n';
 export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
 const locale = getLocale(Astro.url.pathname);
@@ -24,7 +26,7 @@ const principles = ABOUT.principles;
     </header>
 
     <section class="island-panel profile-note" aria-labelledby="profile-heading">
-      <div class="profile-photo"><img src={SITE.avatar} alt={t(locale, `${SITE.author} 的黑色小狗卡通头像`, `${SITE.author}’s cartoon avatar: a little black dog`)} width="112" height="112" /></div>
+      <div class="profile-photo"><Image src={aboutAvatar} alt={t(locale, `${SITE.author} 的粉发女孩卡通头像`, `${SITE.author}’s cartoon avatar: a pink-haired girl`)} width={112} height={112} densities={[1, 2, 3]} format="webp" quality={90} /></div>
       <div class="profile-copy">
         <h2 id="profile-heading">{aboutGreeting(SITE.author, locale)}</h2>
         <p>{ABOUT.intro}</p>
@@ -75,7 +77,7 @@ const principles = ABOUT.principles;
   .about-title { margin-bottom:30px; }
   .profile-note { display:flex; align-items:flex-start; gap:28px; padding:34px; }
   .profile-photo { flex-shrink:0; }
-  .profile-photo img { width:112px; height:112px; object-fit:cover; object-position:center; border-radius:32px; border:5px solid var(--color-paper); }
+  .profile-photo img { display:block; width:112px; height:112px; object-fit:contain; object-position:center; }
   .profile-copy { min-width:0; }
   .profile-copy h2 { margin:0 0 14px; font-size:24px; font-weight:700; }
   .profile-copy > p { font-size:14px; line-height:1.95; color:var(--color-ink-soft); max-width:640px; }
@@ -117,7 +119,6 @@ const principles = ABOUT.principles;
   :global(.dark) .guide-card-label, :global(.dark) .guide-card-number { color:var(--color-snow-faint); }
   :global(.dark) .guide-card-action { border-color:var(--color-line-dark); }
   @media(prefers-reduced-motion:reduce) { .guide-card { transition:none; } .guide-card:hover { transform:none; } }
-  :global(.dark) .profile-photo img { border-color:var(--color-night-subtle); }
   :global(.dark) .profile-copy > p, :global(.dark) .profile-links a:not(.blog-button), :global(.dark) .practice-note blockquote { color:var(--color-snow-soft); }
   :global(.dark) .principles-note li > span, :global(.dark) .practice-note > :global(svg) { color:var(--color-accent-dark); }
   :global(.dark) .about-note-grid h2 { color:var(--color-snow); }
@@ -126,5 +127,3 @@ const principles = ABOUT.principles;
   @media (max-width:800px) { .about-note-grid, .guide-card-grid { grid-template-columns:1fr; } }
   @media (max-width:639px) { .profile-note { flex-direction:column; padding:25px; gap:22px; } .profile-copy h2 { font-size:22px; } .principles-note, .practice-note { padding-inline:23px; } }
 </style>
-
-<style>.profile-photo img { object-fit:cover; object-position:center; }</style>

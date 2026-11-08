@@ -160,7 +160,7 @@ try {
   await page.waitForURL(url('/zh/about/'));
   const currentAvatar = page.locator('.profile-photo img');
   await currentAvatar.evaluate(image => image.decode());
-  assert.match(await currentAvatar.getAttribute('src'), /\/ferris-dog-avatar\.webp(?:\?|$)/, 'about uses the current generated dog avatar');
+  assert.match(await currentAvatar.getAttribute('src'), /about-avatar/, 'about uses the selected transparent girl avatar');
   assert.match(await currentAvatar.getAttribute('alt'), /卡通/, 'the illustration is described as a cartoon, not the reference photograph');
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   console.log('PASS: mobile navigation opens, closes with Escape, and follows links');
