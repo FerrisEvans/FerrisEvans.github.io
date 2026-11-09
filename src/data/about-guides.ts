@@ -16,5 +16,3 @@ export function guidesFor(locale: Locale) {
     { href: localizePath('/about/markdown/', locale), id: 'markdown-features', title: markdownGuide.title, description: markdownGuide.description, label: t(locale, '语法与效果', 'Syntax and examples'), icon: 'code' },
   ];
 }
-
-export const ABOUT_GUIDES = guidesFor('zh');

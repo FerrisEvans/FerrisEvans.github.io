@@ -105,14 +105,6 @@ button {
   @apply mt-3 font-serif text-4xl font-semibold tracking-[-0.025em] sm:text-5xl;
 }
 
-.hero-enter {
-  animation: enter-up 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.hero-enter-delay {
-  animation-delay: 80ms;
-}
-
 @keyframes enter-up {
   from {
     opacity: 0;

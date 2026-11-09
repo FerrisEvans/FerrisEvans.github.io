@@ -152,7 +152,7 @@ export async function createIsland(host: HTMLElement, bytes: ArrayBuffer, invali
   return {
     canvas: renderer.domElement, anchors,
     pick: picker.pick, hover, theme, resize,
-    navigate(view: IslandView | null, reduced: boolean, time: number) { navigation.go(view, reduced); animation.activate(view, time); invalidate(); },
+    navigate(view: IslandView | null, reduced: boolean) { navigation.go(view, reduced); invalidate(); },
     render(time: number, dt: number, reduced: boolean) {
       if (disposed) return;
       navigation.update(dt); animation.update(time, dt, reduced); effects.update(time, dt, reduced); activity.update(time, dt, reduced);

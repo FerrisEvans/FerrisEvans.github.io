@@ -1,7 +1,7 @@
 import { readdir, rm } from 'node:fs/promises';
 
 // Authoring files live beside their generated assets but are not published.
-for (const path of ['island/island.blend', 'island/island.glb', 'brand/ferris-avatar.png', 'brand/ferris-dog-avatar.png', 'brand/identity.json']) {
+for (const path of ['island/island.blend', 'island/island.glb', 'island/model-report.json', 'island/transport.json', 'brand/ferris-avatar.png', 'brand/ferris-dog-avatar.png', 'brand/identity.json']) {
   await rm(new URL(`../../dist/${path}`, import.meta.url), { recursive: true, force: true });
 }
 

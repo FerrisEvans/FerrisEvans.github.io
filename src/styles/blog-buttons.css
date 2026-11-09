@@ -77,8 +77,7 @@
   box-shadow:none;
 }
 
-.blog-body .blog-button--primary.blog-button--primary,
-.blog-body .island-button.primary {
+.blog-body .blog-button--primary.blog-button--primary {
   --blog-button-paper:#f8f8f0;
   --blog-button-ink:#794f27;
   --blog-button-border:#f8f8f0;

@@ -1,5 +1,5 @@
 import { AnimationMixer, LoopOnce, LoopRepeat, type AnimationAction, type AnimationClip, type Object3D } from 'three';
-import type { HoverTarget, IslandView } from './types';
+import type { HoverTarget } from './types';
 
 /** Keep the bear's authored clips and let the garden birds quietly look around.
  * Reduced motion restores their original pose and stops every idle loop. */
@@ -60,7 +60,6 @@ export function createAnimation(root: Object3D, clips: AnimationClip[]) {
       else if (!value && attended) readAgain();
       attended = value;
     },
-    activate(_view: IslandView | null, _time: number) { /* The dog now greets visitors through its authored pivots. */ },
     state() { return reduced ? 'still' : foreground?.getClip().name ?? 'Idle'; },
     poses() {
       return Object.fromEntries(['Bear_Head', 'Bear_Arm_R', 'Bear_Book', 'Bear_Book_Page'].flatMap(name => {

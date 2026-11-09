@@ -5,6 +5,11 @@
 #tag-filter { min-width:0; width:100%; height:46px; border:0; background:transparent; color:var(--color-ink); font-size:14px; outline:none; }
 #tag-filter::placeholder { color:var(--color-ink-faint); }
 .tag-word-cloud { position:relative; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:12px 10px; list-style:none; margin:0; padding:16px 0; border:0; background:transparent; }
+/* Hide only the initial measuring layout, including before React hydrates.
+   Visibility preserves text measurements; a script-free page stays readable. */
+html[data-tag-cloud="pending"] .tag-word-cloud[data-ready="false"] { visibility:hidden; }
+html[data-tag-cloud] .tag-word-cloud { min-height:340px; }
+@media(max-width:599px) { html[data-tag-cloud] .tag-word-cloud { min-height:280px; } }
 .tag-word-cloud > li { display:flex; max-width:100%; margin:0; padding:0; }
 .tag-word-cloud[hidden],.tag-word-cloud > li[hidden] { display:none; }
 .tag-word-cloud .tag-item { position:relative; align-items:center; justify-content:center; min-height:36px; padding:4px 6px; border:0; border-radius:0; background:transparent; color:var(--token-ink); transform:none; transition:none; text-decoration:none; }

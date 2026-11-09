@@ -4,7 +4,7 @@ Run with Blender 5.2+: blender --background --factory-startup --python
 scripts/island/build_scene.py. Does not access or overwrite an interactive scene.
 All dimensions are metres. Blender front is -Y; exported glTF front is +Z.
 """
-import bpy, math, json, random, os, sys
+import bpy, math, json, random, sys
 from pathlib import Path
 from mathutils import Vector
 

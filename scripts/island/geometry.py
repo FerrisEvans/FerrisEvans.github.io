@@ -55,13 +55,6 @@ def cylinder(name,loc,r,depth,mat,parent=None,vertices=24,rot=None):
     bevel(o,min(.035,r*.18,depth*.18),2)
     return finish(o,name,mat,parent,True)
 
-def cone(name,loc,r1,r2,depth,mat,parent=None,vertices=20,rot=None):
-    bpy.ops.mesh.primitive_cone_add(vertices=vertices,radius1=r1,radius2=r2,depth=depth,location=loc)
-    o=bpy.context.object
-    if rot:o.rotation_euler=rot
-    bevel(o,.025,2)
-    return finish(o,name,mat,parent,True)
-
 def tube(name,pts,r,mat,parent=None,res=3):
     c=bpy.data.curves.new(name,'CURVE');c.dimensions='3D';c.resolution_u=8
     c.bevel_depth=r;c.bevel_resolution=res;c.resolution_u=8

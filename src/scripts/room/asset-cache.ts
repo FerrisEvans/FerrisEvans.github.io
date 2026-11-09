@@ -1,7 +1,7 @@
-export type HashedAsset = {url:string;bytes:number;sha256?:string;stream?:boolean};
+type HashedAsset = {url:string;bytes:number;sha256?:string};
 
 const cacheName='praxis-room-assets-v1';
-const hashed=(file:HashedAsset)=>!file.stream&&/^[a-f0-9]{64}$/.test(file.sha256??'');
+const hashed=(file:HashedAsset)=>/^[a-f0-9]{64}$/.test(file.sha256??'');
 
 export function assetUrl(url:string,version?:string){
   if(!version)return url;

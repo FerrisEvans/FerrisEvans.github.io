@@ -7,7 +7,7 @@ import { fromHtml } from 'hast-util-from-html';
 import { readArticles, translationErrors } from './i18n-contract.mjs';
 
 const distDir = path.resolve('dist');
-for (const source of ['assets', 'vendor', 'island/island.blend', 'island/island.glb', 'brand/ferris-avatar.png', 'brand/ferris-dog-avatar.png', 'brand/identity.json']) {
+for (const source of ['assets', 'vendor', 'island/island.blend', 'island/island.glb', 'island/model-report.json', 'island/transport.json', 'brand/ferris-avatar.png', 'brand/ferris-dog-avatar.png', 'brand/identity.json']) {
   assert(!fs.existsSync(path.join(distDir, source)), `Authoring or retired assets must not be published: ${source}`);
 }
 // Every third-party license must survive source pruning without byte changes.

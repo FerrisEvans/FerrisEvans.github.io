@@ -1,5 +1,5 @@
 import { type Locale, t, localizePath } from '../i18n';
-import { useEffect, useId, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, type MotionValue } from 'motion/react';
 import { initialTagTokenColor, randomizeTagTokens } from '../scripts/tag-tokens';
 import { createIslandTooltip } from '../scripts/island/tooltip';
@@ -95,6 +95,7 @@ export default function TagWordCloud({ tags, locale }: TagWordCloudProps) {
   const tooltipId = useId();
   const [query, setQuery] = useState('');
   const [layout, setLayout] = useState<CloudLayout | null>(null);
+  const [ready, setReady] = useState(false);
   const pointer = useMotionValue<Point>(null);
   const active = useMotionValue<Selection>(null);
   const live = useRef<LiveWords>(new Map());
@@ -134,32 +135,47 @@ export default function TagWordCloud({ tags, locale }: TagWordCloudProps) {
   }, [tags]);
 
   useEffect(() => {
+    if (ready) document.dispatchEvent(new Event('tag-cloud-ready'));
+  }, [ready]);
+
+  useLayoutEffect(() => {
     const element = cloud.current;
     if (!element) return;
     let frame = 0, active = true, previousWidth = 0;
+    let fontsReady = document.fonts.status === 'loaded';
     const measure = () => {
-      if (!active) return;
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (!active) return;
-        const width = element.clientWidth;
-        const words = [...element.querySelectorAll<HTMLLIElement>('li:not([hidden])')].map(item => {
-          const link = item.querySelector('a')!, word = item.querySelector<HTMLElement>('.tag-word')!;
-          // Measure the unscaled text once, never the reserved hit area.
-          return { name: item.dataset.word!, count: Number(link.dataset.count), width: word.offsetWidth + 12,
-            height: Math.max(word.offsetHeight + 8, matchMedia('(pointer: coarse)').matches ? 44 : 36),
-            textWidth: word.offsetWidth, textHeight: word.offsetHeight };
-        });
-        const next = packWords(words, width);
-        setLayout(previous => JSON.stringify(previous) === JSON.stringify(next) ? previous : next);
+      if (!active || !fontsReady) return;
+      // If loading timed out, keep the now-visible fallback stable even if
+      // hydration eventually succeeds. Filtering and native links still work.
+      if (document.documentElement.dataset.tagCloud === 'fallback') {
+        setReady(true);
+        return;
+      }
+      const width = element.clientWidth;
+      const words = [...element.querySelectorAll<HTMLLIElement>('li:not([hidden])')].map(item => {
+        const link = item.querySelector('a')!, word = item.querySelector<HTMLElement>('.tag-word')!;
+        // Measure the unscaled text once, never the reserved hit area.
+        return { name: item.dataset.word!, count: Number(link.dataset.count), width: word.offsetWidth + 12,
+          height: Math.max(word.offsetHeight + 8, matchMedia('(pointer: coarse)').matches ? 44 : 36),
+          textWidth: word.offsetWidth, textHeight: word.offsetHeight };
       });
+      const next = packWords(words, width);
+      setLayout(previous => JSON.stringify(previous) === JSON.stringify(next) ? previous : next);
+      // A null layout is a valid wrapping fallback, not a loading state.
+      setReady(true);
+    };
+    const scheduleMeasure = () => {
+      if (!active || !fontsReady) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
     };
     const observer = new ResizeObserver(entries => {
       const width = entries[0]?.contentRect.width ?? 0;
-      if (Math.abs(width - previousWidth) > 1) { previousWidth = width; measure(); }
+      if (Math.abs(width - previousWidth) > 1) { previousWidth = width; scheduleMeasure(); }
     });
     observer.observe(element);
-    void document.fonts.ready.then(measure);
+    void document.fonts.ready.then(() => { fontsReady = true; scheduleMeasure(); });
+    // Filter changes must place newly visible words before the next paint.
     measure();
     return () => { active = false; observer.disconnect(); cancelAnimationFrame(frame); };
   }, [query, tags]);
@@ -268,7 +284,7 @@ export default function TagWordCloud({ tags, locale }: TagWordCloudProps) {
         </label>
         <p id="tag-count" className="sr-only" role="status" aria-live="polite">{locale === "en" ? `${visibleCount} ${visibleCount === 1 ? "tag" : "tags"}` : normalized ? `找到 ${visibleCount} 个标签` : `${tags.length} 个标签`}</p>
       </div>}
-      <ul className="tag-word-cloud" aria-label={t(locale, "标签词云", "Tag cloud")} ref={cloud} hidden={visibleCount === 0} data-packed={Boolean(layout)} style={layout ? { height: layout.height } : undefined}>
+      <ul className="tag-word-cloud" aria-label={t(locale, "标签词云", "Tag cloud")} ref={cloud} hidden={visibleCount === 0} data-ready={ready} data-packed={Boolean(layout)} style={layout ? { height: layout.height } : undefined}>
         {tags.map(tag => <CloudWord locale={locale} key={tag.name} tag={tag} hidden={!tag.name.toLowerCase().includes(normalized)}
           position={layout?.positions[tag.name]} size={fontSize(tag.count)} plan={plan} active={active}
           enabled={motionEnabled} live={live.current} />)}

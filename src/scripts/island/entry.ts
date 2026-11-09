@@ -79,7 +79,7 @@ function mountIsland() {
   }
   function invalidate() { if (!frame && viewer && !document.hidden && visible && !signal.aborted) frame = requestAnimationFrame(draw); }
   const panels = createPanels(view => {
-    viewer?.navigate(view, reduced.matches || capture, elapsed);
+    viewer?.navigate(view, reduced.matches || capture);
     root.dataset.view = view ?? 'home'; focusedView = null; setHover(null);
     invalidate();
   }, signal);
@@ -110,7 +110,7 @@ function mountIsland() {
     status.textContent = t(locale, '正在准备小岛…', 'Preparing the island…'); panels.enhanced(false);
     try {
       const model = new URL(root!.dataset.modelUrl!, location.href);
-      const file = { url: model.pathname, bytes: Number(root!.dataset.modelBytes), sha256: model.searchParams.get('v') ?? undefined, priority: 'high' as const };
+      const file = { url: model.pathname, bytes: Number(root!.dataset.modelBytes), sha256: model.searchParams.get('v') ?? undefined };
       const resources = new RoomAssets([file], (loaded, total, stats) => {
         if (current !== generation || signal.aborted) return;
         progress.value = total ? Math.min(90, loaded / total * 90) : 0;
@@ -130,10 +130,9 @@ function mountIsland() {
       progress.value = 100; progress.hidden = true;
       status.textContent = t(locale, '悬停物件查看入口，点击阅读。拖动环顾，滚轮缩放。', 'Hover to discover an entrance, or tap to read. Drag to look around; scroll or pinch to zoom.');
       panels.enhanced(true);
-      if (panels.selected) viewer.navigate(panels.selected, true, elapsed);
+      if (panels.selected) viewer.navigate(panels.selected, true);
       invalidate();
-      // A single-model load skips preload(); trim only its older cached
-      // revisions after readiness, without delaying the scene or rereading it.
+      // Trim older cached revisions after readiness without delaying the scene.
       void resources.prune();
     } catch (error) { if (current === generation && !signal.aborted) fail(error); }
   }
@@ -151,7 +150,7 @@ function mountIsland() {
       window.dispatchEvent(new CustomEvent('theme-changed'));
     }
   }, { signal });
-  reduced.addEventListener('change', () => { stop(); viewer?.navigate(panels.selected, reduced.matches, elapsed); invalidate(); }, { signal });
+  reduced.addEventListener('change', () => { stop(); viewer?.navigate(panels.selected, reduced.matches); invalidate(); }, { signal });
   document.addEventListener('visibilitychange', () => { stop(); if (!document.hidden) invalidate(); }, { signal });
   const pointers = new Map<number, { x: number; y: number; multiple: boolean; moved: boolean }>();
   let pendingTap: IslandView | undefined;

@@ -82,7 +82,7 @@ test('reading tables retain GFM content and alignment inside one keyboard-scroll
   };
   collect(tree);
   assert.equal(tables.length, 2, 'code fences remain literal; nested tables are wrapped');
-  for (const { table, wrapper } of tables) {
+  for (const { wrapper } of tables) {
     assert.equal(wrapper.tagName, 'div');
     assert(wrapper.properties.className.includes('prose-table-scroll'));
     assert.equal(wrapper.properties.tabIndex, 0);

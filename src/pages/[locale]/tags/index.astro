@@ -17,6 +17,23 @@ const tags = [...counts.entries()]
   .map(([name, count]) => ({ name: tagLabel(name, locale), count, href: localizePath(`/tags/${encodeURIComponent(name)}/`, locale) }));
 ---
 <Base title={t(locale, "标签")}>
+  <script is:inline slot="head">
+    // Opt in before the SSR list can paint. Without scripts it remains usable.
+    (() => {
+      const root = document.documentElement;
+      root.dataset.tagCloud = 'pending';
+      const complete = () => {
+        clearTimeout(timeout);
+        if (root.dataset.tagCloud === 'pending') root.dataset.tagCloud = 'ready';
+      };
+      // Failed or very slow bundles must never leave the tags permanently hidden.
+      const timeout = setTimeout(() => {
+        root.dataset.tagCloud = 'fallback';
+        document.removeEventListener('tag-cloud-ready', complete);
+      }, 5000);
+      document.addEventListener('tag-cloud-ready', complete, { once: true });
+    })();
+  </script>
   <div class="island-page tags-page">
     <header class="tag-intro">
       <span class="page-decoration"><Icon name="tag" size={52} /></span>

@@ -2,7 +2,7 @@
 
 The homepage directly loads a forest reading courtyard assembled from official
 CC0 KayKit Forest/Furniture and Tiny Treats Park/Plants/Picnic sources, with the
-original bear and its coordinated animation. HTML panels supply the site content.
+original bear, dog and rabbit. HTML panels supply the site content.
 `build_scene.py` and its Python modules are the reproducible authoring source;
 `public/island/island.blend` is editable. Its complete uncompressed export is
 `public/island/island.glb`. These two authoring files and original vendor
@@ -10,6 +10,8 @@ models, textures and source inventories are excluded from production by
 `scripts/ci/prune-source-assets.mjs`; vendor licenses and notices remain published.
 Model provenance and mesh statistics
 live beside the exported model in `public/island/model-report.json`.
+The model report and packing receipt (`transport.json`) are retained for local
+validation and excluded from production; the browser does not load them.
 Original vendor glTF/BIN/PNG files, licenses and provenance hashes are preserved
 under `public/island/vendor/`; both the Blender
 generator and publication source seal check them. No paid source was used.
@@ -17,10 +19,11 @@ The same vendor directory also preserves the separate MIT licenses and notices
 for Animal Island UI (cursor and tooltip), Naive Icons (navigation and signs),
 and Magic UI (tag cloud). These are UI dependencies, not CC0 model packs.
 
-1. Run Blender in a **separate background process**, never replace an open file:
+1. For geometry or material changes, run Blender in a **separate background process**, never replace an open file:
    `npm run assets:build` (the macOS application path is explicit in this script).
    Another workstation can run its Blender executable with
-   `--background --python scripts/island/build_scene.py`.
+   `--background --python scripts/island/build_scene.py`. Skip this step when
+   only runtime rendering code or sealed styles change.
 2. Run `npm run assets:model` after geometry or runtime scene changes. This first
    packs the source with Meshopt (no quantization, reordering or decimation),
    lossless WebP textures and gzip into `public/island/island.glb.bin`.
@@ -49,10 +52,12 @@ uses Three.js's bundled Meshopt decoder. Scene readiness triggers best-effort
 pruning of older revisions of the owned model path, retaining current + previous.
 Other cache paths are untouched. The raw authoring GLB is never published.
 
-The generated avatar follows the same source/delivery separation: its original
+The homepage dog avatar follows the same source/delivery separation: its original
 PNG is in `public/brand/`, while `npm run assets:brand` generates a 512px WebP for
-the site's 88–112px avatar displays. Neither the original art nor its source hash
-changes during optimization.
+the homepage's 88px author panel. Neither the original art nor its source hash
+changes during optimization. The About page instead imports
+`src/assets/about-avatar.png`; Astro generates WebP variants for its 112px image
+at 1×, 2× and 3× pixel density.
 
 The model budget is a transfer target, not an FPS guarantee. GitHub Pages already
 applies HTTP gzip to the original GLB; compare actual encoded transfer bytes as
@@ -75,8 +80,8 @@ alone is not sufficient proof that a model appears in the delivered scene.
 ## Test migration
 
 The default suite preserves shared publishing contracts (`scripts/tests/content.test.mjs`)
-and used binary loader/cache/timing contracts (`scripts/tests/room/assets.test.mjs` and
-`load-timings.test.mjs`). Island-specific asset seals and interaction tests are
+and current binary loader/cache contracts (`scripts/tests/room/assets.test.mjs`).
+Island-specific asset seals and interaction tests are
 under `scripts/tests/island/`. Markdown, guides and search retain their existing tests.
 
 The removed shape-specific tests are recoverable at Git commit `08844b2`:

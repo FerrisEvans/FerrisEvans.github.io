@@ -11,8 +11,6 @@ import ts from 'typescript';
 const cacheName='praxis-room-assets-v1';
 const model='/room/materials/cache-test-model.glb.bin';
 const atlas='/room/materials/cache-test-albedo.webp';
-const lampOff='/room/materials/cache-test-lamp-off.webp';
-const stream='/room/film/cache-test.mp4';
 const hash=body=>createHash('sha256').update(body).digest('hex');
 
 /** Real Window CacheStorage, native HTTP and a restarted persistent Chromium
@@ -29,14 +27,12 @@ export async function verifyRoomAssetCache(){
   const bodies=new Map([
     [model,Buffer.from('model geometry version one')],
     [atlas,Buffer.from('unchanged shared texture bytes')],
-    [lampOff,Buffer.from('deferred lamp-off illumination bytes')],
   ]);
   let contentVersion=1;
   let corruptModelResponses=0;
   let cacheModelResponse=false;
   const requests=[],documents=[],pageErrors=[];
-  const files=()=>[...bodies].map(([url,body])=>({url,bytes:body.length,sha256:hash(body),
-    ...(url===model?{priority:'high'}:{}),...(url===lampOff?{deferred:true}:{})}));
+  const files=()=>[...bodies].map(([url,body])=>({url,bytes:body.length,sha256:hash(body)}));
   const expected=()=>Object.fromEntries([...bodies].map(([url,body])=>[url,body.toString()]));
   const server=createServer((request,response)=>{
     const url=new URL(request.url,'http://localhost'),path=url.pathname;
@@ -58,28 +54,25 @@ export async function verifyRoomAssetCache(){
       if(path===model&&cacheModelResponse){response.setHeader('Cache-Control','public, max-age=3600');response.removeHeader('Expires');}
       response.writeHead(200,{'Content-Type':'application/octet-stream','Content-Length':body.length});response.end(body);return;
     }
-    if(path===stream){requests.push({path,query:url.search});response.writeHead(200,{'Content-Type':'video/mp4'});response.end('stream fixture');return;}
     if(path==='/'||path==='/posts/cache-fixture/'){
       documents.push({path,version:contentVersion});
-      const manifest=[...files(),{url:stream,bytes:1000000,stream:true,sha256:hash('stream fixture')}];
+      const manifest=files();
       response.writeHead(200,{'Content-Type':'text/html'});
       response.end(`<!doctype html><title>Content ${contentVersion}</title><h1>Content ${contentVersion}</h1>
         <script type="module">
           import {RoomAssets} from '/modules/assets.js';
           const files=${JSON.stringify(manifest)};
           window.loadBundle=async()=>{
-            const progress=[],initial=files.filter(file=>!file.deferred);
-            const assets=new RoomAssets(initial,(loaded,total)=>progress.push([loaded,total]),{
-              deferred:files.filter(file=>file.deferred),version:'content-${contentVersion}'
-            });
+            const progress=[];
+            const assets=new RoomAssets(files,(loaded,total)=>progress.push([loaded,total]));
             try{
-              await assets.preload();
               const values={};
-              for(const file of files.filter(file=>!file.stream))values[file.url]=new TextDecoder().decode(await assets.read(file.url));
+              for(const file of files)values[file.url]=new TextDecoder().decode(await assets.read(file.url,file.url===${JSON.stringify(model)}?'high':'auto'));
               let unlistedRejected=false;
               try{await assets.read('/posts/cache-fixture/');}catch{unlistedRejected=true;}
+              await assets.prune();
               assets.release();
-              return {values,progress,total:assets.total,active:assets.activeRequests,unlistedRejected};
+              return {values,progress,unlistedRejected};
             }finally{assets.dispose();}
           };
           window.cacheFixtureReady=true;
@@ -98,9 +91,8 @@ export async function verifyRoomAssetCache(){
   const ready=async(page,url)=>{await page.goto(url);await page.waitForFunction(()=>window.cacheFixtureReady===true);};
   const load=async page=>{
     const result=await page.evaluate(()=>window.loadBundle());
-    assert.deepEqual(result.values,expected());assert.equal(result.active,0);assert(result.unlistedRejected);
+    assert.deepEqual(result.values,expected());assert(result.unlistedRejected);
     const total=bodies.get(model).length+bodies.get(atlas).length;
-    assert.equal(result.total,total,'native media and deferred files stay outside the initial byte gate');
     assert.deepEqual(result.progress.at(-1),[total,total],'cached bytes must complete the same loading progress as network bytes');
     return result;
   };
@@ -138,7 +130,7 @@ export async function verifyRoomAssetCache(){
     await new Promise(resolve=>setTimeout(resolve,150));
     assert.equal(cacheReady,false,'an asynchronous false cache result must keep polling');
     await load(page);await firstCache;
-    assert.deepEqual(requests.map(request=>request.path),[model,atlas,lampOff]);
+    assert.deepEqual(requests.map(request=>request.path),[model,atlas]);
     for(const request of requests)assert(request.version.includes(hash(bodies.get(request.path))),'each network URL must use that file’s SHA-256');
     assert((await cachedKeys(page)).every(key=>bodies.has(new URL(key).pathname)),'only declared static assets belong in the room cache');
     const warmRequests=requests.length;
@@ -151,7 +143,7 @@ export async function verifyRoomAssetCache(){
     contentVersion++;const priorDocuments=documents.length;
     await ready(page,base+'/posts/cache-fixture/');assert.equal(await page.title(),'Content 2');await load(page);
     assert(documents.length>priorDocuments,'HTML is fetched again after a content-only release');
-    assert.equal(requests.length,warmRequests,'content and bundle version changes cannot invalidate unchanged file hashes');
+    assert.equal(requests.length,warmRequests,'content changes cannot invalidate unchanged file hashes');
     const previousAtlasKey=(await cachedKeys(page)).find(key=>new URL(key).pathname===atlas);
     bodies.set(model,Buffer.from('model geometry version two with an actual edit'));
     contentVersion++;await ready(page,base);await load(page);await waitCached(page);
@@ -189,24 +181,23 @@ export async function verifyRoomAssetCache(){
 
     await page.evaluate(name=>caches.delete(name),cacheName);const beforeDeletion=requests.length;
     await ready(page,base);await load(page);await waitCached(page);
-    assert.equal(requests.length-beforeDeletion,3,'deleted CacheStorage entries fall back to HTTP');
+    assert.equal(requests.length-beforeDeletion,2,'deleted CacheStorage entries fall back to HTTP');
     await ready(page,base);await page.evaluate(()=>{
       CacheStorage.prototype.open=()=>Promise.reject(new DOMException('fixture blocked Cache API','SecurityError'));
     });
     const beforeDenied=requests.length;await load(page);
-    assert.equal(requests.length-beforeDenied,3,'a blocked Cache API cannot block asset loading');
+    assert.equal(requests.length-beforeDenied,2,'a blocked Cache API cannot block asset loading');
     await ready(page,base);await page.evaluate(async name=>{
       await caches.delete(name);
       Cache.prototype.put=()=>Promise.reject(new DOMException('fixture quota full','QuotaExceededError'));
     },cacheName);
     const beforeQuota=requests.length;await load(page);
-    assert.equal(requests.length-beforeQuota,3,'cache write rejection must leave network responses usable');
+    assert.equal(requests.length-beforeQuota,2,'cache write rejection must leave network responses usable');
     await ready(page,base);await load(page);await waitCached(page);
     assert.deepEqual(await page.evaluate(()=>navigator.serviceWorker.getRegistrations()),[],'asset persistence must not register a service worker');
-    assert((await cachedKeys(page)).every(key=>bodies.has(new URL(key).pathname)),'HTML, posts and native video must not enter CacheStorage');
-    assert(!requests.some(request=>request.path===stream),'preload must leave streamed media to the browser');
+    assert((await cachedKeys(page)).every(key=>bodies.has(new URL(key).pathname)),'HTML and posts must not enter CacheStorage');
     assert.deepEqual(pageErrors,[],'cache fallback must not produce unhandled browser errors');
-    console.log('PASS: deleted, blocked and quota-full caches degrade to HTTP; HTML, posts and streams stay outside CacheStorage and no worker is registered');
+    console.log('PASS: deleted, blocked and quota-full caches degrade to HTTP; HTML and posts stay outside CacheStorage and no worker is registered');
   }finally{
     await context?.close();
     if(server.listening)await new Promise(resolve=>server.close(resolve));

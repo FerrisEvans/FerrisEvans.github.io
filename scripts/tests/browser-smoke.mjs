@@ -5,6 +5,7 @@ import { chromium } from 'playwright';
 import { verifyLegacyWorkerRetirement } from './legacy-worker-browser.mjs';
 import { verifyRoomAssetCache } from './room/asset-cache-browser.mjs';
 import { verifyHomeLoading } from './island/home-loading-browser.mjs';
+import { verifyTagCloudLoading } from './tag-cloud-loading-browser.mjs';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshots = process.env.SMOKE_SCREENSHOT_DIR;
@@ -75,6 +76,7 @@ async function assertStaticEntrances(page) {
 
 try {
   await verifyHomeLoading(browser, base);
+  await verifyTagCloudLoading(browser, base);
   if (process.env.SMOKE_SKIP_INFRA !== '1') {
     await verifyRoomAssetCache();
     await verifyLegacyWorkerRetirement(browser);

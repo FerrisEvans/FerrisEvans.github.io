@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFile, readdir } from 'node:fs/promises';
 import { resolve, relative } from 'node:path';
 
-export const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export const posterSizes = {
   'cover-day.webp': [1440, 1200],
   'cover-night.webp': [1440, 1200],

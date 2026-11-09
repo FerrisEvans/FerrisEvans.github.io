@@ -56,7 +56,7 @@ npm run preview             # 预览 dist/ 中的生产版本
 ```text
 posts/      博文和配图：zh/ 中文、en/ 英文、img/ 共用图片
 src/        页面、组件、样式、站点配置和浏览器代码
-public/     网站资源；assets/ 保存素材原稿，构建时排除原稿目录
+public/     网站资源；brand/ 和 island/ 同时保存原稿与交付文件
 scripts/    素材工具、构建校验和测试
 ├── brand/  品牌素材生成
 ├── island/ 3D 素材生成、打包和封面工具
@@ -72,8 +72,8 @@ scripts/    素材工具、构建校验和测试
 
 首页使用 Three.js 小岛，文章页、目录和搜索不加载 3D。无法运行 JavaScript 或 WebGL 时仍保留静态阅读入口。写文章和添加配图不需要重新生成模型。
 
-只有修改模型或其渲染代码时才需要按顺序运行 `npm run assets:build`、`npm run assets:model`、`npm run assets:posters` 和 `npm run assets:check`。详细命令见 [素材流程](scripts/island/ASSET_PIPELINE.md)，模型来源与许可见 [素材记录](scripts/island/SOURCES.md)。本地预览和性能报告放在被 Git 忽略的 `.room-build/`。
+修改模型几何或材质时，先运行 `npm run assets:build`。模型、渲染代码或纳入校验的样式发生变化后，运行 `npm run assets:model`、`npm run assets:posters` 和 `npm run assets:check`；仅修改渲染代码无需重新运行 Blender。详细命令见 [素材流程](scripts/island/ASSET_PIPELINE.md)，模型来源与许可见 [素材记录](scripts/island/SOURCES.md)。本地预览和性能报告放在被 Git 忽略的 `.room-build/`。
 
-品牌原图、图标、头像和身份记录统一保存在 `public/brand/`。`npm run assets:brand` 从 SVG 和 PNG 原图生成网站使用的图标与 WebP 头像；构建时排除两张原始头像 PNG 和 `identity.json`，只发布网站使用的文件。
+品牌原图、图标、首页小狗头像和身份记录保存在 `public/brand/`。`npm run assets:brand` 从 SVG 和 PNG 原图生成网站使用的图标与小狗 WebP 头像；构建时排除两张原始头像 PNG 和 `identity.json`。关于页单独使用 `src/assets/about-avatar.png`，由 Astro 生成适合不同像素密度的 WebP 图片。
 
 小岛的 Blender 原稿、原始模型和网站使用的模型、封面统一保存在 `public/island/`。第三方模型素材与 UI 组件许可统一放在 `public/island/vendor/`，按上游项目保留独立目录。构建时排除原稿、未压缩模型和第三方原始素材，保留网站资源以及各项目的 `LICENSE.txt`、`NOTICE.md`。
