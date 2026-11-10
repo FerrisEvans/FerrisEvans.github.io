@@ -6,6 +6,8 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 import { articleLocale } from '../../src/utils/article-metadata.mjs';
+import { articleRoutePaths, legacyRedirects } from '../../src/data/legacy-routes.mjs';
+import { tagId } from '../../src/data/tags.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const require = createRequire(import.meta.url);
@@ -133,6 +135,37 @@ test('all real non-draft articles are available, with case-correct article URLs'
     assert(posts.every((post, index) => index === 0 || posts[index - 1].data.date >= post.data.date));
     for (const post of posts) assert.equal(postUrl(post), post.href);
   }
+});
+
+test('article topics remain distinct from directories and consistent across translations', () => {
+  const topicsByKey = new Map();
+  for (const { filePath, data } of articles()) {
+    assert.notEqual(data.key, 'markdown-writing-guide', `${filePath}: the writing sample belongs with the guides, outside the blog collection`);
+    const tags = (data.tags ?? []).map(tagId);
+    assert(!tags.includes(tagId(data.category)), `${filePath}: tags must not repeat the category`);
+    if (data.subcategory) assert(!tags.includes(tagId(data.subcategory)), `${filePath}: tags must not repeat the subcategory`);
+    const topics = { subcategory: data.subcategory ?? null, tags: [...tags].sort() };
+    const previous = topicsByKey.get(data.key);
+    if (previous) assert.deepEqual(topics, previous, `${filePath}: translations share the same subcategory and topic tags`);
+    else topicsByKey.set(data.key, topics);
+  }
+});
+
+test('active routes support omitted tags and reclaim legacy paths after tag alias normalization', () => {
+  const noTags = { data: { key: 'without-tags', category: 'writing' } };
+  assert.deepEqual(articleRoutePaths([noTags]), new Set(['/posts/without-tags/', '/categories/writing/']));
+  const active = articleRoutePaths([
+    noTags,
+    { data: { key: 'with-tags', category: 'notes', tags: ['frame', '写作', '代码示例'] } },
+  ]);
+  const retired = new Map(legacyRedirects(active));
+  for (const path of ['/categories/writing/', '/tags/frame/', '/tags/writing/', '/tags/code-examples/']) {
+    assert(active.has(path), `${path}: a published article restores this canonical path`);
+    assert(!retired.has(path), `${path}: an active path must not redirect to retired content`);
+  }
+  assert(!active.has('/tags/写作/'));
+  assert(!active.has('/tags/代码示例/'));
+  assert.equal(retired.get('/tags/oop/'), '/posts/cpp_lifecycle/', 'unclaimed legacy routes retain their destinations');
 });
 
 test('category discovery removes empty categories while retaining their reusable display configuration', async t => {

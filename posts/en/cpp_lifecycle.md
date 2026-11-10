@@ -5,7 +5,7 @@ description: "How object lifetimes work in C++, from local and static objects to
 date: 2025-02-28
 category: lang
 subcategory: cpp
-tags: [lifecycle, oop]
+tags: [lifecycle]
 ---
 
 This article compares the lifetimes of automatic, static, dynamically allocated, temporary, and thread-local objects in C++, explaining when they are created and destroyed.

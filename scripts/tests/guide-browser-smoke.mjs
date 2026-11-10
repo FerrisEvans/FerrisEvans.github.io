@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Verify the three About guides against an already-running local preview. */
+/** Verify the About guides against an already-running local preview. */
 import assert from 'node:assert/strict';
 import { mkdir, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -10,7 +10,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshotDirectory = process.env.SCREENSHOT_DIR
   ? resolve(process.env.SCREENSHOT_DIR)
   : join(tmpdir(), 'praxis-guide-browser');
-const guideSlugs = ['python-zen', 'writing', 'markdown'];
+const guideSlugs = ['python-zen', 'writing', 'markdown', 'markdown-writing'];
 const guidePaths = locale => guideSlugs.map(slug => `/${locale}/about/${slug}/`);
 const paths = guidePaths('zh');
 const englishPaths = guidePaths('en');
@@ -112,6 +112,7 @@ async function assertGuideNavigation(page, path) {
   const locale = localeOf(path);
   const related = page.getByRole('navigation', { name: locale === 'zh' ? '相关阅读' : 'Related reading' });
   assert.equal(await related.count(), 1, 'related guides have a named navigation region');
+  assert.equal(await related.locator('a').count(), guideSlugs.length - 1, 'related reading includes every other guide exactly once');
   for (const other of guidePaths(locale).filter(value => value !== path)) {
     assert(await related.locator(`a[href="${other}"]`).count() > 0, `${path} links to ${other}`);
   }
@@ -149,7 +150,7 @@ async function assertLocaleContent(page, path) {
 
 async function assertAboutCards(page, locale = 'zh') {
   const cards = page.locator('.about-guides .guide-card');
-  assert.equal(await cards.count(), 3, 'About has three guide cards');
+  assert.equal(await cards.count(), guideSlugs.length, 'About has a card for each guide');
   assert(await page.evaluate(() => {
     const profile = document.querySelector('.profile-note');
     const guides = document.querySelector('.about-guides');
@@ -165,8 +166,17 @@ async function assertAboutCards(page, locale = 'zh') {
     await page.setViewportSize(size);
     const boxes = await Promise.all((await cards.all()).map(card => card.boundingBox()));
     assert(boxes.every(Boolean));
-    if (viewport === 'desktop') assert(Math.abs(boxes[0].y - boxes[2].y) <= 1, 'desktop cards share one row');
-    else assert(boxes[0].y + boxes[0].height <= boxes[1].y && boxes[1].y + boxes[1].height <= boxes[2].y, 'mobile cards form a single column');
+    if (viewport === 'desktop') {
+      for (let index = 0; index < boxes.length; index += 2) {
+        assert(Math.abs(boxes[index].y - boxes[index + 1].y) <= 1, 'desktop cards form rows of two');
+        assert(boxes[index].x + boxes[index].width <= boxes[index + 1].x, 'desktop card columns do not overlap');
+        if (index > 0) assert(boxes[index - 2].y + boxes[index - 2].height <= boxes[index].y, 'desktop card rows do not overlap');
+      }
+    } else {
+      for (let index = 1; index < boxes.length; index++) {
+        assert(boxes[index - 1].y + boxes[index - 1].height <= boxes[index].y, 'mobile cards form a single column');
+      }
+    }
     for (const dark of [false, true]) {
       await setTheme(page, dark);
       await assertNoOverflow(page, `About ${viewport} ${dark ? 'dark' : 'light'}`);
@@ -219,13 +229,13 @@ async function assertResponsiveGuide(page, path) {
       }
       await assertNoOverflow(page, `${path} ${viewport} ${dark ? 'dark' : 'light'}`);
       await screenshot(page, `${name}-${viewport}-${dark ? 'dark' : 'light'}`);
-      if (path.endsWith('/about/markdown/') && !dark) {
+      if ((path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) && !dark) {
         if (viewport === 'mobile') await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-detail.png`), animations: 'disabled' });
+        await page.screenshot({ path: join(screenshotDirectory, `${name}-${viewport}-detail.png`), animations: 'disabled' });
       }
-      if (path.endsWith('/about/markdown/')) {
+      if (path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) {
         await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
-        await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-code-${dark ? 'dark' : 'light'}.png`), animations: 'disabled' });
+        await page.screenshot({ path: join(screenshotDirectory, `${name}-${viewport}-code-${dark ? 'dark' : 'light'}.png`), animations: 'disabled' });
       }
     }
   }
@@ -259,11 +269,16 @@ async function assertLineNumbers(code) {
   }
 }
 
-async function assertCodeGroup(page) {
+async function assertCodeGroup(page, expectedGroups = 1) {
   const english = localeOf(new URL(page.url()).pathname) === 'en';
   const copyLabel = english ? 'Copy code' : '复制代码';
   const groups = page.locator('article .rehype-code-group');
-  assert.equal(await groups.count(), 1, 'syntax guide has one two-language code group');
+  assert.equal(await groups.count(), expectedGroups, 'guide renders every authored code group');
+  const otherGroups = (await groups.all()).slice(1);
+  for (const other of otherGroups) {
+    assert.equal(await other.getByRole('tab').count(), 2);
+    await assertSelected(other.getByRole('tab').nth(0));
+  }
   const group = groups.first();
   const tabs = group.getByRole('tab');
   assert.equal(await tabs.count(), 2);
@@ -271,6 +286,7 @@ async function assertCodeGroup(page) {
   await assertLineNumbers(group.getByRole('tabpanel').locator('pre > code'));
   await tabs.nth(1).click();
   await assertSelected(tabs.nth(1));
+  for (const other of otherGroups) await assertSelected(other.getByRole('tab').nth(0));
   await assertLineNumbers(group.getByRole('tabpanel').locator('pre > code'));
   assert.equal(await group.getByRole('tabpanel').count(), 1, 'only the selected panel is exposed');
   for (const [key, index] of [['Home', 0], ['ArrowRight', 1], ['ArrowRight', 0], ['End', 1], ['ArrowLeft', 0]]) {
@@ -298,9 +314,23 @@ async function assertCodeGroup(page) {
   assert.equal(await copy.getAttribute('title'), english ? 'Copied' : '已复制');
   assert.equal(await copy.getAttribute('aria-label'), copyLabel, 'copy control keeps a stable accessible name');
   assert.equal((await copy.innerText()).trim(), '', 'success feedback remains icon-only');
+  for (const other of otherGroups) {
+    await other.getByRole('tab').nth(1).click();
+    await assertSelected(other.getByRole('tab').nth(1));
+    await assertLineNumbers(other.getByRole('tabpanel').locator('pre > code'));
+    await assertSelected(tabs.nth(1));
+  }
   const color = await tabs.nth(1).evaluate(element => getComputedStyle(element).backgroundColor);
   await setTheme(page, !await page.evaluate(() => document.documentElement.classList.contains('dark')));
   await page.waitForFunction(previous => getComputedStyle(document.querySelector('article .rehype-code-group .rcg-tab.active')).backgroundColor !== previous, color, { timeout: 2_000 });
+}
+
+async function assertMathRendering(page) {
+  const article = page.locator('article[data-pagefind-body]');
+  assert(await article.locator('.katex-display').count() > 0);
+  assert.equal(await article.locator('.katex-error').count(), 0);
+  assert.match(await article.locator('.katex').first().evaluate(element => getComputedStyle(element).fontFamily), /KaTeX_Main/, 'KaTeX stylesheet applies');
+  assert(await page.evaluate(async () => (await document.fonts.load('16px KaTeX_Main')).length > 0), 'math font loads');
 }
 
 async function assertMarkdownFeatures(page) {
@@ -311,10 +341,7 @@ async function assertMarkdownFeatures(page) {
     assert.equal(await article.locator(`.markdown-alert-${type}`).count(), 1);
   }
   assert(await article.locator('kbd').count() > 0);
-  assert(await article.locator('.katex-display').count() > 0);
-  assert.equal(await article.locator('.katex-error').count(), 0);
-  assert.match(await article.locator('.katex').first().evaluate(element => getComputedStyle(element).fontFamily), /KaTeX_Main/, 'KaTeX stylesheet applies');
-  assert(await page.evaluate(async () => (await document.fonts.load('16px KaTeX_Main')).length > 0), 'math font loads');
+  await assertMathRendering(page);
   const references = article.locator('a[data-footnote-ref]');
   assert.equal(await references.count(), 1, 'the separate footnote example remains a footnote');
   assert.equal(await article.locator('#user-content-fn-energy-symbols').count(), 0, 'formula references no longer use a footnote destination');
@@ -479,6 +506,11 @@ try {
       await assertMarkdownFeatures(page);
       await assertImageViewer(page);
     }
+    if (path.endsWith('/about/markdown-writing/')) {
+      await assertCodeGroup(page, 2);
+      await assertMathRendering(page);
+      await assertImageViewer(page);
+    }
     await assertResponsiveGuide(page, path);
     const related = paths.find(value => value !== path);
     await page.getByRole('navigation', { name: '相关阅读' }).locator(`a[href="${related}"]`).click();
@@ -500,6 +532,11 @@ try {
     if (path.endsWith('/about/markdown/')) {
       await assertCodeGroup(page);
       await assertMarkdownFeatures(page);
+      await assertImageViewer(page);
+    }
+    if (path.endsWith('/about/markdown-writing/')) {
+      await assertCodeGroup(page, 2);
+      await assertMathRendering(page);
       await assertImageViewer(page);
     }
     if (path.endsWith('/python-zen/')) {
@@ -529,14 +566,19 @@ try {
     if (!await mobile.evaluate(element => element.open)) await mobile.locator(':scope > summary').click();
     await clickAnchor(plain, mobile.locator('a[href*="#"]').first());
     await assertNoOverflow(plain, `${path} without JavaScript`);
-    if (path.endsWith('/about/markdown/')) {
+    if (path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) {
       const panels = plain.locator('article .rcg-block');
-      assert.equal(await panels.count(), 2);
+      assert.equal(await panels.count(), path.endsWith('/about/markdown-writing/') ? 4 : 2);
       for (const panel of await panels.all()) {
         assert(await panel.isVisible(), 'every language remains readable without JavaScript');
         assert((await panel.innerText()).trim().length > 0);
         await assertLineNumbers(panel.locator('pre > code'));
       }
+      await assertMathRendering(plain);
+      const image = plain.locator('article img').first();
+      assert(await image.evaluate(element => element.naturalWidth > 0), 'guide image remains readable without JavaScript');
+    }
+    if (path.endsWith('/about/markdown/')) {
       await assertNativeMarkdownReading(plain, { checkKeyboardScroll: true, noJavaScript: true });
       await assertCrossReferences(plain, { noJavaScript: true });
       await assertNoOverflow(plain, 'numbered definitions without JavaScript');

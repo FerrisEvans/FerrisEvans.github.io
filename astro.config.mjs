@@ -16,8 +16,15 @@ import rehypeLocalizedLinks from './src/plugins/rehype-localized-links.mjs';
 import rehypeMathMetadata from './src/plugins/rehype-math-metadata.mjs';
 import rehypeCodeGroup from 'rehype-code-group';
 import { codeLineNumbers } from './src/plugins/code-line-numbers.mjs';
+import { articleRoutePaths, legacyRedirects } from './src/data/legacy-routes.mjs';
+import { readArticles } from './scripts/ci/i18n-contract.mjs';
 
 import react from '@astrojs/react';
+
+const publishedArticles = readArticles(fileURLToPath(new URL('.', import.meta.url))).filter(entry => entry.data.draft !== true);
+const retiredPaths = new Set(['en', 'zh'].flatMap(locale =>
+  legacyRedirects(articleRoutePaths(publishedArticles.filter(entry => entry.data.locale === locale)))
+    .map(([from]) => `/${locale}${from}`)));
 
 // Pagefind is generated after Astro's production build. Reuse that index in
 // development without copying generated files into the public source tree.
@@ -66,7 +73,10 @@ export default defineConfig({
   site: 'https://ferrisevans.github.io',
   compressHTML: true,
   i18n: { locales: ['en', 'zh'], defaultLocale: 'en', routing: 'manual' },
-  integrations: [sitemap({ filter: page => /^\/(en|zh)\//.test(new URL(page).pathname) && !/\/(drafts|page)\//.test(new URL(page).pathname) && !/\/categories\/programming-language\/$/.test(new URL(page).pathname) }), react()],
+  integrations: [sitemap({ filter: page => {
+    const pathname = decodeURIComponent(new URL(page).pathname);
+    return /^\/(en|zh)\//.test(pathname) && !/\/(drafts|page)\//.test(pathname) && !retiredPaths.has(pathname);
+  } }), react()],
   vite: {
     // The component library imports CSS modules that Astro must bundle for SSR.
     resolve: { noExternal: ['animal-island-ui'] },

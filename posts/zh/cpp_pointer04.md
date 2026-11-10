@@ -5,7 +5,7 @@ description: 解释左值与右值的概念，说明变量及某些表达式为�
 date: 2025-03-02
 category: lang
 subcategory: cpp
-tags: [pointer, reference, lvalue, rvalue]
+tags: [pointer, lvalue, rvalue]
 ---
 
 本文通过 C 语言表达式说明左值与右值，不完整展开 C++ 的值类别模型。代码块是放在函数内部的片段，省略了外围函数。

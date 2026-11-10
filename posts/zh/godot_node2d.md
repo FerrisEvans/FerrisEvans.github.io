@@ -5,7 +5,7 @@ description: 介绍 Godot 节点体系与 Node2D、Control 基类，以及 Area2
 date: 2025-03-18
 category: game-dev
 subcategory: godot
-tags: [godot, node2d]
+tags: [node2d]
 ---
 
 本文介绍 Godot 4 中常见的 2D 节点及其用途，界面标签采用英文名称。

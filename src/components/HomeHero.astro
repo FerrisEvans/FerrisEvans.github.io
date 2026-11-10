@@ -83,7 +83,7 @@ const library = (content.featured.length ? content.featured : content.posts).sli
           <div class="island-author"><img src={content.author.avatar} width="88" height="88" loading="lazy" decoding="async" alt={t(locale, "Ferris 的黑色小狗卡通头像")} /><div><h2 id="panel-about-title">{t(locale, `你好，我是 ${content.author.name}。`, `Hi, I’m ${content.author.name}.`)}</h2><p>{t(locale, "保持好奇，慢慢来。")}</p></div></div>
           <p class="island-panel-lead">{content.author.intro}</p>
           <a class="island-text-link" href={localizePath(content.author.href, locale)}>{t(locale, "再多认识我一点 →")}</a>
-          <h3 class="island-guides-heading">{t(locale, "一起读的三份指南")}</h3>
+          <h3 class="island-guides-heading">{t(locale, "一起读的指南")}</h3>
           <ul class="island-guide-list">{content.guides.map(guide => <li><a href={localizePath(guide.href, locale)}><Icon name={guide.icon} size={26} /><div><span>{guide.label}</span><h4>{guide.title}</h4><p>{guide.description}</p></div><span aria-hidden="true">↗</span></a></li>)}</ul>
         </section>
         <section id="tags" data-island-section aria-labelledby="panel-tags-title">

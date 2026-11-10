@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
+import { readArticles } from '../ci/i18n-contract.mjs';
+import { articleRoutePaths, legacyRedirects } from '../../src/data/legacy-routes.mjs';
 const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || undefined });
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -11,17 +13,26 @@ const visit = async path => { const response = await page.goto(new URL(path,base
 try {
   await visit('/'); await page.waitForURL(new URL('/en/',base).href);
   await visit('/posts/GDScript/'); await page.waitForURL(new URL('/zh/posts/GDScript/',base).href);
-  for (const [source, target] of [
-    ['/categories/programming-language/', '/zh/categories/lang/'],
-    ['/en/categories/programming-language/', '/en/categories/lang/'],
-    ['/zh/categories/programming-language/', '/zh/categories/lang/'],
-  ]) {
-    await visit(`${source}?source=legacy-category#group-1`);
-    await page.waitForURL(new URL(`${target}?source=legacy-category#group-1`, base).href);
+  const published = readArticles().filter(entry => entry.data.draft !== true);
+  for (const prefix of ['', '/en', '/zh']) {
+    const locale = prefix === '/en' ? 'en' : 'zh';
+    const active = articleRoutePaths(published.filter(entry => entry.data.locale === locale));
+    for (const [source, target] of legacyRedirects(active)) {
+      const destination = new URL(`/${locale}${target}`, base);
+      destination.search = '?source=legacy-entry';
+      destination.hash = '#incoming-fragment';
+      await visit(`${prefix}${source}?source=legacy-entry#incoming-fragment`);
+      await page.waitForURL(destination.href);
+      if (target.includes('#')) {
+        await visit(`${prefix}${source}`);
+        await page.waitForURL(new URL(`/${locale}${target}`, base).href);
+        assert(await page.locator(new URL(page.url()).hash).isVisible(), 'legacy tag reaches its category group');
+      }
+    }
   }
   for (const locale of ['en','zh']) {
     const other = locale === 'en' ? 'zh' : 'en';
-    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/markdown/', 'about/python-zen/']) {
+    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/markdown/', 'about/markdown-writing/', 'about/python-zen/']) {
       await visit(`/${locale}/${path}`);
       assert.equal(await page.locator('html').getAttribute('lang'),locale === 'en' ? 'en' : 'zh-CN');
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');

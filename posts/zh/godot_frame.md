@@ -5,7 +5,7 @@ description: 解释 Godot 中 _process 的 delta 参数含义，说明如何用�
 date: 2025-03-19
 category: game-dev
 subcategory: godot
-tags: [godot, frame]
+tags: [delta-time]
 ---
 
 本文以 Godot 4 的 GDScript 为例，说明 `_process()` 的 `delta` 参数如何用于计算每帧位移。它讨论移动的计算方式，不提供完整的角色控制器。

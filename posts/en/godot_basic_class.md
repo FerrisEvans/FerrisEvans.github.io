@@ -4,7 +4,7 @@ description: An introduction to Godot’s four core concepts—scenes, nodes, th
 date: 2025-03-16
 category: game-dev
 subcategory: godot
-tags: [godot, node2d, scene, signal]
+tags: [node, scene, signal]
 key: godot_basic_class
 ---
 

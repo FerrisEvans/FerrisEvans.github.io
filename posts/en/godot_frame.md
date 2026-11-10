@@ -4,7 +4,7 @@ description: What the delta parameter in Godot’s _process function means and h
 date: 2025-03-19
 category: game-dev
 subcategory: godot
-tags: [godot, frame]
+tags: [delta-time]
 key: godot_frame
 ---
 

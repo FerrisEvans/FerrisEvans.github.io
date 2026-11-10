@@ -5,7 +5,7 @@ description: 推荐一批 Godot 2D 学习资源：从入门到进阶的视频教
 date: 2025-02-11
 category: game-dev
 subcategory: godot
-tags: [godot, tutorial, open-source]
+tags: [tutorial]
 ---
 
 本文收集 Godot 2D 视频教程、示例项目和图文教程。星级代表我的个人推荐程度，标题后的“入门”和“进阶”说明适合的学习阶段。预览图来自各节所链接的教程。

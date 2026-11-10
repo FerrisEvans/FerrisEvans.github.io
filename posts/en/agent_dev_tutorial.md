@@ -4,7 +4,7 @@ description: A roadmap for aspiring agent engineers, covering vector databases, 
 date: 2025-12-22
 category: ai
 subcategory: agent
-tags: [agent, rag, vector-db, llm]
+tags: [rag, vector-db, llm]
 key: agent_dev_tutorial
 ---
 

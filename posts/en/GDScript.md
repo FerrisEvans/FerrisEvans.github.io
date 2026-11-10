@@ -4,7 +4,7 @@ description: Notes on the official GDScript style guide, covering formatting, na
 date: 2025-03-17
 category: game-dev
 subcategory: godot
-tags: [gdscript, godot]
+tags: [gdscript, code-style]
 key: GDScript
 ---
 

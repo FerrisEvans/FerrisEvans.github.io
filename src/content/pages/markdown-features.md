@@ -503,7 +503,7 @@ title: 用 Markdown 写一篇博文
 description: 记录一个可复现的小实验。
 date: 2026-11-04
 category: writing
-tags: [Markdown, 写作]
+tags: [markdown]
 key: hello-markdown
 draft: true
 ---

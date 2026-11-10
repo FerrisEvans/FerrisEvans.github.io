@@ -5,7 +5,7 @@ description: "Understand lvalues and rvalues, and why some expressions can appea
 date: 2025-03-02
 category: lang
 subcategory: cpp
-tags: [pointer, reference, lvalue, rvalue]
+tags: [pointer, lvalue, rvalue]
 ---
 
 ## Lvalues and rvalues

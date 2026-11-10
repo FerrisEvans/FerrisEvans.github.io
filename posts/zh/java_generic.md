@@ -5,7 +5,7 @@ description: 从泛型类、泛型方法讲到类型擦除与通配符边界，�
 date: 2021-07-17
 category: lang
 subcategory: java
-tags: [generic]
+tags: [generic, type-erasure, wildcard]
 ---
 
 泛型（generics）让同一份代码适用于多种类型，同时保留编译期类型检查。

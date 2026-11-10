@@ -1,13 +1,10 @@
 ---
 title: "Write blog posts with Markdown"
 description: A hands-on guide to writing blog posts with frontmatter, math, images, tabbed code examples, and draft previews.
-date: 2026-11-04
-category: writing
-tags: [markdown, 写作, 代码示例]
-key: markdown-writing-guide
+locale: en
 ---
 
-This post walks through the blog’s writing workflow. The title, summary, and category go at the top of the file; the body uses standard Markdown. You can use this workflow for travel notes, baking journals, and programming tutorials.
+This guide walks through the blog’s writing workflow. The title, summary, and category go at the top of the file; the body uses standard Markdown. You can use this workflow for travel notes, baking journals, and programming tutorials.
 
 To follow the local preview steps, use a checkout of this repository with dependencies installed and Node.js 22.23.4 or later. Run commands from the project root. For decisions about structure and formatting, see [Writing conventions](/en/about/writing/).
 
@@ -22,7 +19,7 @@ description: Introduce the article in one sentence.
 key: my-note
 date: 2026-11-04
 category: writing
-tags: [markdown, notes]
+tags: [markdown]
 draft: true
 ---
 ```
@@ -70,7 +67,7 @@ You can add flowcharts, screenshots, and hand-drawn diagrams with standard Markd
 
 The example below shows a retrieval-augmented generation (RAG) workflow: a question is rewritten and routed to a data source, retrieved documents provide context, and a model generates the answer.
 
-![RAG workflow connecting query rewriting, retrieval, and answer generation](../img/rag.jpeg)
+![RAG workflow connecting query rewriting, retrieval, and answer generation](../../../../posts/img/rag.jpeg)
 
 The diagram is based on LangChain’s [RAG From Scratch tutorial](https://github.com/langchain-ai/rag-from-scratch/blob/main/rag_from_scratch_1_to_4.ipynb).
 

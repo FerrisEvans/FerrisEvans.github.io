@@ -2,17 +2,24 @@
 import LegacyRedirect from '../layouts/LegacyRedirect.astro';
 import { getPosts, postSlug } from '../utils/posts';
 import { SITE } from '../data/site';
+import { articleRoutePaths, legacyRedirects } from '../data/legacy-routes.mjs';
+import { locales } from '../i18n';
 export async function getStaticPaths() {
   const posts = await getPosts({ locale: 'zh' });
   const paths = new Map<string,string>();
-  for (const page of ['notes','categories','tags','archives','about','about/python-zen','about/writing','about/markdown','search','explore']) paths.set(page, `/zh/${page}/`);
+  for (const page of ['notes','categories','tags','archives','about','about/python-zen','about/writing','about/markdown','about/markdown-writing','search','explore']) paths.set(page, `/zh/${page}/`);
   for (const post of posts) {
     paths.set(`posts/${postSlug(post)}`, `/zh/posts/${postSlug(post)}/`);
     paths.set(`categories/${post.data.category}`, `/zh/categories/${post.data.category}/`);
     for (const tag of post.data.tags) paths.set(`tags/${tag}`, `/zh/tags/${encodeURIComponent(tag)}/`);
   }
-  paths.set('categories/programming-language', '/zh/categories/lang/');
-  paths.set('tags/写作','/zh/tags/writing/'); paths.set('tags/代码示例','/zh/tags/code-examples/');
+  for (const locale of locales) {
+    const active = articleRoutePaths(locale === 'zh' ? posts : await getPosts({ locale }));
+    for (const [from, to] of legacyRedirects(active)) {
+      paths.set(`${locale}${from}`.replace(/\/$/, ''), `/${locale}${to}`);
+      if (locale === 'zh') paths.set(from.slice(1, -1), `/zh${to}`);
+    }
+  }
   const count = Math.max(1, Math.ceil(posts.length / SITE.postsPerPage));
   for (let page=1;page<=count;page++) {
     const to = page === 1 ? '/zh/notes/' : `/zh/notes/page/${page}/`;

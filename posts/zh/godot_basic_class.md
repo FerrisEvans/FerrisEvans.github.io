@@ -5,7 +5,7 @@ description: 总结 Godot 的四大基本概念：场景、节点、场景树与
 date: 2025-03-16
 category: game-dev
 subcategory: godot
-tags: [godot, node2d, scene, signal]
+tags: [node, scene, signal]
 ---
 
 我在完成第二个 Godot 项目后写下这组笔记。这个项目让我对引擎有了整体认识。[我跟着学习的教程](https://www.bilibili.com/video/BV1pu4y1b7p6)覆盖了不少内容，因此我决定用一系列文章整理所学知识，并大致按照教程和[官方文档](https://docs.godotengine.org/en/stable/)的顺序回顾。

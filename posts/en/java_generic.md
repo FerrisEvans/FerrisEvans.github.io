@@ -5,7 +5,7 @@ description: "From generic classes and methods to type erasure and wildcard boun
 date: 2021-07-17
 category: lang
 subcategory: java
-tags: [generic]
+tags: [generic, type-erasure, wildcard]
 ---
 
 Generics let us write reusable code that works with a range of types while preserving compile-time type safety.

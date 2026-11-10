@@ -4,7 +4,7 @@ description: A collection of Godot 2D learning resources, including video tutori
 date: 2025-02-11
 category: game-dev
 subcategory: godot
-tags: [godot, tutorial, open-source]
+tags: [tutorial]
 key: godot_project
 ---
 

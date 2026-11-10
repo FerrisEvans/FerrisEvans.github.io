@@ -1,4 +1,6 @@
 import translations from './messages.json';
+import { tagId, tagLabels } from '../data/tags.mjs';
+export { tagId } from '../data/tags.mjs';
 
 export const locales = ['en', 'zh'] as const;
 export type Locale = typeof locales[number];
@@ -28,8 +30,4 @@ export function countLabel(locale: Locale, count: number, zh: string, singular: 
   return `${count} ${locale === 'zh' ? zh : count === 1 ? singular : plural}`;
 }
 
-const tags: Record<string, [string, string]> = {
-  writing: ['写作', 'Writing'], 'code-examples': ['代码示例', 'Code examples'],
-};
-export const tagId = (name: string) => Object.entries(tags).find(([,labels]) => labels.includes(name))?.[0] ?? name;
-export const tagLabel = (id: string, locale: Locale) => tags[tagId(id)]?.[locale === 'zh' ? 0 : 1] ?? id;
+export const tagLabel = (id: string, locale: Locale) => tagLabels[tagId(id)]?.[locale === 'zh' ? 0 : 1] ?? id;

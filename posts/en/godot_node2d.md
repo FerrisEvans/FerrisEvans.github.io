@@ -4,7 +4,7 @@ description: An overview of Godot’s node hierarchy, the Node2D and Control bas
 date: 2025-03-18
 category: game-dev
 subcategory: godot
-tags: [godot, node2d]
+tags: [node2d]
 key: godot_node2d
 ---
 

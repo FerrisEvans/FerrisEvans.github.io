@@ -5,7 +5,7 @@ description: 介绍 C++ 中自动对象、静态对象、自由存储对象、�
 date: 2025-02-28
 category: lang
 subcategory: cpp
-tags: [lifecycle, oop]
+tags: [lifecycle]
 ---
 
 本文比较 C++ 中自动对象、静态对象、动态分配对象、临时对象和线程局部对象的生命周期，说明它们何时创建、何时销毁。

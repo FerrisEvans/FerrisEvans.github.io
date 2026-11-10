@@ -5,7 +5,7 @@ description: 面向智能体开发者的入门路线图：向量数据库、RAG 
 date: 2025-12-22
 category: ai
 subcategory: agent
-tags: [agent, rag, vector-db, llm]
+tags: [rag, vector-db, llm]
 ---
 
 本文面向已掌握 Python、调用过大语言模型（large language model，LLM）API 的开发者，梳理智能体（AI agent）的学习路线，涉及检索增强生成（retrieval-augmented generation，RAG）[^rag]、架构、记忆管理和生产化工程。Python 示例用于说明控制流程，不对应特定 SDK；模型客户端、工具实现和存储初始化等内容已省略，不能直接作为完整程序运行。

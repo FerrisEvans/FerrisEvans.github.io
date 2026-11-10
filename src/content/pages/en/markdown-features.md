@@ -503,7 +503,7 @@ title: Write a Blog Post with Markdown
 description: Document a small, reproducible experiment.
 date: 2026-11-04
 category: writing
-tags: [Markdown, writing]
+tags: [markdown]
 key: hello-markdown
 draft: true
 ---

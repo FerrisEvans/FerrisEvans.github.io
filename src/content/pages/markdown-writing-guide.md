@@ -1,13 +1,10 @@
 ---
-key: markdown-writing-guide
 title: Markdown 写作之旅：公式、图片与多语言代码
 description: 一篇可直接参照的写作样例，包含文章头部、自动公式、普通图片、代码标签与草稿预览。
-date: 2026-11-04
-category: writing
-tags: [markdown, 写作, 代码示例]
+locale: zh
 ---
 
-这篇笔记记录博客的日常写作方式。文章的标题、摘要和分类放在文件开头，正文继续使用普通 Markdown。旅行笔记、烘焙记录或编程教程，都可以沿用同一套流程。
+这份指南介绍博客的日常写作方式。文章的标题、摘要和分类放在文件开头，正文继续使用普通 Markdown。旅行笔记、烘焙记录或编程教程，都可以沿用同一套流程。
 
 预览前需要已检出本仓库、安装项目依赖，并使用 Node.js 22.23.4 或更高版本。下文命令均在项目根目录运行。内容组织与格式选择见[文档格式约定](/zh/about/writing/)。
 
@@ -21,7 +18,7 @@ title: 我的新笔记
 description: 用一句话介绍这篇文章。
 date: 2026-11-04
 category: writing
-tags: [markdown, 笔记]
+tags: [markdown]
 key: my-note
 draft: true
 ---
@@ -70,7 +67,7 @@ $$
 
 下面以检索增强生成（retrieval-augmented generation，RAG）流程为例：问题经过改写与路由后进入数据源检索，检索到的文档提供上下文，再由模型生成回答。
 
-![RAG 流程：查询改写连接检索与答案生成](../img/rag.jpeg)
+![RAG 流程：查询改写连接检索与答案生成](../../../posts/img/rag.jpeg)
 
 图示基于 LangChain 的 [RAG From Scratch 教程](https://github.com/langchain-ai/rag-from-scratch/blob/main/rag_from_scratch_1_to_4.ipynb)。
 

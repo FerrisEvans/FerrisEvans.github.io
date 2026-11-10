@@ -5,7 +5,7 @@ description: 整理 GDScript 官方代码风格指南：格式化、命名约定
 date: 2025-03-17
 category: game-dev
 subcategory: godot
-tags: [gdscript, godot]
+tags: [gdscript, code-style]
 ---
 
 本文整理 GDScript 的代码风格，包括格式、命名、声明顺序和类型标注。语言语法见 [GDScript 官方文档](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/index.html)。GDScript 的语法与 Python 相似，因此 [PEP 8](https://peps.python.org/pep-0008/) 也是有用的参考。

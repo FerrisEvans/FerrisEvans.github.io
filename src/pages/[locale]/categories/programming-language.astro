@@ -1,9 +1,0 @@
----
-import { locales, getLocale, localizePath } from '../../../i18n';
-import { categoryOf } from '../../../data/site';
-import LegacyRedirect from '../../../layouts/LegacyRedirect.astro';
-
-export const getStaticPaths = () => locales.map(locale => ({ params: { locale } }));
-const locale = getLocale(Astro.url.pathname);
----
-<LegacyRedirect to={localizePath('/categories/lang/', locale)} label={categoryOf('lang', locale).label} />
