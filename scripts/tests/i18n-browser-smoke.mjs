@@ -11,9 +11,17 @@ const visit = async path => { const response = await page.goto(new URL(path,base
 try {
   await visit('/'); await page.waitForURL(new URL('/en/',base).href);
   await visit('/posts/GDScript/'); await page.waitForURL(new URL('/zh/posts/GDScript/',base).href);
+  for (const [source, target] of [
+    ['/categories/programming-language/', '/zh/categories/lang/'],
+    ['/en/categories/programming-language/', '/en/categories/lang/'],
+    ['/zh/categories/programming-language/', '/zh/categories/lang/'],
+  ]) {
+    await visit(`${source}?source=legacy-category#group-1`);
+    await page.waitForURL(new URL(`${target}?source=legacy-category#group-1`, base).href);
+  }
   for (const locale of ['en','zh']) {
     const other = locale === 'en' ? 'zh' : 'en';
-    for (const path of ['', 'notes/', 'categories/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/markdown/', 'about/python-zen/']) {
+    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/markdown/', 'about/python-zen/']) {
       await visit(`/${locale}/${path}`);
       assert.equal(await page.locator('html').getAttribute('lang'),locale === 'en' ? 'en' : 'zh-CN');
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');

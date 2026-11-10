@@ -1,12 +1,11 @@
 ---
 title: Common game stats and their abbreviations
 description: Reference tables for common character attributes and combat stats, with abbreviations, full names, and meanings.
-pubDate: 2025-03-15
+date: 2025-03-15
 category: game-dev
 subcategory: game-design
 tags: [terminology]
-locale: en
-translationKey: game_popular_terminology
+key: game_popular_terminology
 ---
 
 Stat names, abbreviations, and their effects vary from game to game. The tables below collect examples; check a game’s own descriptions for the exact meaning of each stat.

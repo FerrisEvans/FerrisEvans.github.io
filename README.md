@@ -16,22 +16,21 @@ Ferris 的个人博客，使用 Astro 构建，发布到 [GitHub Pages](https://
 
 ```yaml
 ---
-locale: zh                      # 英文版填 en
-translationKey: my-note         # 两种语言共用，决定文章网址
+key: my-note                    # 两种语言共用，决定文章网址
 title: 文章标题
 description: 一句话摘要
-pubDate: 2026-11-05
-category: programming-language
+date: 2026-11-05
+category: lang
 tags: [notes]
 draft: true
 ---
 ```
 
-文章网址为 `/zh/posts/my-note/` 和 `/en/posts/my-note/`，由 `translationKey` 决定，发布后不要随意修改。两份文章的标题、正文、图片说明分别使用对应语言。
+文章语言由 `posts/zh/` 或 `posts/en/` 目录推导，无需填写 `locale`。文章网址为 `/zh/posts/my-note/` 和 `/en/posts/my-note/`，由目录和 `key` 共同决定，发布后不要随意修改 `key`。两份文章的标题、正文、图片说明分别使用对应语言。
 
-运行 `npm run dev`，从 `/zh/drafts/` 或 `/en/drafts/` 预览草稿。发布时将两份文章的 `draft` 同时设为 `false` 或删除该字段；缺少另一语言的正式译文会阻止构建。生产站点不发布草稿。`pubDate` 用于展示和排序，不是定时发布开关。
+运行 `npm run dev`，从 `/zh/drafts/` 或 `/en/drafts/` 预览草稿。发布时将两份文章的 `draft` 同时设为 `false` 或删除该字段；缺少另一语言的正式译文会阻止构建。生产站点不发布草稿。`date` 用于展示和排序，不是定时发布开关。
 
-分类、标签、目录、RSS 和搜索索引随文章自动生成，不需要手工登记。分类显示名可在 `src/data/site.ts` 定制。文章之间使用 `/posts/<translationKey>/` 链接，构建时自动加当前语言前缀。
+分类、标签、目录、RSS 和搜索索引随文章自动生成，不需要手工登记。分类显示名可在 `src/data/site.ts` 定制。文章之间使用 `/posts/<key>/` 链接，构建时自动加当前语言前缀。
 
 支持数学公式、代码高亮、代码标签组、提示块、脚注、编号引用和图片放大。详细写法见网站的 [Markdown 指南](https://ferrisevans.github.io/zh/about/markdown/) 与 [写作约定](https://ferrisevans.github.io/zh/about/writing/)。
 

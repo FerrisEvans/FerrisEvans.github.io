@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: java_generic
+key: java_generic
 title: 理解 Java 泛型
 description: 从泛型类、泛型方法讲到类型擦除与通配符边界，用代码示例对比 Java 与 C++ 的实现差异。
-pubDate: 2021-07-17
-category: programming-language
+date: 2021-07-17
+category: lang
 subcategory: java
 tags: [generic]
 ---

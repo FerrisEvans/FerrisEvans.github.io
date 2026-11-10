@@ -1,11 +1,10 @@
 ---
 title: "Write blog posts with Markdown"
 description: A hands-on guide to writing blog posts with frontmatter, math, images, tabbed code examples, and draft previews.
-pubDate: 2026-11-04
+date: 2026-11-04
 category: writing
 tags: [markdown, 写作, 代码示例]
-locale: en
-translationKey: markdown-writing-guide
+key: markdown-writing-guide
 ---
 
 This post walks through the blog’s writing workflow. The title, summary, and category go at the top of the file; the body uses standard Markdown. You can use this workflow for travel notes, baking journals, and programming tutorials.
@@ -14,28 +13,27 @@ To follow the local preview steps, use a checkout of this repository with depend
 
 ## Start with a Markdown file
 
-Create `my-note.md` in `posts/en/`; its English URL will be `/en/posts/my-note/`. Put its Chinese counterpart in `posts/zh/` and give both files the same `translationKey`.
+Create `my-note.md` in `posts/en/` and set `key: my-note`; its English URL will be `/en/posts/my-note/`. Put its Chinese counterpart in `posts/zh/` and give both files the same `key`. The article language is inferred from its directory, so no `locale` field is needed.
 
 ```yaml
 ---
 title: My new note
 description: Introduce the article in one sentence.
-locale: en
-translationKey: my-note
-pubDate: 2026-11-04
+key: my-note
+date: 2026-11-04
 category: writing
 tags: [markdown, notes]
 draft: true
 ---
 ```
 
-`title`, `pubDate`, `category`, `locale`, and `translationKey` are required. Categories use lowercase letters, digits, and hyphens, such as `travel-notes`; tags may contain Chinese text. Once the article is published, new categories and tags appear in their indexes automatically, without manual registration.
+`title`, `date`, `category`, and `key` are required. Categories use lowercase letters, digits, and hyphens, such as `travel-notes`; tags may contain Chinese text. Once the article is published, new categories and tags appear in their indexes automatically, without manual registration.
 
 `draft: true` marks a draft. A draft may have only one language version. To preview and publish:
 
 1. Run `npm run dev` from the project root.
 2. Open **Drafts** in the English navigation and select the article to check its rendering.
-3. Prepare both Chinese and English versions with the same `translationKey`. Remove `draft: true` or change it to `false` in both files.
+3. Prepare both Chinese and English versions with the same `key`. Remove `draft: true` or change it to `false` in both files.
 4. Push or merge the files into `main` when you are ready to publish them. This triggers the site’s deployment workflow.
 
 Dates control display and sorting; they do not schedule publication.

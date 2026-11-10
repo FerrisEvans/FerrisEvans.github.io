@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: godot_node2d
+key: godot_node2d
 title: "Godot 节点"
 description: 介绍 Godot 节点体系与 Node2D、Control 基类，以及 Area2D、RigidBody2D 等常用节点。
-pubDate: 2025-03-18
+date: 2025-03-18
 category: game-dev
 subcategory: godot
 tags: [godot, node2d]

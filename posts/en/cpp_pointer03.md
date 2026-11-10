@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_pointer03
-locale: en
+key: cpp_pointer03
 title: "Pointers, part 3 | Strings"
 description: "An introduction to null-terminated C-style strings and how character pointers are initialized."
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, string]
 ---

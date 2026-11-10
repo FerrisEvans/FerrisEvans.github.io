@@ -25,7 +25,7 @@ const category = 'authoring-fixture';
 const tag = 'authoring-contract';
 const postPaths = Object.fromEntries(locales.map(locale => [locale, `/${locale}/posts/${slug}/`]));
 const postPath = postPaths.zh;
-const fixturePaths = Object.fromEntries(locales.map(locale => [locale, join(temporary, 'posts', locale, `${slug}.md`)]));
+const fixturePaths = Object.fromEntries(locales.map(locale => [locale, join(temporary, 'posts', locale, `source-${slug}.md`)]));
 const immutable = ['public/island/island.glb.bin', 'public/island/manifest.json', 'src/data/site.ts'];
 const children = new Set();
 const screenshotDirectory = process.env.AUTHORING_SCREENSHOT_DIR ? resolve(process.env.AUTHORING_SCREENSHOT_DIR) : null;
@@ -34,11 +34,10 @@ const environment = { ...process.env, GITHUB_SHA: revision, ASTRO_TELEMETRY_DISA
 let browser;
 
 const fixture = (locale) => `---
-locale: ${locale}
-translationKey: ${slug}
+key: ${slug}
 title: "${titles[locale]}"
 description: "${locale === 'zh' ? '旅行摄影与烘焙食谱，验证新增汉字无需生成字体。' : 'Travel photography and baking recipes for the bilingual publication check.'}"
-pubDate: 2099-01-01
+date: 2099-01-01
 category: ${category}
 tags: [${tag}]
 draft: true

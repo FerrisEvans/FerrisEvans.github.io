@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_lifecycle
+key: cpp_lifecycle
 title: "对象的生命周期"
 description: 介绍 C++ 中自动对象、静态对象、自由存储对象、临时对象与线程局部对象的生命周期。
-pubDate: 2025-02-28
-category: programming-language
+date: 2025-02-28
+category: lang
 subcategory: cpp
 tags: [lifecycle, oop]
 ---

@@ -52,7 +52,7 @@ export interface CategoryDef {
 
 export const CATEGORIES: CategoryDef[] = [
   {
-    slug: 'programming-language',
+    slug: 'lang',
     label: '编程语言',
     description: 'C/C++、Java 等语言的底层机制、内存模型与深入笔记',
     accent: '#7161c5',

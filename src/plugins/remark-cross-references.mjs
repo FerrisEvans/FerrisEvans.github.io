@@ -1,10 +1,12 @@
+import { markdownLocale } from './markdown-locale.mjs';
+
 const labelPattern = /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/;
 const directiveTypes = new Set(['containerDirective', 'leafDirective', 'textDirective']);
 
 /** remark-directive parses the syntax; this transform supplies page-local numbering. */
 export default function remarkCrossReferences() {
   return (tree, file) => {
-    const english = /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en';
+    const english = markdownLocale(file) === 'en';
     const labels = new Map();
     const references = [];
     const source = String(file.value);

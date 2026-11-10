@@ -493,7 +493,7 @@ This is the link’s destination. Syntax highlighting, code copying, image zoom,
 
 ### Frontmatter syntax
 
-Place YAML frontmatter at the very beginning of a Markdown file, between two `---` lines. It describes the article rather than forming part of its body, and is not part of CommonMark or GFM; its fields are defined by this site’s content model. Save the example below to `posts/en/hello-markdown.md` to give it the URL `/en/posts/hello-markdown/`. Its Chinese counterpart belongs in `posts/zh/hello-markdown.md`; both files share the same `translationKey`.
+Place YAML frontmatter at the very beginning of a Markdown file, between two `---` lines. It describes the article rather than forming part of its body, and is not part of CommonMark or GFM; its fields are defined by this site’s content model. Save the example below to `posts/en/hello-markdown.md` to give it the URL `/en/posts/hello-markdown/`. Its Chinese counterpart belongs in `posts/zh/hello-markdown.md`; both files share the same `key`. The article language is inferred from the `posts/en/` or `posts/zh/` directory, so no `locale` field is needed.
 
 **Syntax**
 
@@ -501,11 +501,10 @@ Place YAML frontmatter at the very beginning of a Markdown file, between two `--
 ---
 title: Write a Blog Post with Markdown
 description: Document a small, reproducible experiment.
-pubDate: 2026-11-04
+date: 2026-11-04
 category: writing
 tags: [Markdown, writing]
-locale: en
-translationKey: hello-markdown
+key: hello-markdown
 draft: true
 ---
 ```
@@ -515,10 +514,9 @@ draft: true
 | Field | Required | Purpose |
 | --- | --- | --- |
 | `title` | Yes | Page title and article-list title |
-| `pubDate` | Yes | Publication date and article ordering |
+| `date` | Yes | Publication date and article ordering |
 | `category` | Yes | Category index; use lowercase English letters, digits, and hyphens |
-| `locale` | Yes | Content language: `zh` or `en` |
-| `translationKey` | Yes | Stable, case-sensitive identifier shared by the Chinese and English versions |
+| `key` | Yes | Stable, case-sensitive identifier shared by the Chinese and English versions |
 | `description` | No | Summary and page description |
 | `tags` | No | Tag index; empty if omitted |
 | `subcategory` | No | Subcategory identifier, using the same format as categories |
@@ -528,7 +526,7 @@ draft: true
 
 ### Previewing, publishing, and deleting
 
-Set `draft: true`, run `npm run dev`, and preview the article locally at `/en/drafts/`. A production build does not generate a draft article or add it to indexes. Drafts may exist in only one language. To publish, prepare both Chinese and English versions with the same `translationKey` and set both to `draft: false`; a published article requires a published counterpart. After adding or deleting an article, the next build updates article lists, categories, tags, archives, RSS, the sitemap, and the search index.
+Set `draft: true`, run `npm run dev`, and preview the article locally at `/en/drafts/`. A production build does not generate a draft article or add it to indexes. Drafts may exist in only one language. To publish, prepare both Chinese and English versions with the same `key` and set both to `draft: false`; a published article requires a published counterpart. After adding or deleting an article, the next build updates article lists, categories, tags, archives, RSS, the sitemap, and the search index.
 
 You do not need to maintain index configuration or study-room fonts for each article. `name`, `desc`, and `latex` are not publishing fields used by this guide; use the names in the table above. Insert flowcharts as ordinary images; this site does not render Mermaid.
 

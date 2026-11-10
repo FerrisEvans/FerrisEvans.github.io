@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: GDScript
+key: GDScript
 title: "GDScript 代码风格指南"
 description: 整理 GDScript 官方代码风格指南：格式化、命名约定、代码顺序与类型声明建议。
-pubDate: 2025-03-17
+date: 2025-03-17
 category: game-dev
 subcategory: godot
 tags: [gdscript, godot]

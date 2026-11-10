@@ -25,7 +25,7 @@ export const getStaticPaths = (async () => {
       .filter((candidate) =>
         candidate.data.category === post.data.category &&
         (candidate.data.subcategory ?? '') === (post.data.subcategory ?? ''))
-      .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
+      .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
     const related = visiblePosts
       .filter((candidate) => candidate.id !== post.id && candidate.data.category === post.data.category)
       .slice(0, 3);
@@ -91,7 +91,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
           {post.data.description && <p class="notebook-description">{post.data.description}</p>}
           <div class="notebook-meta">
             <a href={localizePath("/about/", locale)} rel="author"><Icon name="user" size={15} />{t(locale, `作者：${SITE.author}`, `By ${SITE.author}`)}</a>
-            <span><Icon name="calendar" size={15} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time></span>
+            <span><Icon name="calendar" size={15} /><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, locale)}</time></span>
             <span><Icon name="clock" size={15} />{readingMinutes} {t(locale, "分钟 · 约")} {words} {t(locale, "字")}</span>
             {post.data.updatedDate && <span><time datetime={post.data.updatedDate.toISOString()}>{t(locale, "更新于")} {formatDate(post.data.updatedDate, locale)}</time></span>}
           </div>
@@ -159,7 +159,7 @@ const tocCount = headings.filter((heading) => heading.depth === 2 || heading.dep
               </a>
             )}
           </nav>
-          {!isDraft && <Giscus articleKey={post.data.translationKey} />}
+          {!isDraft && <Giscus articleKey={post.data.key} />}
         </footer>
         <ReadingTools />
       </article>

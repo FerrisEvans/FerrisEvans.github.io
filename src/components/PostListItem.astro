@@ -15,13 +15,13 @@ interface Props {
 
 const { post, headingLevel = 2, showTags = false } = Astro.props;
 const Heading = headingLevel === 3 ? 'h3' : 'h2';
-const patterns = { 'programming-language': 'app-pink', 'data-structures': 'app-yellow', 'game-dev': 'app-teal', ai: 'purple' } as const;
+const patterns = { lang: 'app-pink', 'data-structures': 'app-yellow', 'game-dev': 'app-teal', ai: 'purple' } as const;
 const pattern = patterns[post.data.category as keyof typeof patterns] ?? 'default';
 ---
 
 <li class="note-list-item"><Card pattern={pattern} hoverable className="note-entry">
   <div class="entry-meta">
-    <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time>
+    <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, locale)}</time>
     <span><Icon name="clock" size={14} />{readingTime(post)} {t(locale, "分钟")}</span>
   </div>
   <Heading class="entry-title"><a href={localizePath(postUrl(post), locale)}>{post.data.title}</a></Heading>

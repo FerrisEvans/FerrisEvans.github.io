@@ -3,7 +3,7 @@
   "greeting": "你好，我是 {author}。",
   "intro": "一名开发者。兴趣方向涵盖游戏开发、编程语言与 AI Agent——从引擎到游戏，从理论到实践。这里是我的个人博客，用来记录学习笔记与一些思考。",
   "interests": [
-    "programming-language",
+    "lang",
     "game-dev",
     "ai"
   ],

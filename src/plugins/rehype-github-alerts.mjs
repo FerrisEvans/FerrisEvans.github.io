@@ -1,3 +1,5 @@
+import { markdownLocale } from './markdown-locale.mjs';
+
 const MARKER = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/;
 
 const LABELS = {
@@ -61,5 +63,5 @@ function transform(blockquote, english) {
 }
 
 export default function rehypeGithubAlerts() {
-  return (tree, file = {}) => visit(tree, /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en');
+  return (tree, file = {}) => visit(tree, markdownLocale(file) === 'en');
 }

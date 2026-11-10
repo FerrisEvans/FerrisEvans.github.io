@@ -1,7 +1,9 @@
+import { markdownLocale } from './markdown-locale.mjs';
+
 /** Keep authored internal links in the article's language; asset URLs stay shared. */
 export default function rehypeLocalizedLinks() {
   return (tree, file = {}) => {
-    const locale = /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en' ? 'en' : 'zh';
+    const locale = markdownLocale(file);
     function visit(node) {
       if (node.type === 'element' && node.tagName === 'a') {
         const href = node.properties?.href;

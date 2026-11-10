@@ -59,6 +59,49 @@ test('configured alert and reading plugins retain notices and accessible image z
   assert.match(code, /<figcaption>示意图<\/figcaption>/);
 });
 
+test('Markdown language follows the article directory and preserves document frontmatter fallback', async () => {
+  const root = new URL('../../', import.meta.url);
+  const content = `[Next](/posts/GDScript/)
+
+> [!NOTE]
+> Keep this notice.
+
+![Diagram](/avatar.png)
+
+| Name | Value |
+| --- | --- |
+| Example | 1 |
+
+:::numbered{#example}
+Definition.
+:::
+
+:ref[example]`;
+  const cases = [
+    ['relative Chinese article', { fileURL: 'posts/zh/en/note.md' }, 'zh'],
+    ['absolute English article', { fileURL: new URL('posts/en/zh/note.md', root) }, 'en'],
+    ['nested misleading article directory', { fileURL: new URL('posts/zh/nested/posts/en/note.md', root) }, 'zh'],
+    ['backslash article path', { fileURL: 'posts\\en\\nested\\posts\\zh\\note.md' }, 'en'],
+    ['article directory overrides frontmatter', { fileURL: new URL('posts/zh/note.md', root), frontmatter: { locale: 'en' } }, 'zh'],
+    ['English document', { fileURL: new URL('src/content/pages/en/guide.md', root), frontmatter: { locale: 'en' } }, 'en'],
+    ['non-article directory with misleading segments', { fileURL: new URL('examples/posts/en/guide.md', root), frontmatter: { locale: 'zh' } }, 'zh'],
+    ['anonymous English document', { frontmatter: { locale: 'en' } }, 'en'],
+    ['anonymous default document', {}, 'zh'],
+  ];
+  for (const [name, options, locale] of cases) {
+    const { code } = await renderer.render(content, options);
+    const english = locale === 'en';
+    for (const expected of [
+      `href="/${locale}/posts/GDScript/"`,
+      `class="markdown-alert-title">${english ? 'NOTE' : 'NOTE · 注释'}</p>`,
+      `aria-label="${english ? 'Enlarge image: Diagram' : '放大图片：Diagram'}"`,
+      `aria-label="${english ? 'Table (scroll horizontally)' : '表格（可横向滚动）'}"`,
+      `aria-label="${english ? 'See reference 1' : '参见编号 1'}"`,
+      `aria-label="${english ? 'Permalink to reference 1' : '编号 1 的永久链接'}"`,
+    ]) assert(code.includes(expected), `${name}: ${expected}`);
+  }
+});
+
 test('reading tables retain GFM content and alignment inside one keyboard-scrollable region', async () => {
   const { code } = await renderer.render(String.raw`| Topic | Status | Time |
 | :--- | :---: | ---: |

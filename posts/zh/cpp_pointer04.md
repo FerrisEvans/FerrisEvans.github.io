@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_pointer04
+key: cpp_pointer04
 title: "手撕指针第四章 | 左值与右值"
 description: 解释左值与右值的概念，说明变量及某些表达式为何能够出现在赋值符号左侧。
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, reference, lvalue, rvalue]
 ---

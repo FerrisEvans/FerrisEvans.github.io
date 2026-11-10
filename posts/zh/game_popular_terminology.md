@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: game_popular_terminology
+key: game_popular_terminology
 title: 游戏常见的英文能力值说明
 description: 整理游戏中常见属性与战斗数值的英文缩写、全称和含义对照表。
-pubDate: 2025-03-15
+date: 2025-03-15
 category: game-dev
 subcategory: game-design
 tags: [terminology]

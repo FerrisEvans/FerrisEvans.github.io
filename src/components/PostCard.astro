@@ -8,7 +8,7 @@ import TagChip from './TagChip.astro';
 import Icon from './Icon.astro';
 interface Props { post: Post; featured?: boolean }
 const { post, featured = false } = Astro.props;
-const icons: Record<string,string> = { 'programming-language': 'book', 'data-structures': 'layers', 'game-dev': 'game', ai: 'flower' };
+const icons: Record<string,string> = { lang: 'book', 'data-structures': 'layers', 'game-dev': 'game', ai: 'flower' };
 ---
 <article class:list={['note-card', { 'featured-note': featured }]}>
 <Card pattern={featured ? 'app-teal' : 'default'} hoverable className="note-card-body">
@@ -17,7 +17,7 @@ const icons: Record<string,string> = { 'programming-language': 'book', 'data-str
   <h2><a href={localizePath(postUrl(post), locale)}>{post.data.title}</a></h2>
   {post.data.description && <p class="note-description">{post.data.description}</p>}
   <div class="note-tags">{post.data.tags.slice(0, featured ? 4 : 3).map(tag => <TagChip tag={tag} />)}</div>
-  <div class="note-bottom"><span><Icon name="calendar" size={18} /><time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate, locale)}</time><span>· {readingTime(post)} {t(locale, "分钟")}</span></span><Icon name="arrow-right" size={23} /></div>
+  <div class="note-bottom"><span><Icon name="calendar" size={18} /><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, locale)}</time><span>· {readingTime(post)} {t(locale, "分钟")}</span></span><Icon name="arrow-right" size={23} /></div>
 </Card>
 </article>
 <style>

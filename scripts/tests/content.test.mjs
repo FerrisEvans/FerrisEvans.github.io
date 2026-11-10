@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { articleLocale } from '../../src/utils/article-metadata.mjs';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 const require = createRequire(import.meta.url);
@@ -42,21 +43,42 @@ function articles() {
     assert(front, `${path} has front matter`);
     const slug = path.replaceAll('\\', '/').replace(/^posts\//, '').replace(/\.md$/, '');
     const data = yaml.load(front[1]);
-    return { id: slug.toLowerCase(), href: `/${data.locale}/posts/${data.translationKey}/`, data };
+    return { id: slug.toLowerCase(), filePath: path, href: `/${articleLocale(path)}/posts/${data.key}/`, data };
   });
 }
 
 function post(id, data = {}, locale = 'en') {
-  return { id: `${locale}/${id}`, data: { locale, translationKey: id, tags: [], ...data } };
+  return { id: `${locale}/${id}`, filePath: `posts/${locale}/${id}.md`, data: { key: id, tags: [], ...data } };
 }
+
+test('article schema accepts the new fields and rejects obsolete frontmatter without discarding it silently', () => {
+  const { collections } = loadTS('src/content.config.ts', {
+    'astro:content': { defineCollection: definition => definition },
+    'astro/loaders': { glob: () => ({}) },
+  });
+  const schema = collections.blog.schema;
+  const input = { key: 'GDScript', title: 'Example', date: '2026-01-01', updatedDate: '2026-02-01', category: 'lang', subcategory: 'cpp', tags: ['pointer', '写作'] };
+  const parsed = schema.parse(input);
+  assert.equal(parsed.key, 'GDScript');
+  assert.equal(parsed.date.toISOString(), '2026-01-01T00:00:00.000Z');
+  assert.equal(parsed.updatedDate.toISOString(), '2026-02-01T00:00:00.000Z');
+  assert.equal(parsed.subcategory, input.subcategory);
+  assert.deepEqual(parsed.tags, input.tags);
+  assert.equal(Object.hasOwn(parsed, 'locale'), false);
+  for (const [field, value] of [['locale', 'en'], ['translationKey', 'old-key'], ['pubDate', '2025-01-01']]) {
+    const result = schema.safeParse({ ...input, [field]: value });
+    assert.equal(result.success, false);
+    assert(result.error.issues.some(issue => issue.path[0] === field));
+  }
+});
 
 test('published posts exclude drafts and retain the current publication-date ordering policy', async () => {
   const fixture = [
-    post('old', { pubDate: new Date('2024-01-01'), draft: false }),
-    post('draft', { pubDate: new Date('2100-01-01'), draft: true }),
-    post('new', { pubDate: new Date('2025-01-01'), draft: false }),
-    post('future', { pubDate: new Date('2099-01-01'), draft: false }),
-    post('new', { pubDate: new Date('2025-01-01'), draft: false }, 'zh'),
+    post('old', { date: new Date('2024-01-01'), draft: false }),
+    post('draft', { date: new Date('2100-01-01'), draft: true }),
+    post('new', { date: new Date('2025-01-01'), draft: false }),
+    post('future', { date: new Date('2099-01-01'), draft: false }),
+    post('new', { date: new Date('2025-01-01'), draft: false }, 'zh'),
   ];
   const { getPosts } = loadTS('src/utils/posts.ts', { 'astro:content': {
     getCollection: async (name, filter = () => true) => { assert.equal(name, 'blog'); return fixture.filter(filter); },
@@ -68,14 +90,14 @@ test('published posts exclude drafts and retain the current publication-date ord
 test('draft previews require development mode and explicit opt-in; public indexes remain published-only', async () => {
   const fixture = [
     ...['en', 'zh'].flatMap(locale => [
-      post('published', { pubDate: new Date('2026-01-01'), draft: false }, locale),
-      post('unfinished', { pubDate: new Date('2026-02-01'), draft: true }, locale),
-      post('another-draft', { pubDate: new Date('2025-12-01'), draft: true }, locale),
+      post('published', { date: new Date('2026-01-01'), draft: false }, locale),
+      post('unfinished', { date: new Date('2026-02-01'), draft: true }, locale),
+      post('another-draft', { date: new Date('2025-12-01'), draft: true }, locale),
     ]),
   ];
   for (const development of [false, true]) {
     const { getPosts } = loadTS('src/utils/posts.ts', {
-      'astro:content': { getCollection: async (_name, filter) => fixture.filter(filter) },
+      'astro:content': { getCollection: async (_name, filter = () => true) => fixture.filter(filter) },
     }, { development });
     // Public consumers pass a locale, but never opt into draft content.
     for (const locale of ['en', 'zh']) {
@@ -87,21 +109,28 @@ test('draft previews require development mode and explicit opt-in; public indexe
   }
 });
 
-test('preview URLs preserve stable article keys and their case independently of collection filenames', () => {
-  const { postUrl } = loadTS('src/utils/posts.ts', { 'astro:content': {} });
+test('language comes from the source path while URLs preserve keys independently of IDs and filenames', async () => {
+  const fixture = ['en', 'zh'].flatMap(locale => [
+    { ...post('nested/gdscript', { key: 'GDScript', date: new Date('2026-01-01') }, locale), id: `overridden-${locale}` },
+    { ...post('different-filename', { key: 'stable-custom-url', date: new Date('2025-01-01') }, locale), id: `${locale === 'en' ? 'zh' : 'en'}/misleading-slug` },
+  ]);
+  const { getPosts, postUrl } = loadTS('src/utils/posts.ts', { 'astro:content': { getCollection: async () => fixture } });
   for (const locale of ['en', 'zh']) {
-    assert.equal(postUrl(post('gdscript', { translationKey: 'GDScript' }, locale)), `/${locale}/posts/GDScript/`);
-    assert.equal(postUrl(post('different-filename', { translationKey: 'stable-custom-url' }, locale)), `/${locale}/posts/stable-custom-url/`);
+    const posts = await getPosts({ locale });
+    assert.deepEqual(posts.map(postUrl), [`/${locale}/posts/GDScript/`, `/${locale}/posts/stable-custom-url/`]);
+    assert(posts.every(post => post.data.locale === locale));
   }
+  delete fixture[0].filePath;
+  await assert.rejects(getPosts(), /missing file path/);
 });
 
 test('all real non-draft articles are available, with case-correct article URLs', async () => {
   const collection = articles();
   const { getPosts, postUrl } = loadTS('src/utils/posts.ts', { 'astro:content': { getCollection: async (_name, filter = () => true) => collection.filter(filter) } });
   for (const locale of ['en', 'zh']) {
-    const posts = await getPosts({ locale }), expected = collection.filter(post => !post.data.draft && post.data.locale === locale);
+    const posts = await getPosts({ locale }), expected = collection.filter(post => !post.data.draft && articleLocale(post.filePath) === locale);
     assert.deepEqual(new Set(posts.map(post => post.id)), new Set(expected.map(post => post.id)));
-    assert(posts.every((post, index) => index === 0 || posts[index - 1].data.pubDate >= post.data.pubDate));
+    assert(posts.every((post, index) => index === 0 || posts[index - 1].data.date >= post.data.date));
     for (const post of posts) assert.equal(postUrl(post), post.href);
   }
 });
@@ -112,12 +141,12 @@ test('category discovery removes empty categories while retaining their reusable
   const configured = CATEGORIES.find(category => category.slug === 'data-structures');
   assert(configured, 'the category definition remains available for future posts');
   let collection = [
-    post('published', { category: 'data-structures', pubDate: new Date('2026-01-01'), draft: false }),
-    post('unfinished', { category: 'data-structures', pubDate: new Date('2026-02-01'), draft: true }),
-    post('other', { category: 'new-topic', pubDate: new Date('2026-03-01'), draft: false }),
+    post('published', { category: 'data-structures', date: new Date('2026-01-01'), draft: false }),
+    post('unfinished', { category: 'data-structures', date: new Date('2026-02-01'), draft: true }),
+    post('other', { category: 'new-topic', date: new Date('2026-03-01'), draft: false }),
   ];
   const { getPosts } = loadTS('src/utils/posts.ts', {
-    'astro:content': { getCollection: async (_name, filter) => collection.filter(filter) },
+    'astro:content': { getCollection: async (_name, filter = () => true) => collection.filter(filter) },
   });
   const discover = async () => categoriesFor((await getPosts()).map(post => post.data.category));
   assert.deepEqual((await discover()).map(category => category.slug), ['data-structures', 'new-topic']);

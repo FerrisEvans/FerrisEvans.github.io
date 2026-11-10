@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_pointer02
-locale: en
+key: cpp_pointer02
 title: "Pointers, part 2 | Arrays"
 description: "How to declare arrays, access their elements, understand array-to-pointer conversion, and manage dynamically allocated arrays safely."
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, array]
 ---

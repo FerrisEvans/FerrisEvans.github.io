@@ -1,3 +1,5 @@
+import { markdownLocale } from './markdown-locale.mjs';
+
 function standaloneImage(paragraph) {
   const children = (paragraph.children ?? []).filter(
     (child) => child.type !== 'text' || child.value.trim() !== '',
@@ -68,5 +70,5 @@ function visit(node, english) {
 }
 
 export default function rehypeReading() {
-  return (tree, file = {}) => visit(tree, /[\/]en[\/]/.test(file.path ?? '') || file.data?.astro?.frontmatter?.locale === 'en');
+  return (tree, file = {}) => visit(tree, markdownLocale(file) === 'en');
 }

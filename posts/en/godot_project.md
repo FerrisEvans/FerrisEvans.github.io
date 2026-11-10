@@ -1,12 +1,11 @@
 ---
 title: "Godot 2D projects, tutorials, and blogs worth exploring"
 description: A collection of Godot 2D learning resources, including video tutorials, open-source projects, and blogs for beginners and intermediate developers.
-pubDate: 2025-02-11
+date: 2025-02-11
 category: game-dev
 subcategory: godot
 tags: [godot, tutorial, open-source]
-locale: en
-translationKey: godot_project
+key: godot_project
 ---
 
 This collection brings together Godot 2D video tutorials, example projects, and a written tutorial. The ratings reflect my personal recommendations; the level beside each title indicates the intended audience. The preview images come from the tutorials linked below them.

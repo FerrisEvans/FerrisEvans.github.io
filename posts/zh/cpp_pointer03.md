@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_pointer03
+key: cpp_pointer03
 title: "手撕指针第三章 | 字符串"
 description: 介绍以 0 结尾的 C 风格字符串，及其指针声明方式中容易误解的初始化语义。
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, string]
 ---

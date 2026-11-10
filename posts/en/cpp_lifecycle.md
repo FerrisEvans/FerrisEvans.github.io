@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_lifecycle
-locale: en
+key: cpp_lifecycle
 title: "Object lifetimes"
 description: "How object lifetimes work in C++, from local and static objects to dynamically allocated objects, temporaries, and thread-local objects."
-pubDate: 2025-02-28
-category: programming-language
+date: 2025-02-28
+category: lang
 subcategory: cpp
 tags: [lifecycle, oop]
 ---

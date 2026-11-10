@@ -1,12 +1,11 @@
 ---
 title: "GDScript style guide"
 description: Notes on the official GDScript style guide, covering formatting, naming conventions, code order, and type declarations.
-pubDate: 2025-03-17
+date: 2025-03-17
 category: game-dev
 subcategory: godot
 tags: [gdscript, godot]
-locale: en
-translationKey: GDScript
+key: GDScript
 ---
 
 This post covers GDScript formatting, naming conventions, declaration order, and type annotations. For language syntax, see the [official documentation](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/index.html). Because GDScript’s syntax resembles Python’s, [PEP 8](https://peps.python.org/pep-0008/) is also a useful reference.

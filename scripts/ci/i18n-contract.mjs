@@ -1,19 +1,23 @@
 import { globSync, readFileSync } from 'node:fs';
 import yaml from 'js-yaml';
+import { articleLocale, articleMetadataErrors } from '../../src/utils/article-metadata.mjs';
 
 /** Publication is atomic across languages; drafts do not satisfy a published counterpart. */
 export function translationErrors(entries) {
   const groups = new Map(), errors = [];
   for (const entry of entries) {
-    const { locale, translationKey } = entry.data;
-    if (!['en','zh'].includes(locale) || !translationKey) {
-      errors.push({ file: entry.path, message: 'Every article needs locale (en or zh) and a translationKey.' });
+    let locale;
+    try { locale = articleLocale(entry.path); }
+    catch (error) { errors.push({ file: entry.path, message: error.message }); continue; }
+    const { key } = entry.data;
+    if (typeof key !== 'string' || !/^[A-Za-z0-9_-]+$/.test(key)) {
+      errors.push({ file: entry.path, message: 'Every article needs a key using letters, numbers, underscores, or hyphens.' });
       continue;
     }
-    const group = groups.get(translationKey) ?? new Map();
-    if (group.has(locale)) errors.push({ file: entry.path, message: `${translationKey}: duplicate ${locale} version (${group.get(locale).path}).` });
+    const group = groups.get(key) ?? new Map();
+    if (group.has(locale)) errors.push({ file: entry.path, message: `${key}: duplicate ${locale} version (${group.get(locale).path}).` });
     else group.set(locale, entry);
-    groups.set(translationKey, group);
+    groups.set(key, group);
   }
   for (const [key, group] of groups) {
     const published = [...group.values()].find(entry => entry.data.draft !== true);
@@ -27,11 +31,14 @@ export function translationErrors(entries) {
   return errors;
 }
 export function readArticles(root = process.cwd()) {
-  return [...globSync('posts/{en,zh}/**/*.md', { cwd: root })].map(path => {
+  return [...globSync('posts/**/*.md', { cwd: root })].map(path => {
     const raw = readFileSync(`${root}/${path}`, 'utf8');
     const match = raw.match(/^---\s*\r?\n([\s\S]*?)^---\s*$/m);
     if (!match) throw new Error(`${path}: missing front matter`);
-    return { path, data: yaml.load(match[1]) };
+    const data = yaml.load(match[1]);
+    const obsolete = articleMetadataErrors(data);
+    if (obsolete.length) throw new Error(`${path}: ${obsolete.map(error => error.message).join(' ')}`);
+    return { path, data: { ...data, locale: articleLocale(path) } };
   });
 }
 export function reportTranslationErrors(errors) {

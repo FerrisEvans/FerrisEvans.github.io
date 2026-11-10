@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: godot_frame
+key: godot_frame
 title: "Godot 中的移动与帧间隔"
 description: 解释 Godot 中 _process 的 delta 参数含义，说明如何用帧间隔实现与帧率无关的移动。
-pubDate: 2025-03-19
+date: 2025-03-19
 category: game-dev
 subcategory: godot
 tags: [godot, frame]

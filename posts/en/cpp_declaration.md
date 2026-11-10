@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_declaration
-locale: en
+key: cpp_declaration
 title: "C++ declarations"
 description: "A guide to C++ declarations and definitions, scope, variable shadowing, initialization, auto, decltype, and type aliases."
-pubDate: 2025-02-25
-category: programming-language
+date: 2025-02-25
+category: lang
 subcategory: cpp
 tags: [declaration, definition, scope, initialization]
 ---

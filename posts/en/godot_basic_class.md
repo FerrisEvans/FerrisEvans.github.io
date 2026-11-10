@@ -1,12 +1,11 @@
 ---
 title: "The four core concepts of Godot"
 description: An introduction to Godot’s four core concepts—scenes, nodes, the scene tree, and signals—to help beginners see how they fit together.
-pubDate: 2025-03-16
+date: 2025-03-16
 category: game-dev
 subcategory: godot
 tags: [godot, node2d, scene, signal]
-locale: en
-translationKey: godot_basic_class
+key: godot_basic_class
 ---
 
 I wrote these notes after completing my second Godot project, which gave me a broad overview of the engine.

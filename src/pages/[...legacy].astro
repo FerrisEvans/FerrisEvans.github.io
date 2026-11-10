@@ -11,6 +11,7 @@ export async function getStaticPaths() {
     paths.set(`categories/${post.data.category}`, `/zh/categories/${post.data.category}/`);
     for (const tag of post.data.tags) paths.set(`tags/${tag}`, `/zh/tags/${encodeURIComponent(tag)}/`);
   }
+  paths.set('categories/programming-language', '/zh/categories/lang/');
   paths.set('tags/写作','/zh/tags/writing/'); paths.set('tags/代码示例','/zh/tags/code-examples/');
   const count = Math.max(1, Math.ceil(posts.length / SITE.postsPerPage));
   for (let page=1;page<=count;page++) {

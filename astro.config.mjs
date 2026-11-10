@@ -66,7 +66,7 @@ export default defineConfig({
   site: 'https://ferrisevans.github.io',
   compressHTML: true,
   i18n: { locales: ['en', 'zh'], defaultLocale: 'en', routing: 'manual' },
-  integrations: [sitemap({ filter: page => /^\/(en|zh)\//.test(new URL(page).pathname) && !/\/(drafts|page)\//.test(new URL(page).pathname) }), react()],
+  integrations: [sitemap({ filter: page => /^\/(en|zh)\//.test(new URL(page).pathname) && !/\/(drafts|page)\//.test(new URL(page).pathname) && !/\/categories\/programming-language\/$/.test(new URL(page).pathname) }), react()],
   vite: {
     // The component library imports CSS modules that Astro must bundle for SSR.
     resolve: { noExternal: ['animal-island-ui'] },

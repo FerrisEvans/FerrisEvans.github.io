@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_pointer01
-locale: en
+key: cpp_pointer01
 title: "Pointers, part 1 | Declarations"
 description: "An introduction to pointers, covering memory addresses, pointer declarations, dereferencing, void*, nullptr, and common pitfalls."
-pubDate: 2024-06-06
-category: programming-language
+date: 2024-06-06
+category: lang
 subcategory: cpp
 tags: [pointer]
 ---

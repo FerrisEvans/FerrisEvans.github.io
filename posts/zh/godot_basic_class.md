@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: godot_basic_class
+key: godot_basic_class
 title: "Godot 四大基本概念"
 description: 总结 Godot 的四大基本概念：场景、节点、场景树与信号，帮助初学者建立整体认知。
-pubDate: 2025-03-16
+date: 2025-03-16
 category: game-dev
 subcategory: godot
 tags: [godot, node2d, scene, signal]

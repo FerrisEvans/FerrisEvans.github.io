@@ -493,7 +493,7 @@ public partial class Hello : Node
 
 ### Frontmatter 写法
 
-YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `posts/zh/hello-markdown.md` 后，下面的示例会得到 `/zh/posts/hello-markdown/` 路径。英文版放在 `posts/en/hello-markdown.md`，两份文件使用相同的 `translationKey`。
+YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描述文章信息，不是正文，也不属于 CommonMark 或 GFM；字段由本站内容模型定义。保存到 `posts/zh/hello-markdown.md` 后，下面的示例会得到 `/zh/posts/hello-markdown/` 路径。英文版放在 `posts/en/hello-markdown.md`，两份文件使用相同的 `key`。文章语言由 `posts/zh/` 或 `posts/en/` 目录推导，无需填写 `locale`。
 
 **写法**
 
@@ -501,11 +501,10 @@ YAML frontmatter 放在 Markdown 文件最前面，两条 `---` 之间。它描�
 ---
 title: 用 Markdown 写一篇博文
 description: 记录一个可复现的小实验。
-pubDate: 2026-11-04
+date: 2026-11-04
 category: writing
 tags: [Markdown, 写作]
-locale: zh
-translationKey: hello-markdown
+key: hello-markdown
 draft: true
 ---
 ```
@@ -515,10 +514,9 @@ draft: true
 | 字段 | 必填 | 作用 |
 | --- | --- | --- |
 | `title` | 是 | 页面标题和文章列表标题 |
-| `pubDate` | 是 | 发布日期和文章排序 |
+| `date` | 是 | 发布日期和文章排序 |
 | `category` | 是 | 分类索引，使用小写英文字母、数字和连字符 |
-| `locale` | 是 | 内容语言：`zh` 或 `en` |
-| `translationKey` | 是 | 中英文共享的稳定标识，区分大小写 |
+| `key` | 是 | 中英文共享的稳定标识，区分大小写 |
 | `description` | 否 | 摘要与页面描述 |
 | `tags` | 否 | 标签索引，省略时为空 |
 | `subcategory` | 否 | 子分类标识，格式与分类相同 |
@@ -528,7 +526,7 @@ draft: true
 
 ### 预览、发布与删除
 
-设置 `draft: true` 后，运行 `npm run dev`，在本地 `/zh/drafts/` 预览；生产构建不会生成这篇草稿的文章或索引。草稿可以暂时只有一种语言。准备发布时，须提供相同 `translationKey` 的中英文版本，并把两份都改为 `draft: false`；已发布文章必须具备已发布的对应译文。新增或删除文章后，下次构建会更新文章列表、分类、标签、归档、RSS、站点地图和搜索索引。
+设置 `draft: true` 后，运行 `npm run dev`，在本地 `/zh/drafts/` 预览；生产构建不会生成这篇草稿的文章或索引。草稿可以暂时只有一种语言。准备发布时，须提供相同 `key` 的中英文版本，并把两份都改为 `draft: false`；已发布文章必须具备已发布的对应译文。新增或删除文章后，下次构建会更新文章列表、分类、标签、归档、RSS、站点地图和搜索索引。
 
 不需要逐篇维护索引配置或书房字体。`name`、`desc`、`latex` 不是本文档采用的发布字段，请使用上表中的名称。流程图使用普通图片，本站不提供 Mermaid 渲染。
 

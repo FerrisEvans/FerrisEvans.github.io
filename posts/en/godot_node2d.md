@@ -1,12 +1,11 @@
 ---
 title: "Nodes in Godot"
 description: An overview of Godot’s node hierarchy, the Node2D and Control base classes, and common nodes such as Area2D and RigidBody2D.
-pubDate: 2025-03-18
+date: 2025-03-18
 category: game-dev
 subcategory: godot
 tags: [godot, node2d]
-locale: en
-translationKey: godot_node2d
+key: godot_node2d
 ---
 
 This post introduces common 2D nodes in Godot 4 and their uses. Interface labels follow the English editor.

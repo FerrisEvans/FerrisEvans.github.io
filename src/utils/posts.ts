@@ -1,18 +1,22 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
-
-export type Post = CollectionEntry<'blog'>;
-
 import { type Locale, tagId } from '../i18n';
+import { articleLocale } from './article-metadata.mjs';
+
+export type Post = CollectionEntry<'blog'> & { data: { locale: Locale } };
 
 /** Drafts are opt-in for local previews and can never enter a production build. */
 export async function getPosts(options: { includeDrafts?: boolean; locale?: Locale } = {}): Promise<Post[]> {
   const includeDrafts = import.meta.env.DEV && options.includeDrafts === true;
-  const posts = await getCollection('blog', ({ data }) => data.locale === (options.locale ?? 'en') && (!data.draft || includeDrafts));
-  return posts.map(post => ({ ...post, data: { ...post.data, tags: post.data.tags.map(tagId) } })).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  const posts = (await getCollection('blog')).map(post => ({
+    ...post,
+    data: { ...post.data, locale: articleLocale(post.filePath), tags: post.data.tags.map(tagId) },
+  }));
+  return posts.filter(({ data }) => data.locale === (options.locale ?? 'en') && (!data.draft || includeDrafts))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
 export function postSlug(post: Post): string {
-  return post.data.translationKey;
+  return post.data.key;
 }
 
 export function formatDate(date: Date, locale: Locale = 'zh'): string {

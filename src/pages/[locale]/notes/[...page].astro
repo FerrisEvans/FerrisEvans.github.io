@@ -66,7 +66,7 @@ const posts = page.data;
 const isFirst = page.currentPage === 1;
 const grid = isFirst ? posts.filter((p) => p.id !== featured?.id) : posts;
 
-const categoryIcons: Record<string, string> = { 'programming-language': 'book', 'data-structures': 'layers', 'game-dev': 'game', ai: 'flower' };
+const categoryIcons: Record<string, string> = { lang: 'book', 'data-structures': 'layers', 'game-dev': 'game', ai: 'flower' };
 
 const categoryPatterns: CardProps["pattern"][] = ["app-pink", "app-yellow", "app-teal", "purple"];
 ---

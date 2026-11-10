@@ -21,8 +21,8 @@ export async function getIslandContent(locale: Locale = 'en') {
     description: post.data.description ?? '',
     href: postUrl(post),
     category: categoryOf(post.data.category, locale).label,
-    date: post.data.pubDate.toISOString().slice(0, 10),
-    updated: (post.data.updatedDate ?? post.data.pubDate).toISOString().slice(0, 10),
+    date: post.data.date.toISOString().slice(0, 10),
+    updated: (post.data.updatedDate ?? post.data.date).toISOString().slice(0, 10),
     readingMinutes: readingTime(post),
     pinned: post.data.pin,
   });
@@ -31,7 +31,7 @@ export async function getIslandContent(locale: Locale = 'en') {
     posts: posts.map(adapt),
     featured: posts.filter(post => post.data.pin).map(adapt),
     recent: [...posts].sort((a, b) =>
-      (b.data.updatedDate ?? b.data.pubDate).valueOf() - (a.data.updatedDate ?? a.data.pubDate).valueOf()
+      (b.data.updatedDate ?? b.data.date).valueOf() - (a.data.updatedDate ?? a.data.date).valueOf()
     ).slice(0, 4).map(adapt),
     categories: categories.map(category => ({
       slug: category.slug, title: category.label, description: category.description,

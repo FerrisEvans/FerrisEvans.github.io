@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_pointer02
+key: cpp_pointer02
 title: "手撕指针第二章 | 数组"
 description: 讲解数组的声明与访问、数组名与指针的关系，以及自由存储数组的释放注意事项。
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, array]
 ---

@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: agent_dev_tutorial
+key: agent_dev_tutorial
 title: "Agent 开发入门指南"
 description: 面向智能体开发者的入门路线图：向量数据库、RAG 优化、ReAct 架构、记忆管理与生产化工程。
-pubDate: 2025-12-22
+date: 2025-12-22
 category: ai
 subcategory: agent
 tags: [agent, rag, vector-db, llm]

@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: godot_project
+key: godot_project
 title: "Godot 2D 项目与教程推荐"
 description: 推荐一批 Godot 2D 学习资源：从入门到进阶的视频教程、开源项目与博客。
-pubDate: 2025-02-11
+date: 2025-02-11
 category: game-dev
 subcategory: godot
 tags: [godot, tutorial, open-source]

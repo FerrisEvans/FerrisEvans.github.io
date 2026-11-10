@@ -2,14 +2,19 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fromHtml } from 'hast-util-from-html';
+import yaml from 'js-yaml';
 import config from '../../astro.config.mjs';
 
 const { processor, ...options } = config.markdown;
 const renderer = await processor.createRenderer(options);
 const fileURL = new URL('../../src/content/pages/markdown-features.md', import.meta.url);
-const markdown = readFileSync(fileURL, 'utf8')
-  .replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
-const rendered = await renderer.render(markdown, { fileURL });
+function renderGuide(fileURL) {
+  const source = readFileSync(fileURL, 'utf8');
+  const header = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
+  assert(header, 'standalone guides provide their own frontmatter');
+  return renderer.render(source.slice(header[0].length), { fileURL, frontmatter: yaml.load(header[1]) });
+}
+const rendered = await renderGuide(fileURL);
 const nodes = [];
 const visit = node => {
   if (node.type === 'element') nodes.push(node);
@@ -94,8 +99,7 @@ test('guide formulas, footnote round trips and heading links have real rendered 
 
 test('the English syntax guide preserves rendered features and localizes reader-facing labels', async () => {
   const fileURL = new URL('../../src/content/pages/en/markdown-features.md', import.meta.url);
-  const source = readFileSync(fileURL, 'utf8').replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
-  const english = await renderer.render(source, { fileURL });
+  const english = await renderGuide(fileURL);
   const elements = [];
   function collect(node) {
     if (node.type === 'element') elements.push(node);

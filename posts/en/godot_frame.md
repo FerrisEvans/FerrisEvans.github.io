@@ -1,12 +1,11 @@
 ---
 title: "Movement and delta time in Godot"
 description: What the delta parameter in Godot’s _process function means and how to use it to make movement independent of frame rate.
-pubDate: 2025-03-19
+date: 2025-03-19
 category: game-dev
 subcategory: godot
 tags: [godot, frame]
-locale: en
-translationKey: godot_frame
+key: godot_frame
 ---
 
 This post uses Godot 4 GDScript to explain how the `delta` parameter of `_process()` helps calculate movement per frame. It covers the calculation, rather than a complete character controller.

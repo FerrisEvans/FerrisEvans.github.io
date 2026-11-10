@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_declaration
+key: cpp_declaration
 title: "C++ 声明"
 description: 讲解 C++ 的声明与定义、作用域、变量隐藏、初始化方式及 auto、decltype 与类型别名。
-pubDate: 2025-02-25
-category: programming-language
+date: 2025-02-25
+category: lang
 subcategory: cpp
 tags: [declaration, definition, scope, initialization]
 ---

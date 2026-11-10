@@ -1,9 +1,8 @@
 ---
-locale: zh
-translationKey: markdown-writing-guide
+key: markdown-writing-guide
 title: Markdown 写作之旅：公式、图片与多语言代码
 description: 一篇可直接参照的写作样例，包含文章头部、自动公式、普通图片、代码标签与草稿预览。
-pubDate: 2026-11-04
+date: 2026-11-04
 category: writing
 tags: [markdown, 写作, 代码示例]
 ---
@@ -14,28 +13,27 @@ tags: [markdown, 写作, 代码示例]
 
 ## 从一个 Markdown 文件开始
 
-在 `posts/zh/` 新建 `my-note.md`，文章地址就是 `/zh/posts/my-note/`。英文版放在 `posts/en/`，两份文件使用相同的 `translationKey`。
+在 `posts/zh/` 新建 `my-note.md`，并设置 `key: my-note`，文章地址就是 `/zh/posts/my-note/`。英文版放在 `posts/en/`，两份文件使用相同的 `key`。文章语言由所在目录推导，无需填写 `locale`。
 
 ```yaml
 ---
 title: 我的新笔记
 description: 用一句话介绍这篇文章。
-pubDate: 2026-11-04
+date: 2026-11-04
 category: writing
 tags: [markdown, 笔记]
-locale: zh
-translationKey: my-note
+key: my-note
 draft: true
 ---
 ```
 
-`title`、`pubDate`、`category`、`locale` 和 `translationKey` 必填。分类使用小写字母、数字和连字符，例如 `travel-notes`；标签可以直接写中文。文章发布后，新分类和标签会自动出现在索引中，无需手动登记。
+`title`、`date`、`category` 和 `key` 必填。分类使用小写字母、数字和连字符，例如 `travel-notes`；标签可以直接写中文。文章发布后，新分类和标签会自动出现在索引中，无需手动登记。
 
 `draft: true` 表示草稿。草稿可以暂时只有一种语言。预览和发布步骤如下：
 
 1. 在项目根目录运行 `npm run dev`。
 2. 在中文导航中选择**草稿**，打开文章并检查渲染效果。
-3. 准备具有相同 `translationKey` 的中英文版本，删除两份文件中的 `draft: true`，或都改成 `false`。
+3. 准备具有相同 `key` 的中英文版本，删除两份文件中的 `draft: true`，或都改成 `false`。
 4. 确认准备公开后，将文件推送或合并到 `main`。这会触发网站部署流程。
 
 日期用于展示和排序，不会自动预约发布。

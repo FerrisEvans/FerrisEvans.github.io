@@ -1,12 +1,11 @@
 ---
 title: "Introduction to AI agent development"
 description: A roadmap for aspiring agent engineers, covering vector databases, RAG optimization, ReAct architectures, memory, and production engineering.
-pubDate: 2025-12-22
+date: 2025-12-22
 category: ai
 subcategory: agent
 tags: [agent, rag, vector-db, llm]
-locale: en
-translationKey: agent_dev_tutorial
+key: agent_dev_tutorial
 ---
 
 This roadmap is for developers who know Python and have called a large language model (LLM) API. It covers retrieval-augmented generation (RAG)[^rag], agent architectures, memory, and production concerns. The Python snippets illustrate control flow rather than a particular SDK: model clients, tool implementations, and storage setup are omitted, so the snippets are not standalone programs.

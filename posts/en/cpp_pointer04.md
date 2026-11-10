@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_pointer04
-locale: en
+key: cpp_pointer04
 title: "Pointers, part 4 | Lvalues and rvalues"
 description: "Understand lvalues and rvalues, and why some expressions can appear on the left side of an assignment."
-pubDate: 2025-03-02
-category: programming-language
+date: 2025-03-02
+category: lang
 subcategory: cpp
 tags: [pointer, reference, lvalue, rvalue]
 ---

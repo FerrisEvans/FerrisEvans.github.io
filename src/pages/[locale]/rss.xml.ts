@@ -12,6 +12,6 @@ export async function feed(locale: Locale, siteUrl: URL) {
   const posts = await getPosts({ locale });
   return rss({ title: site.title, description: site.description, site: siteUrl,
     customData: `<language>${locale === 'zh' ? 'zh-CN' : 'en'}</language>`,
-    items: posts.map(post => ({ title: post.data.title, description: post.data.description ?? '', pubDate: post.data.pubDate, link: postUrl(post) })),
+    items: posts.map(post => ({ title: post.data.title, description: post.data.description ?? '', pubDate: post.data.date, link: postUrl(post) })),
   });
 }

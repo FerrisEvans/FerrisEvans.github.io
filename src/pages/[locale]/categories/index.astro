@@ -11,7 +11,7 @@ import { getPosts } from '../../../utils/posts';
 const posts = await getPosts({ locale });
 const categories = categoriesFor(posts.map((post) => post.data.category), locale);
 const countOf = (slug: string) => posts.filter((post) => post.data.category === slug).length;
-const icons: Record<string, string> = { 'programming-language': 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' };
+const icons: Record<string, string> = { lang: 'code', 'data-structures': 'layers', 'game-dev': 'game', ai: 'sparkles' };
 
 const patterns = ['app-pink', 'app-yellow', 'app-teal', 'purple'] as const;
 ---

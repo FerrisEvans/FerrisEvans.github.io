@@ -1,10 +1,9 @@
 ---
-translationKey: java_generic
-locale: en
+key: java_generic
 title: "Working through Java generics"
 description: "From generic classes and methods to type erasure and wildcard bounds, explore Java generics through code and comparisons with C++ templates."
-pubDate: 2021-07-17
-category: programming-language
+date: 2021-07-17
+category: lang
 subcategory: java
 tags: [generic]
 ---

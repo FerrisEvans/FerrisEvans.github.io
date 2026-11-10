@@ -1,10 +1,9 @@
 ---
-translationKey: cpp_type
-locale: en
+key: cpp_type
 title: "C++ types"
 description: "A guide to fundamental C++ types—bool, characters, integers, floating-point types, and void—along with narrowing conversions and literal prefixes and suffixes."
-pubDate: 2025-02-22
-category: programming-language
+date: 2025-02-22
+category: lang
 subcategory: cpp
 tags: [type]
 ---

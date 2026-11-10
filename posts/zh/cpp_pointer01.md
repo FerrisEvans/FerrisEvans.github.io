@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_pointer01
+key: cpp_pointer01
 title: "手撕指针第一章 | 声明"
 description: 从内存与地址讲起，介绍指针的声明、解引用、void* 与 nullptr 的用法和常见误区。
-pubDate: 2024-06-06
-category: programming-language
+date: 2024-06-06
+category: lang
 subcategory: cpp
 tags: [pointer]
 ---

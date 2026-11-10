@@ -1,10 +1,9 @@
 ---
-locale: zh
-translationKey: cpp_type
+key: cpp_type
 title: "C++ 类型"
 description: 梳理 C++ 基本类型：布尔、字符、整数、浮点与 void，讲解窄化转换与字面量前后缀。
-pubDate: 2025-02-22
-category: programming-language
+date: 2025-02-22
+category: lang
 subcategory: cpp
 tags: [type]
 ---
