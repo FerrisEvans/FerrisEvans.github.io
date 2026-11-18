@@ -32,7 +32,7 @@ try {
   }
   for (const locale of ['en','zh']) {
     const other = locale === 'en' ? 'zh' : 'en';
-    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/markdown/', 'about/markdown-writing/', 'about/python-zen/']) {
+    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/python-zen/']) {
       await visit(`/${locale}/${path}`);
       assert.equal(await page.locator('html').getAttribute('lang'),locale === 'en' ? 'en' : 'zh-CN');
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');

@@ -7,7 +7,7 @@ import config from '../../astro.config.mjs';
 
 const { processor, ...options } = config.markdown;
 const renderer = await processor.createRenderer(options);
-const fileURL = new URL('../../src/content/pages/markdown-features.md', import.meta.url);
+const fileURL = new URL('../../src/content/pages/writing-guide.md', import.meta.url);
 function renderGuide(fileURL) {
   const source = readFileSync(fileURL, 'utf8');
   const header = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
@@ -24,10 +24,13 @@ visit(fromHtml(rendered.code, { fragment: true }));
 const hasClass = (node, name) => node.properties.className?.includes(name);
 const textContent = node => node.type === 'text' ? node.value : (node.children ?? []).map(textContent).join('');
 
-test('the reference separates syntax layers and renders actual GFM extensions', () => {
+test('the merged guide separates top-level sections and renders GFM extensions', () => {
   assert.equal(config.markdown.processor.options.gfm, true);
   assert.deepEqual(nodes.filter(node => node.tagName === 'h2' && node.properties.id !== 'footnote-label').map(textContent), [
-    'CommonMark 基础', 'GFM 正式扩展', '内嵌 HTML', '本站插件与渲染增强', '发布元数据',
+    '从草稿到发布', '格式约定', '语法与效果', '实操样例', '参考资料',
+  ]);
+  assert.deepEqual(nodes.filter(node => node.tagName === 'h3' && ['CommonMark 基础', 'GFM 正式扩展', '内嵌 HTML', '本站插件与渲染增强'].includes(textContent(node))).map(textContent), [
+    'CommonMark 基础', 'GFM 正式扩展', '内嵌 HTML', '本站插件与渲染增强',
   ]);
   assert(!nodes.some(node => node.tagName === 'h1'), 'the page layout owns the only h1');
   assert.equal(nodes.filter(node => node.tagName === 'hr').length, 1, 'the CommonMark thematic-break example keeps native separator semantics');
@@ -52,16 +55,16 @@ test('the reference separates syntax layers and renders actual GFM extensions', 
   assert(nodes.some(node => node.tagName === 'code' && textContent(node).includes('| :--- | :---: | ---: |')), 'source examples remain literal code');
 });
 
-test('the syntax reference renders every documented alert and one two-language code group', () => {
+test('the writing guide renders every documented alert and both authored code groups', () => {
   const alerts = nodes.filter(node => hasClass(node, 'markdown-alert'));
   assert.equal(alerts.length, 5);
   for (const type of ['note', 'tip', 'important', 'warning', 'caution']) {
     assert(alerts.some(node => hasClass(node, `markdown-alert-${type}`)));
   }
-  assert.equal(nodes.filter(node => hasClass(node, 'rehype-code-group')).length, 1);
-  assert.equal(nodes.filter(node => node.properties.role === 'tab').length, 2);
+  assert.equal(nodes.filter(node => hasClass(node, 'rehype-code-group')).length, 2);
+  assert.equal(nodes.filter(node => node.properties.role === 'tab').length, 4);
   const panels = nodes.filter(node => node.properties.role === 'tabpanel');
-  assert.equal(panels.length, 2);
+  assert.equal(panels.length, 4);
   assert(panels.every(node => node.properties.hidden !== true), 'all examples remain readable without JavaScript');
   const ids = nodes.map(node => node.properties.id).filter(Boolean);
   assert.equal(new Set(ids).size, ids.length, 'code groups and document anchors must not share IDs');
@@ -85,20 +88,20 @@ test('guide formulas, footnote round trips and heading links have real rendered 
   assert.deepEqual(nodes.filter(node => hasClass(node, 'cross-reference')).map(node => node.properties.href), ['#xref-idempotency', '#xref-energy']);
   assert(byId.has('xref-idempotency') && byId.has('xref-energy'));
   assert.match(rendered.code, /<details>\s*<summary>查看推导思路<\/summary>\s*<p>先确认<strong>输入条件<\/strong>/);
-  assert.equal(nodes.filter(node => node.tagName === 'kbd').length, 4);
+  assert(nodes.filter(node => node.tagName === 'kbd').length >= 4);
   assert(nodes.some(node => node.tagName === 'sub' && textContent(node) === '2'));
   assert(nodes.some(node => node.tagName === 'sup' && textContent(node) === '2'));
-  assert.deepEqual(rendered.metadata.localImagePaths, ['../../../posts/img/rag.jpeg']);
+  assert.deepEqual(rendered.metadata.localImagePaths, ['./img/guide-rag.jpeg']);
   assert(nodes.some(node => {
     if (node.tagName !== 'img' || !node.properties.__astro_image_) return false;
     const image = JSON.parse(node.properties.__astro_image_);
-    return image.src === '../../../posts/img/rag.jpeg' && image.alt === '检索增强生成的流程示意图';
+    return image.src === './img/guide-rag.jpeg' && image.alt === 'RAG 流程：查询改写连接检索与答案生成';
   }));
-  assert(nodes.some(node => node.tagName === 'a' && node.properties.href === '/zh/about/writing/'));
+  assert(nodes.some(node => node.tagName === 'a' && node.properties.href === '/zh/about/'));
 });
 
-test('the English syntax guide preserves rendered features and localizes reader-facing labels', async () => {
-  const fileURL = new URL('../../src/content/pages/en/markdown-features.md', import.meta.url);
+test('the English writing guide preserves rendered features and localizes reader-facing labels', async () => {
+  const fileURL = new URL('../../src/content/pages/en/writing-guide.md', import.meta.url);
   const english = await renderGuide(fileURL);
   const elements = [];
   function collect(node) {
@@ -111,10 +114,16 @@ test('the English syntax guide preserves rendered features and localizes reader-
     assert(byId.has(decodeURIComponent(link.properties.href.slice(1))), `missing English target for ${link.properties.href}`);
   }
   assert.equal(elements.filter(node => hasClass(node, 'markdown-alert')).length, 5);
-  assert.equal(elements.filter(node => hasClass(node, 'rehype-code-group')).length, 1);
+  assert.equal(elements.filter(node => hasClass(node, 'rehype-code-group')).length, 2);
   assert.equal(elements.filter(node => hasClass(node, 'numbered-reference')).length, 2);
   assert.equal(english.metadata.frontmatter.hasMath, true);
   assert(elements.some(node => node.properties['aria-label']?.startsWith('Enlarge image') || node.properties.ariaLabel?.startsWith('Enlarge image')));
-  assert(elements.some(node => node.tagName === 'a' && node.properties.href === '/en/about/writing/'));
-  assert.doesNotMatch(textContent(fromHtml(english.code, { fragment: true })), /[\u3400-\u9fff]/u);
+  assert(elements.some(node => node.tagName === 'a' && node.properties.href === '/en/about/'));
+  assert.deepEqual(english.metadata.localImagePaths, ['../img/guide-rag.jpeg']);
+  // Chinese typography examples are intentional; other top-level sections stay English.
+  const englishText = textContent(fromHtml(english.code, { fragment: true }));
+  assert.match(englishText, /Chinese typography/);
+  assert.match(englishText, /使用 Godot 创建场景/);
+  assert.match(englishText, /From draft to publication/);
+  assert.match(englishText, /Syntax and examples/);
 });

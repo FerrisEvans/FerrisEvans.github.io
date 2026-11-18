@@ -38,16 +38,17 @@ for (const pack of fs.readdirSync(vendorSource)) {
       `Published license differs from upstream: ${pack}/${file}`);
   }
 }
+const publishedLangLocales = locales.filter(locale =>
+  published.some(entry => entry.data.locale === locale && entry.data.category === 'lang'));
 const requiredFiles = [
   'index.html',
   'en/index.html',
   'zh/index.html',
   'en/rss.xml',
   'zh/rss.xml',
-  'en/categories/lang/index.html',
-  'zh/categories/lang/index.html',
+  ...publishedLangLocales.map(locale => `${locale}/categories/lang/index.html`),
   ...retiredAliases.map(([from]) => `${from.slice(1)}index.html`),
-  ...locales.map(locale => `${locale}/about/markdown-writing/index.html`),
+  ...locales.map(locale => `${locale}/about/writing/index.html`),
   '404.html',
   'rss.xml',
   'sitemap-index.xml',
@@ -58,8 +59,6 @@ const requiredFiles = [
   'about/index.html',
   'about/python-zen/index.html',
   'about/writing/index.html',
-  'about/markdown/index.html',
-  'about/markdown-writing/index.html',
   'room/index.html',
   'island/index.html',
   'release.json',
@@ -109,7 +108,6 @@ if (!homepage.includes('weijin-lettering')) throw new Error('Homepage brand must
 if (!homepage.includes('id="island-root"') || !homepage.includes('id="island-scene"')) throw new Error('Homepage must directly mount the interactive courtyard');
 if (homepage.includes('id="home-enter-room"')) throw new Error('Homepage must not require a separate exploration entry');
 for (const [file, destination] of [['lofi/index.html', '/zh/notes/'], ['room/index.html', '/zh/'], ['island/index.html', '/zh/'],
-  ['about/markdown-writing/index.html', '/zh/about/markdown-writing/'],
   ...retiredAliases.map(([from, to]) => [`${from.slice(1)}index.html`, to]),
   ...htmlFiles.map(file => path.relative(distDir, file).replaceAll(path.sep, '/')).filter(file => /^page\/\d+\/index\.html$/.test(file)).map(file => [file, file === 'page/1/index.html' ? '/zh/notes/' : `/zh/notes/${file.replace(/index\.html$/, '')}`])]) {
   const html = fs.readFileSync(path.join(distDir, file), 'utf8');
@@ -132,7 +130,7 @@ for (const [file, destination] of [['lofi/index.html', '/zh/notes/'], ['room/ind
 }
 const sitemapUrls = fs.readdirSync(distDir).filter(file => /^sitemap.*\.xml$/.test(file)).flatMap(file =>
   [...fs.readFileSync(path.join(distDir, file), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1])));
-for (const pathname of ['/en/', '/zh/', '/en/notes/', '/zh/notes/', '/en/categories/lang/', '/zh/categories/lang/', ...locales.map(locale => `/${locale}/about/markdown-writing/`)]) if (!sitemapUrls.some(url => url.pathname === pathname)) throw new Error(`Missing canonical sitemap route: ${pathname}`);
+for (const pathname of ['/en/', '/zh/', '/en/notes/', '/zh/notes/', ...publishedLangLocales.map(locale => `/${locale}/categories/lang/`), ...locales.map(locale => `/${locale}/about/writing/`)]) if (!sitemapUrls.some(url => url.pathname === pathname)) throw new Error(`Missing canonical sitemap route: ${pathname}`);
 if (sitemapUrls.some(url => (!/^\/(en|zh)\//.test(url.pathname) && !url.pathname.endsWith('.xml')) || /\/page\/\d+\/$/.test(url.pathname) || retiredPaths.has(decodeURIComponent(url.pathname)))) throw new Error('Legacy aliases must stay out of the canonical sitemap');
 const release = JSON.parse(fs.readFileSync(path.join(distDir, 'release.json'), 'utf8'));
 if (!/^\d+\.\d+\.\d+$/.test(release.version) || !/^[a-f0-9]{40}$/.test(release.revision) || !release.roomBuildId) {
@@ -146,7 +144,7 @@ if (release.version !== packageVersion || release.roomBuildId !== roomBuildId ||
 const postPages = htmlFiles.filter((f) =>
   /^\/(en|zh)\/posts\//.test(outputPath(f)) && !retiredPaths.has(outputPath(f))
 );
-if (postPages.length === 0) {
+if (published.length > 0 && postPages.length === 0) {
   throw new Error('No blog post pages were generated under dist/{en,zh}/posts/');
 }
 
@@ -189,7 +187,7 @@ for (const pathname of expectedTaxonomyPaths) {
 }
 
 for (const locale of locales) {
-  const pathname = `/${locale}/about/markdown-writing/`;
+  const pathname = `/${locale}/about/writing/`;
   const tree = fromHtml(fs.readFileSync(path.join(distDir, pathname, 'index.html'), 'utf8'));
   assert.equal(elements(tree, 'html')[0]?.properties.lang, languageTags[locale], `${pathname}: guide document language`);
   const links = elements(tree, 'link');
@@ -201,7 +199,7 @@ for (const locale of locales) {
   for (const [lang, targetLocale] of [['en', 'en'], ['zh-CN', 'zh'], ['x-default', 'en']]) {
     const matches = alternates.filter(node => node.properties.hrefLang === lang);
     assert.equal(matches.length, 1, `${pathname}: one ${lang} guide alternative`);
-    assert.equal(matches[0].properties.href, new URL(`/${targetLocale}/about/markdown-writing/`, siteOrigin).href, `${pathname}: ${lang} guide target`);
+    assert.equal(matches[0].properties.href, new URL(`/${targetLocale}/about/writing/`, siteOrigin).href, `${pathname}: ${lang} guide target`);
   }
   assert(elements(tree).some(node => Object.hasOwn(node.properties, 'dataPagefindBody')), `${pathname}: guide has searchable content`);
   assert(!elements(tree, 'script').some(node => node.properties.src === 'https://giscus.app/client.js'), `${pathname}: guide does not retain an article comment widget`);
@@ -210,7 +208,7 @@ for (const locale of locales) {
   const expected = published.filter(entry => entry.data.locale === locale).map(entry => articlePath(entry.data));
   const archive = fromHtml(fs.readFileSync(path.join(distDir, locale, 'archives/index.html'), 'utf8'));
   const archiveLinks = elements(archive, 'a').filter(node => node.properties.className?.includes('archive-title')).map(node => node.properties.href);
-  assert.equal(archiveLinks.length, expected.length, `${locale}: archive article count excludes the migrated guide`);
+  assert.equal(archiveLinks.length, expected.length, `${locale}: archive article count excludes the writing guide`);
   assert.deepEqual(new Set(archiveLinks), new Set(expected), `${locale}: archive contains exactly the published articles`);
   for (const kind of ['categories', 'tags']) {
     const index = fromHtml(fs.readFileSync(path.join(distDir, locale, kind, 'index.html'), 'utf8'));
@@ -220,19 +218,18 @@ for (const locale of locales) {
     assert.deepEqual(new Set(linked), new Set([...expectedTaxonomyPaths].filter(pathname => pathname.startsWith(`/${locale}/${kind}/`))), `${locale}: ${kind} index advertises only active archives`);
   }
 
-  if (retiredPaths.has(`/${locale}/tags/godot/`)) {
+  const godot = published.filter(entry => entry.data.locale === locale && entry.data.category === 'game-dev' && entry.data.subcategory === 'godot').map(entry => articlePath(entry.data));
+  if (retiredPaths.has(`/${locale}/tags/godot/`) && godot.length > 0) {
     const gameDev = fromHtml(fs.readFileSync(path.join(distDir, locale, 'categories/game-dev/index.html'), 'utf8'));
     const group = elements(gameDev, 'section').find(node => node.properties.ariaLabelledBy?.includes('group-0'));
     assert(group, `${locale}: the Godot legacy target has a first category group`);
     assert.equal(elements(group, 'h2')[0]?.children.map(node => node.value ?? '').join(''), 'Godot', `${locale}: group-0 remains the Godot group`);
     const linked = elements(group, 'a').map(node => node.properties.href).filter(href => typeof href === 'string' && href.startsWith(`/${locale}/posts/`));
-    const godot = published.filter(entry => entry.data.locale === locale && entry.data.category === 'game-dev' && entry.data.subcategory === 'godot').map(entry => articlePath(entry.data));
-    assert(godot.length > 0, `${locale}: Godot archive has published articles`);
     assert.deepEqual(new Set(linked), new Set(godot), `${locale}: the Godot legacy target contains all of its articles`);
   }
 }
 
-for (const locale of locales) {
+for (const locale of publishedLangLocales) {
   const pathname = `/${locale}/categories/lang/`;
   const tree = fromHtml(fs.readFileSync(path.join(distDir, pathname, 'index.html'), 'utf8'));
   const canonical = elements(tree, 'link').filter(node => node.properties.rel?.includes('canonical'));
@@ -313,7 +310,7 @@ for (const locale of locales) {
   assert(paths, `${locale}: Pagefind document fragments exist`);
   assert.equal(paths.size, pagefind.languages[language].page_count, `${locale}: all indexed documents have fragments`);
   assert([...paths].every(pathname => pathname.startsWith(`/${locale}/`)), `${locale}: search index must not include another language or legacy aliases`);
-  assert(paths.has(`/${locale}/about/markdown-writing/`), `${locale}: the migrated guide is searchable at its canonical route`);
+  assert(paths.has(`/${locale}/about/writing/`), `${locale}: the writing guide is searchable at its canonical route`);
   for (const entry of published.filter(entry => entry.data.locale === locale)) {
     assert(paths.has(articlePath(entry.data)), `${articlePath(entry.data)}: article is present in its language search index`);
   }

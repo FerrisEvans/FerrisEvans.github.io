@@ -9,9 +9,9 @@ Ferris 的个人博客，使用 Astro 构建，发布到 [GitHub Pages](https://
 - **[posts/zh/](posts/zh/)**：中文博文；**[posts/en/](posts/en/)**：英文博文。
 - **[posts/img/](posts/img/)**：中英文共用的博文配图。Markdown 都写 `![说明](../img/文件名.png)`。
 
-相对图片由 Astro 构建处理，编辑器也能直接预览。博文和写作指南共用 `posts/img/`，不再保留旧的 `/assets/lib/` 图片地址。
+相对图片由 Astro 构建处理，编辑器也能直接预览。博文配图放在 `posts/img/`；关于页写作指南的演示图放在 `src/content/pages/img/`。
 
-Markdown 写作指南：[中文源文件](src/content/pages/markdown-writing-guide.md) / [English source](src/content/pages/en/markdown-writing-guide.md)。指南位于关于页面的阅读资料区，不计入博文、分类或标签。
+本站写作指南：[中文源文件](src/content/pages/writing-guide.md) / [English source](src/content/pages/en/writing-guide.md)。指南位于关于页面的阅读资料区，不计入博文、分类或标签。
 新文章的文件头：
 
 ```yaml
@@ -34,7 +34,7 @@ draft: true
 
 `category` 和 `subcategory` 表达文章的目录归属；`tags` 只标注正文实际讨论的主题，使用通行叫法，不重复分类或子分类。中英文版本保持相同的子分类和标签。
 
-支持数学公式、代码高亮、代码标签组、提示块、脚注、编号引用和图片放大。发布流程见 [Markdown 写作指南](https://ferrisevans.github.io/zh/about/markdown-writing/)；语法与格式见 [Markdown 指南](https://ferrisevans.github.io/zh/about/markdown/) 与 [写作约定](https://ferrisevans.github.io/zh/about/writing/)。
+支持数学公式、代码高亮、代码标签组、提示块、脚注、编号引用和图片放大。发布流程、格式约定与语法示例见 [本站写作指南](https://ferrisevans.github.io/zh/about/writing/)。
 
 ## 本地开发
 

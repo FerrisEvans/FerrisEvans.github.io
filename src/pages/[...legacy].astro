@@ -7,7 +7,7 @@ import { locales } from '../i18n';
 export async function getStaticPaths() {
   const posts = await getPosts({ locale: 'zh' });
   const paths = new Map<string,string>();
-  for (const page of ['notes','categories','tags','archives','about','about/python-zen','about/writing','about/markdown','about/markdown-writing','search','explore']) paths.set(page, `/zh/${page}/`);
+  for (const page of ['notes','categories','tags','archives','about','about/python-zen','about/writing','search','explore']) paths.set(page, `/zh/${page}/`);
   for (const post of posts) {
     paths.set(`posts/${postSlug(post)}`, `/zh/posts/${postSlug(post)}/`);
     paths.set(`categories/${post.data.category}`, `/zh/categories/${post.data.category}/`);

@@ -10,7 +10,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4327';
 const screenshotDirectory = process.env.SCREENSHOT_DIR
   ? resolve(process.env.SCREENSHOT_DIR)
   : join(tmpdir(), 'praxis-guide-browser');
-const guideSlugs = ['python-zen', 'writing', 'markdown', 'markdown-writing'];
+const guideSlugs = ['python-zen', 'writing'];
 const guidePaths = locale => guideSlugs.map(slug => `/${locale}/about/${slug}/`);
 const paths = guidePaths('zh');
 const englishPaths = guidePaths('en');
@@ -149,40 +149,32 @@ async function assertLocaleContent(page, path) {
 }
 
 async function assertAboutCards(page, locale = 'zh') {
-  const cards = page.locator('.about-guides .guide-card');
-  assert.equal(await cards.count(), guideSlugs.length, 'About has a card for each guide');
+  const links = page.locator('.about-guides .guide-link');
+  assert.equal(await links.count(), guideSlugs.length, 'About lists each reading guide');
   assert(await page.evaluate(() => {
     const profile = document.querySelector('.profile-note');
-    const guides = document.querySelector('.about-guides');
     const notes = document.querySelector('.about-note-grid');
-    return Boolean(profile && guides && notes &&
-      (profile.compareDocumentPosition(guides) & Node.DOCUMENT_POSITION_FOLLOWING) &&
-      (guides.compareDocumentPosition(notes) & Node.DOCUMENT_POSITION_FOLLOWING));
-  }), 'guide cards occupy the former interests position between author profile and principles');
+    const guides = document.querySelector('.about-guides');
+    return Boolean(profile && notes && guides &&
+      (profile.compareDocumentPosition(notes) & Node.DOCUMENT_POSITION_FOLLOWING) &&
+      (notes.compareDocumentPosition(guides) & Node.DOCUMENT_POSITION_FOLLOWING));
+  }), 'reading notes follow the author profile and principles');
   for (const [viewport, size] of [
     ['desktop', { width: 1440, height: 1000 }],
     ['mobile', { width: 390, height: 844 }],
   ]) {
     await page.setViewportSize(size);
-    const boxes = await Promise.all((await cards.all()).map(card => card.boundingBox()));
+    const boxes = await Promise.all((await links.all()).map(link => link.boundingBox()));
     assert(boxes.every(Boolean));
-    if (viewport === 'desktop') {
-      for (let index = 0; index < boxes.length; index += 2) {
-        assert(Math.abs(boxes[index].y - boxes[index + 1].y) <= 1, 'desktop cards form rows of two');
-        assert(boxes[index].x + boxes[index].width <= boxes[index + 1].x, 'desktop card columns do not overlap');
-        if (index > 0) assert(boxes[index - 2].y + boxes[index - 2].height <= boxes[index].y, 'desktop card rows do not overlap');
-      }
-    } else {
-      for (let index = 1; index < boxes.length; index++) {
-        assert(boxes[index - 1].y + boxes[index - 1].height <= boxes[index].y, 'mobile cards form a single column');
-      }
+    for (let index = 1; index < boxes.length; index++) {
+      assert(boxes[index - 1].y + boxes[index - 1].height <= boxes[index].y + 1, 'guide links stack in one column');
     }
     for (const dark of [false, true]) {
       await setTheme(page, dark);
       await assertNoOverflow(page, `About ${viewport} ${dark ? 'dark' : 'light'}`);
       await screenshot(page, `${locale}-about-${viewport}-${dark ? 'dark' : 'light'}`);
       if (viewport === 'desktop' && !dark) {
-        await page.locator('.about-guides').screenshot({ path: join(screenshotDirectory, `${locale}-about-cards-desktop.png`), animations: 'disabled' });
+        await page.locator('.about-guides').screenshot({ path: join(screenshotDirectory, `${locale}-about-guides-desktop.png`), animations: 'disabled' });
       }
     }
   }
@@ -219,21 +211,21 @@ async function assertResponsiveGuide(page, path) {
     }
     for (const dark of [false, true]) {
       await setTheme(page, dark);
-      if (path.endsWith('/about/markdown/')) {
+      if (path.endsWith('/about/writing/')) {
         await assertNativeMarkdownReading(page, { checkKeyboardScroll: viewport === 'mobile' });
         await assertCrossReferences(page);
         if (!dark) {
           await page.mouse.move(0, 0);
-          await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-markdown-${viewport}-cross-references.png`), animations: 'disabled' });
+          await page.screenshot({ path: join(screenshotDirectory, `${localeOf(path)}-writing-${viewport}-cross-references.png`), animations: 'disabled' });
         }
       }
       await assertNoOverflow(page, `${path} ${viewport} ${dark ? 'dark' : 'light'}`);
       await screenshot(page, `${name}-${viewport}-${dark ? 'dark' : 'light'}`);
-      if ((path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) && !dark) {
+      if (path.endsWith('/about/writing/') && !dark) {
         if (viewport === 'mobile') await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
         await page.screenshot({ path: join(screenshotDirectory, `${name}-${viewport}-detail.png`), animations: 'disabled' });
       }
-      if (path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) {
+      if (path.endsWith('/about/writing/')) {
         await page.locator('article .rehype-code-group').first().scrollIntoViewIfNeeded();
         await page.screenshot({ path: join(screenshotDirectory, `${name}-${viewport}-code-${dark ? 'dark' : 'light'}.png`), animations: 'disabled' });
       }
@@ -501,14 +493,9 @@ try {
     await page.waitForURL(new URL(path, base).href);
     await settleImages(page);
     await assertGuideNavigation(page, path);
-    if (path.endsWith('/about/markdown/')) {
-      await assertCodeGroup(page);
-      await assertMarkdownFeatures(page);
-      await assertImageViewer(page);
-    }
-    if (path.endsWith('/about/markdown-writing/')) {
+    if (path.endsWith('/about/writing/')) {
       await assertCodeGroup(page, 2);
-      await assertMathRendering(page);
+      await assertMarkdownFeatures(page);
       await assertImageViewer(page);
     }
     await assertResponsiveGuide(page, path);
@@ -529,14 +516,9 @@ try {
     await visit(page, path);
     await assertLocaleContent(page, path);
     await assertGuideNavigation(page, path);
-    if (path.endsWith('/about/markdown/')) {
-      await assertCodeGroup(page);
-      await assertMarkdownFeatures(page);
-      await assertImageViewer(page);
-    }
-    if (path.endsWith('/about/markdown-writing/')) {
+    if (path.endsWith('/about/writing/')) {
       await assertCodeGroup(page, 2);
-      await assertMathRendering(page);
+      await assertMarkdownFeatures(page);
       await assertImageViewer(page);
     }
     if (path.endsWith('/python-zen/')) {
@@ -566,9 +548,9 @@ try {
     if (!await mobile.evaluate(element => element.open)) await mobile.locator(':scope > summary').click();
     await clickAnchor(plain, mobile.locator('a[href*="#"]').first());
     await assertNoOverflow(plain, `${path} without JavaScript`);
-    if (path.endsWith('/about/markdown/') || path.endsWith('/about/markdown-writing/')) {
+    if (path.endsWith('/about/writing/')) {
       const panels = plain.locator('article .rcg-block');
-      assert.equal(await panels.count(), path.endsWith('/about/markdown-writing/') ? 4 : 2);
+      assert.equal(await panels.count(), 4);
       for (const panel of await panels.all()) {
         assert(await panel.isVisible(), 'every language remains readable without JavaScript');
         assert((await panel.innerText()).trim().length > 0);
@@ -577,8 +559,6 @@ try {
       await assertMathRendering(plain);
       const image = plain.locator('article img').first();
       assert(await image.evaluate(element => element.naturalWidth > 0), 'guide image remains readable without JavaScript');
-    }
-    if (path.endsWith('/about/markdown/')) {
       await assertNativeMarkdownReading(plain, { checkKeyboardScroll: true, noJavaScript: true });
       await assertCrossReferences(plain, { noJavaScript: true });
       await assertNoOverflow(plain, 'numbered definitions without JavaScript');
