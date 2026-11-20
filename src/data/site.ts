@@ -11,7 +11,7 @@ export const SITE = {
   description: `${BLOG_NAME} 是 ${AUTHOR_NAME} 的个人博客。${BLOG_INTRO}`,
   intro: BLOG_INTRO,
   author: AUTHOR_NAME,
-  email: 'ferris.evans@outlook.com',
+  email: 'ferris8bit@icloud.com',
   avatar: `/brand/ferris-dog-avatar.webp?v=${BRAND_VERSION}`,
   github: 'https://github.com/FerrisEvans',
   twitter: 'https://twitter.com/ferrisgeek',
