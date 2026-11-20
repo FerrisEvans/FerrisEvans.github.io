@@ -1,39 +1,39 @@
 ---
 key: agentic_dev_1
-title: "[Agentic Dev] Part 1: An orientation"
-description: First written in 2025, and revised as the technology changes.
+title: "[Agentic Dev] Part 1: Getting Started"
+description: Originally written in 2025, and updated periodically as the technology evolves.
 date: 2025-12-22
 category: ai
 subcategory: agent
 tags: [dev, tutorial]
 ---
 
-I wrote the first version of this just before Christmas 2025, and I will keep revising it as the technology changes. A year has gone by since then. Christmas 2026 is close, and agent development has moved a long way in that time. I had planned to cover all of this in a single article. It is a series now. This opening post stays light on technical detail. If you are new to designing and building AI agents, I want it to give you a direction before the details start.
+I wrote the first version of this post just before Christmas 2025, with plans to keep updating it as the technology evolves. A year has already gone by, and with Christmas 2026 right around the corner, AI agent development has come a long way. So I've decided to expand what was originally a single post into a full series. As the opening installment, this post stays light on technical details. Instead, it's meant to give newcomers to AI agent design and development a clear sense of direction before we dive deeper.
 
-Agent development was not yet a real role on a job board when the field was younger. The implementation has grown much more complicated since then, but the overall architecture has stayed clear. The individual techniques are leaves. They grow on the architecture, which is the trunk. We are no longer looking at a simple automated system. We are looking at a complex autonomous one. If you learn it in layers, easy parts first, the path is not as steep as it looks.
+From the days before "agent developer" was even a real role on job boards to where we are today, the implementation details have grown much more complex, yet the overall architecture has stayed remarkably clear. All the specific techniques are like branches and leaves growing out of that architectural trunk. We're no longer dealing with simple automation, but full-fledged autonomous systems. Even so, if you take a gradual approach and build from the fundamentals up, the learning curve isn't all that steep.
 
 > [!NOTE]
-> A rough sketch of the pieces.
+> Let's take a quick, high-level look at the core pieces.
 >
 > **1. Core**
 >
-> An LLM is not an agent, but every agent is built around one. It can run a simple workflow, and it can work through a hard chain of reasoning. On its own it has no tools, no way to interact with the world, and no memory. It answers from the data it was trained on. Building an agent means giving that model the other components it needs, so it can do real work.
+> An LLM isn't an agent on its own, but it sits at the heart of every agent. It can handle everything from simple orchestration to complex reasoning. By itself, though, an LLM has no tools, no way to interact with the outside world, and no memory; it only responds based on its vast training data. Building an agent means equipping the LLM with the surrounding components it needs to unlock its full potential.
 >
 > **2. Tool**
 >
-> I am using "tool" in a wide sense: knowledge bases, web search, function calls, task orchestration. These are the components from the last section. With them, the model can do more than answer from its training data.
+> I'm using "tool" in a broad sense here: knowledge bases, web search, function calling, task orchestration, and the like. These are the surrounding components mentioned above. With them, the LLM is no longer confined to its static training data and can take real action across a range of tasks.
 >
 > **3. Mem**
 >
-> Memory is what lets an agent plan ahead, offer help without being asked, and improve on its own. Not every agent needs a Mem module. When the work calls for one, design it light or heavy for that product. Sometimes the right amount is none.
+> If you want an agent to advance toward strategic planning, proactive assistance, and self-improvement, memory is indispensable. That said, depending on the type of agent, a Mem module isn't always strictly necessary. Instead, design it to be as lightweight or heavyweight as your use case requires.
 
-The grouping above is only a sketch. A lot of important points are missing, and later posts will take them one by one. The components also have to be strung together. The thread that does that is how the agent reasons and decides: what to do next, what a tool just returned, and when the task is finished.
+The overview above only scratches the surface of how an agent's components break down; there are plenty of key points we haven't touched on yet, and we'll cover them one by one in later posts. Of course, all these pieces need a single thread tying them together, and that thread is the agent's reasoning and decision-making loop: choosing the next step, interpreting tool outputs, and judging when a task is done.
 
-At this point the resemblance is hard to miss. Designing an agent looks a lot like the way a person makes a decision. Someone asks you to do something, or you set the task yourself. You think about how to do it. Your hands pick up a tool. Your eyes stay on the work. You look at the result and choose the next move. This series walks through that process, with the agent as the one doing the work. Four topics, for now:
+By now, the resemblance is hard to miss: agent design mirrors how humans operate. Isn't this essentially how we make decisions ourselves? Someone hands us a task (or we set one ourselves), our brain figures out how to tackle it, our hands use tools, our eyes monitor the progress, and our brain evaluates the outcome to decide the next move. This series walks through that process with an AI agent taking center stage. Here are the topics I have planned so far:
 
 1. Agentic design patterns
-2. Interview questions for AI agent engineers, explained in detail
-3. Reading notes on work by people who know this field well
-4. What I have learned from open-source projects
+2. Deep dives into AI agent engineer interview questions
+3. Reading notes on articles by leaders in the field
+4. Personal takeaways from open-source projects
 
-If you want a path from zero to actually building agents, start with Datawhale's [Hello Agent](https://github.com/datawhalechina/hello-agents). It is the best on-ramp I know.
+Finally, I highly recommend Datawhale's [Hello Agent](https://github.com/datawhalechina/hello-agents) project. It's a great hands-on guide to take you from zero to one in AI agent development.
