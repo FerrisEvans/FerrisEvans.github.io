@@ -53,7 +53,7 @@ $$
 \\frac{1}{2} + \\sqrt{x}
 $$
 
-![${locale === 'zh' ? '发布验证配图' : 'Publication check illustration'}](../img/rag.jpeg)
+![${locale === 'zh' ? '发布验证配图' : 'Publication check illustration'}](../img/redstar_ai_infra.png)
 
 ## ${locale === 'zh' ? '第一组代码' : 'First code group'}
 

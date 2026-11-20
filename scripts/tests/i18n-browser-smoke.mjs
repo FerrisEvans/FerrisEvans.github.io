@@ -12,7 +12,7 @@ page.on('pageerror', error => errors.push(error.message));
 const visit = async path => { const response = await page.goto(new URL(path,base).href); assert.equal(response.status(),200,path); };
 try {
   await visit('/'); await page.waitForURL(new URL('/en/',base).href);
-  await visit('/posts/GDScript/'); await page.waitForURL(new URL('/zh/posts/GDScript/',base).href);
+  await visit('/posts/agentic_dev_1/'); await page.waitForURL(new URL('/zh/posts/agentic_dev_1/',base).href);
   const published = readArticles().filter(entry => entry.data.draft !== true);
   for (const prefix of ['', '/en', '/zh']) {
     const locale = prefix === '/en' ? 'en' : 'zh';
@@ -32,7 +32,7 @@ try {
   }
   for (const locale of ['en','zh']) {
     const other = locale === 'en' ? 'zh' : 'en';
-    for (const path of ['', 'notes/', 'categories/', 'categories/lang/', 'tags/', 'archives/', 'about/', 'search/', 'posts/cpp_pointer01/', 'posts/java_generic/', 'about/writing/', 'about/python-zen/']) {
+    for (const path of ['', 'notes/', 'categories/', 'categories/ai/', 'tags/', 'archives/', 'about/', 'search/', 'posts/agentic_dev_1/', 'about/writing/', 'about/python-zen/']) {
       await visit(`/${locale}/${path}`);
       assert.equal(await page.locator('html').getAttribute('lang'),locale === 'en' ? 'en' : 'zh-CN');
       const canonical = await page.locator('link[rel="canonical"]').getAttribute('href');
@@ -47,27 +47,27 @@ try {
         assert(!/\p{Script=Han}/u.test(text),`Untranslated English page: ${path}: ${text.match(/.{0,30}\p{Script=Han}.{0,30}/u)?.[0]}`);
       }
     }
-    await visit(`/${locale}/posts/cpp_pointer01/`);
+    await visit(`/${locale}/posts/agentic_dev_1/`);
     const term = await page.locator('script[src="https://giscus.app/client.js"]').getAttribute('data-term');
-    assert.equal(term,'posts/cpp_pointer01/','both versions retain the original shared discussion term (Giscus removes the leading slash)');
+    assert.equal(term,'posts/agentic_dev_1/','both versions retain the original shared discussion term (Giscus removes the leading slash)');
     const switcher = page.locator('[data-language-switch]');
     assert.equal(await switcher.count(), 1, 'exactly one direct language toggle');
     assert.equal(await switcher.getAttribute('hreflang'), other === 'zh' ? 'zh-CN' : 'en');
     await page.evaluate(() => history.replaceState(null, '', `${location.pathname}?source=language-check#comments`));
     await switcher.click();
-    await page.waitForURL(new URL(`/${other}/posts/cpp_pointer01/?source=language-check#comments`,base).href);
+    await page.waitForURL(new URL(`/${other}/posts/agentic_dev_1/?source=language-check#comments`,base).href);
     await page.locator('[data-language-switch]').focus();
     await page.keyboard.press('Enter');
-    await page.waitForURL(new URL(`/${locale}/posts/cpp_pointer01/?source=language-check#comments`,base).href);
+    await page.waitForURL(new URL(`/${locale}/posts/agentic_dev_1/?source=language-check#comments`,base).href);
     await visit(`/${locale}/search/`);
-    await page.locator('.pagefind-ui__search-input').fill(locale === 'en' ? 'pointer' : '指针');
+    await page.locator('.pagefind-ui__search-input').fill(locale === 'en' ? 'agent' : '智能体');
     await page.locator('.pagefind-ui__result-link').first().waitFor();
     const results = await page.locator('.pagefind-ui__result-link').evaluateAll(links=>links.map(link=>new URL(link.href).pathname));
     assert(results.length && results.every(path=>path.startsWith(`/${locale}/`)),`search stays in ${locale}`);
   }
   for (const width of [320,390,1000,1280]) {
     await page.setViewportSize({width,height:844});
-    for (const path of ['/en/','/en/notes/','/en/about/','/en/posts/java_generic/']) {
+    for (const path of ['/en/','/en/notes/','/en/about/','/en/posts/agentic_dev_1/']) {
       await visit(path);
       await page.evaluate(()=>document.fonts.ready);
       assert(await page.evaluate(()=>document.documentElement.scrollWidth <= innerWidth + 1),`overflow at ${width}: ${path}`);
@@ -79,12 +79,12 @@ try {
   const staticPage = await noJs.newPage();
   await staticPage.goto(new URL('/en/',base).href);
   assert(await staticPage.locator('#island-directory a[href="/en/notes/"]').first().isVisible());
-  await staticPage.goto(new URL('/en/posts/cpp_pointer01/',base).href);
+  await staticPage.goto(new URL('/en/posts/agentic_dev_1/',base).href);
   assert(await staticPage.getByRole('heading',{level:1}).isVisible());
   const chineseLink = staticPage.locator('[data-language-switch][hreflang="zh-CN"]');
   assert(await chineseLink.isVisible(),'direct language toggle remains usable without JavaScript');
   await chineseLink.click();
-  await staticPage.waitForURL(new URL('/zh/posts/cpp_pointer01/',base).href);
+  await staticPage.waitForURL(new URL('/zh/posts/agentic_dev_1/',base).href);
   await noJs.close();
   assert.deepEqual(errors,[]);
   console.log('PASS: bilingual routes, metadata, shared comments, locale search, icon navigation, responsive English pages and no-JS reading');

@@ -165,7 +165,7 @@ test('active routes support omitted tags and reclaim legacy paths after tag alia
   }
   assert(!active.has('/tags/写作/'));
   assert(!active.has('/tags/代码示例/'));
-  assert.equal(retired.get('/tags/oop/'), '/posts/cpp_lifecycle/', 'unclaimed legacy routes retain their destinations');
+  assert.equal(retired.get('/tags/oop/'), '/notes/', 'unclaimed legacy routes retain their destinations');
 });
 
 test('category discovery removes empty categories while retaining their reusable display configuration', async t => {

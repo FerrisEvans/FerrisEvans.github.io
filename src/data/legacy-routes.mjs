@@ -2,7 +2,7 @@ import { tagId } from './tags.mjs';
 
 // Retired entry points, not tag synonyms. Published content may reclaim a path.
 export const legacyRoutes = Object.freeze({
-  '/categories/programming-language/': '/categories/lang/',
+  '/categories/programming-language/': '/notes/',
   '/posts/markdown-writing-guide/': '/about/writing/',
   '/about/markdown/': '/about/writing/',
   '/about/markdown-writing/': '/about/writing/',
@@ -12,12 +12,12 @@ export const legacyRoutes = Object.freeze({
   '/tags/code-examples/': '/about/writing/',
   '/tags/写作/': '/about/writing/',
   '/tags/代码示例/': '/about/writing/',
-  '/tags/godot/': '/categories/game-dev/#group-0',
+  '/tags/godot/': '/notes/',
   '/tags/agent/': '/categories/ai/',
-  '/tags/frame/': '/tags/delta-time/',
-  '/tags/oop/': '/posts/cpp_lifecycle/',
-  '/tags/reference/': '/posts/cpp_pointer04/',
-  '/tags/open-source/': '/posts/godot_project/',
+  '/tags/frame/': '/notes/',
+  '/tags/oop/': '/notes/',
+  '/tags/reference/': '/notes/',
+  '/tags/open-source/': '/notes/',
 });
 
 /** @param {Iterable<string>} activePaths Unlocalized published route paths. */

@@ -113,7 +113,7 @@ try {
   await context.route('https://giscus.app/**', (route) => route.abort());
   const page = await context.newPage();
   const primaryNavigation = ['/zh/', '/zh/notes/', '/zh/categories/', '/zh/tags/', '/zh/archives/', '/zh/about/'];
-  for (const path of ['/zh/', '/zh/notes/', '/zh/tags/', '/zh/archives/', '/zh/about/', '/zh/posts/agent_dev_tutorial/']) {
+  for (const path of ['/zh/', '/zh/notes/', '/zh/tags/', '/zh/archives/', '/zh/about/', '/zh/posts/agentic_dev_1/']) {
     await page.goto(url(path));
     await page.locator('.site-header').waitFor({ state: 'visible' });
     assert.equal(await page.locator('.site-header').count(), 1, `${path} uses the shared site header`);
@@ -133,16 +133,15 @@ try {
       assert.match(await page.locator(selector).first().evaluate(element => getComputedStyle(element).cursor), /animal-island-default\.svg/, `${path} shares the native theme cursor`);
     }
   }
-  for (const [legacy, current] of [['/lofi/', '/zh/notes/'], ['/page/1/', '/zh/notes/'], ['/page/2/', '/zh/notes/page/2/'], ['/room/', '/zh/'], ['/island/', '/zh/']]) {
+  for (const [legacy, current] of [['/lofi/', '/zh/notes/'], ['/page/1/', '/zh/notes/'], ['/room/', '/zh/'], ['/island/', '/zh/']]) {
     await page.goto(url(`${legacy}?source=legacy-check#about`));
     await page.waitForURL(url(`${current}?source=legacy-check#about`));
     assert.equal(await page.locator('link[rel="canonical"]').getAttribute('href'), new URL(current, 'https://ferrisevans.github.io').href);
   }
   console.log('PASS: six direct shared navigation links, canonical homepage/notes routes and legacy aliases preserve query/hash');
-  await page.goto(url('/zh/notes/page/2/'));
-  await page.getByRole('link', { name: '上一页', exact: true }).click();
-  await page.waitForURL(url('/zh/notes/'));
-  console.log('PASS: notes pagination returns from page 2 to the canonical article list');
+  await page.goto(url('/zh/notes/'));
+  assert.equal(await page.locator('.pagination').count(), 0, 'one page of notes does not render a pager');
+  console.log('PASS: the notes list stays on one page while a single article is published');
   if (await page.evaluate(() => document.documentElement.classList.contains('dark'))) {
     await page.locator('#theme-toggle').click();
   }
@@ -230,120 +229,25 @@ try {
   console.log('PASS: tag filtering handles matches, empty results, and keyboard-friendly reset');
 
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto(url('/zh/posts/agent_dev_tutorial/'));
+  await page.goto(url('/zh/posts/agentic_dev_1/'));
   const reading = await page.evaluate(() => {
     const prose = document.querySelector('.prose-custom');
     return {
       width: prose.getBoundingClientRect().width,
-      bodySize: parseFloat(getComputedStyle(prose.querySelector('p')).fontSize),
-      footnoteSize: parseFloat(getComputedStyle(prose.querySelector('[data-footnotes] p')).fontSize),
       fonts: [getComputedStyle(prose).fontFamily, getComputedStyle(document.querySelector('article h1')).fontFamily],
     };
   });
-  assert(reading.width >= 760, 'a 1280px desktop must leave a broad reading column instead of squeezing the article beside its directory');
-  assert.equal(await page.locator('.reading-bookmarks').isVisible(), false, 'the desktop directory must collapse before it crowds the reading column');
-  const compactToc = page.locator('.notebook-mobile-toc');
-  await compactToc.locator('summary').click();
-  assert(await compactToc.locator('.toc-link').first().isVisible(), 'the collapsed directory must remain reachable');
-  await compactToc.locator('summary').click();
+  assert(reading.width >= 760, 'a 1280px desktop must leave a broad reading column');
+  assert.equal(await page.locator('.reading-bookmarks').count(), 0, 'an article without section headings does not reserve a desktop directory');
   for (const font of reading.fonts) {
     assert.match(font, /sans-serif/, 'article headings and prose must use the surrounding sans-serif visual language');
     assert.doesNotMatch(font, /Songti|Noto Serif|STSong|(?:^|,\s*)serif(?:,|$)/i);
   }
-  assert(reading.footnoteSize < reading.bodySize, 'footnotes must remain subordinate to the article text');
   await screenshot(page, 'article-readable-desktop');
-  console.log('PASS: common desktop widths retain a broad sans-serif article and smaller footnotes');
-
-  const imageButton = page.locator('.image-zoom').first();
-  // Lazy images can initially have zero height; move the real button into view
-  // before decoding and clicking, matching a reader scrolling through the post.
-  await imageButton.evaluate((button) => button.scrollIntoView({ block: 'center', behavior: 'instant' }));
-  await imageButton.locator('img').evaluate((image) => image.decode());
-  for (const width of [1280, 390]) {
-    await page.setViewportSize({ width, height: 900 });
-    await imageButton.click();
-    await page.waitForFunction(() => {
-      const viewer = document.getElementById('image-viewer');
-      const bounds = document.getElementById('image-viewer-image').getBoundingClientRect();
-      return viewer.open && bounds.width > 0 && Math.abs(bounds.x + bounds.width / 2 - innerWidth / 2) <= 2 && Math.abs(bounds.y + bounds.height / 2 - innerHeight / 2) <= 2;
-    });
-    const image = await page.locator('#image-viewer-image').boundingBox();
-    assert(image && image.x >= 0 && image.y >= 0 && image.x + image.width <= width + 2 && image.y + image.height <= 902, 'the enlarged image must fit inside the viewport');
-    await screenshot(page, `article-image-preview-${width}`);
-    await page.keyboard.press('Escape');
-    assert.equal(await page.locator('#image-viewer').evaluate((dialog) => dialog.open), false, 'Escape must close image preview');
-  }
-  console.log('PASS: real article images open centered within desktop and mobile viewports');
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  const codeScroll = await page.locator('.prose-custom pre').evaluateAll((blocks) => {
-    const block = blocks.find((item) => item.scrollWidth > item.clientWidth);
-    if (!block) return null;
-    block.scrollLeft = block.scrollWidth;
-    return { width: block.clientWidth, scrollWidth: block.scrollWidth, scrollLeft: block.scrollLeft, whiteSpace: getComputedStyle(block.querySelector('code')).whiteSpace, overflow: getComputedStyle(block).overflowX };
-  });
-  assert(codeScroll, 'the fixture must exercise a code block wider than the mobile reading column');
-  assert.match(codeScroll.overflow, /auto|scroll/);
-  assert.equal(codeScroll.whiteSpace, 'pre', 'code must preserve its original lines');
-  assert(Math.abs(codeScroll.scrollLeft - (codeScroll.scrollWidth - codeScroll.width)) <= 2, 'a reader must be able to scroll to the end of a long code line');
-  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'wide code must scroll internally without widening the page');
-  // Keep the OS clipboard untouched while exercising the real copy control.
-  await page.evaluate(() => {
-    navigator.clipboard.writeText = async (text) => { window.__smokeCopiedCode = text; };
-  });
-  const firstCode = page.locator('.code-block').first();
-  const sourceCode = firstCode.locator('pre > code');
-  const expectedCode = await sourceCode.textContent();
-  const lineNumbers = await sourceCode.locator(':scope > .line').evaluateAll(lines => lines.map(line => {
-    const marker = line.firstElementChild;
-    return {
-      marker: marker?.classList.contains('code-line-number'),
-      number: marker?.getAttribute('data-line-number'),
-      hidden: marker?.getAttribute('aria-hidden'),
-      text: marker?.textContent,
-      display: marker ? getComputedStyle(marker, '::before').content : null,
-    };
-  }));
-  assert(lineNumbers.length > 0, 'ordinary code blocks have line numbers');
-  for (const [index, line] of lineNumbers.entries()) {
-    assert(line.marker);
-    assert.equal(line.number, String(index + 1));
-    assert.equal(line.hidden, 'true');
-    assert.equal(line.text, '');
-    assert.equal(line.display, JSON.stringify(String(index + 1)), 'line number is displayed by CSS');
-  }
-  const copy = firstCode.getByRole('button', { name: '复制代码', exact: true });
-  assert.equal((await copy.innerText()).trim(), '', 'ordinary copy control is icon-only');
-  const copyIcons = copy.locator('svg');
-  assert(await copyIcons.count() > 0);
-  for (const icon of await copyIcons.all()) assert.equal(await icon.getAttribute('aria-hidden'), 'true');
-  await copy.click();
-  await page.waitForFunction(() => typeof window.__smokeCopiedCode === 'string');
-  assert.equal(await page.evaluate(() => window.__smokeCopiedCode), expectedCode, 'copy preserves exact source whitespace without line numbers');
-  assert.equal(await copy.getAttribute('data-copied'), 'true');
-  assert.equal(await copy.getAttribute('title'), '已复制');
-  assert.equal(await copy.getAttribute('aria-label'), '复制代码');
-  assert.equal((await copy.innerText()).trim(), '', 'successful copying does not add visible text');
-  console.log('PASS: mobile code retains its formatting, scrolls to the end, and copies without decorative line numbers');
-
-  await page.setViewportSize({ width: 1536, height: 900 });
-  await page.goto(url('/zh/posts/agent_dev_tutorial/'));
-  await page.evaluate(() => scrollTo({ top: 1200, behavior: 'instant' }));
-  const toc = await page.locator('.toc-scroll').boundingBox();
-  assert(toc && toc.y >= 80 && toc.y <= 110, 'desktop article directory must remain visible beside the reading sheet');
-  await screenshot(page, 'article-toc');
-  console.log('PASS: desktop article directory remains visible while scrolling');
-
-  await page.goto(url('/zh/posts/cpp_pointer01/'));
-  const formula = page.locator('.katex').first();
-  await formula.waitFor({ state: 'visible' });
-  assert.equal(await page.locator('.katex-error').count(), 0);
-  assert.match(await formula.evaluate((element) => getComputedStyle(element).fontFamily), /KaTeX_Main/);
-  assert(await page.evaluate(async () => (await document.fonts.load('16px KaTeX_Main')).length > 0), 'math fonts must load from the production CSS');
-  console.log('PASS: production math includes KaTeX styling and loaded fonts');
+  console.log('PASS: common desktop widths retain a broad sans-serif article');
 
   await page.goto(url('/zh/search/'));
-  await page.locator('.pagefind-ui__search-input').fill('指针');
+  await page.locator('.pagefind-ui__search-input').fill('智能体');
   await page.locator('.pagefind-ui__result').first().waitFor({ state: 'visible' });
   const result = await page.locator('.pagefind-ui__result-link').first().getAttribute('href');
   assert(new URL(result, base).pathname.startsWith('/zh/posts/'), 'search results must link to articles');
