@@ -7,7 +7,7 @@ import config from '../../astro.config.mjs';
 
 const { processor, ...options } = config.markdown;
 const renderer = await processor.createRenderer(options);
-const fileURL = new URL('../../src/content/pages/writing-guide.md', import.meta.url);
+const fileURL = new URL('../../src/guides/writing-guide.md', import.meta.url);
 function renderGuide(fileURL) {
   const source = readFileSync(fileURL, 'utf8');
   const header = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
@@ -101,7 +101,7 @@ test('guide formulas, footnote round trips and heading links have real rendered 
 });
 
 test('the English writing guide preserves rendered features and localizes reader-facing labels', async () => {
-  const fileURL = new URL('../../src/content/pages/en/writing-guide.md', import.meta.url);
+  const fileURL = new URL('../../src/guides/en/writing-guide.md', import.meta.url);
   const english = await renderGuide(fileURL);
   const elements = [];
   function collect(node) {

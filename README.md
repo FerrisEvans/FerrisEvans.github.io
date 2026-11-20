@@ -9,9 +9,9 @@ Ferris 的个人博客，使用 Astro 构建，发布到 [GitHub Pages](https://
 - **[posts/zh/](posts/zh/)**：中文博文；**[posts/en/](posts/en/)**：英文博文。
 - **[posts/img/](posts/img/)**：中英文共用的博文配图。Markdown 都写 `![说明](../img/文件名.png)`。
 
-相对图片由 Astro 构建处理，编辑器也能直接预览。博文配图放在 `posts/img/`；关于页写作指南的演示图放在 `src/content/pages/img/`。
+相对图片由 Astro 构建处理，编辑器也能直接预览。博文配图放在 `posts/img/`；关于页写作指南的演示图放在 `src/guides/img/`。
 
-本站写作指南：[中文源文件](src/content/pages/writing-guide.md) / [English source](src/content/pages/en/writing-guide.md)。指南位于关于页面的阅读资料区，不计入博文、分类或标签。
+本站写作指南：[中文源文件](src/guides/writing-guide.md) / [English source](src/guides/en/writing-guide.md)。指南位于关于页面的阅读资料区，不计入博文、分类或标签。
 新文章的文件头：
 
 ```yaml
@@ -65,7 +65,7 @@ scripts/    素材工具、构建校验和测试
 └── tests/  单元测试、浏览器测试和模型验证工具
 ```
 
-`src/content/pages/` 是网站的写作指南，不是博文。`src/data/site.ts` 管理标题、简介、头像和分类；`src/i18n/` 管理界面翻译。
+`src/guides/` 是网站的写作指南，不是博文。`src/data/site.ts` 管理标题、简介、头像和分类；`src/i18n/` 管理界面翻译。
 
 ## 发布与网站维护
 

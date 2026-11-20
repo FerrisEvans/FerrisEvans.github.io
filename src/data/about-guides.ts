@@ -1,5 +1,5 @@
-import { frontmatter as writing } from '../content/pages/writing-guide.md';
-import { frontmatter as writingEn } from '../content/pages/en/writing-guide.md';
+import { frontmatter as writing } from '../guides/writing-guide.md';
+import { frontmatter as writingEn } from '../guides/en/writing-guide.md';
 import { type Locale, localizePath, t } from '../i18n';
 import { aboutFor } from './room-about';
 

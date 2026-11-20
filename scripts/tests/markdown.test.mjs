@@ -83,7 +83,7 @@ Definition.
     ['nested misleading article directory', { fileURL: new URL('posts/zh/nested/posts/en/note.md', root) }, 'zh'],
     ['backslash article path', { fileURL: 'posts\\en\\nested\\posts\\zh\\note.md' }, 'en'],
     ['article directory overrides frontmatter', { fileURL: new URL('posts/zh/note.md', root), frontmatter: { locale: 'en' } }, 'zh'],
-    ['English document', { fileURL: new URL('src/content/pages/en/guide.md', root), frontmatter: { locale: 'en' } }, 'en'],
+    ['English document', { fileURL: new URL('src/guides/en/guide.md', root), frontmatter: { locale: 'en' } }, 'en'],
     ['non-article directory with misleading segments', { fileURL: new URL('examples/posts/en/guide.md', root), frontmatter: { locale: 'zh' } }, 'zh'],
     ['anonymous English document', { frontmatter: { locale: 'en' } }, 'en'],
     ['anonymous default document', {}, 'zh'],
